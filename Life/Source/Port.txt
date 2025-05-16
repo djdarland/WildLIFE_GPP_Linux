@@ -1,0 +1,1501 @@
+Record of Report of WildLIFE from version 1.02
+Started 7/31/2019 6:30pm CT
+Working in Ubuntu 18.04 Linux
+
+Created WildLIFE-4.01 Directory
+Created WildLIFE-4.01 Subdirectory
+Copied Life-1.02.tar.gz into Subdirectory
+Unpacked to Life-1.02 Subdirectory
+Rnamed it to WildLIFE-4.01
+Unpacked Life-1.02.tar.gz again
+chmod -R u-w Life-1.02
+Copy Life-2.33 to WildLIFE-4.01/WildLIFE-4.01
+Unpacked to Life-2.33 Subdirectory
+chmod -R u-w Life-2.33
+
+I worked my way through the source file by file from 1.02 using the Makefie.
+I use option "111" of ./ee - it delete all ".o" files.
+I believe dependencies not correct in my Makefile - this assures everything compiled.
+My computer so fast it seems not worth while to fix Makefile.
+
+For each ".c" file
+I added
+
+#ifdef REV401PLUS
+#include "defs.h"
+// These are all ".h" files from my version 2.33
+// A lot of work had went into trying to make these correct
+#endif
+
+#ifdef REV102
+.... whatever includes were there already.
+also in many cases global declarations. - I was not so careful
+I think compiler would tell of any conflicting declarations.
+#endif
+
+Also - I am not using "configure".
+My code is hoped to work on any 64 bit Linux or cygwin without "configure."
+I copied Makefile in WildLIFE-4.01 to Makefile.orig (to make sure saved)
+I copied Makefile from 2.33 Source directory to 4.01 Source directory
+Also "ee" and "ee?"
+Also copied defs.h, def_const.h, def_glob.h, def_macro.h, def_proto.h, def_struct.h
+
+Made ee writable and added Port.txt
+Copied mk.sh & made writable.
+Added "./" before Try in Makefile in regexp
+
+The following fields were changed mainly to make searching easier.
+The compiler would give errors if the changes were made incorrectly.
+
+Also in goal
+a was changed to aaaa_1
+b was changed to bbbb_1
+c was changed to cccc_1
+
+Also in pair_list
+a was changed to aaaa_2
+b was changed to bbbb_2
+
+Also in stack
+a was changed to aaaa_3
+b was changed to bbbb_3
+
+Also in triple_list
+a was changed to aaaa_4
+b was changed to bbbb_4
+c was changed to cccc_4
+
+Also in int_list value was changed to value_1
+
+Also in residuation value was changed to value_2
+
+Also in psi_term value was changed to value_3
+
+
+
+The following defines replace enums:
+#define   undef_it 1
+#define   predicate_it 2
+#define   function_it 3
+#define   type_it 4
+#define   global_it 5
+#define   block_it 6
+
+These had been an enumeration in 1.02 - now they an integer defines.
+They are sometimes cast to a pointer. (def_type)
+Also field "type" in "definition" structure was changed to "type_def"
+
+Where I worked we did not use enumerations.
+And it is used as pointer - I did not feel compfortable with enum as pointer.
+My defines are cast with (def_type) to pointers when compared
+
+changed "true" & "false" to "lf_true" and "lf_false" (avoiding possible conflicts)
+
+Added following -- seems I eliminated these in 233
+
+#define Infoline   if (NOTQUIET) infoline
+#define Warningline if (warningflag) warningline
+
+#ifndef NOTRACE
+#define Traceline  if (trace) traceline
+#else
+#define Traceline  if (0) traceline
+#endif
+
+Im memory statistics (and some othee places) added "l" in format strings (for longs)
+
+ptr_psi_term quotedStackCopy(ptr_psi_term p); // Reverted - ptr back in arg REV401PLUS - it was wrong in 2.33 
+
+changed char *arg_v[ARGNN]; // Modified DJD in built_ins.c
+
+following defines used to indicate comparison function rather than
+passing function pointer which is difficult when function parameters differ.
+
+#define STRCMP  1L 
+#define INTCMP  2L
+#define FEATCMP 3L
+
+in ptr_node general_insert(comp,keystr,tree,info,heapflag,copystr,bkflag)
+used
+      // revised logic not using function pointer
+      if (comp == INTCMP) cmp=intcmp((long)keystr,(long)(*tree)->key); // REV401PLUS cast
+      else if (comp == STRCMP) cmp=strcmp(keystr,(*tree)->key);
+      else if (comp == FEATCMP) cmp=featcmp(keystr,(*tree)->key);
+
+and in ptr_node find(comp,keystr,tree)
+      // revised logic not using function pointer
+      if (comp == INTCMP) cmp=intcmp((long)keystr,(long)((struct wl_node *)tree)->key);
+      else if (comp == STRCMP) cmp=strcmp((char *)keystr,(char *)((struct wl_node *)tree)->key);
+      else if (comp == FEATCMP) cmp=featcmp(keystr,((struct wl_node *)tree)->key);
+
+Replace DEFRULES with (ptr_psi_term)DEFRULES
+
+change several locals from "eval" to "eval_2" because of conflict with a define
+
+true & false changed to lf_true & lf_false
+
+Used error.c from 2.33 - it is much work to change from varags.h to stdarg.h
+
+Used sys.c from 2.33 - wanted to at least skip till later - types of changes were different.
+
+I #ifdef'd out raw.c - and attempted nothing with the x-windows code - yet anyway.
+
+Copied a bit of argument code from 2.33 for lib.c & life.c
+
+Also, I added many casts - I tried to note all with "// REV3401PLUS cast"
+Similar for other changes - I did not comment the field aaaa_1, ..., value_1, ...changes however or type_def, (def_type) or ..._it changes, however.'
+They all follow the same pattern.
+
+After 1st clean compile got segmentation fault.
+
+Added
+
+#define dennis_debug(str) printf ("This is line %d of file \"%s\" in function \"%s\" str = %s.\n",	__LINE__, __FILE__,__FUNCTION__,str);
+
+And tracked problem down.
+
+I had missed ckanging true & false to lf_true & lf_false in 1 file (built_ins.c I think).
+
+I have had no more run time errors.
+
+I copied Test Suite from 2.33 to new place - separate.
+
+It runs wild_life in my path (new one).
+Some results match exactly.
+Most do not - but differences seem mostly white space.
+Reponses are coming back on one line instead of multiple lines.
+One test seemed stuck - removed it for now.
+
+I will try removing white space in test suite.
+
+after removing whitespace
+84 match perfectly
+310 out differ
+42 err differ
+
+Noticed indent level seemed sometimes to increment by sizeof long instead of 1
+
+Added paren around level+1 in login.c
+then 
+161 match perfectly
+225 out differ
+42 err differ
+
+Thought quotedStacCopy might be wrong - had made a change.
+On investigation - it is not used - #if'd it out.
+
+I #ifdef's out any remaining externs - they all should be in headers.
+Made no difference.
+
+Started going through .c files putting back initializations of globals.
+After list.c - switching header (thare had not been any compiler errors)
+got:
+
+echo 406 Total Tests completed
+echo 162 Total Tests match
+echo 244 Total Tests differ
+echo 224 Total Tests out differ
+echo 41 Total Tests err differ
+
+After completing moving initializations:
+echo 406 Total Tests completed
+echo 379 Total Tests match
+echo 27 Total Tests differ
+echo 4 Total Tests out differ
+echo 25 Total Tests err differ
+
+Systematically going through all files for which there are .o files.
+Removing "dead" code & checking fo anything missed.
+
+Discovered missing initializations in error.c
+After fixing:
+
+echo 406 Total Tests completed
+echo 392 Total Tests match
+echo 14 Total Tests differ
+echo 4 Total Tests out differ
+echo 12 Total Tests err differ
+
+Completed going through files.
+Found a few more missing initializations - but they did not affect tests.
+
+Added back the test that was getting stuck - it now passed.
+
+Results now:
+
+echo 407 Total Tests completed
+echo 393 Total Tests match
+echo 14 Total Tests differ
+echo 4 Total Tests out differ
+echo 12 Total Tests err differ
+
+Examined output some
+Added "END Abort" message in built_ins.c in long abort_life(nlflag)
+Then have:
+
+echo 407 Total Tests completed
+echo 401 Total Tests match
+echo 6 Total Tests differ
+echo 4 Total Tests out differ
+echo 4 Total Tests err differ
+
+Examined these cases.
+
+1 -- condpred -- refout file missing -- checked - also missing in 1.02
+2 -- dupfeat  -- 4.01 gives line number error is near -- reference does not
+3 -- eoftest2 -- out differ in ">" - err - 4.01 gives syntax error'
+4 -- eoftest  -- out different -- err - dfferent errors
+5 -- testslc  -- out differ -- Files may be missing -- think this superlint?
+6 -- testsl   -- get slightly different warning messages -- another superlint?
+
+I should go over sys.c - I am still using 2.33 version.
+I see little reason to study error.c - I worked it over a lot before.
+
+Not really using arity.c or raw.x or xpred.c or xdisplaylist.c currently.
+
+-------------------------------------------------------------------------
+Using githup version 4.03 with ts-1.02.sh - to go back to
+original 1.02 test Suite. Result summary:
+
+echo 325 Total Tests completed
+echo 305 Total Tests match
+echo 20 Total Tests differ
+echo 13 Total Tests out differ
+echo 9 Total Tests err differ
+
+I will work on it after adding & commiting test suite (1.02).
+-------------------------------------------------------------------------
+
+Found error in logic removing whitespace in check_edit
+Removed white space edit. Then get: (using 4.03 tests)
+
+echo 414 Total Tests completed
+echo 394 Total Tests match
+echo 20 Total Tests differ
+echo 10 Total Tests out differ
+echo 14 Total Tests err differ
+
+------------------------------------------------------------------------
+Will remove all white space removal.
+------------------------------------------------------------------------
+
+Then 1.02 Tests yeld:
+echo ./addtab -- Matches Perfectly
+echo ./alias -- Matches Perfectly
+echo ./andor14 -- Matches Perfectly
+echo ./andor1 -- Matches Perfectly
+echo ./andor2 -- Matches Perfectly
+echo ./andor3 -- Matches Perfectly
+echo ./andor4 -- Matches Perfectly
+echo ./andor5 -- Matches Perfectly
+echo ./another_bug -- Matches Perfectly
+echo ./anyorder -- Matches Perfectly
+echo ./append -- Matches Perfectly
+echo ./apply -- Matches Perfectly
+echo ./arith1 -- Matches Perfectly
+echo ./arith2 -- Matches Perfectly
+echo ./arith3 -- Matches Perfectly
+echo ./arith4 -- Matches Perfectly
+echo ./arith5 -- Matches Perfectly
+echo ./arith6 -- Matches Perfectly
+echo ./arith7 -- Matches Perfectly
+echo ./arith8 -- Matches Perfectly
+echo ./arith9 -- Matches Perfectly
+echo ./arnaud_bug -- Matches Perfectly
+echo ./assert1 -- Matches Perfectly
+echo ./assert2 -- Matches Perfectly
+echo ./assert3 -- Matches Perfectly
+echo ./assert4 -- Matches Perfectly
+./work-1.02.sh babcode
+echo ./babel -- Matches Perfectly
+echo ./bagof1 -- Matches Perfectly
+echo ./bagof2 -- Matches Perfectly
+echo ./bagof3 -- Matches Perfectly
+echo ./bagof4 -- Matches Perfectly
+echo ./bagof5 -- Matches Perfectly
+echo ./bagof6 -- Matches Perfectly
+echo ./bigstr -- Matches Perfectly
+echo ./bitnot -- Matches Perfectly
+echo ./bk_assign -- Matches Perfectly
+echo ./boites1 -- Matches Perfectly
+echo ./boites2 -- Matches Perfectly
+echo ./boolpred2 -- Matches Perfectly
+echo ./boolpred -- Matches Perfectly
+echo ./brunobug -- Matches Perfectly
+echo ./bruno_disj -- Matches Perfectly
+echo ./call1 -- Matches Perfectly
+echo ./canonical -- Matches Perfectly
+echo ./caret -- Matches Perfectly
+echo ./cb -- Matches Perfectly
+echo ./chapla -- Matches Perfectly
+echo ./charcode -- Matches Perfectly
+echo ./chart_parser1 -- Matches Perfectly
+echo ./chart_parser2 -- Matches Perfectly
+./work-1.02.sh children
+echo ./choice -- Matches Perfectly
+./work-1.02.sh clause
+echo ./compose2 -- Matches Perfectly
+echo ./compose -- Matches Perfectly
+echo ./comp_struct -- Matches Perfectly
+./work-1.02.sh condpred
+echo ./constr -- Matches Perfectly
+echo ./copy1 -- Matches Perfectly
+echo ./copy2 -- Matches Perfectly
+echo ./copy3 -- Matches Perfectly
+echo ./copyfile -- Matches Perfectly
+echo ./curry14 -- Matches Perfectly
+echo ./curry15 -- Matches Perfectly
+echo ./curry1 -- Matches Perfectly
+echo ./curry2 -- Matches Perfectly
+echo ./curry3 -- Matches Perfectly
+echo ./curry4 -- Matches Perfectly
+echo ./curry5 -- Matches Perfectly
+echo ./curry6 -- Matches Perfectly
+echo ./curry7 -- Matches Perfectly
+echo ./curry8 -- Matches Perfectly
+echo ./cut2 -- Matches Perfectly
+echo ./cut3 -- Matches Perfectly
+echo ./cycles1 -- Matches Perfectly
+echo ./cycles2 -- Matches Perfectly
+./work-1.02.sh debug
+echo ./decl -- Matches Perfectly
+echo ./delay2 -- Matches Perfectly
+echo ./delay -- Matches Perfectly
+echo ./dichotomy -- Matches Perfectly
+echo ./dict -- Matches Perfectly
+echo ./disequality1 -- Matches Perfectly
+echo ./disequality2 -- Matches Perfectly
+echo ./disequality3 -- Matches Perfectly
+echo ./disequality4 -- Matches Perfectly
+echo ./disequality5 -- Matches Perfectly
+echo ./disequality6 -- Matches Perfectly
+echo ./disequality7 -- Matches Perfectly
+echo ./disequality8 -- Matches Perfectly
+echo ./disequality9 -- Matches Perfectly
+echo ./disj1 -- Matches Perfectly
+echo ./disj2 -- Matches Perfectly
+echo ./disj3 -- Matches Perfectly
+echo ./disj4 -- Matches Perfectly
+echo ./disj5 -- Matches Perfectly
+echo ./disj6 -- Matches Perfectly
+echo ./disj7 -- Matches Perfectly
+echo ./dissolve -- Matches Perfectly
+echo ./dupfeat -- Matches Perfectly
+echo ./dynstat -- Matches Perfectly
+echo ./encapsulate -- Matches Perfectly
+echo ./eoftest2 -- Matches Perfectly
+echo ./eoftest3 -- Matches Perfectly
+echo ./eoftest -- Matches Perfectly
+echo ./eratosthenes -- Matches Perfectly
+echo ./errordecl -- Matches Perfectly
+echo ./example -- Matches Perfectly
+echo ./extest -- Matches Perfectly
+echo ./fact -- Matches Perfectly
+echo ./factorize -- Matches Perfectly
+echo ./fail -- Matches Perfectly
+echo ./featnames -- Matches Perfectly
+echo ./feat_order -- Matches Perfectly
+echo ./feature -- Matches Perfectly
+echo ./feature_module -- Matches Perfectly
+echo ./features1 -- Matches Perfectly
+echo ./featval -- Matches Perfectly
+echo ./foo -- Matches Perfectly
+echo ./funcself -- Matches Perfectly
+echo ./function2 -- Matches Perfectly
+echo ./fusil -- Matches Perfectly
+echo ./gauss -- Matches Perfectly
+echo ./gctest -- Matches Perfectly
+echo ./genint -- Matches Perfectly
+echo ./glb -- Matches Perfectly
+echo ./glblub -- Matches Perfectly
+echo ./global2 -- Matches Perfectly
+echo ./global3 -- Matches Perfectly
+echo ./global -- Matches Perfectly
+echo ./glob_gc -- Matches Perfectly
+./work-1.02.sh glob_test2
+echo ./grammars -- Matches Perfectly
+echo ./hamming -- Matches Perfectly
+echo ./hanoi -- Matches Perfectly
+echo ./hasfeature -- Matches Perfectly
+echo ./inherit -- Matches Perfectly
+echo ./intabs -- Matches Perfectly
+echo ./intdiv2 -- Matches Perfectly
+echo ./intdiv3 -- Matches Perfectly
+echo ./intdiv -- Matches Perfectly
+echo ./intlist -- Matches Perfectly
+echo ./inttrace -- Matches Perfectly
+echo ./isatest2 -- Matches Perfectly
+echo ./isatest -- Matches Perfectly
+echo ./junk -- Matches Perfectly
+echo ./lazyinherit -- Matches Perfectly
+echo ./lazy -- Matches Perfectly
+echo ./lefun1 -- Matches Perfectly
+echo ./lefun2 -- Matches Perfectly
+echo ./libstruct -- Matches Perfectly
+./work-1.02.sh libtest
+echo ./list_bda -- Matches Perfectly
+./work-1.02.sh listing1
+echo ./listing2 -- Matches Perfectly
+echo ./loadquery -- Matches Perfectly
+echo ./long -- Matches Perfectly
+echo ./longstr -- Matches Perfectly
+echo ./lub -- Matches Perfectly
+echo ./machine -- Matches Perfectly
+echo ./magic -- Matches Perfectly
+echo ./makestr -- Matches Perfectly
+echo ./manual10 -- Matches Perfectly
+echo ./manual11 -- Matches Perfectly
+echo ./manual1 -- Matches Perfectly
+echo ./manual2 -- Matches Perfectly
+echo ./manual3 -- Matches Perfectly
+./work-1.02.sh manual4
+echo ./manual5 -- Matches Perfectly
+echo ./manual6 -- Matches Perfectly
+echo ./manual7 -- Matches Perfectly
+echo ./manual8 -- Matches Perfectly
+echo ./manual9 -- Matches Perfectly
+echo ./many_types -- Matches Perfectly
+echo ./matrix -- Matches Perfectly
+echo ./module_test1a -- Matches Perfectly
+echo ./module_test1 -- Matches Perfectly
+./work-1.02.sh module_test2
+echo ./module_test3 -- Matches Perfectly
+echo ./module_test4 -- Matches Perfectly
+echo ./module_test5 -- Matches Perfectly
+echo ./module_test6 -- Matches Perfectly
+echo ./mort -- Matches Perfectly
+echo ./mresid -- Matches Perfectly
+echo ./n2 -- Matches Perfectly
+echo ./naming -- Matches Perfectly
+echo ./nesting -- Matches Perfectly
+echo ./nicetest -- Matches Perfectly
+echo ./nl -- Matches Perfectly
+echo ./nofour -- Matches Perfectly
+echo ./nonstrict1 -- Matches Perfectly
+echo ./nonstrict2 -- Matches Perfectly
+echo ./nonstrict3 -- Matches Perfectly
+echo ./nonstrict4 -- Matches Perfectly
+echo ./nonstrict5 -- Matches Perfectly
+echo ./nonvar -- Matches Perfectly
+echo ./not -- Matches Perfectly
+echo ./numeric -- Matches Perfectly
+echo ./op1 -- Matches Perfectly
+echo ./op2 -- Matches Perfectly
+echo ./op3 -- Matches Perfectly
+echo ./order -- Matches Perfectly
+echo ./overload -- Matches Perfectly
+echo ./pagewidth -- Matches Perfectly
+echo ./parents -- Matches Perfectly
+echo ./parse2 -- Matches Perfectly
+echo ./parse -- Matches Perfectly
+echo ./parser -- Matches Perfectly
+echo ./part -- Matches Perfectly
+echo ./peep -- Matches Perfectly
+./work-1.02.sh pers2
+echo ./persistent2 -- Matches Perfectly
+echo ./persistent -- Matches Perfectly
+echo ./person1 -- Matches Perfectly
+echo ./person2 -- Matches Perfectly
+echo ./posint -- Matches Perfectly
+echo ./power -- Matches Perfectly
+./work-1.02.sh preparser
+echo ./prime -- Matches Perfectly
+echo ./print1 -- Matches Perfectly
+echo ./print2 -- Matches Perfectly
+echo ./print_depth1 -- Matches Perfectly
+echo ./print_depth2 -- Matches Perfectly
+echo ./print_test -- Matches Perfectly
+echo ./printvar -- Matches Perfectly
+echo ./profiler1 -- Matches Perfectly
+echo ./profiler2 -- Matches Perfectly
+echo ./profiler3 -- Matches Perfectly
+echo ./project1 -- Matches Perfectly
+echo ./project2 -- Matches Perfectly
+echo ./project3 -- Matches Perfectly
+echo ./prove -- Matches Perfectly
+echo ./psi2str -- Matches Perfectly
+echo ./puke -- Matches Perfectly
+echo ./put_get -- Matches Perfectly
+echo ./pyth2 -- Matches Perfectly
+echo ./pyth -- Matches Perfectly
+echo ./qsort1 -- Matches Perfectly
+echo ./qsort2 -- Matches Perfectly
+echo ./query_decl -- Matches Perfectly
+echo ./random -- Matches Perfectly
+echo ./resid1 -- Matches Perfectly
+echo ./resid2 -- Matches Perfectly
+echo ./retract1 -- Matches Perfectly
+echo ./retract2 -- Matches Perfectly
+echo ./retract3 -- Matches Perfectly
+echo ./retract4 -- Matches Perfectly
+echo ./retract5 -- Matches Perfectly
+echo ./retract6 -- Matches Perfectly
+echo ./retract7 -- Matches Perfectly
+echo ./rootsort2 -- Matches Perfectly
+echo ./rootsort -- Matches Perfectly
+echo ./schedule1 -- Matches Perfectly
+echo ./schedule2 -- Matches Perfectly
+echo ./school -- Matches Perfectly
+echo ./self -- Matches Perfectly
+echo ./share -- Matches Perfectly
+echo ./simp_eqn -- Matches Perfectly
+echo ./smalltwente -- Matches Perfectly
+echo ./smm -- Matches Perfectly
+echo ./soap -- Matches Perfectly
+echo ./sortcycle1 -- Matches Perfectly
+echo ./sortcycle2 -- Matches Perfectly
+echo ./sortcycle3 -- Matches Perfectly
+echo ./sortcycle4 -- Matches Perfectly
+echo ./sortcycle5 -- Matches Perfectly
+echo ./str2psi -- Matches Perfectly
+echo ./strbug -- Matches Perfectly
+echo ./streams -- Matches Perfectly
+echo ./strip -- Matches Perfectly
+echo ./str -- Matches Perfectly
+echo ./sub -- Matches Perfectly
+echo ./subs -- Matches Perfectly
+echo ./subsort -- Matches Perfectly
+echo ./t3201 -- Matches Perfectly
+echo ./t3202 -- Matches Perfectly
+echo ./t3203 -- Matches Perfectly
+echo ./t3204 -- Matches Perfectly
+echo ./t3205 -- Matches Perfectly
+echo ./t3206 -- Matches Perfectly
+echo ./t3207 -- Matches Perfectly
+echo ./t4105 -- Matches Perfectly
+echo ./t4202 -- Matches Perfectly
+echo ./t4502 -- Matches Perfectly
+echo ./t4505 -- Matches Perfectly
+./work-1.02.sh t8101
+echo ./t8102 -- Matches Perfectly
+echo ./t8103 -- Matches Perfectly
+./work-1.02.sh t8104
+./work-1.02.sh t8105
+echo ./tan -- Matches Perfectly
+echo ./termsize -- Matches Perfectly
+echo ./test00 -- Matches Perfectly
+./work-1.02.sh test03
+echo ./test04 -- Matches Perfectly
+echo ./testprof -- Matches Perfectly
+./work-1.02.sh testslc
+./work-1.02.sh testsl
+echo ./titi -- Matches Perfectly
+./work-1.02.sh t
+echo ./tri_ins -- Matches Perfectly
+echo ./tripeq -- Matches Perfectly
+echo ./two_bugs -- Matches Perfectly
+echo ./typedisj -- Matches Perfectly
+echo ./unary -- Matches Perfectly
+echo ./unify -- Matches Perfectly
+echo ./varlevel2 -- Matches Perfectly
+echo ./varlevel -- Matches Perfectly
+echo ./volanski1 -- Matches Perfectly
+echo ./wambruno -- Matches Perfectly
+echo ./wam -- Matches Perfectly
+echo ./wlife -- Matches Perfectly
+echo ./write -- Matches Perfectly
+echo ./writeq -- Matches Perfectly
+echo ./xor -- Matches Perfectly
+echo ./z_comb -- Matches Perfectly
+echo ./z_cut2 -- Matches Perfectly
+echo ./z_gcsimp -- Matches Perfectly
+echo ./z_gctoken1 -- Matches Perfectly
+echo ./z_gctoken2 -- Matches Perfectly
+echo ./z_maurice -- Matches Perfectly
+echo ./z_power_4 -- Matches Perfectly
+echo ./z_pyth_gc -- Matches Perfectly
+echo 325 Total Tests completed
+echo 305 Total Tests match
+echo 20 Total Tests differ
+echo 13 Total Tests out differ
+echo 9 Total Tests err differ
+-------------------------------------------------------------------------
+Full Test yields:
+
+echo ./aaa-0000-darland -- Matches Perfectly
+echo ./aaa-00-listing -- Matches Perfectly
+echo ./aaa-00-module -- Matches Perfectly
+echo ./aaa-00-quote -- Matches Perfectly
+echo ./aaa-03-03 -- Matches Perfectly
+echo ./aaa-04-02 -- Matches Perfectly
+echo ./aaa-04-03B -- Matches Perfectly
+echo ./aaa-04-03 -- Matches Perfectly
+echo ./aaa-05-01 -- Matches Perfectly
+echo ./aaa-05-02 -- Matches Perfectly
+echo ./aaa-05-04 -- Matches Perfectly
+echo ./aaa-06-01 -- Matches Perfectly
+echo ./aaa-06-02 -- Matches Perfectly
+echo ./aaa-06-03 -- Matches Perfectly
+echo ./aaa-06-04 -- Matches Perfectly
+echo ./aaa-06-05 -- Matches Perfectly
+echo ./aaa-06-06 -- Matches Perfectly
+echo ./aaa-06-07 -- Matches Perfectly
+echo ./aaa-06-08 -- Matches Perfectly
+echo ./aaa-06-09 -- Matches Perfectly
+echo ./aaa-06-10 -- Matches Perfectly
+echo ./aaa-06-11 -- Matches Perfectly
+echo ./aaa-06-12 -- Matches Perfectly
+echo ./aaa-06-13 -- Matches Perfectly
+echo ./aaa-06-14 -- Matches Perfectly
+echo ./aaa-06-15 -- Matches Perfectly
+echo ./aaa-06-16 -- Matches Perfectly
+echo ./aaa-06-17A -- Matches Perfectly
+echo ./aaa-06-17B -- Matches Perfectly
+echo ./aaa-06-17C -- Matches Perfectly
+echo ./aaa-06-17 -- Matches Perfectly
+echo ./aaa-07-01 -- Matches Perfectly
+echo ./aaa-07-03 -- Matches Perfectly
+echo ./aaa-07-04 -- Matches Perfectly
+echo ./aaa-07-05 -- Matches Perfectly
+echo ./aaa-07-06 -- Matches Perfectly
+echo ./aaa-07-07 -- Matches Perfectly
+echo ./aaa-08-02 -- Matches Perfectly
+echo ./aaa-08-03 -- Matches Perfectly
+echo ./aaa-08-04 -- Matches Perfectly
+echo ./aaa-08-05 -- Matches Perfectly
+echo ./aaa-08-06 -- Matches Perfectly
+echo ./aaa-08-07 -- Matches Perfectly
+echo ./aaa-08-08 -- Matches Perfectly
+echo ./aaa-08-09 -- Matches Perfectly
+echo ./aaa-08-10 -- Matches Perfectly
+echo ./aaa-08-11 -- Matches Perfectly
+echo ./aaa-08-12 -- Matches Perfectly
+echo ./aaa-08-13 -- Matches Perfectly
+echo ./aaa-08-14-arith-64 -- Matches Perfectly
+echo ./aaa-08-14-arith -- Matches Perfectly
+echo ./aaa-08-14-bool -- Matches Perfectly
+echo ./aaa-08-14 -- Matches Perfectly
+echo ./aaa-08-14-neg -- Matches Perfectly
+echo ./aaa-08-15 -- Matches Perfectly
+echo ./aaa-08-16 -- Matches Perfectly
+echo ./aaa-08-17 -- Matches Perfectly
+echo ./aaa-08-18 -- Matches Perfectly
+echo ./aaa-08-19 -- Matches Perfectly
+echo ./aaa-08-20 -- Matches Perfectly
+echo ./aaa-08-21 -- Matches Perfectly
+echo ./aaa-08-22 -- Matches Perfectly
+echo ./aaa-08-23 -- Matches Perfectly
+echo ./aaa-08-24 -- Matches Perfectly
+echo ./aaa-08-25 -- Matches Perfectly
+echo ./aaa-08-26 -- Matches Perfectly
+./work.sh aaa-08-29
+./work.sh aaa-08-31
+echo ./aaa-08-32 -- Matches Perfectly
+echo ./aaa-09-01 -- Matches Perfectly
+echo ./aaa-09-02B -- Matches Perfectly
+echo ./aaa-09-02C -- Matches Perfectly
+echo ./aaa-09-02 -- Matches Perfectly
+echo ./aaa-09-03 -- Matches Perfectly
+echo ./aaa-09-04 -- Matches Perfectly
+echo ./aaa-09-05 -- Matches Perfectly
+echo ./aaa-09-06 -- Matches Perfectly
+echo ./aaa-09-07 -- Matches Perfectly
+echo ./aaa-10-01 -- Matches Perfectly
+echo ./aaa-10-02 -- Matches Perfectly
+echo ./aaa-10-04 -- Matches Perfectly
+echo ./aaa-11-01B -- Matches Perfectly
+echo ./aaa-11-01 -- Matches Perfectly
+echo ./aaa-11-03 -- Matches Perfectly
+echo ./aaa-11-04 -- Matches Perfectly
+./work.sh aaa-11-06
+echo ./aaa-13-02 -- Matches Perfectly
+echo ./aaa-13-03 -- Matches Perfectly
+echo ./aaa-13-04 -- Matches Perfectly
+./work.sh aborthook
+echo ./addtab -- Matches Perfectly
+echo ./alias -- Matches Perfectly
+echo ./andor14 -- Matches Perfectly
+echo ./andor1 -- Matches Perfectly
+echo ./andor2 -- Matches Perfectly
+echo ./andor3 -- Matches Perfectly
+echo ./andor4 -- Matches Perfectly
+echo ./andor5 -- Matches Perfectly
+echo ./another_bug -- Matches Perfectly
+echo ./anyorder -- Matches Perfectly
+echo ./append -- Matches Perfectly
+echo ./apply -- Matches Perfectly
+echo ./arith1 -- Matches Perfectly
+echo ./arith2 -- Matches Perfectly
+echo ./arith3 -- Matches Perfectly
+echo ./arith4 -- Matches Perfectly
+echo ./arith5 -- Matches Perfectly
+echo ./arith6 -- Matches Perfectly
+echo ./arith7 -- Matches Perfectly
+echo ./arith8 -- Matches Perfectly
+echo ./arith9 -- Matches Perfectly
+echo ./arnaud_bug -- Matches Perfectly
+echo ./assert1 -- Matches Perfectly
+echo ./assert2 -- Matches Perfectly
+echo ./assert3 -- Matches Perfectly
+echo ./assert4 -- Matches Perfectly
+echo ./babcode -- Matches Perfectly
+echo ./babel -- Matches Perfectly
+echo ./bagof1 -- Matches Perfectly
+echo ./bagof2 -- Matches Perfectly
+echo ./bagof3 -- Matches Perfectly
+echo ./bagof4 -- Matches Perfectly
+echo ./bagof5 -- Matches Perfectly
+echo ./bagof6 -- Matches Perfectly
+echo ./bigstr -- Matches Perfectly
+echo ./bitnot -- Matches Perfectly
+echo ./bk_assign -- Matches Perfectly
+echo ./boites1 -- Matches Perfectly
+echo ./boites2 -- Matches Perfectly
+echo ./boolpred2 -- Matches Perfectly
+echo ./boolpred -- Matches Perfectly
+echo ./brunobug -- Matches Perfectly
+echo ./bruno_disj -- Matches Perfectly
+echo ./call1 -- Matches Perfectly
+echo ./canonical -- Matches Perfectly
+echo ./caret -- Matches Perfectly
+echo ./cb -- Matches Perfectly
+echo ./chapla -- Matches Perfectly
+echo ./charcode -- Matches Perfectly
+echo ./chart_parser1 -- Matches Perfectly
+echo ./chart_parser2 -- Matches Perfectly
+echo ./children -- Matches Perfectly
+echo ./choice -- Matches Perfectly
+echo ./clause -- Matches Perfectly
+echo ./compose2 -- Matches Perfectly
+echo ./compose -- Matches Perfectly
+echo ./comp_struct -- Matches Perfectly
+./work.sh condpred
+echo ./constr -- Matches Perfectly
+echo ./copy1 -- Matches Perfectly
+echo ./copy2 -- Matches Perfectly
+echo ./copy3 -- Matches Perfectly
+echo ./copyfile -- Matches Perfectly
+echo ./curry14 -- Matches Perfectly
+echo ./curry15 -- Matches Perfectly
+echo ./curry1 -- Matches Perfectly
+echo ./curry2 -- Matches Perfectly
+echo ./curry3 -- Matches Perfectly
+echo ./curry4 -- Matches Perfectly
+echo ./curry5 -- Matches Perfectly
+echo ./curry6 -- Matches Perfectly
+echo ./curry7 -- Matches Perfectly
+echo ./curry8 -- Matches Perfectly
+echo ./cut2 -- Matches Perfectly
+echo ./cut3 -- Matches Perfectly
+echo ./cycles1 -- Matches Perfectly
+echo ./cycles2 -- Matches Perfectly
+./work.sh debug
+echo ./decl -- Matches Perfectly
+echo ./delay2 -- Matches Perfectly
+echo ./delay -- Matches Perfectly
+echo ./dichotomy -- Matches Perfectly
+echo ./dict -- Matches Perfectly
+echo ./disequality1 -- Matches Perfectly
+echo ./disequality2 -- Matches Perfectly
+echo ./disequality3 -- Matches Perfectly
+echo ./disequality4 -- Matches Perfectly
+echo ./disequality5 -- Matches Perfectly
+echo ./disequality6 -- Matches Perfectly
+echo ./disequality7 -- Matches Perfectly
+echo ./disequality8 -- Matches Perfectly
+echo ./disequality9 -- Matches Perfectly
+echo ./disj1 -- Matches Perfectly
+echo ./disj2 -- Matches Perfectly
+echo ./disj3 -- Matches Perfectly
+echo ./disj4 -- Matches Perfectly
+echo ./disj5 -- Matches Perfectly
+echo ./disj6 -- Matches Perfectly
+echo ./disj7 -- Matches Perfectly
+echo ./dissolve -- Matches Perfectly
+./work.sh dupfeat
+echo ./dynstat -- Matches Perfectly
+echo ./encapsulate -- Matches Perfectly
+./work.sh eoftest2
+echo ./eoftest3 -- Matches Perfectly
+./work.sh eoftest
+echo ./eratosthenes -- Matches Perfectly
+echo ./errordecl -- Matches Perfectly
+echo ./example -- Matches Perfectly
+echo ./extest -- Matches Perfectly
+echo ./fact -- Matches Perfectly
+echo ./factorize -- Matches Perfectly
+echo ./fail -- Matches Perfectly
+echo ./featnames -- Matches Perfectly
+echo ./feat_order -- Matches Perfectly
+echo ./feature -- Matches Perfectly
+echo ./feature_module -- Matches Perfectly
+echo ./features1 -- Matches Perfectly
+echo ./featval -- Matches Perfectly
+echo ./foo -- Matches Perfectly
+echo ./funcself -- Matches Perfectly
+echo ./function2 -- Matches Perfectly
+echo ./fusil -- Matches Perfectly
+echo ./gauss -- Matches Perfectly
+echo ./gctest -- Matches Perfectly
+echo ./genint -- Matches Perfectly
+echo ./glb -- Matches Perfectly
+echo ./glblub -- Matches Perfectly
+echo ./global2 -- Matches Perfectly
+echo ./global3 -- Matches Perfectly
+echo ./global -- Matches Perfectly
+echo ./glob_gc -- Matches Perfectly
+./work.sh glob_test2
+echo ./grammars -- Matches Perfectly
+echo ./hamming -- Matches Perfectly
+echo ./hanoi -- Matches Perfectly
+echo ./hasfeature -- Matches Perfectly
+echo ./inherit -- Matches Perfectly
+echo ./intabs -- Matches Perfectly
+echo ./intdiv2 -- Matches Perfectly
+echo ./intdiv3 -- Matches Perfectly
+echo ./intdiv -- Matches Perfectly
+echo ./intlist -- Matches Perfectly
+echo ./inttrace -- Matches Perfectly
+echo ./isatest2 -- Matches Perfectly
+echo ./isatest -- Matches Perfectly
+echo ./junk -- Matches Perfectly
+echo ./lazyinherit -- Matches Perfectly
+echo ./lazy -- Matches Perfectly
+echo ./lefun1 -- Matches Perfectly
+echo ./lefun2 -- Matches Perfectly
+echo ./libstruct -- Matches Perfectly
+./work.sh libtest
+echo ./list_bda -- Matches Perfectly
+echo ./listing1 -- Matches Perfectly
+echo ./listing2 -- Matches Perfectly
+echo ./loadquery -- Matches Perfectly
+echo ./long -- Matches Perfectly
+echo ./longstr -- Matches Perfectly
+echo ./lub -- Matches Perfectly
+echo ./machine -- Matches Perfectly
+echo ./magic -- Matches Perfectly
+echo ./makestr -- Matches Perfectly
+echo ./manual10 -- Matches Perfectly
+echo ./manual11 -- Matches Perfectly
+echo ./manual1 -- Matches Perfectly
+echo ./manual2 -- Matches Perfectly
+echo ./manual3 -- Matches Perfectly
+./work.sh manual4
+echo ./manual5 -- Matches Perfectly
+echo ./manual6 -- Matches Perfectly
+echo ./manual7 -- Matches Perfectly
+echo ./manual8 -- Matches Perfectly
+echo ./manual9 -- Matches Perfectly
+echo ./many_types -- Matches Perfectly
+echo ./matrix -- Matches Perfectly
+echo ./module_test1a -- Matches Perfectly
+echo ./module_test1 -- Matches Perfectly
+./work.sh module_test2
+echo ./module_test3 -- Matches Perfectly
+echo ./module_test4 -- Matches Perfectly
+echo ./module_test5 -- Matches Perfectly
+echo ./module_test6 -- Matches Perfectly
+echo ./mort -- Matches Perfectly
+echo ./mresid -- Matches Perfectly
+echo ./n2 -- Matches Perfectly
+echo ./naming -- Matches Perfectly
+echo ./nesting -- Matches Perfectly
+echo ./nicetest -- Matches Perfectly
+echo ./nl -- Matches Perfectly
+echo ./nofour -- Matches Perfectly
+echo ./nonstrict1 -- Matches Perfectly
+echo ./nonstrict2 -- Matches Perfectly
+echo ./nonstrict3 -- Matches Perfectly
+echo ./nonstrict4 -- Matches Perfectly
+echo ./nonstrict5 -- Matches Perfectly
+echo ./nonvar -- Matches Perfectly
+echo ./not -- Matches Perfectly
+echo ./numeric -- Matches Perfectly
+echo ./op1 -- Matches Perfectly
+echo ./op2 -- Matches Perfectly
+echo ./op3 -- Matches Perfectly
+echo ./order -- Matches Perfectly
+echo ./overload -- Matches Perfectly
+echo ./pagewidth -- Matches Perfectly
+echo ./parents -- Matches Perfectly
+echo ./parse2 -- Matches Perfectly
+echo ./parse -- Matches Perfectly
+echo ./parser -- Matches Perfectly
+echo ./part -- Matches Perfectly
+echo ./peep -- Matches Perfectly
+./work.sh pers2
+echo ./persistent2 -- Matches Perfectly
+echo ./persistent -- Matches Perfectly
+echo ./person1 -- Matches Perfectly
+echo ./person2 -- Matches Perfectly
+echo ./posint -- Matches Perfectly
+echo ./power -- Matches Perfectly
+./work.sh preparser
+echo ./prime -- Matches Perfectly
+echo ./print1 -- Matches Perfectly
+echo ./print2 -- Matches Perfectly
+echo ./print_depth1 -- Matches Perfectly
+echo ./print_depth2 -- Matches Perfectly
+echo ./print_test -- Matches Perfectly
+echo ./printvar -- Matches Perfectly
+echo ./profiler1 -- Matches Perfectly
+echo ./profiler2 -- Matches Perfectly
+echo ./profiler3 -- Matches Perfectly
+echo ./project1 -- Matches Perfectly
+echo ./project2 -- Matches Perfectly
+echo ./project3 -- Matches Perfectly
+echo ./prove -- Matches Perfectly
+echo ./psi2str -- Matches Perfectly
+echo ./puke -- Matches Perfectly
+echo ./put_get -- Matches Perfectly
+echo ./pyth2 -- Matches Perfectly
+echo ./pyth -- Matches Perfectly
+echo ./qsort1 -- Matches Perfectly
+echo ./qsort2 -- Matches Perfectly
+echo ./query_decl -- Matches Perfectly
+echo ./random -- Matches Perfectly
+echo ./resid1 -- Matches Perfectly
+echo ./resid2 -- Matches Perfectly
+echo ./retract1 -- Matches Perfectly
+echo ./retract2 -- Matches Perfectly
+echo ./retract3 -- Matches Perfectly
+echo ./retract4 -- Matches Perfectly
+echo ./retract5 -- Matches Perfectly
+echo ./retract6 -- Matches Perfectly
+echo ./retract7 -- Matches Perfectly
+echo ./rootsort2 -- Matches Perfectly
+echo ./rootsort -- Matches Perfectly
+echo ./schedule1 -- Matches Perfectly
+echo ./schedule2 -- Matches Perfectly
+echo ./school -- Matches Perfectly
+echo ./self -- Matches Perfectly
+echo ./share -- Matches Perfectly
+echo ./simp_eqn -- Matches Perfectly
+echo ./smalltwente -- Matches Perfectly
+echo ./smm -- Matches Perfectly
+echo ./soap -- Matches Perfectly
+echo ./sortcycle1 -- Matches Perfectly
+echo ./sortcycle2 -- Matches Perfectly
+echo ./sortcycle3 -- Matches Perfectly
+echo ./sortcycle4 -- Matches Perfectly
+echo ./sortcycle5 -- Matches Perfectly
+echo ./str2psi -- Matches Perfectly
+echo ./strbug -- Matches Perfectly
+echo ./streams -- Matches Perfectly
+echo ./strip -- Matches Perfectly
+echo ./str -- Matches Perfectly
+echo ./sub -- Matches Perfectly
+echo ./subs -- Matches Perfectly
+echo ./subsort -- Matches Perfectly
+echo ./t3201 -- Matches Perfectly
+echo ./t3202 -- Matches Perfectly
+echo ./t3203 -- Matches Perfectly
+echo ./t3204 -- Matches Perfectly
+echo ./t3205 -- Matches Perfectly
+echo ./t3206 -- Matches Perfectly
+echo ./t3207 -- Matches Perfectly
+echo ./t4105 -- Matches Perfectly
+echo ./t4202 -- Matches Perfectly
+echo ./t4502 -- Matches Perfectly
+echo ./t4505 -- Matches Perfectly
+./work.sh t8101
+echo ./t8102 -- Matches Perfectly
+echo ./t8103 -- Matches Perfectly
+echo ./t8104 -- Matches Perfectly
+./work.sh t8105
+echo ./tan -- Matches Perfectly
+echo ./termsize -- Matches Perfectly
+echo ./test00 -- Matches Perfectly
+./work.sh test03
+echo ./test04 -- Matches Perfectly
+echo ./testprof -- Matches Perfectly
+./work.sh testslc
+./work.sh testsl
+echo ./titi -- Matches Perfectly
+echo ./t -- Matches Perfectly
+echo ./tri_ins -- Matches Perfectly
+echo ./tripeq -- Matches Perfectly
+echo ./two_bugs -- Matches Perfectly
+echo ./typedisj -- Matches Perfectly
+echo ./unary -- Matches Perfectly
+echo ./unify -- Matches Perfectly
+echo ./varlevel2 -- Matches Perfectly
+echo ./varlevel -- Matches Perfectly
+echo ./volanski1 -- Matches Perfectly
+echo ./wambruno -- Matches Perfectly
+echo ./wam -- Matches Perfectly
+echo ./wlife -- Matches Perfectly
+echo ./write -- Matches Perfectly
+echo ./writeq -- Matches Perfectly
+echo ./xor -- Matches Perfectly
+echo ./z_comb -- Matches Perfectly
+echo ./z_cut2 -- Matches Perfectly
+echo ./z_gcsimp -- Matches Perfectly
+echo ./z_gctoken1 -- Matches Perfectly
+echo ./z_gctoken2 -- Matches Perfectly
+echo ./z_maurice -- Matches Perfectly
+echo ./z_power_4 -- Matches Perfectly
+echo ./z_pyth_gc -- Matches Perfectly
+echo 414 Total Tests completed
+echo 394 Total Tests match
+echo 20 Total Tests differ
+echo 10 Total Tests out differ
+echo 14 Total Tests err differ
+
+---------------------------------------------------------
+Working with current test suite.
+Approved aaa-08-29
+Difference was caused by script creating .tmp suffix
+Note: had to fix approve also relating to .tmp output
+----------------------------------------------------------
+Went back to ./ts-1.02.sh
+
+aborthook has error output:
+
+*** Abort
+
+*** END Abort
+
+Reference has no output.
+---------------------------------------------------------
+babcode
+
+387 sorts instead of 381 sorts
+----------------------------------------------------------
+children
+
+differences - mainly is seems from x windows not included.
+--------------------------------------------------------------
+clause
+
+differeces are:
+
+45c45
+< A = [_A|_B], B = list, C = [_A|append(_B,B)], X = (append(A,B) -> C).
+---
+> A = [], B = list, C = B, X = (append(A,B) -> B).
+48c48
+< A = [], B = list, C = B, X = (append(A,B) -> B).
+---
+> A = [_A|_B], B = list, C = [_A|append(_B,B)], X = (append(A,B) -> C).
+53c53
+< X = (append([_A|_B],_C: list) -> [_A|append(_B,_C)]).
+---
+> X = (append([],_A: list) -> _A).
+56c56
+< X = (append([],_A: list) -> _A).
+---
+> X = (append([_A|_B],_C: list) -> [_A|append(_B,_C)]).
+------------------------------------------------------------------
+condpred
+
+reference seems missing
+---------------------------------------------------------------------
+debug
+
+copied Life/Tools to Life/Tests/Tools
+
+Then clause numbers seemed different
+--------------------------------------------------------------------
+glob_test2
+
+in output 'p' missing from persistent
+
+in error output -- "END Abort added"
+-----------------------------------------------------------------
+libtest
+
+many manual entries missing + more.
+-------------------------------------------------------------------
+listing1
+
+don't see the difference
+------------------------------------------------------------------
+manual4
+
+END Abort added
+--------------------------------------------------------------------
+module_test2
+
+END Abort added
+---------------------------------------------------------------------
+pers2
+
+END Abort added
+--------------------------------------------------------------------
+preparser
+
+syntax error in new version
+-------------------------------------------------------------------
+t8101
+
+END Abort added
+--------------------------------------------------------------------
+t8104
+
+get Infinity instead of inf
+get NaN instead of nan
+----------------------------------------------------------------------
+t8105
+
+END Abort added
+----------------------------------------------------------------------
+test03
+
+lots undefinded - probably for x-windows
+---------------------------------------------------------------------
+testslc
+
+superlint?
+--------------------------------------------------------------------
+testsl
+
+superlint - don't see difference
+--------------------------------------------------------------------
+t
+
+I'm confused
+--------------------------------------------------------------------
+At this point ts-1.02.sh gives:
+
+325 Total Tests completed
+305 Total Tests match
+20 Total Tests differ
+13 Total Tests out differ
+9 Total Tests err differ
+----------------------------------------------------------------------
+
+commented printf of "END Abort" in built_ins.c
+I must have added it in debugging in past. (It's in newer references.
+I had re-added it above.
+---------------------------------------------------------------------
+After
+
+echo 325 Total Tests completed
+echo 310 Total Tests match
+echo 15 Total Tests differ
+echo 13 Total Tests out differ
+echo 3 Total Tests err differ
+---------------------------------------------------------------------
+
+aborthook
+
+get Abort message new version - nothing reference
+APPROVED new output
+----------------------------------------------------------------------
+
+
+babcode
+APPROVED new output
+----------------------------------------------------------------------
+children
+
+differences seem to relate to X Windows
+APPROVED new output
+----------------------------------------------------------------------
+
+clause
+
+Just order of output is different
+APPROVED new output
+
+-----------------------------------------------------------------------
+condpred
+
+reference missing
+
+APPROVED new output
+-------------------------------------------------------------------
+debug
+
+just clause numbers seem different
+
+APPROVED new output
+
+---------------------------------------------------------------------
+glob_test2
+
+'p' missing in persistant in new output
+
+------------------------------------------------------------------
+libtest
+
+not finding files to import
+
+------------------------------------------------------------------
+listing
+
+see no difference (whitespace?)
+
+APPROVED new output
+
+---------------------------------------------------------------------
+test03
+
+differences seem related to X windows
+
+APPROVED new output
+
+-----------------------------------------------------------------------
+testslc
+
+think there are files missing
+
+removed from testing
+
+----------------------------------------------------------------------
+testsl
+
+see no difference (whitespace?)
+
+APPROVED new output
+
+---------------------------------------------------------------------
+t
+
+there are more sorts in new version
+
+APPROVED new output
+
+
+---------------------------------------------------------------------
+
+t8104
+
+Approved
+difference only Infinity for inf
+and NaN for nan
+--------------------------------------------------------------------
+
+
+glob_test2
+
+'p' missing from persistent
+
+(out)
+
+---------------------------------
+
+libtest
+
+seems files missing
+
+removed from testing
+
+------------------------------------
+
+-------------------------------------------
+only discrepancy glob_test2
+
+'p' missing from persistent
+
+BUT examining carefuly -- 'p' missing from reference - new correct!!
+
+APPROVED new output
+
+----------------------------------------------
+NOW for ts-1.02.sh
+
+echo 323 Total Tests completed
+echo 322 Total Tests match
+echo 1 Total Tests differ
+echo 1 Total Tests out differ
+echo 1 Total Tests err differ
+
+ONLY remaining preparser
+-------------------------------------------------------------
+------------------------------------------------------------
+Starting on ts.sh -- after getting "END Abort" correct
+
+
+echo 414 Total Tests completed
+echo 403 Total Tests match
+echo 11 Total Tests differ
+echo 9 Total Tests out differ
+echo 6 Total Tests err differ
+
+---------------------------------------------------------------
+aaa-08-31
+added x.lf to FILES -- found in handbook
+
+fixed
+--------------------------------------------------------------
+condpred
+
+reference missing
+
+APPROVED new output
+--------------------------------------------------------------
+
+debug
+
+clauses numbered differently
+
+APPROVED new output
+
+----------------------------------------------------------------
+2 -- dupfeat  -- 4.01 gives line number error is near -- reference does not
+
+APPROVED new output
+
+-------------------------------------------------------------
+
+eoftest2
+
+study LATER
+
+-------------------------------------------------------------
+
+eoftest
+
+study LATER
+
+-----------------------------------------------------------
+libtest
+
+I think manual missing
+
+APPROVED new output
+
+-------------------------------------------------------------
+preparser
+
+study LATER
+
+---------------------------------------------------------------
+
+test03
+
+differences seem related to X windows
+
+APPROVED new output
+
+-----------------------------------------------------------------------
+testslc
+
+think there are files missing
+
+removed from testing
+
+-------------------------------------------------------------------
+testsl
+
+see minor difference re default
+
+APPROVED new output
+
+--------------------------------------------------------------------
+
+NOW:
+
+echo 413 Total Tests completed
+echo 410 Total Tests match
+echo 3 Total Tests differ
+echo 3 Total Tests out differ
+echo 3 Total Tests err differ
+
+Problems are:
+
+eoftest2
+eoftest
+preparser
+-----------------------------------------------------------------------
+After life_local_redo (with ts.sh)
+
+413 Total Tests completed
+409 Total Tests match
+4 Total Tests differ
+4 Total Tests out differ
+4 Total Tests err differ
+
+1 more error:
+
+testsl
+
+------------------------------------------------------------------------
+After life_local_xxxx_redo2
+
+echo 413 Total Tests completed
+echo 405 Total Tests match
+echo 8 Total Tests differ
+echo 8 Total Tests out differ
+echo 4 Total Tests err differ
+
+-------------------------------------------------------------------------
+
+Worked on X Windows
+Main changes
+
+Use fonts that exist on my system.
+
+Update +SETUP+ path.
+
+Sometimes added
+module("user")?
+and
+open("....")?
+
+at end of modules
+
+Removed load("xtools_utils") from life_demo.lf
+
+Disabled (effectively_ check for font in life_demo - I just used one I
+knew that I had.
+
+-----------------------------------------------------------------------
+
+Going back to test suite.
+Investigating end_of_file (2 of 4 mismatches)
+
+Add example 08-27 from handbook
+
+It works OK as is. (And makes sense).
+
+eoftest2 is confusing to me. (Approve output).
+
+eoftest does't make sense either. (Approve also).
+
+in extest.lf added full paths
+
+Updated paths to sl and slc
+
+Test testsl now works --
+also added 2nd \ 2 places in c_tokenizer.lf
+
+testslc does not work -- c has changed anyway -- remove test
+
+added 2nd \ in preparser.lf and then matched
+
+NOW
+
+echo 414 Total Tests completed
+echo 414 Total Tests match
+echo 0 Total Tests differ
+echo 0 Total Tests out differ
+echo 0 Total Tests err differ
+
+Note: No changes to c code.
+
+Still need to update suites for 1.02 & X
+
+
+Original 1.02 Test Suite Now gives
+
+echo 324 Total Tests completed
+echo 324 Total Tests match
+echo 0 Total Tests differ
+echo 0 Total Tests out differ
+
+For -X
+
+had to approve 08-29 - had earlier for others.
+
+had to approve children -- additions for X
+
+Eliminated eoftest2 for this also
+
+Eliminated eoftest for this also
+
+Problem with glob_test2 --- p in persistent missing.
+May have approved others by mistake.
+
+test03 also differs - not sure  -- involves children - may be X difference
+
+Now for X version
+
+echo 412 Total Tests completed
+echo 410 Total Tests match
+echo 2 Total Tests differ
+echo 2 Total Tests out differ
+echo 0 Total Tests err differ
+

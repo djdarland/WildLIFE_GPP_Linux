@@ -1,0 +1,3 @@
+
+import("~/life_local/Examples/dictionary","~/life_local/Examples/hamming","~/life_local/Examples/machine","~/life_local/Examples/nl","~/life_local/Examples/prime",
+       "~/life_local/Examples/simple","~/life_local/Examples/magic","~/life_local/Examples/schedule","~/life_local/Examples/soap","solve","~/life_local/Examples/xxxooo")?

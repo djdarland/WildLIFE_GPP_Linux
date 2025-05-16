@@ -1,0 +1,15 @@
+tar -xzvf WildLIFE..[version]...tar.gz
+
+THEN
+in Life/Source subdirectory
+
+do
+./mk.sh to make most current version
+./mk-1.02.sh  to make version more compatible with 1.02 Test Suite
+./mk-X.sh     to make version with X Windows support compiled in
+
+Also
+
+./cp_local.sh   to copy local directories for all versions.
+
+
