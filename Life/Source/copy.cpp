@@ -60,10 +60,10 @@ void clear_copy()
   Add the translation of address A to address B in the translation table.
   Also add an info field.
 */
-/* static */ void insert_translation(a,b,info)
-ptr_psi_term a;
-ptr_psi_term b;
-long info;
+/* static */ void insert_translation(ptr_psi_term a,ptr_psi_term b,long info)
+	     // ptr_psi_term a;
+	     // ptr_psi_term b;
+	     // long info;
 {
   long index;
   long lastbucket;
@@ -98,9 +98,9 @@ long info;
   Get the translation of address A and the info field stored with it.
   Return NULL if none is found.
 */
-/* static */ ptr_psi_term translate(a,infoptr)   /*  RM: Jan 27 1993  */
-ptr_psi_term a;
-long **infoptr;
+/* static */ ptr_psi_term translate(ptr_psi_term a,long **infoptr)   /*  RM: Jan 27 1993  */
+	     //  ptr_psi_term a;
+	     //long **infoptr;
 {
   long index;
   /* long i; 20.8 */
@@ -160,9 +160,9 @@ long **infoptr;
 ptr_psi_term copy(); /* Forward declarations */
 void mark_quote_c();
 
-static ptr_node copy_tree(t, copy_flag, heap_flag)
-ptr_node t;
-long copy_flag, heap_flag;
+static ptr_node copy_tree(ptr_node t, long copy_flag, long heap_flag)
+//ptr_node t;
+//long copy_flag, heap_flag;
 {
   ptr_node r;
   ptr_psi_term t1,t2;
@@ -222,33 +222,33 @@ long copy_flag, heap_flag;
 /* See mark_quote_c: */ /* 15.9 */
 #define QUOTE_STUB 3
 
-ptr_psi_term exact_copy(t, heap_flag)
-ptr_psi_term t;
-long heap_flag;
+ptr_psi_term exact_copy(ptr_psi_term t, long heap_flag)
+// ptr_psi_term t;
+// long heap_flag;
 { to_heap=FALSE; return (copy(t, EXACT_FLAG, heap_flag)); }
 
-ptr_psi_term quote_copy(t, heap_flag)
-ptr_psi_term t;
-long heap_flag;
+ptr_psi_term quote_copy(ptr_psi_term t, long heap_flag)
+// ptr_psi_term t;
+// long heap_flag;
 { to_heap=FALSE; return (copy(t, QUOTE_FLAG, heap_flag)); }
 
-ptr_psi_term eval_copy(t, heap_flag)
-ptr_psi_term t;
-long heap_flag;
+ptr_psi_term eval_copy(ptr_psi_term t, long heap_flag)
+// ptr_psi_term t;
+// long heap_flag;
 { to_heap=FALSE; return (copy(t, EVAL_FLAG, heap_flag)); }
 
 /* There is a bug in inc_heap_copy */
-ptr_psi_term inc_heap_copy(t)
-ptr_psi_term t;
+ptr_psi_term inc_heap_copy(ptr_psi_term t)
+// ptr_psi_term t;
 { to_heap=TRUE; return (copy(t, EXACT_FLAG, TRUE)); }
 
 static long curr_status;
 
 
 
-ptr_psi_term copy(t, copy_flag, heap_flag)
-     ptr_psi_term t;
-     long copy_flag,heap_flag;
+ptr_psi_term copy(ptr_psi_term t, long copy_flag, long heap_flag)
+//     ptr_psi_term t;
+//     long copy_flag,heap_flag;
 {
   ptr_psi_term u;
   long old_status;
@@ -361,8 +361,8 @@ ptr_psi_term copy(t, copy_flag, heap_flag)
   This is used by APPLY in order to build the calling psi-term which is used
   for matching.
 */
-ptr_node distinct_tree(t)
-ptr_node t;
+ptr_node distinct_tree(ptr_node t)
+// ptr_node t;
 {
   ptr_node n;
   
@@ -385,8 +385,8 @@ ptr_node t;
   psi-term which is used for matching.  Note that this routine is not
   recursive, i.e. it only copies the main functor & the attribute tree.
 */
-ptr_psi_term distinct_copy(t)
-ptr_psi_term t;
+ptr_psi_term distinct_copy(ptr_psi_term t)
+// ptr_psi_term t;
 {
   ptr_psi_term res;
 
@@ -421,9 +421,9 @@ ptr_psi_term t;
 /* Assumes all translation table entries already exist. */
 /* The infoptr field is updated so that each subgraph is only traversed once. */
 /* This routine is called only from the main copy routine. */
-void mark_quote_c(t,heap_flag)
-ptr_psi_term t;
-long heap_flag;
+void mark_quote_c(ptr_psi_term t, long heap_flag)
+// ptr_psi_term t;
+// long heap_flag;
 {
   ptr_list l;
   long *infoptr;
@@ -449,9 +449,9 @@ long heap_flag;
   }
 }
 
-void mark_quote_tree_c(n,heap_flag)
-ptr_node n;
-long heap_flag;
+void mark_quote_tree_c(ptr_node n,long heap_flag)
+// ptr_node n;
+// long heap_flag;
 {
   if (n) {
     mark_quote_tree_c(n->left,heap_flag);
@@ -483,8 +483,8 @@ static long mark_nonstrict_flag;
 /* occurrence is nonstrict).  The translation table is used to indicate (1) */
 /* whether a term has already been traversed, and if so, (2) whether there  */
 /* was a nonstrict traversal (in that case, the info field is FALSE). */
-void mark_eval(t) /* 24.8 25.8 */
-ptr_psi_term t;
+void mark_eval(ptr_psi_term t) /* 24.8 25.8 */
+// ptr_psi_term t;
 {
   clear_copy();
   mark_nonstrict_flag=FALSE;
@@ -493,8 +493,8 @@ ptr_psi_term t;
 
 /* Same as above, except that the status is only changed from 0 to 4 when */
 /* needed; it is never changed from 4 to 0. */
-void mark_nonstrict(t)
-ptr_psi_term t;
+void mark_nonstrict(ptr_psi_term t)
+// ptr_psi_term t;
 {
   clear_copy();
   mark_nonstrict_flag=TRUE;
@@ -502,16 +502,16 @@ ptr_psi_term t;
 }
 
 /* Mark a term as quoted. */
-void mark_quote_new2(t)
-ptr_psi_term t;
+void mark_quote_new2(ptr_psi_term t)
+// ptr_psi_term t;
 {
   clear_copy();
   mark_nonstrict_flag=FALSE;
   mark_quote_new(t);
 }
 
-void mark_eval_new(t)
-ptr_psi_term t;
+void mark_eval_new(ptr_psi_term t)
+// ptr_psi_term t;
 {
   ptr_list l;
   long *infoptr,flag;
@@ -577,8 +577,8 @@ ptr_psi_term t;
   }
 }
 
-void mark_eval_tree_new(n)
-ptr_node n;
+void mark_eval_tree_new(ptr_node n)
+// ptr_node n;
 {
   if (n) {
     mark_eval_tree_new(n->left);
@@ -588,8 +588,8 @@ ptr_node n;
 }
 
 
-void mark_quote_new(t)
-ptr_psi_term t;
+void mark_quote_new(ptr_psi_term t)
+// ptr_psi_term t;
 {
   ptr_list l;
   long *infoptr;
@@ -612,8 +612,8 @@ ptr_psi_term t;
 }
 
 
-void mark_quote_tree_new(n)
-ptr_node n;
+void mark_quote_tree_new(ptr_node n)
+// ptr_node n;
 {
   if (n) {
     mark_quote_tree_new(n->left);
@@ -632,8 +632,8 @@ ptr_node n;
 extern void mark_quote_tree(); /* A forward declaration */
 
 /* Mark a psi-term as completely evaluated. */
-void mark_quote(t)
-ptr_psi_term t;
+void mark_quote(ptr_psi_term t)
+// ptr_psi_term t;
 {
   ptr_list l;
 
@@ -647,8 +647,8 @@ ptr_psi_term t;
   }
 }
 
-void mark_quote_tree(t)
-ptr_node t;
+void mark_quote_tree(ptr_node t)
+// ptr_node t;
 {
   if (t) {
     mark_quote_tree(t->left);
@@ -662,8 +662,8 @@ ptr_node t;
 
 void bk_mark_quote_tree();
      
-void bk_mark_quote(t)
-ptr_psi_term t;
+void bk_mark_quote(ptr_psi_term t)
+// ptr_psi_term t;
 {
   ptr_list l;
 
@@ -679,8 +679,8 @@ ptr_psi_term t;
   }
 }
 
-void bk_mark_quote_tree(t)
-ptr_node t;
+void bk_mark_quote_tree(ptr_node t)
+// ptr_node t;
 {
   if (t) {
     bk_mark_quote_tree(t->left);
