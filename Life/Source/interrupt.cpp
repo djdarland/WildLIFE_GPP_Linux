@@ -17,9 +17,9 @@ static char vcid[] = "$Id: interrupt.c,v 1.2 1994/12/08 23:25:19 duchier Exp $";
   This routine is called whenever the user types CONTROL C which generates an
   interrupt. The interrupt is dealt with later, when convenient, or ignored.
 */
-void interrupt()
+void interrupt(int)
 {
-  void (*f)(); /*  RM: Apr  7 1993   Weird problem in GCC and C89 */
+  void (*f)(int); /*  RM: Apr  7 1993   Weird problem in GCC and C89 */
   
   interrupted=TRUE;
   f=interrupt;
@@ -34,7 +34,7 @@ void interrupt()
 */
 void init_interrupt()
 {
-  void (*f)(); /*  RM: Apr  7 1993   Weird problem in GCC and C89 */
+  void (*f)(int); /*  RM: Apr  7 1993   Weird problem in GCC and C89 */
   f=interrupt;
   if (signal(SIGINT,SIG_IGN)!=SIG_IGN)
     signal(SIGINT,f);
