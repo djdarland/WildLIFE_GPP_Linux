@@ -37,19 +37,19 @@ static long amount_used;
 #ifdef CLIFE
 long pass;
 #else 
-static long pass;
+// static long pass;
 #endif /* CLIFE */
 
 #define LONELY 1
 
-static struct tms last_garbage_time;
-static float gc_time, life_time;
+// static struct tms last_garbage_time;
+// static float gc_time, life_time;
 
 /************* STUFF FOR PARSING COMMAND LINE ARGS ************************/
 
-char *GetStrOption(name,def)
-char *name;
-char *def;
+char *GetStrOption(char *name,char *def)
+// char *name;
+// char *def;
 {
   int i;
   char *result=def;
@@ -68,8 +68,8 @@ char *def;
 
 
 
-int GetBoolOption(name)
-char *name;
+int GetBoolOption(char *name)
+// char *name;
 {
   char *s;
   s=GetStrOption(name,"off");
@@ -78,9 +78,9 @@ char *name;
 
 
 
-int GetIntOption(name,def)
-char *name;
-int def;
+int GetIntOption(char *name,int def)
+// char *name;
+// int def;
 {
   char *s;
   char buffer[40];
@@ -167,7 +167,7 @@ long bounds_undo_stack()
 
 /* Forward declarations */
 static void check_psi_list();
-static void check_resid_list(); /* 21.9 */
+static void check_resid_list(ptr_resid_list*); /* 21.9 */
 static void check_choice();
 static void check_undo_stack();
 
@@ -326,13 +326,13 @@ static void compress()
 
 
 
-#ifdef CLIFE
-long unchecked (p, len)
-#else
-static long unchecked (p, len)
-#endif /* CLIFE */
-GENERIC *p; 
-long len;
+//#ifdef CLIFE
+long unchecked (GENERIC *p, long len)
+// #else
+// static long unchecked (GENERIC *p, long len)
+// #endif /* CLIFE */
+// GENERIC *p; 
+// long len;
 {
   GENERIC addr;
   long result=FALSE, value;
@@ -395,8 +395,8 @@ long len;
 /******** CHECK_STRING(s)
   Claim the memory used by the string S.
 */
-static void check_string (s)
-GENERIC *s;
+static void check_string (GENERIC *s)
+// GENERIC *s;
 {
   GENERIC addr;
   long value;
@@ -436,8 +436,8 @@ GENERIC *s;
 /******** CHECK_BYTEDATA(s)
   Claim the memory used by a block of bytes
   */
-static void check_bytedata(s)
-     GENERIC *s;
+static void check_bytedata(GENERIC *s)
+//     GENERIC *s;
 {
   GENERIC addr;
   long value;
@@ -468,10 +468,10 @@ static void check_bytedata(s)
 /******** CHECK_CODE(c)
   Claim the memory used by a type code (=list of integers).
 */
-static void check_code(c)
-ptr_int_list *c;
+static void check_code(ptr_int_list *c)
+// ptr_int_list *c;
 {
-  while (unchecked(c,sizeof(int_list)))
+  while (unchecked((GENERIC*)c,sizeof(int_list)))
     c= &((*c)->next);
 }
 
@@ -480,10 +480,10 @@ ptr_int_list *c;
 /******** CHECK_PAIR_LIST
   Checks a list of <GOAL,BODY> pairs.
 */
-static void check_pair_list(p)
-ptr_pair_list *p;
+static void check_pair_list(ptr_pair_list *p)
+// ptr_pair_list *p;
 {  
-  while (unchecked(p,sizeof(pair_list))) {
+  while (unchecked((GENERIC*)p,sizeof(pair_list))) {
     check_psi_term(&((*p)->aaaa_2));
     check_psi_term(&((*p)->bbbb_2));
     p= &((*p)->next);
@@ -496,10 +496,10 @@ ptr_pair_list *p;
 /******** CHECK_TRIPLE_LIST
   Checks a list of <GOAL,BODY,DEF> triples.
 */
-static void check_triple_list(p)
-ptr_triple_list *p;
+static void check_triple_list(ptr_triple_list *p)
+// ptr_triple_list *p;
 {  
-  while (unchecked(p,sizeof(triple_list))) {
+  while (unchecked((GENERIC*)p,sizeof(triple_list))) {
     check_psi_term(&((*p)->aaaa_4));
     check_psi_term(&((*p)->bbbb_4));
     check_definition(&((*p)->cccc_4));
@@ -512,10 +512,10 @@ ptr_triple_list *p;
 /******** CHECK_KIDS(c)
   Check a list of parents or children of a given type.
 */
-static void check_kids(c)
-ptr_int_list *c;
+static void check_kids(ptr_int_list *c)
+// ptr_int_list *c;
 {
-  while (unchecked(c,sizeof(int_list))) {
+  while (unchecked((GENERIC*)c,sizeof(int_list))) {
     check_definition((struct wl_definition **)&((*c)->value_1)); // REV401PLUS cast
     c= &((*c)->next);
   }
@@ -526,18 +526,18 @@ ptr_int_list *c;
 /******** CHECK_OPERATOR_DATA(op)
   Explore a list of operator declarations.
 */
-static void check_operator_data(op)
-ptr_operator_data *op;
+static void check_operator_data(ptr_operator_data *op)
+// ptr_operator_data *op;
 {
-  while (unchecked(op,sizeof(operator_data))) {
+  while (unchecked((GENERIC*)op,sizeof(operator_data))) {
     op = &((*op)->next);
   }
 }
 
 
-static void check_module();
+static void check_module(ptr_module*);
 void check_hash_table();          /*  RM: Feb  3 1993  */
-static void check_keyword();      /*  RM: Jan 12 1993  */
+static void check_keyword(ptr_keyword*);      /*  RM: Jan 12 1993  */
 
 
 
@@ -545,12 +545,12 @@ static void check_keyword();      /*  RM: Jan 12 1993  */
   Check a list of modules.
 */
 
-static void check_module_list(c)    /*  RM: Jan 12 1993  */
+static void check_module_list(ptr_int_list *c)    /*  RM: Jan 12 1993  */
      
-     ptr_int_list *c;
+//     ptr_int_list *c;
 {
-  while (unchecked(c,sizeof(int_list))) {
-    check_module(&((*c)->value_1));
+  while (unchecked((GENERIC*)c,sizeof(int_list))) {
+    check_module((ptr_module*) &((*c)->value_1));
     c= &((*c)->next);
   }
 }
@@ -559,14 +559,14 @@ static void check_module_list(c)    /*  RM: Jan 12 1993  */
 /******** CHECK_MODULE_TREE
   This goes through the module table, checking all nodes.
 */
-static void check_module_tree(n)    /*  RM: Jan 13 1993  */
-     ptr_node *n;
+static void check_module_tree(ptr_node *n)    /*  RM: Jan 13 1993  */
+//     ptr_node *n;
 {
-  if (unchecked(n,sizeof(node))) {
+  if (unchecked((GENERIC*)n,sizeof(node))) {
     check_module_tree(&((*n)->left));
-    check_string(&((*n)->key));
-    check_module(&((*n)->data));
-    check_module_tree(&((*n)->right));
+    check_string((GENERIC*)&((*n)->key));
+    check_module((ptr_module*)&((*n)->data));
+    check_module_tree((ptr_node*)&((*n)->right));
   }
 }
 
@@ -576,16 +576,16 @@ static void check_module_tree(n)    /*  RM: Jan 13 1993  */
   Checks a module.
   */
 
-static void check_module(m)        /*  RM: Jan 12 1993  */
+static void check_module(ptr_module *m)        /*  RM: Jan 12 1993  */
      
-     ptr_module *m;
+//     ptr_module *m;
 {
-  if(unchecked(m,sizeof(struct wl_module))) {
-    check_string(&((*m)->module_name));
-    check_string(&((*m)->source_file));
-    check_module_list(&((*m)->open_modules));
-    check_module_list(&((*m)->inherited_modules));
-    check_hash_table((*m)->symbol_table);
+  if(unchecked((GENERIC*)m,sizeof(struct wl_module))) {
+    check_string((GENERIC*)&((*m)->module_name));
+    check_string((GENERIC*)&((*m)->source_file));
+    check_module_list((ptr_int_list*)&((*m)->open_modules));
+    check_module_list((ptr_int_list*)&((*m)->inherited_modules));
+    check_hash_table((ptr_hash_table)(*m)->symbol_table);
   }
 }
 
@@ -596,9 +596,9 @@ static void check_module(m)        /*  RM: Jan 12 1993  */
   memory.
   */
 
-void check_hash_table(table) /*  RM: Feb  3 1993  */
+void check_hash_table(ptr_hash_table table) /*  RM: Feb  3 1993  */
      
-     ptr_hash_table table;
+//     ptr_hash_table table;
 {
   long i;
   
@@ -613,14 +613,14 @@ void check_hash_table(table) /*  RM: Feb  3 1993  */
   Checks a keyword.
   */
 
-static void check_keyword(k)      /*  RM: Jan 12 1993  */
+static void check_keyword(ptr_keyword *k)      /*  RM: Jan 12 1993  */
      
-     ptr_keyword *k;
+//     ptr_keyword *k;
 {
-  if(unchecked(k,sizeof(struct wl_keyword))) {
+  if(unchecked((GENERIC*)k,sizeof(struct wl_keyword))) {
     check_module(&((*k)->module));
-    check_string(&((*k)->symbol));
-    check_string(&((*k)->combined_name));
+    check_string((GENERIC*)&((*k)->symbol));
+    check_string((GENERIC*)&((*k)->combined_name));
     check_definition(&((*k)->definition));
   }
 }
@@ -632,10 +632,10 @@ static void check_keyword(k)      /*  RM: Jan 12 1993  */
   for all types, and the attributed code. The code field is not checked as
   this has been done separately by CHECK_GAMMA.
 */
-void check_definition(d)
-ptr_definition *d;
+void check_definition(ptr_definition *d)
+// ptr_definition *d;
 {  
-  if(unchecked(d,sizeof(definition))) {
+  if(unchecked((GENERIC*)d,sizeof(definition))) {
     
     check_keyword(&((*d)->keyword)); /*  RM: Jan 12 1993  */
     
@@ -687,10 +687,10 @@ void check_definition_list()   /*  RM: Feb 15 1993  */
   This routine checks the CODE field in a definition.
   It may only be invoked by CHECK_GAMMA.
 */
-static void check_def_code(d)
-ptr_definition *d;
+static void check_def_code(ptr_definition *d)
+// ptr_definition *d;
 {  
-  if (unchecked(d,sizeof(definition)))
+  if (unchecked((GENERIC*)d,sizeof(definition)))
     check_code(&((*d)->code));
   /* p = &((*d)->properties); */
   /* check_def_prop(p); */
@@ -702,8 +702,8 @@ ptr_definition *d;
   This routine checks the other fields in a definition.
   It may only be invoked by CHECK_GAMMA_REST.
 */
-static void check_def_rest(d)
-ptr_definition *d;
+static void check_def_rest(ptr_definition *d)
+// ptr_definition *d;
 {
   if (*d) {
     check_keyword(&((*d)->keyword)); /*  RM: Jan 12 1993  */
@@ -727,13 +727,13 @@ ptr_definition *d;
   This goes through the symbol table, checking all nodes, symbols, strings
   and definitions not contained in the type table.
 */
-static void check_symbol(n)
-ptr_node *n;
+static void check_symbol(ptr_node *n)
+// ptr_node *n;
 {
-  if (unchecked(n,sizeof(node))) {
+  if (unchecked((GENERIC*)n,sizeof(node))) {
     check_symbol(&((*n)->left));
-    check_string(&((*n)->key));
-    check_keyword(&((*n)->data));   /*  RM: Jan 12 1993  */
+    check_string((GENERIC*)&((*n)->key));
+    check_keyword((ptr_keyword*)&((*n)->data));   /*  RM: Jan 12 1993  */
     check_symbol(&((*n)->right));
   }
 }
@@ -743,10 +743,10 @@ ptr_node *n;
 /******** CHECK_TYPE_DISJ
   Checks the list of definitions appearing in a type disjunction.
 */
-static void check_type_disj(p)
-ptr_int_list *p;
+static void check_type_disj(ptr_int_list *p)
+// ptr_int_list *p;
 {  
-  while (unchecked(p,sizeof(int_list))) {
+  while (unchecked((GENERIC*)p,sizeof(int_list))) {
     check_definition((struct wl_definition **)&((*p)->value_1)); // REV401PLUS cast
     p= &((*p)->next);
   }
@@ -759,10 +759,10 @@ ptr_int_list *p;
   unify, eval, eval_cut etc...) gives its own meanings to the three other
   fields (A,B and C) present in each goal.
 */
-static void check_goal_stack(g)
-ptr_goal *g;
+static void check_goal_stack(ptr_goal *g)
+// ptr_goal *g;
 {
-  while (unchecked(g,sizeof(goal))) {
+  while (unchecked((GENERIC*)g,sizeof(goal))) {
     
     switch ((*g)->type) {
       
@@ -777,8 +777,8 @@ ptr_goal *g;
       
     case prove:
       check_psi_term(&((*g)->aaaa_1));
-      if ((unsigned long)(*g)->bbbb_1!=DEFRULES) check_pair_list(&((*g)->bbbb_1));
-      check_pair_list(&((*g)->cccc_1));
+      if ((unsigned long)(*g)->bbbb_1!=DEFRULES) check_pair_list((ptr_pair_list*)&((*g)->bbbb_1));
+      check_pair_list((ptr_pair_list*)&((*g)->cccc_1));
       break;
       
     case disj: 
@@ -793,7 +793,7 @@ ptr_goal *g;
     case eval: 
       check_psi_term(&((*g)->aaaa_1));
       check_psi_term(&((*g)->bbbb_1));
-      check_pair_list(&((*g)->cccc_1));
+      check_pair_list((ptr_pair_list*)&((*g)->cccc_1));
       break;
 
     case load:
@@ -811,7 +811,7 @@ ptr_goal *g;
       /* assert((GENERIC)(*g)->aaaa_1 <= (GENERIC)choice_stack); 12.7 17.7 */
       if (pass==1 && (ptr_choice_point)(*g)->aaaa_1>choice_stack)
         (*g)->aaaa_1=(ptr_psi_term)choice_stack;
-      unchecked(&((*g)->aaaa_1),LONELY);
+      unchecked((GENERIC*)&((*g)->aaaa_1),LONELY);
       break;
       
     case eval_cut:
@@ -819,7 +819,7 @@ ptr_goal *g;
       /* assert((GENERIC)(*g)->bbbb_1 <= (GENERIC)choice_stack); 12.7 17.7 */
       if (pass==1 && (ptr_choice_point)(*g)->bbbb_1>choice_stack)
         (*g)->bbbb_1=(ptr_psi_term)choice_stack;
-      unchecked(&((*g)->bbbb_1),LONELY);
+      unchecked((GENERIC*)&((*g)->bbbb_1),LONELY);
       check_resid_block((struct wl_resid_block **)&((*g)->cccc_1)); // REV401PLUS cast
       break;
 
@@ -829,31 +829,31 @@ ptr_goal *g;
       /* assert((GENERIC)(*g)->bbbb_1 <= (GENERIC)choice_stack); 12.7 17.7 */
       if (pass==1 && (ptr_choice_point)(*g)->bbbb_1>choice_stack)
         (*g)->bbbb_1=(ptr_psi_term)choice_stack;
-      unchecked(&((*g)->bbbb_1),LONELY);
+      unchecked((GENERIC*)&((*g)->bbbb_1),LONELY);
       check_resid_block((struct wl_resid_block **)&((*g)->cccc_1)); // REV401PLUS cast
       break;
       
     case type_disj:
       check_psi_term(&((*g)->aaaa_1));
-      check_type_disj(&((*g)->bbbb_1));
+      check_type_disj((ptr_int_list*)&((*g)->bbbb_1));
       break;
       
     case clause:
       check_psi_term(&((*g)->aaaa_1));
       check_psi_term(&((*g)->bbbb_1));
-      unchecked(&((*g)->cccc_1),LONELY);
+      unchecked((GENERIC*)&((*g)->cccc_1),LONELY);
       /* check_pair_list((*g)->cccc_1); */ /* 6.8 */
       break;
 
     case del_clause:
       check_psi_term(&((*g)->aaaa_1));
       check_psi_term(&((*g)->bbbb_1));
-      unchecked(&((*g)->cccc_1),LONELY);
+      unchecked((GENERIC*)&((*g)->cccc_1),LONELY);
       /* check_pair_list((*g)->cccc_1); */ /* 6.8 */
       break;
 
     case retract:
-      unchecked(&((*g)->aaaa_1),LONELY);
+      unchecked((GENERIC*)&((*g)->aaaa_1),LONELY);
       /* check_pair_list((*g)->aaaa_1); */ /* 6.8 */
       /*PVR*/ /* check_choice(&((*g)->bbbb_1)); 9.6 */
       break;
@@ -871,18 +871,18 @@ ptr_goal *g;
 /******** CHECK_RESID(r)
   Explore a list of residuations.
 */
-static void check_resid(r)
-ptr_residuation *r;
+static void check_resid(ptr_residuation *r)
+// ptr_residuation *r;
 {
   ptr_int_list code;
   ptr_list *l;
 
-  while (unchecked(r,sizeof(residuation))) {
+  while (unchecked((GENERIC*)r,sizeof(residuation))) {
 
     if ((*r)->sortflag) /* 22.9 */
       check_definition((struct wl_definition **)&((*r)->bestsort)); // REV401PLUS cast
     else
-      check_code(&((*r)->bestsort)); /* 21.9 */
+      check_code((ptr_int_list*)&((*r)->bestsort)); /* 21.9 */
 
     /* Handling of the value field (6.10) */
     code = (*r)->sortflag ? ((ptr_definition)((*r)->bestsort))->code
@@ -895,7 +895,7 @@ ptr_residuation *r;
 	  printf("Found an old list!!\n");
       }
       else if (sub_CodeType(code,real->code))
-        unchecked(&((*r)->value_2),sizeof(REAL));
+        unchecked((GENERIC*)&((*r)->value_2),sizeof(REAL));
       else if (sub_CodeType(code,quoted_string->code))
         check_string(&((*r)->value_2));
       /* DENYS: BYTEDATA */
@@ -904,7 +904,7 @@ ptr_residuation *r;
       else if (sub_CodeType(code,cut->code)) {
         if (pass==1 && (*r)->value_2>(GENERIC)choice_stack)
           (*r)->value_2=(GENERIC)choice_stack;
-        unchecked(&((*r)->value_2),LONELY);
+        unchecked((GENERIC*)&((*r)->value_2),LONELY);
       }
       else if (sub_CodeType(code,variable->code)) /* 8.8 */
 	check_string(&((*r)->value_2));
@@ -920,15 +920,15 @@ ptr_residuation *r;
 /******** CHECK_RESID_BLOCK(rb)
   Explore a residuation block.
 */
-void check_resid_block(rb)
-ptr_resid_block *rb;
+void check_resid_block(ptr_resid_block *rb)
+// ptr_resid_block *rb;
 {
   if (*rb) {
-    if (unchecked(rb,sizeof(resid_block))) {
+    if (unchecked((GENERIC*)rb,sizeof(resid_block))) {
       check_goal_stack(&((*rb)->ra));
-      check_resid_list(&((*rb)->rv)); /* 21.9 */
-      /* unchecked(&((*rb)->rl),LONELY); 12.6 */  /* 10.6 */
-      unchecked(&((*rb)->md),LONELY); /* 10.6 */
+      check_resid_list((ptr_resid_list*)&((*rb)->rv)); /* 21.9 */
+      /* unchecked((GENERIC*)&((*rb)->rl),LONELY); 12.6 */  /* 10.6 */
+      unchecked((GENERIC*)&((*rb)->md),LONELY); /* 10.6 */
       /* check_goal_stack(&((*rb)->rl)); 10.6 */
       /* check_psi_term(&((*rb)->md)); 10.6 */
     }
@@ -940,12 +940,12 @@ ptr_resid_block *rb;
 /******** CHECK_PSI_TERM(t)
   Explore a psi_term.
 */
-void check_psi_term(t)
-ptr_psi_term *t;
+void check_psi_term(ptr_psi_term *t)
+// ptr_psi_term *t;
 {
   ptr_list *l;
 
-  while (unchecked(t,sizeof(psi_term))) {
+  while (unchecked((GENERIC*)t,sizeof(psi_term))) {
       
     /* A psi-term on the heap has no residuation list. */
     if (pass==1 && (GENERIC)(*t)>=heap_pointer && (GENERIC)(*t)<mem_limit) {
@@ -964,7 +964,7 @@ ptr_psi_term *t;
       else
 
 	if (sub_type((*t)->type,real))
-	  unchecked(&((*t)->value_3),sizeof(REAL));
+	  unchecked((GENERIC*)&((*t)->value_3),sizeof(REAL));
 	else if (sub_type((*t)->type,quoted_string))
 	  check_string(&((*t)->value_3));
       /* DENYS: BYTEDATA */
@@ -979,7 +979,7 @@ ptr_psi_term *t;
 	  /* assert((*t)->value_3 <= (GENERIC)choice_stack); 12.7 17.7 */
 	  if (pass==1 && (*t)->value_3>(GENERIC)choice_stack)
 	    (*t)->value_3=(GENERIC)choice_stack;
-	  unchecked(&((*t)->value_3),LONELY);
+	  unchecked((GENERIC*)&((*t)->value_3),LONELY);
 	}
 	else if (sub_type((*t)->type,variable)) /* 8.8 */
 	  check_string(&((*t)->value_3));
@@ -1005,12 +1005,12 @@ ptr_psi_term *t;
   for last call optimization.  This would never overflow, even on
   very skewed attribute trees.)
 */
-void check_attr(n)
-ptr_node *n;
+void check_attr(ptr_node *n)
+// ptr_node *n;
 {
-  while (unchecked(n,sizeof(node))) {
+  while (unchecked((GENERIC*)n,sizeof(node))) {
     check_attr(&((*n)->left));
-    check_string(&((*n)->key));
+    check_string((GENERIC*)&((*n)->key));
     check_psi_term((ptr_psi_term *)&((*n)->data)); // REV401PLUS cast
 
     n = &((*n)->right);
@@ -1032,7 +1032,7 @@ void check_gamma_code()
 {
   long i;
 
-  if (unchecked(&gamma_table,type_count*sizeof(ptr_definition))) {
+  if (unchecked((GENERIC*)&gamma_table,type_count*sizeof(ptr_definition))) {
     for (i=0;i<type_count;i++)
       check_def_code(&(gamma_table[i]));
   }
@@ -1058,10 +1058,10 @@ static void check_gamma_rest()
   The type of the pointer to be restored on backtracking is known, which
   allows the structure it is referring to to be accordingly checked.
 */
-static void check_undo_stack(s)
-ptr_stack *s;
+static void check_undo_stack(ptr_stack *s)
+// ptr_stack *s;
 {
-  while (unchecked(s,sizeof(stack))) {
+  while (unchecked((GENERIC*)s,sizeof(stack))) {
        
     switch((*s)->type) {
       
@@ -1070,7 +1070,7 @@ ptr_stack *s;
       break;
       
     case resid_ptr:
-      check_resid(&((*s)->bbbb_3));
+      check_resid((ptr_residuation*)&((*s)->bbbb_3));
       break;
       
     case int_ptr:
@@ -1082,11 +1082,11 @@ ptr_stack *s;
       break;
       
     case code_ptr:
-      check_code(&((*s)->bbbb_3));
+      check_code((ptr_int_list*)&((*s)->bbbb_3));
       break;
 
     case goal_ptr:
-      check_goal_stack(&((*s)->bbbb_3));
+      check_goal_stack((ptr_goal*)&((*s)->bbbb_3));
       break;
 
     case cut_ptr: /* 22.9 */
@@ -1114,16 +1114,16 @@ ptr_stack *s;
 /******** CHECK_CHOICE(c)
   This routine checks all choice points.
 */
-static void check_choice_structs(c)
-     ptr_choice_point *c;
+static void check_choice_structs(ptr_choice_point *c)
+//     ptr_choice_point *c;
 {
-  while(unchecked(c,sizeof(choice_point))) {
+  while(unchecked((GENERIC*)c,sizeof(choice_point))) {
     c= &((*c)->next);
   }
 }
 
-static void check_choice(c)
-     ptr_choice_point *c;
+static void check_choice(ptr_choice_point *c)
+//     ptr_choice_point *c;
 {
   while(*c) {
     check_undo_stack(&((*c)->undo_point)); /* 17.7 */
@@ -1147,8 +1147,8 @@ static void check_special_addresses()
 
   c=choice_stack;
   while(c) {
-    /* unchecked(&(c->undo_point),LONELY); 17.7 */
-    unchecked(&(c->stack_top),LONELY);
+    /* unchecked((GENERIC*)&(c->undo_point),LONELY); 17.7 */
+    unchecked((GENERIC*)&(c->stack_top),LONELY);
     c=c->next;
   }
 
@@ -1156,8 +1156,8 @@ static void check_special_addresses()
   while (p) {
     if (!(p->type & undo_action)) {
       /* Only update an address if it's within the Life data space! */
-      if (VALID_RANGE(p->aaaa_3)) unchecked(&(p->aaaa_3),LONELY);
-      if (p->type==cut_ptr) unchecked(&(p->bbbb_3),LONELY); /* 22.9 */
+      if (VALID_RANGE(p->aaaa_3)) unchecked((GENERIC*)&(p->aaaa_3),LONELY);
+      if (p->type==cut_ptr) unchecked((GENERIC*)&(p->bbbb_3),LONELY); /* 22.9 */
     }
     p=p->next;
   }
@@ -1169,10 +1169,10 @@ static void check_special_addresses()
   Update all the values in the list of residuation variables, which is a list
   of psi_terms.
 */
-static void check_psi_list(l)
-ptr_int_list *l;
+static void check_psi_list(ptr_int_list *l)
+// ptr_int_list *l;
 {
-  while(unchecked(l,sizeof(int_list))) {
+  while(unchecked((GENERIC*)l,sizeof(int_list))) {
     check_psi_term((ptr_psi_term *)&((*l)->value_1));
     l= &((*l)->next);
   }
@@ -1184,10 +1184,10 @@ ptr_int_list *l;
   Update all the values in the list of residuation variables, which is a list
   of pairs of psi_terms.
 */
-static void check_resid_list(l)
-ptr_resid_list *l;
+static void check_resid_list(ptr_resid_list *l)
+// ptr_resid_list *l;
 {
-  while(unchecked(l,sizeof(resid_list))) {
+  while(unchecked((GENERIC*)l,sizeof(resid_list))) {
     check_psi_term(&((*l)->var));
     check_psi_term(&((*l)->othervar));
     l= &((*l)->next);
@@ -1200,12 +1200,12 @@ ptr_resid_list *l;
   Go through the VARiable tree.
   (This could be made tail recursive.)
 */
-static void check_var(n)
-ptr_node *n;
+static void check_var(ptr_node *n)
+// ptr_node *n;
 {
-  if (unchecked(n,sizeof(node))) {
+  if (unchecked((GENERIC*)n,sizeof(node))) {
     check_var(&((*n)->left));
-    check_string(&((*n)->key));
+    check_string((GENERIC*)&((*n)->key));
     check_psi_term((ptr_psi_term *)&((*n)->data));
     check_var(&((*n)->right));
   }
@@ -1261,7 +1261,7 @@ static void check()
   check_definition(&add_module2);
   check_definition(&add_module3);
     
-  check_definition(&and);
+  check_definition(&wl_and);
   check_definition(&apply);
   check_definition(&boolean);
   check_definition(&boolpredsym);
@@ -1346,16 +1346,16 @@ static void check()
   
   /* check_psi_term(&empty_list); 5.8 */
   
-  check_string(&one);
-  check_string(&two);
-  check_string(&three);
-  check_string(&year_attr);
-  check_string(&month_attr);
-  check_string(&day_attr);
-  check_string(&hour_attr);
-  check_string(&minute_attr);
-  check_string(&second_attr);
-  check_string(&weekday_attr);
+  check_string((GENERIC*)&one);
+  check_string((GENERIC*)&two);
+  check_string((GENERIC*)&three);
+  check_string((GENERIC*)&year_attr);
+  check_string((GENERIC*)&month_attr);
+  check_string((GENERIC*)&day_attr);
+  check_string((GENERIC*)&hour_attr);
+  check_string((GENERIC*)&minute_attr);
+  check_string((GENERIC*)&second_attr);
+  check_string((GENERIC*)&weekday_attr);
 
   check_psi_term(&input_state);
   check_psi_term(&stdin_state);
@@ -1416,8 +1416,8 @@ static void check()
 }
 
 
-void print_gc_info(timeflag)
-long timeflag;
+void print_gc_info(long timeflag)
+// long timeflag;
 {
   fprintf(stderr," [%ld%% free (%ldK), %ld%% heap, %ld%% stack",
           (100*((unsigned long)heap_pointer-(unsigned long)stack_pointer)+mem_size/2)/mem_size,
@@ -1538,8 +1538,8 @@ void garbage()
   the macro ALIGN is supposed to be a power of 2 and the pointer returned
   is a multiple of ALIGN.
 */
-GENERIC heap_alloc (s)
-long s;
+GENERIC heap_alloc (long s)
+// long s;
 {
     if (s & (ALIGN-1))
       s = s - (s & (ALIGN-1))+ALIGN;
@@ -1562,8 +1562,8 @@ long s;
   the macro ALIGN is supposed to be a power of 2 and the pointer returned
   is a multiple of ALIGN.
 */
-GENERIC stack_alloc(s)
-long s;
+GENERIC stack_alloc(long s)
+// long s;
 {
     GENERIC r;
 
