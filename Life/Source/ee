@@ -53,7 +53,7 @@ $EDITOR djd1 djd2 ;;
 120)  wild_life_X;;
 121) $EDITOR Makefile;;
 122) ./cp_local.sh;;
-
+201) $EDITOR ~/.emacs ;;
 666) $EDITOR Port.txt & ;;
 777) $EDITOR NOTES_DJD.txt & ;;
 

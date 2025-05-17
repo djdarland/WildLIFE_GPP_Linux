@@ -168,7 +168,7 @@ EXTERN long parser_stack_index; /* 26.1 */
 
 */
 
-EXTERN ptr_definition and;
+EXTERN ptr_definition wl_and;
 
 /*! \var apply
   \brief symbol in bi module
@@ -957,7 +957,7 @@ EXTERN long cmp_debug_flag;
 // from parser.c
 EXTERN psi_term psi_term_stack[PARSER_STACK_SIZE];
 EXTERN long int_stack[PARSER_STACK_SIZE];
-EXTERN operator op_stack[PARSER_STACK_SIZE];
+EXTERN wl_operator op_stack[PARSER_STACK_SIZE];
 
 EXTERN long no_var_tree;
 
@@ -1000,7 +1000,7 @@ EXTERN ptr_node symbol_table;
 // from types.h
 EXTERN ptr_int_list adults,children;
 
-EXTERN long parser_stack_index;
+// EXTERN long parser_stack_index;
 
 EXTERN ptr_node var_tree;
 EXTERN ptr_node printed_vars;
@@ -1045,7 +1045,7 @@ xevent, xkeyboard_event, xbutton_event, /* RM: 7.12.92 */
 
 EXTERN long x_window_creation;
 
-EXTERN char  *numbers[21];
+// EXTERN char  *numbers[21];
 
-EXTERN long  set_extra_args[6];
+// EXTERN long  set_extra_args[6];
 

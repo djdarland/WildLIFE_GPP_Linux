@@ -447,8 +447,8 @@ static long c_encode()
 
 static GENERIC unitListElement;
 
-void setUnitList(x)
-GENERIC x;
+void setUnitList(GENERIC x)
+// GENERIC x;
 {
 	unitListElement = x;
 }

@@ -154,7 +154,7 @@ int main(int argc, char *argv[])  // REV401PLUS correct main proto
         undo(save_undo_stack); /* 17.8 */
         var_occurred=FALSE; /* 18.8 */
         encode_types();
-        Infoline(assert_ok?"\n*** Yes\n":"\n*** No\n"); /* 21.1 */
+        Infoline(assert_ok?(char*)"\n*** Yes\n":(char*)"\n*** No\n"); /* 21.1 */
       }
     }
   } while (!exitflag);

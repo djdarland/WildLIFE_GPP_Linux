@@ -454,8 +454,8 @@ static long c_intdiv()
 
 
 /* Main routine for floor & ceiling functions */
-static long c_floor_ceiling(floorflag)
-long floorflag;
+static long c_floor_ceiling(long floorflag)
+// long floorflag;
 {
   long success=TRUE;
   ptr_psi_term arg1,arg2,arg3,t;
@@ -578,8 +578,8 @@ static long c_sqrt()
 
 
 /* Main routine for sine and cosine */
-static long c_trig(trigflag)
-long trigflag;
+static long c_trig(long trigflag)
+// long trigflag;
 {
   long success=TRUE;
   ptr_psi_term arg1,arg3,t; /* arg3 is result */
@@ -867,7 +867,7 @@ static long c_bit_or()
   Return the bitwise shift left or shift right.
 */
 
-static long c_shift();
+static long c_shift(long);
 
 
 static long c_shift_left()
@@ -880,8 +880,8 @@ static long c_shift_right()
   return (c_shift(TRUE));
 }
 
-static long c_shift(dir)
-long dir;
+static long c_shift(long dir)
+// long dir;
 {
   long success=TRUE;
   ptr_psi_term arg1,arg2,arg3,t;

@@ -11,7 +11,7 @@
 
 typedef long type_ptr;
 
-typedef long operator; // Added REV401PLUS
+typedef long wl_operator; // Added REV401PLUS
 
 /*! \typedef PsiTerm
 \brief Type for psi-terms, hidden from users 
@@ -73,7 +73,7 @@ typedef struct wl_choice_point *    ptr_choice_point;
 /****************************** DATA STRUCTURES **************************/
 
 typedef struct wl_operator_data {
-  operator type;
+  wl_operator type;
   long precedence;
   ptr_operator_data next;
 } operator_data;
@@ -119,7 +119,7 @@ struct wl_keyword {
   ptr_module module;
   char *symbol;
   char *combined_name; /* module#symbol */
-  int public;
+  int wl_public;
   int private_feature; /*  RM: Mar 11 1993  */
   ptr_definition definition;
 };
@@ -154,7 +154,7 @@ typedef struct wl_definition {
   ptr_int_list children;
   def_type type_def;
   char always_check;  /* TRUE by default */
-  char protected;     /* TRUE by default */
+  char wl_protected;     /* TRUE by default */
   char evaluate_args; /* TRUE by default */
   char already_loaded; /* Cleared at the prompt, set upon loading */
   ptr_operator_data op_data;
