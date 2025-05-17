@@ -44,9 +44,9 @@ ptr_psi_term stack_nil()
   Create a CONS object.
   */
 
-ptr_psi_term stack_cons(head,tail)
-     ptr_psi_term head;
-     ptr_psi_term tail;
+ptr_psi_term stack_cons(ptr_psi_term head, ptr_psi_term tail)
+//     ptr_psi_term head;
+//     ptr_psi_term tail;
 {
   ptr_psi_term cons;
 
@@ -64,14 +64,14 @@ ptr_psi_term stack_cons(head,tail)
   create a PAIR object.
   */
 
-ptr_psi_term stack_pair(left,right)
-     ptr_psi_term left;
-     ptr_psi_term right;
+ptr_psi_term stack_pair(ptr_psi_term left, ptr_psi_term right)
+//     ptr_psi_term left;
+//     ptr_psi_term right;
 {
   ptr_psi_term pair;
 
   pair=stack_psi_term(4);
-  pair->type=and;
+  pair->type=wl_and;
   if(left)
     stack_insert(FEATCMP,one,&(pair->attr_list),(GENERIC)left);  // cast REV401PLUS
   if(right)
@@ -84,8 +84,8 @@ ptr_psi_term stack_pair(left,right)
   create an INT object
   */
 
-ptr_psi_term stack_int(n)
-     long n;
+ptr_psi_term stack_int(long n)
+//     long n;
 {
   ptr_psi_term m;
   m=stack_psi_term(4);
@@ -99,8 +99,8 @@ ptr_psi_term stack_int(n)
   create a STRING object
   */
 
-ptr_psi_term stack_string(s)
-     char *s;			  
+ptr_psi_term stack_string(char *s)
+//     char *s;			  
 {
   ptr_psi_term t = stack_psi_term(4);
   t->type = quoted_string;
@@ -114,9 +114,9 @@ ptr_psi_term stack_string(s)
   create a STRING object given a sequence of bytes
   */
 
-ptr_psi_term stack_bytes(s,n)
-     char *s;
-     int n;
+ptr_psi_term stack_bytes(char *s, int n)
+//     char *s;
+//     int n;
 {
   ptr_psi_term t = stack_psi_term(4);
   t->type = quoted_string;
@@ -130,9 +130,9 @@ ptr_psi_term stack_bytes(s,n)
   Get the value of a Life string, or the name of a non-string psi-term.
   Return TRUE iff a valid string is found.
 */
-long psi_to_string(t, fn)
-ptr_psi_term t;
-char **fn;
+long psi_to_string(ptr_psi_term t, char **fn)
+// ptr_psi_term t;
+// char **fn;
 {
   if (equal_types(t->type,quoted_string)) {
     if (t->value_3) {
@@ -153,17 +153,17 @@ char **fn;
 
 /***  RM: Dec  9 1992  (START) ***/
 
-ptr_psi_term make_feature_list(tree,tail,module,val)
-     
-     ptr_node tree;
-     ptr_psi_term tail;
-     ptr_module module;
-     int val;
+ptr_psi_term make_feature_list(ptr_node tree,ptr_psi_term tail,
+			       ptr_module module,int val)
+//     ptr_node tree;
+//     ptr_psi_term tail;
+//     ptr_module module;
+//     int val;
      
 {
-  ptr_psi_term new;
+  ptr_psi_term wl_new;
   ptr_definition def;
-  double d, strtod();
+  double d; // , strtod();
   
   
   if(tree) {
@@ -179,9 +179,9 @@ ptr_psi_term make_feature_list(tree,tail,module,val)
 	if(val) /* RM: Mar  3 1994 Distinguish between features & values */
 	  tail=stack_cons((ptr_psi_term)tree->data,tail); // REV401PLUS cast
 	else {
-	  new=stack_psi_term(4);      
-	  new->type=def;
-	  tail=stack_cons(new,tail);
+	  wl_new=stack_psi_term(4);      
+	  wl_new->type=def;
+	  tail=stack_cons(wl_new,tail);
 	}
       }
     }
@@ -189,11 +189,11 @@ ptr_psi_term make_feature_list(tree,tail,module,val)
       if(val) /* RM: Mar  3 1994 Distinguish between features & values */
 	tail=stack_cons((ptr_psi_term)tree->data,tail); // REV401PLUS cast
       else {
-	new=stack_psi_term(4);      
-	new->type=(d==floor(d))?integer:real;
-	new->value_3=heap_alloc(sizeof(REAL));
-	*(REAL *)new->value_3=(REAL)d;
-	tail=stack_cons(new,tail);
+	wl_new=stack_psi_term(4);      
+	wl_new->type=(d==floor(d))?integer:real;
+	wl_new->value_3=heap_alloc(sizeof(REAL));
+	*(REAL *)wl_new->value_3=(REAL)d;
+	tail=stack_cons(wl_new,tail);
       }
     }
     
@@ -214,10 +214,10 @@ ptr_psi_term make_feature_list(tree,tail,module,val)
 /******** CHECK_REAL(t,v,n)
   Like get_real_value, but does not force the type of T to be real.
 */
-long check_real(t,v,n)
-ptr_psi_term t;
-REAL *v;
-long *n;
+long check_real(ptr_psi_term t,REAL *v,long *n)
+// ptr_psi_term t;
+// REAL *v;
+// long *n;
 {
   long success=FALSE;
   long smaller;
@@ -243,10 +243,10 @@ long *n;
   Also force the type of T to REAL if REAL <| T.
   This is used in all the arithmetic built-in functions to get their arguments.
 */
-long get_real_value(t,v,n)
-ptr_psi_term t;
-REAL *v;
-long *n;
+long get_real_value(ptr_psi_term t,REAL *v,long *n)
+// ptr_psi_term t;
+// REAL *v;
+// long *n;
 {
   long success=FALSE;
   long smaller;
@@ -282,10 +282,10 @@ long *n;
   GET_REAL_VALUE. The values handled here have to be booleans.
   Check if psi_term T is a boolean. V <- TRUE or FALSE value of T.
 */
-static long get_bool_value(t,v,n)
-ptr_psi_term t;
-REAL *v;
-long *n;
+static long get_bool_value(ptr_psi_term t,REAL *v,long *n)
+// ptr_psi_term t;
+// REAL *v;
+// long *n;
 {
   long success=FALSE;
   long smaller;
@@ -327,9 +327,9 @@ long *n;
   Unify psi_term T to the boolean value V = TRUE or FALSE.
   This is used by built-in logical functions to return their result.
 */
-void unify_bool_result(t,v)
-ptr_psi_term t;
-long v;
+void unify_bool_result(ptr_psi_term t,long v)
+// ptr_psi_term t;
+// long v;
 {
   ptr_psi_term u;
 
@@ -368,9 +368,9 @@ long v;
   Unify psi_term T to the real value V.
   This is used by built-in arithmetic functions to return their result.
 */
-long unify_real_result(t,v)
-ptr_psi_term t;
-REAL v;
+long unify_real_result(ptr_psi_term t,REAL v)
+// ptr_psi_term t;
+// REAL v;
 {
   long smaller;
   long success=TRUE;
@@ -867,16 +867,16 @@ static long c_boolpred()
   return success;
 }
 
-static long get_bool(typ)
-ptr_definition typ;
+static long get_bool(ptr_definition typ)
+// ptr_definition typ;
 {
   if (sub_type(typ,lf_true)) return TRUE;
   else if (sub_type(typ,lf_false)) return FALSE;
   else return UNDEF;
 }
 
-static long unify_bool(arg)
-ptr_psi_term arg;
+static void unify_bool(ptr_psi_term arg)  // was long but no return
+// ptr_psi_term arg;
 {
   ptr_psi_term tmp;
 
@@ -887,8 +887,8 @@ ptr_psi_term arg;
 
 /* Main routine to handle the and & or functions. */
 /* sel = TRUE (for and) or FALSE (for or) */
-static long c_logical_main(sel)
-long sel;
+static long c_logical_main(long sel)
+// long sel;
 {
   long success=TRUE;
   ptr_psi_term funct,arg1,arg2,arg3;
@@ -1526,9 +1526,9 @@ static long c_is_sort()
 
 
 /* Return TRUE iff t has only argument "1", and return the argument. */
-long only_arg1(t, arg1)
-ptr_psi_term t;
-ptr_psi_term *arg1;
+long only_arg1(ptr_psi_term t, ptr_psi_term *arg1)
+// ptr_psi_term t;
+// ptr_psi_term *arg1;
 {
   ptr_node n=t->attr_list;
 
@@ -1612,7 +1612,7 @@ static long c_non_strict()
 */
 static long c_op()
 {
-  long declare_operator();
+  //  long declare_operator();
   ptr_psi_term t=aim->aaaa_1;
 
   return declare_operator(t);
@@ -1620,8 +1620,8 @@ static long c_op()
 
 
 
-long file_exists(s)
-char *s;
+long file_exists(char *s)
+// char *s;
 {
   FILE *f;
   char *e;
@@ -1877,9 +1877,9 @@ static long c_print_variables()
 
 
 
-static void set_parse_queryflag(thelist, sort)
-ptr_node thelist;
-long sort;
+static void set_parse_queryflag(ptr_node thelist, long sort)
+// ptr_node thelist;
+// long sort;
 {
   ptr_node n;             /* node pointing to argument 2  */
   ptr_psi_term arg;       /* argumenrt 2 psi-term */
@@ -1892,8 +1892,8 @@ long sort;
     queryflag=stack_psi_term(4);
     queryflag->type =
     update_symbol(bi_module,
-		  ((sort==QUERY)?"query":
-                  ((sort==FACT)?"declaration":"error")));
+		  ((sort==QUERY)?(char*)"query":
+		   ((sort==FACT)?(char*)"declaration":(char*)"error")));
     push_goal(unify,queryflag,arg,NULL);
   }
 }
@@ -1944,7 +1944,7 @@ static long c_parse()
             queryflag=stack_psi_term(4);
             queryflag->type=
               update_symbol(bi_module,
-                ((sort==QUERY)?"query":((sort==FACT)?"declaration":"error"))
+			    ((sort==QUERY)?(char*)"query":((sort==FACT)?(char*)"declaration":(char*)"error"))
               );
             push_goal(unify,queryflag,arg2,NULL);
           }
@@ -1994,14 +1994,14 @@ static long c_parse()
   of global variables.
 */
 
-static long c_read();
+static long c_read(long);
      
 static long c_read_psi() { return (c_read(TRUE)); }
 
 static long c_read_token() { return (c_read(FALSE)); }
 
-static long c_read(psi_flag)     
-long psi_flag;
+static long c_read(long psi_flag)     
+// long psi_flag;
 {
   long success=TRUE;
   long sort;
@@ -2036,7 +2036,7 @@ long psi_flag;
 	  queryflag=stack_psi_term(4);
 	  queryflag->type=
 	    update_symbol(bi_module,
-			  ((sort==QUERY)?"query":((sort==FACT)?"declaration":"error"))
+			  ((sort==QUERY)?(char*)"query":((sort==FACT)?(char*)"declaration":(char*)"error"))
 			  );
 	  push_goal(unify,queryflag,arg2,NULL);
 	}
@@ -2087,11 +2087,12 @@ long psi_flag;
 long c_halt()   /*  RM: Jan  8 1993  Used to be 'void' */ // REV401PLUS chg to long
 {
   exit_life(TRUE);
+  return 0L; // to avoid error
 }
 
 
-void exit_life(nl_flag)
-long nl_flag;
+void exit_life(long nl_flag)
+// long nl_flag;
 {
   open_input_file("stdin");
   times(&life_end);
@@ -2123,8 +2124,8 @@ long c_abort()   /*  RM: Feb 15 1993  */
 
 
 /* 26.1 */
-long abort_life(nlflag) /*  RM: Feb 15 1993  */
-int nlflag;
+long abort_life(int nlflag) /*  RM: Feb 15 1993  */
+// int nlflag;
 {
   if ( aborthooksym->type_def!=(def_type)function_it ||
        !aborthooksym->rule->bbbb_2 ||
@@ -2214,10 +2215,10 @@ static long c_setq()
     deref_ptr(arg1);
     d=arg1->type;
     if (d->type_def==(def_type)function_it || d->type_def==(def_type)undef_it) {
-      if (d->type_def==(def_type)undef_it || !d->protected) {
+      if (d->type_def==(def_type)undef_it || !d->wl_protected) {
         if (!arg1->attr_list) {
           d->type_def=(def_type)function_it;
-          d->protected=FALSE;
+          d->wl_protected=FALSE;
           p=HEAP_ALLOC(pair_list);
           p->aaaa_2=heap_psi_term(4);
           p->aaaa_2->type=d;
@@ -2306,9 +2307,9 @@ static long c_assert_last()
   This routine is used both for CLAUSE and RETRACT.
   If R==TRUE then delete the first clause which unifies with T.
 */
-long pred_clause(t,r,g)
-ptr_psi_term t, g;
-long r;
+long pred_clause(ptr_psi_term t,long r,ptr_psi_term g)
+// ptr_psi_term t, g;
+// long r;
 {
   long success=FALSE;
   ptr_psi_term head,body;
@@ -2436,9 +2437,9 @@ static long c_global()    /*  RM: Feb 10 1993  */
 
 
 
-void global_error_check(n, error_2, eval_2)
-ptr_node n;
-long *error_2, *eval_2; // REV401PLUS added _2 and made long 
+void global_error_check(ptr_node n, long *error_2, long *eval_2)
+// ptr_node n;
+// long *error_2, *eval_2; // REV401PLUS added _2 and made long 
 {
   if (n) {
     ptr_psi_term t,a1,a2;
@@ -2474,8 +2475,8 @@ long *error_2, *eval_2; // REV401PLUS added _2 and made long
 }
 
 
-void global_tree(n)
-ptr_node n;
+void global_tree(ptr_node n)
+// ptr_node n;
 {
   if (n) {
     ptr_psi_term t;
@@ -2490,8 +2491,8 @@ ptr_node n;
 }
 
 
-void global_one(t)
-ptr_psi_term t;
+void global_one(ptr_psi_term t)
+// ptr_psi_term t;
 {
   ptr_psi_term u,val;
 
@@ -2546,9 +2547,9 @@ static long c_persistent()     /*  RM: Feb 10 1993  */
 }
 
 
-void persistent_error_check(n, error) //REV401PLUS add void
-ptr_node n;
-long *error;  // REV401PLUS long
+void persistent_error_check(ptr_node n, long *error) //REV401PLUS add void
+// ptr_node n;
+// long *error;  // REV401PLUS long
 {
   if (n) {
     ptr_psi_term t;
@@ -2569,8 +2570,8 @@ long *error;  // REV401PLUS long
 }
 
 
-void persistent_tree(n) // REV401PLUS add void
-ptr_node n;
+void persistent_tree(ptr_node n) // REV401PLUS add void
+// ptr_node n;
 {
   if (n) {
     ptr_psi_term t;
@@ -2585,10 +2586,12 @@ ptr_node n;
 }
 
 
-void persistent_one(t) // REV401PLUS add void
-ptr_psi_term t;
-{
+void persistent_one(ptr_psi_term t) // REV401PLUS add void
+// ptr_psi_term t;
+{ 
   t->type->type_def=(def_type)global_it;
+
+
   if ((GENERIC)t->type->global_value<(GENERIC)heap_pointer)
     t->type->global_value=heap_psi_term(4);
 }
@@ -2859,7 +2862,7 @@ static long c_get()
   in the range 0..255), and any other psi-term (in which case its name is
   written).
 */
-static long c_put_main(); /* Forward declaration */
+static long c_put_main(long); /* Forward declaration */
 
 static long c_put()
 {
@@ -2871,8 +2874,8 @@ static long c_put_err()
   return c_put_main(TRUE);
 }
 
-static long c_put_main(to_stderr)
-long to_stderr;
+static long c_put_main(long to_stderr)
+// long to_stderr;
 {
   long i,success=FALSE;
   ptr_psi_term arg1,arg2,g;
@@ -3430,8 +3433,8 @@ static long c_feature_values()
 
 /* Return TRUE iff T is a type that should not show up as part of the
    type hierarchy, i.e. it is an internal hidden type. */
-long hidden_type(t)
-ptr_definition t;
+long hidden_type(ptr_definition t)
+// ptr_definition t;
 {
    return (/* (t==conjunction) || 19.8 */
 	   /* (t==disjunction) || RM: Dec  9 1992 */
@@ -3455,11 +3458,12 @@ ptr_definition t;
    If the number of symbols is very large, this routine may run out of space
    before garbage collection.
 */
-ptr_psi_term collect_symbols(sel) /*  RM: Feb  3 1993  */
-     long sel;
+ptr_psi_term collect_symbols(long sel) /*  RM: Feb  3 1993  */
+//     long sel;
+
 
 {
-  ptr_psi_term new;
+  ptr_psi_term wl_new;
   ptr_definition def;
   long botflag;
   ptr_psi_term result;
@@ -3479,9 +3483,9 @@ ptr_psi_term collect_symbols(sel) /*  RM: Feb  3 1993  */
            def->type_def==(def_type)undef_it)
           && !hidden_type(def)) {
         /* Create the node that will be inserted */
-        new=stack_psi_term(4);
-        new->type=def;
-	result=stack_cons(new,result);
+        wl_new=stack_psi_term(4);
+        wl_new->type=def;
+	result=stack_cons(wl_new,result);
       }
     }
     else if (sel==op_sel) {
@@ -3490,11 +3494,11 @@ ptr_psi_term collect_symbols(sel) /*  RM: Feb  3 1993  */
       while (od) {
         ptr_psi_term name,type;
 
-	new=stack_psi_term(4);
-        new->type=opsym;
-	result=stack_cons(new,result);
+	wl_new=stack_psi_term(4);
+        wl_new->type=opsym;
+	result=stack_cons(wl_new,result);
 	
-        stack_add_int_attr(new,one,od->precedence);
+        stack_add_int_attr(wl_new,one,od->precedence);
 
         type=stack_psi_term(4);
         switch (od->type) {
@@ -3520,11 +3524,11 @@ ptr_psi_term collect_symbols(sel) /*  RM: Feb  3 1993  */
           type->type=yfx_sym;
           break;
         }
-        stack_add_psi_attr(new,two,type);
+        stack_add_psi_attr(wl_new,two,type);
 
         name=stack_psi_term(4);
         name->type=def;
-        stack_add_psi_attr(new,three,name);
+        stack_add_psi_attr(wl_new,three,name);
 
         od=od->next;
       }
@@ -3559,8 +3563,8 @@ static long c_ops()
 
 /* PVR 23.2.94 -- Added this to fix c_strip and c_copy_pointer */
 /* Make a copy of an attr_list structure, keeping the same leaf pointers */
-static ptr_node copy_attr_list(n)
-ptr_node n;
+static ptr_node copy_attr_list(ptr_node n)
+// ptr_node n;
 {
   ptr_node m;
 
@@ -4122,7 +4126,7 @@ static long c_global_assign()
 {
   long success=FALSE;
   ptr_psi_term arg1,arg2,g,perm,smallest;
-  ptr_psi_term new;
+  ptr_psi_term wl_new;
   
   g=aim->aaaa_1;
   deref_ptr(g);
@@ -4135,15 +4139,15 @@ static long c_global_assign()
     if (arg1!=arg2) {
 
       clear_copy();
-      new=inc_heap_copy(arg2);
+      wl_new=inc_heap_copy(arg2);
       
       if((GENERIC)arg1<heap_pointer) {
 	push_psi_ptr_value(arg1,(GENERIC *)&(arg1->coref)); // REV401PLUS cast
-	arg1->coref= new;
+	arg1->coref= wl_new;
       }
       else {
-	*arg1= *new; /* Overwrite in-place */
-	new->coref=arg1;
+	*arg1= *wl_new; /* Overwrite in-place */
+	wl_new->coref=arg1;
       }
     }
   }
@@ -4323,8 +4327,8 @@ static long c_undo()
   predicate is called as before except that matching is used instead
   of unification to decide whether to enter a clause.
 */
-static long c_freeze_inner(freeze_flag)
-long freeze_flag;
+static long c_freeze_inner(long freeze_flag)
+// long freeze_flag;
 {
   long success=TRUE;
   ptr_psi_term arg1,g;
@@ -4770,10 +4774,11 @@ ptr_node one_attr()
 
 
 /* Return a psi term with one or two args, and the addresses of the args */
-ptr_psi_term new_psi_term(numargs, typ, a1, a2)
-long numargs;
-ptr_definition typ;
-ptr_psi_term **a1, **a2;
+ptr_psi_term new_psi_term(long numargs, ptr_definition typ,
+			  ptr_psi_term **a1, ptr_psi_term **a2)
+// long numargs;
+// ptr_definition typ;
+// ptr_psi_term **a1, **a2;
 {
    ptr_psi_term t;
    ptr_node n1, n2;
@@ -4805,8 +4810,8 @@ ptr_psi_term **a1, **a2;
 /* Return TRUE iff there are some rules r */
 /* This is true for a user-defined function or predicate with a definition, */
 /* and for a type with constraints. */
-long has_rules(r)
-ptr_pair_list r;
+long has_rules(ptr_pair_list r)
+// ptr_pair_list r;
 {
   if (r==NULL) return FALSE;
   while (r) {
@@ -4817,8 +4822,8 @@ ptr_pair_list r;
 }
 
 /* Return TRUE if rules r are for a built-in */
-long is_built_in(r)
-ptr_pair_list r;
+long is_built_in(ptr_pair_list r)
+// ptr_pair_list r;
 {
   return ((unsigned long)r>0 && (unsigned long)r<MAX_BUILT_INS);
 }
@@ -4826,8 +4831,8 @@ ptr_pair_list r;
 
 /* List the characteristics (delay_check, dynamic/static, non_strict) */
 /* in such a way that they can be immediately read in. */
-void list_special(t) // REV401PLUS add void
-ptr_psi_term t;
+void list_special(ptr_psi_term t) // REV401PLUS add void
+// ptr_psi_term t;
 {
   ptr_definition d = t->type;
   ptr_pair_list r = t->type->rule;
@@ -4842,9 +4847,9 @@ ptr_psi_term t;
       prflag=TRUE;
     }
   } else {
-    if (!d->protected) {
+    if (!d->wl_protected) {
       if (is_built_in(r)) fprintf(output_stream,"%% ");
-      fprintf(output_stream,"%s(",(d->protected?"static":"dynamic"));
+      fprintf(output_stream,"%s(",(d->wl_protected?"static":"dynamic"));
       display_psi_stream(t);
       fprintf(output_stream,")?\n");
       prflag=TRUE;
@@ -5060,11 +5065,11 @@ static long c_funct()
   T=type (function or predicate).
   R=address of C routine to call.
 */
-void new_built_in(m,s,t,r)
-     ptr_module m;
-     char *s;
-     def_type t;
-     long (*r)();
+void new_built_in(ptr_module m,char *s,def_type t,long (*r)())
+//     ptr_module m;
+//     char *s;
+//     def_type t;
+//     long (*r)();
 {
   ptr_definition d;
 
@@ -5089,10 +5094,10 @@ void new_built_in(m,s,t,r)
   Declare that string S is an operator of precedence P and of type T where
   T=xf, fx, yf, fy, xfx etc...
 */
-static void op_declare(p,t,s)
-long p;
-operator t;
-char *s;
+static void op_declare(long p,wl_operator t,char *s)
+// long p;
+// operator t;
+// char *s;
 {
   ptr_definition d;
   ptr_operator_data od;
@@ -5121,14 +5126,14 @@ char *s;
   For example: '*op*'(3,xfx,+)?
   T is the OP declaration.
 */
-long declare_operator(t)
-ptr_psi_term t;
+long declare_operator(ptr_psi_term t)
+// ptr_psi_term t;
 {
   ptr_psi_term prec,type,atom;
   ptr_node n;
   char *s;
   long p;
-  operator kind=nop;
+  wl_operator kind=nop;
   long success=FALSE;
 
   deref_ptr(t);
@@ -5178,8 +5183,8 @@ ptr_psi_term t;
 
 
 
-char *str_conc(s1,s2)
-char *s1, *s2;
+char *str_conc(char *s1,char *s2)
+// char *s1, *s2;
 {
   char *result;
 
@@ -5191,10 +5196,10 @@ char *s1, *s2;
 
 
 
-char *sub_str(s,p,n)
-char *s;
-long p;
-long n;
+char *sub_str(char *s,long p,long n)
+// char *s;
+// long p;
+// long n;
 {
   char *result;
   long i;
@@ -5218,8 +5223,8 @@ long n;
 
 
 
-long append_files(s1,s2)
-char *s1, *s2;
+long append_files(char *s1,char *s2)
+// char *s1, *s2;
 {
   FILE *f1;
   FILE *f2;
@@ -5824,7 +5829,7 @@ void init_built_in_types()
   /*  RM: Jan 13 1993  */
   /* Initialize the minimum syntactic symbols */
   set_current_module(syntax_module); /*  RM: Feb  3 1993  */
-  and=update_symbol(syntax_module,",");  
+  wl_and=update_symbol(syntax_module,",");  
   update_symbol(syntax_module,"[");
   update_symbol(syntax_module,"]");
   update_symbol(syntax_module,"(");
@@ -6116,8 +6121,8 @@ void init_built_in_types()
   
   /* Hack so '.set_up' doesn't issue a Warning message */
   /*  RM: Feb  3 1993  */
-  hash_lookup(bi_module->symbol_table,"set_module")->public=TRUE;
-  hash_lookup(bi_module->symbol_table,"built_in")->public=TRUE;
+  hash_lookup(bi_module->symbol_table,"set_module")->wl_public=TRUE;
+  hash_lookup(bi_module->symbol_table,"built_in")->wl_public=TRUE;
 
   /*  RM: Jan 29 1993  */
   abortsym=update_symbol(bi_module,"abort"); /* 26.1 */
