@@ -30,16 +30,16 @@ ptr_hash_table hash_create(int size)
 
 //     int size; // Moved MINT
 {
-  ptr_hash_table new;
+  ptr_hash_table wl_new;
   int i;
   
-  new=(ptr_hash_table)malloc(sizeof(struct wl_hash_table));
-  new->size=size;
-  new->used=0;
-  new->data=(ptr_keyword *)malloc(size*sizeof(ptr_keyword));
+  wl_new=(ptr_hash_table)malloc(sizeof(struct wl_hash_table));
+  wl_new->size=size;
+  wl_new->used=0;
+  wl_new->data=(ptr_keyword *)malloc(size*sizeof(ptr_keyword));
   for(i=0;i<size;i++)
-    new->data[i]=NULL;
-  return new;
+    wl_new->data[i]=NULL;
+  return wl_new;
 }
 
 
@@ -48,10 +48,10 @@ ptr_hash_table hash_create(int size)
   Allocate a bigger hash table.
   */
 
-void hash_expand(table,new_size)
+void hash_expand(ptr_hash_table table,int new_size)
 
-     ptr_hash_table table;
-     int new_size;
+//     ptr_hash_table table;
+//     int new_size;
 {
   ptr_keyword *old_data;
   int old_size;
@@ -81,10 +81,10 @@ void hash_expand(table,new_size)
   Return the hash code for a symbol
   */
 
-int hash_code(table,symbol)
+int hash_code(ptr_hash_table table,char *symbol)
      
-     ptr_hash_table table;
-     char *symbol;
+//     ptr_hash_table table;
+//     char *symbol;
 {
   int n=0;
   
@@ -106,10 +106,10 @@ int hash_code(table,symbol)
 
 
 
-int hash_find(table,symbol)
+int hash_find(ptr_hash_table table,char *symbol)
 
-     ptr_hash_table table;
-     char *symbol;
+//     ptr_hash_table table;
+//     char *symbol;
 
 {
   int n;
@@ -133,10 +133,10 @@ int hash_find(table,symbol)
   Look up a symbol in the symbol table.
   */
 
-ptr_keyword hash_lookup(table,symbol)
+ptr_keyword hash_lookup(ptr_hash_table table,char *symbol)
      
-     ptr_hash_table table;
-     char *symbol;
+//     ptr_hash_table table;
+//     char *symbol;
 
 {
   int n;
@@ -155,11 +155,11 @@ ptr_keyword hash_lookup(table,symbol)
   Add a symbol and data to a table. Overwrite previous data.
   */
 
-void hash_insert(table,symbol,keyword)
+void hash_insert(ptr_hash_table table,char *symbol,ptr_keyword keyword)
      
-     ptr_hash_table table;
-     char *symbol;
-     ptr_keyword keyword;
+//     ptr_hash_table table;
+//     char *symbol;
+//     ptr_keyword keyword;
 {
   int n;
 
@@ -182,9 +182,9 @@ void hash_insert(table,symbol,keyword)
   Display a symbol table (for debugging).
   */
 
-void hash_display(table)
+void hash_display(ptr_hash_table table)
      
-     ptr_hash_table table;
+//     ptr_hash_table table;
      
 {
   int i;
