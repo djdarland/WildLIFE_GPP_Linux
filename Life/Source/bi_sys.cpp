@@ -455,7 +455,7 @@ void setUnitList(GENERIC x)
 
 ptr_psi_term unitListValue()
 {
-	return makePsiTerm((void *)unitListElement);
+	return makePsiTerm((ptr_definition)unitListElement);
 }
 
 GENERIC unitListNext()
@@ -464,14 +464,14 @@ GENERIC unitListNext()
 	return NULL;
 }
 
-ptr_psi_term intListValue(p)
-ptr_int_list p;
+ptr_psi_term intListValue(ptr_int_list p)
+// ptr_int_list p;
 {
-	return makePsiTerm((void *)p->value_1); 
+	return makePsiTerm((ptr_definition)p->value_1); 
 }
 
-GENERIC intListNext(p)
-ptr_int_list p;
+GENERIC intListNext(ptr_int_list p)
+// ptr_int_list p;
 {
 	return (GENERIC )(p->next);
 }
@@ -493,8 +493,8 @@ ptr_psi_term quotedStackCopy(p)
  * shared.
  */
 
-ptr_psi_term residListGoalQuote(p)
-ptr_residuation p;
+ptr_psi_term residListGoalQuote(ptr_residuation p)
+// ptr_residuation p;
 {
 	ptr_psi_term psi;
 
@@ -504,14 +504,14 @@ ptr_residuation p;
 	return psi;
 }
 
-GENERIC residListNext(p)
-ptr_residuation p;
+GENERIC residListNext(ptr_residuation p)
+// ptr_residuation p;
 {
 	return (GENERIC )(p->next);
 }
 
-ptr_psi_term makePsiTerm(x)
-ptr_definition x;
+ptr_psi_term makePsiTerm(ptr_definition x)
+// ptr_definition x;
 {
 	ptr_psi_term p;
 	
@@ -522,11 +522,10 @@ ptr_definition x;
 
 
 
-ptr_psi_term makePsiList(head, valueFunc, nextFunc)
-     
-     GENERIC head;
-     ptr_psi_term (*valueFunc)();
-     GENERIC (*nextFunc)();
+ptr_psi_term makePsiList(GENERIC head, ptr_psi_term (*valueFunc)(GENERIC), GENERIC (*nextFunc)(GENERIC))
+//     GENERIC head;
+//     ptr_psi_term (*valueFunc)();
+//     GENERIC (*nextFunc)();
 {
   ptr_psi_term result;
 
@@ -566,17 +565,18 @@ static long c_residList()
 	deref_ptr(arg1);
 	deref_args(func, set_1);
 
-	other = makePsiList((void *)arg1->resid,
-			    residListGoalQuote,
-			    residListNext);
+	//ptr_psi_term makePsiList(GENERIC head, ptr_psi_term (*valueFunc)(GENERIC), GENERIC (*nextFunc)(GENERIC))
+	other = makePsiList((GENERIC)arg1->resid,
+			    (ptr_psi_term (*)(GENERIC))residListGoalQuote,
+			    (GENERIC (*)(GENERIC))residListNext);
 	resid_aim = NULL;
 	push_goal(unify,result,other,NULL);
 	return TRUE;
 }
 
 
-ptr_goal makeGoal(p)
-ptr_psi_term p;
+ptr_goal makeGoal(ptr_psi_term p)
+// ptr_psi_term p;
 {
 	ptr_goal old = goal_stack;
 	ptr_goal g;
