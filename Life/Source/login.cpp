@@ -37,10 +37,10 @@ static char vcid[] = "$Id: login.c,v 1.4 1995/01/14 00:25:33 duchier Exp $";
   binary tree ATTR_LIST, place them in ARG1 and ARG2. This routine nearly
   always makes a direct hit.
   */
-void get_two_args(t,a,b)
-     ptr_node t;
-     ptr_psi_term *a;
-     ptr_psi_term *b;
+void get_two_args(ptr_node t,ptr_psi_term *a,ptr_psi_term *b)
+//     ptr_node t;
+//     ptr_psi_term *a;
+//     ptr_psi_term *b;
 {
   ptr_node n;
   
@@ -48,7 +48,8 @@ void get_two_args(t,a,b)
   *b=NULL;
   if (t) {
     if (t->key==one) {
-      *a=(ptr_psi_term )t->data;
+      //      *a=(ptr_psi_term )t->data;
+      *a=(ptr_psi_term )t->data;  // changed g++
       n=t->right;
       if (n) 
 	if (n->key==two)
@@ -56,22 +57,22 @@ void get_two_args(t,a,b)
 	else {
 	  n=find(FEATCMP,two,t);
 	  if(n==NULL)
-	    *b=NULL;
+	    *b=NULL;  
 	  else
-	    *b=(ptr_psi_term )n->data;
+	    *b=(ptr_psi_term )n->data; 
 	}
       else
-	*b=NULL;
+	*b=NULL; 
     }
     else {
       n=find(FEATCMP,one,t);
       if (n==NULL)
-	*a=NULL;
+	*a=NULL; 
       else
-	*a=(ptr_psi_term )n->data;
+	*a=(ptr_psi_term )n->data; 
       n=find(FEATCMP,two,t);
       if (n==NULL)
-	*b=NULL;
+	*b=NULL; 
       else
 	*b=(ptr_psi_term )n->data;
     }
@@ -86,9 +87,9 @@ void get_two_args(t,a,b)
   binary tree ATTR_LIST, place it in ARG1. This routine nearly
   always makes a direct hit.
   */
-void get_one_arg(t,a)
-     ptr_node t;
-     ptr_psi_term *a;
+void get_one_arg(ptr_node t,ptr_psi_term *a)
+//     ptr_node t;
+//     ptr_psi_term *a;
 {
   ptr_node n;
   
@@ -115,9 +116,9 @@ void get_one_arg(t,a)
   '1' as quickly as possible from the binary tree ATTR_LIST.
   This routine nearly always makes a direct hit.
   */
-void get_one_arg_addr(t,a)
-     ptr_node t;
-     ptr_psi_term **a;
+void get_one_arg_addr(ptr_node t,ptr_psi_term **a)
+//     ptr_node t;
+//     ptr_psi_term **a;
 {
   ptr_node n;
   ptr_psi_term *b;
@@ -148,10 +149,10 @@ void get_one_arg_addr(t,a)
   The global flag ASSERT_FIRST indicates whether to do the insertion at the
   head or the tail of the existing list.
   */
-void add_rule(head,body,typ)
-     ptr_psi_term head;
-     ptr_psi_term body;
-     def_type typ;
+void add_rule(ptr_psi_term head,ptr_psi_term body,def_type typ)
+//     ptr_psi_term head;
+//     ptr_psi_term body;
+//     def_type typ;
 {
   psi_term succ;
   ptr_psi_term head2;
@@ -237,9 +238,9 @@ void add_rule(head,body,typ)
   The psi_term T is of the form 'H :- B' or 'H -> B', but it may be incorrect
   (report errors). TYP is the type, function or predicate.
   */
-void assert_rule(t,typ)
-     psi_term t;
-     def_type typ;
+void assert_rule(psi_term t,def_type typ)
+//     psi_term t;
+//     def_type typ;
 {
   ptr_psi_term head;
   ptr_psi_term body;
@@ -267,8 +268,8 @@ void assert_rule(t,typ)
   0= insert after existing rules (assert),
   */
 
-void assert_clause(t)
-     ptr_psi_term t;
+void assert_clause(ptr_psi_term t)
+//     ptr_psi_term t;
 {
   ptr_psi_term arg1,arg2;
   char *str;
@@ -360,9 +361,9 @@ void start_chrono()
   It needn't be done if P is greater than the latest choice point because in
   that case memory is reclaimed.
   */
-void push_ptr_value(t,p)
-     type_ptr t;
-     GENERIC *p;
+void push_ptr_value(type_ptr t,GENERIC *p)
+//     type_ptr t;
+//     GENERIC *p;
 {
   ptr_stack n;
   
@@ -389,9 +390,9 @@ void push_ptr_value(t,p)
   q is address of psi-term, p is address of field inside psi-term
   that is modified.  Both the definition and the time_stamp must be trailed.
   */
-void push_def_ptr_value(q,p)
-     ptr_psi_term q;
-     GENERIC *p;
+void push_def_ptr_value(ptr_psi_term q,GENERIC *p)
+//     ptr_psi_term q;
+//     GENERIC *p;
 {
   ptr_stack m,n;
   
@@ -443,9 +444,9 @@ void push_def_ptr_value(q,p)
   q is address of psi-term, p is address of field inside psi-term
   that is modified.  Both the coref and the time_stamp must be trailed.
   */
-void push_psi_ptr_value(q,p)
-     ptr_psi_term q;
-     GENERIC *p;
+void push_psi_ptr_value(ptr_psi_term q,GENERIC *p)
+//     ptr_psi_term q;
+//     GENERIC *p;
 {
   ptr_stack m,n;
   
@@ -488,9 +489,9 @@ void push_psi_ptr_value(q,p)
 /* Same as push_ptr_value, but for objects that must always be trailed. */
 /* This includes objects outside of the Life data space and entries in  */
 /* the var_tree. */
-void push_ptr_value_global(t,p)
-     type_ptr t;
-     GENERIC *p;
+void push_ptr_value_global(type_ptr t,GENERIC *p)
+//     type_ptr t;
+//     GENERIC *p;
 {
   ptr_stack n;
   
@@ -510,8 +511,8 @@ void push_ptr_value_global(t,p)
   the undo_stack (trail) so that the window can be destroyed, redrawn, or
   hidden on backtracking.
   */
-void push_window(type,disp,wind)
-     long type,disp,wind;
+void push_window(long type,long disp,long wind)
+//     long type,disp,wind;
 {
   ptr_stack n;
   
@@ -531,10 +532,10 @@ void push_window(type,disp,wind)
   It needn't be done if P is greater than the latest choice point because in
   that case memory is reclaimed.
   */
-void push2_ptr_value(t,p,v)
-     type_ptr t;
-     GENERIC *p;
-     GENERIC v;
+void push2_ptr_value(type_ptr t,GENERIC *p,GENERIC v)
+//     type_ptr t;
+//     GENERIC *p;
+//     GENERIC v;
 {
   ptr_stack n;
   
@@ -555,11 +556,11 @@ void push2_ptr_value(t,p,v)
   T is the type of the goal, A,B and C are various parameters.
   See PUSH_CHOICE_POINT(t,a,b,c).
   */
-void push_goal(t,a,b,c)
-     goals t;
-     ptr_psi_term  a;
-     ptr_psi_term  b;
-     GENERIC c;
+void push_goal(goals t,ptr_psi_term a,ptr_psi_term b,GENERIC c)
+//     goals t;
+//     ptr_psi_term  a;
+//     ptr_psi_term  b;
+//     GENERIC c;
 {
   ptr_goal thegoal;
   
@@ -591,11 +592,11 @@ void push_goal(t,a,b,c)
   
   etc...
   */
-void push_choice_point(t,a,b,c)
-     goals t;
-     ptr_psi_term a;
-     ptr_psi_term b;
-     GENERIC c;
+void push_choice_point(goals t,ptr_psi_term a,ptr_psi_term b,GENERIC c)
+//      goals t;
+//     ptr_psi_term a;
+//     ptr_psi_term b;
+//     GENERIC c;
 {
   ptr_goal alternative;
   ptr_choice_point choice;
@@ -646,8 +647,8 @@ choice_stack?choice_stack->time_stamp:INIT_TIME_STAMP;
   This routine could be modified in order to cope with goals to be proved
   on backtracking: undo(goal).
   */
-void undo(limit)
-     ptr_stack limit;
+void undo(ptr_stack limit)
+//     ptr_stack limit;
 {
   /*
     while((unsigned long)undo_stack>(unsigned long)goal_stack)
@@ -757,8 +758,8 @@ void backtrack()
   This routine is careful not to remove any trailed entries that are
   on the heap or outside of Life space.
   */
-static void clean_trail(cutpt)
-     ptr_choice_point cutpt;
+static void clean_trail(ptr_choice_point cutpt)
+//     ptr_choice_point cutpt;
 {
   ptr_stack *prev,u,cut_limit;
   GENERIC cut_sp;
@@ -792,8 +793,8 @@ static void clean_trail(cutpt)
   Remove all trail entries that reference a given window.
   This is called when the window is destroyed.
   */
-void clean_undo_window(disp,wind)
-     long disp,wind;
+void clean_undo_window(long disp,long wind)
+//     long disp,wind;
 {
   ptr_stack *prev,u;
   ptr_choice_point c;
@@ -833,8 +834,8 @@ void clean_undo_window(disp,wind)
 
 
 /* Unify the corresponding arguments */
-void merge1(u,v)
-     ptr_node *u,v;
+void merge1(ptr_node *u, ptr_node v)
+//     ptr_node *u,v;
 {
   long cmp;
   ptr_node temp;
@@ -884,8 +885,8 @@ void merge1(u,v)
 /* For each lone argument in either u or v, create a new psi-term to put */
 /* the (useless) result: This is needed so that *all* arguments of a uni-*/
 /* unified psi-term are evaluated, which avoids incorrect 'Yes' answers. */
-void merge2(u,v)
-     ptr_node *u,v;
+void merge2(ptr_node *u,ptr_node v)
+//     ptr_node *u,v;
 {
   long cmp;
   ptr_node temp;
@@ -934,8 +935,8 @@ void merge2(u,v)
 
 
 /* Merge v's loners into u and evaluate the corresponding arguments */
-void merge3(u,v)
-     ptr_node *u,v;
+void merge3(ptr_node *u,ptr_node v)
+//     ptr_node *u,v;
 {
   long cmp;
   ptr_node temp;
@@ -1002,8 +1003,8 @@ void merge3(u,v)
 
 #if FALSE
 /* This version is not quite right */
-void merge(u,v)
-     ptr_node *u,v;
+void merge(ptr_node *u,ptr_node v)
+//     ptr_node *u,v;
 {
   long cmp;
   ptr_node temp;
@@ -1061,8 +1062,8 @@ void merge(u,v)
 }
 #endif
 
-void merge(u,v)
-     ptr_node *u,v;
+void merge(ptr_node *u,ptr_node v)
+//     ptr_node *u,v;
 {
   merge1(u,v); /* Unify corresponding arguments */
   merge2(u,v); /* Evaluate lone arguments (lazy failure + eager success) */
@@ -1070,8 +1071,8 @@ void merge(u,v)
 }
 
 /* For built-ins.c */
-void merge_unify(u,v)
-     ptr_node *u,v;
+void merge_unify(ptr_node *u,ptr_node v)
+//     ptr_node *u,v;
 {
   merge1(u,v); /* Unify corresponding arguments */
   merge3(u,v); /* Merge v's loners into u & evaluate corresponding arguments */
@@ -1128,9 +1129,9 @@ void show_count()
   The above is true if allflag==FALSE.  If allflag==TRUE then all constraints
   are executed, not just those defined in the type itself.
   */
-void fetch_def(u, allflag)
-     ptr_psi_term u;
-     long allflag;
+void fetch_def(ptr_psi_term u, long allflag)
+//     ptr_psi_term u;
+//     long allflag;
 {
   ptr_triple_list prop;
   ptr_psi_term v,w;
@@ -1188,11 +1189,13 @@ void fetch_def(u, allflag)
   term     = t(a=>one,b=>two,c=> X)
   pred     = thing(X)
   */
-void fetch_def_lazy(u, old1, old2, old1attr, old2attr, old1stat, old2stat)
-     ptr_psi_term u;
-     ptr_definition old1, old2;
-     ptr_node old1attr, old2attr;
-     long old1stat, old2stat;
+void fetch_def_lazy(ptr_psi_term u, ptr_definition old1, ptr_definition old2,
+		    ptr_node old1attr, ptr_node old2attr,
+		    long old1stat, long old2stat)
+//     ptr_psi_term u;
+//     ptr_definition old1, old2;
+//     ptr_node old1attr, old2attr;
+//     long old1stat, old2stat;
 {
   ptr_triple_list prop;
   ptr_psi_term v,w;
@@ -1271,8 +1274,8 @@ long unify_aim()
   return unify_body(TRUE);
 }
 
-long unify_body(eval_flag)
-     long eval_flag;
+long unify_body(long eval_flag)
+//     long eval_flag;
 {
   long success=TRUE,compare;
   ptr_psi_term u,v,tmp;
@@ -1560,7 +1563,7 @@ long prove_aim()
     
     deref_ptr(thegoal); /* Evaluation is explicitly handled later. */
     
-    if (thegoal->type!=and) {
+    if (thegoal->type!=wl_and) {
       if (thegoal->type!=cut)
 	if(thegoal->type!=life_or) {
 	  /* User-defined predicates with unevaluated arguments */
@@ -1602,7 +1605,7 @@ long prove_aim()
 		  return success; /* We're done! */
 		}
 	      }
-	      else if (!thegoal->type->protected && thegoal->type->type_def==(def_type)undef_it) {
+	      else if (!thegoal->type->wl_protected && thegoal->type->type_def==(def_type)undef_it) {
 		/* Don't give an error message for undefined dynamic objects */
 		/* that do not yet have a definition */
 		success=FALSE;
@@ -1777,8 +1780,8 @@ void type_disj_aim()
   unify the calling argument with the current rule. If this succeeds and
   R=TRUE then delete the rule (RETRACT).
   */
-long clause_aim(r)
-     long r;
+long clause_aim(long r)
+//     long r;
 {
   long success=FALSE;
   ptr_pair_list *p;
@@ -1863,8 +1866,8 @@ long num_choices()
 
 
 /* Return the number of variables in the variable tree. */
-long num_vars(vt)
-     ptr_node vt;
+long num_vars(ptr_node vt)
+//     ptr_node vt;
 {
   long num;
   
@@ -1985,7 +1988,7 @@ long what_next_aim()
   x_window_creation=FALSE;
 #endif
   
-  Infoline(aim->aaaa_1?"\n*** Yes":"\n*** No");
+  Infoline(aim->aaaa_1?(char*)"\n*** Yes":(char*)"\n*** No");
   show_count();
   if (aim->aaaa_1 || level>0) print_variables(NOTQUIET);
 
@@ -2487,9 +2490,9 @@ void main_prove()
 }
 
 
-int dummy_printf(f,s,t)
+int dummy_printf(char *f,char *s,char *t)
      
-     char *f, *s, *t;
+//     char *f, *s, *t;
 {
   return strlen(f);
 }
