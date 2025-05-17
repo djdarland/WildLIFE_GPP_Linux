@@ -35,9 +35,9 @@ float garbage_time=0;
 */ // REMOVED above for MINT
 
 
-char **group_features(f,n)
-     char **f;
-     ptr_node n;
+char **group_features(char **f,ptr_node n)
+//     char **f;
+//     ptr_node n;
 {
   *f=NULL;
   if(n) {
@@ -53,8 +53,8 @@ char **group_features(f,n)
 }
 
 
-void exit_if_true(exitflag)
-     long exitflag;
+void exit_if_true(long exitflag)
+//     long exitflag;
 {
   if (exitflag) {
     printf("\n\n*** Execution is not allowed to continue.\n");
@@ -202,9 +202,9 @@ void WFInit(long argc, char *argv[])
 
 
 
-int WFInput(query)
+int WFInput(char *query)
      
-     char *query;
+//     char *query;
 {
   ptr_psi_term t;
   long sort;
@@ -289,9 +289,9 @@ int WFInput(query)
 
 
 
-PsiTerm WFGetVar(name)
+PsiTerm WFGetVar(char *name)
      
-     char *name;
+//     char *name;
 {
   ptr_psi_term result=NULL;
   ptr_node n;
@@ -307,9 +307,9 @@ PsiTerm WFGetVar(name)
 }
 
 
-int WFfeature_count_loop(n)
+int WFfeature_count_loop(ptr_node n)
      
-     ptr_node n;
+//     ptr_node n;
 {
   int result=0;
 
@@ -326,9 +326,9 @@ int WFfeature_count_loop(n)
 
 
 
-int WFFeatureCount(psi)
+int WFFeatureCount(ptr_psi_term psi)
 
-     ptr_psi_term psi;
+//   ptr_psi_term psi;
 {
   int result=0;
 
@@ -342,9 +342,9 @@ int WFFeatureCount(psi)
 
 
 
-char *WFType(psi)
+char *WFType(ptr_psi_term psi)
 
-     ptr_psi_term psi;
+//   ptr_psi_term psi;
 {
   char *result=NULL;
   if(psi) {
@@ -356,9 +356,9 @@ char *WFType(psi)
 
 
 
-char **WFFeatures(psi)
+char **WFFeatures(ptr_psi_term psi)
 
-     ptr_psi_term psi;
+//     ptr_psi_term psi;
 {
   char **features=NULL;
   int n;
@@ -379,9 +379,9 @@ char **WFFeatures(psi)
 
 
 
-double WFGetDouble(psi,ok)
-     ptr_psi_term psi;
-     int *ok;
+double WFGetDouble(ptr_psi_term psi,int *ok)
+//     ptr_psi_term psi;
+//     int *ok;
 {
   double value=0.0;
   
@@ -402,9 +402,9 @@ double WFGetDouble(psi,ok)
 
 
 
-char *WFGetString(psi,ok)
-     ptr_psi_term psi;
-     int *ok;
+char *WFGetString(ptr_psi_term psi,int *ok)
+//     ptr_psi_term psi;
+//     int *ok;
 {
   char *value=NULL;
   
@@ -425,10 +425,10 @@ char *WFGetString(psi,ok)
 
 
 
-PsiTerm WFGetFeature(psi,feature)
+ptr_psi_term WFGetFeature(ptr_psi_term psi,char *feature)  // changed g++
 
-     ptr_psi_term psi;
-     char *feature;
+//     ptr_psi_term psi;
+//     char *feature;
 {
   ptr_psi_term  result=NULL;
   ptr_node n;
@@ -437,7 +437,7 @@ PsiTerm WFGetFeature(psi,feature)
     deref_ptr(psi);
     n=find(FEATCMP,feature,psi->attr_list);
     if(n)
-      result=(PsiTerm)n->data;
+      result=(ptr_psi_term)n->data;  // changed g++
   }
   
   return result;

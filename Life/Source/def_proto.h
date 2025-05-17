@@ -240,7 +240,7 @@ char *WFType(ptr_psi_term psi);
 char **WFFeatures(ptr_psi_term psi);
 double WFGetDouble(ptr_psi_term psi,int *ok);
 char *WFGetString(ptr_psi_term psi, int *ok);
-PsiTerm WFGetFeature(ptr_psi_term ps, char *feature);
+ptr_psi_term WFGetFeature(ptr_psi_term ps, char *feature);  // Changed g++ 
 
 int main(int argc, char *argv[]);
 // from list.c

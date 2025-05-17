@@ -23,9 +23,9 @@ static char vcid[] = "$Id: list.c,v 1.2 1994/12/08 23:28:16 duchier Exp $";
 /*			Set functions					       */
 /*=============================================================================*/
 
-void List_SetLinkProc (header, getLinks)
-RefListHeader header;
-RefListGetLinksProc getLinks;
+void List_SetLinkProc (RefListHeader header, RefListGetLinksProc getLinks)
+// RefListHeader header;
+// RefListGetLinksProc getLinks;
 {
     header->First = NULL;
     header->Last = NULL;
@@ -41,9 +41,9 @@ RefListGetLinksProc getLinks;
 /*			List functions					       */
 /*=============================================================================*/
 
-void List_InsertAhead (header, atom) 
-RefListHeader header;
-Ref atom;
+void List_InsertAhead (RefListHeader header, Ref atom) 
+// RefListHeader header;
+// Ref atom;
 {
     RefListGetLinksProc  getLinks = header->GetLinks;
 
@@ -65,9 +65,9 @@ Ref atom;
 
 /*==============================================================================*/
 
-void List_Append (header, atom) 
-RefListHeader header;
-Ref atom;
+void List_Append (RefListHeader header, Ref atom) 
+// RefListHeader header;
+// Ref atom;
 {
     RefListGetLinksProc  getLinks = header->GetLinks;
 
@@ -91,10 +91,10 @@ Ref atom;
 
 /*==============================================================================*/
 
-void List_InsertBefore (header, atom, mark)
-RefListHeader header;
-Ref atom;
-Ref mark;
+void List_InsertBefore (RefListHeader header, Ref atom, Ref mark)
+// RefListHeader header;
+// Ref atom;
+// Ref mark;
 {
     RefListGetLinksProc  getLinks = header->GetLinks;
 
@@ -121,10 +121,10 @@ Ref mark;
 
 /*==============================================================================*/
 
-void List_InsertAfter (header, atom, mark)
-RefListHeader header;
-Ref atom;
-Ref mark;
+void List_InsertAfter (RefListHeader header, Ref atom, Ref mark)
+// RefListHeader header;
+// Ref atom;
+// Ref mark;
 {
     RefListGetLinksProc  getLinks = header->GetLinks;
 
@@ -156,10 +156,10 @@ Ref mark;
 
 /*==============================================================================*/
 
-void List_Swap (header, first, second)
-RefListHeader header;
-Ref first;
-Ref second;
+void List_Swap (RefListHeader header, Ref first, Ref second)
+// RefListHeader header;
+// Ref first;
+// Ref second;
 {
     RefListGetLinksProc	getLinks = header->GetLinks;
 
@@ -195,9 +195,9 @@ Ref second;
 
 /*==============================================================================*/
 
-static long List_SwapLinks (header, atom)
-RefListHeader header;
-Ref atom;
+static long List_SwapLinks (RefListHeader header, Ref atom)
+// RefListHeader header;
+// Ref atom;
 {
     Ref	save;
 
@@ -208,8 +208,8 @@ Ref atom;
     return TRUE;
 }
 
-void List_Reverse (header)
-RefListHeader header;
+void List_Reverse (RefListHeader header)
+// RefListHeader header;
 {
     Ref			cur, next;
     RefListGetLinksProc	getLinks = header->GetLinks;
@@ -232,9 +232,9 @@ RefListHeader header;
 
 /*==============================================================================*/
 
-void List_Remove (header, atom)
-RefListHeader header;
-Ref atom;
+void List_Remove (RefListHeader header, Ref atom)
+// RefListHeader header;
+// Ref atom;
 {
 /*-----------------------------------------------------------------------------
 
@@ -279,9 +279,9 @@ WARNING
 
 /*==============================================================================*/
 
-void List_Concat (header1, header2)
-RefListHeader header1;
-RefListHeader header2;
+void List_Concat (RefListHeader header1, RefListHeader header2)
+// RefListHeader header1;
+// RefListHeader header2;
 {
     RefListGetLinksProc  getLinks = header1->GetLinks;
 
@@ -313,11 +313,12 @@ RefListHeader header2;
 
 /*==============================================================================*/
 
-long List_EnumFrom (header, atom, proc, closure)
-RefListHeader	header;
-Ref atom;
-RefListEnumProc	proc;
-Ref closure;
+long List_EnumFrom (RefListHeader header, Ref atom,
+		    RefListEnumProc proc, Ref closure)
+// RefListHeader	header;
+// Ref atom;
+// RefListEnumProc	proc;
+// Ref closure;
 {
     Ref	cur, next;
     int	notInterrupted = TRUE;
@@ -343,10 +344,10 @@ Ref closure;
 
 /*==============================================================================*/
 
-long List_Enum (header, proc, closure)
-RefListHeader	header;
-RefListEnumProc	proc;
-Ref closure;
+long List_Enum (RefListHeader header, RefListEnumProc proc, Ref closure)
+// RefListHeader	header;
+// RefListEnumProc	proc;
+// Ref closure;
 /*-----------------------------------------------------------------------------
 
 (NO) SIDE EFFECTS
@@ -361,11 +362,12 @@ Ref closure;
 
 /*==============================================================================*/
 
-long List_EnumBackFrom (header, atom, proc, closure)
-RefListHeader	header;
-Ref		atom;
-RefListEnumProc	proc;
-Ref		closure;
+long List_EnumBackFrom (RefListHeader header, Ref atom,
+			RefListEnumProc proc, Ref closure)
+// RefListHeader	header;
+// Ref		atom;
+// RefListEnumProc	proc;
+// Ref		closure;
 {
     Ref	cur, prev;
     int	notInterrupted = TRUE;
@@ -391,10 +393,10 @@ Ref		closure;
 
 /*==============================================================================*/
 
-long List_EnumBack (header, proc, closure)
-RefListHeader	header;
-RefListEnumProc	proc;
-Ref			closure;
+long List_EnumBack (RefListHeader header, RefListEnumProc proc, Ref closure)
+// RefListHeader	header;
+// RefListEnumProc	proc;
+// Ref			closure;
 {
     return (List_EnumBackFrom (header, header->Last, proc, closure));
 }
@@ -402,9 +404,9 @@ Ref			closure;
 /*==============================================================================*/
 
 /*ARGSUSED*/
-static long List_CountAtom (p, nbR)
-Ref p; 
-Ref nbR;
+static long List_CountAtom (Ref p, Ref nbR)
+// Ref p; 
+// Ref nbR;
 {
     long *nb = (long *)nbR;
     
@@ -412,8 +414,8 @@ Ref nbR;
     return TRUE;
 }
 
-long List_Card (header)
-RefListHeader header;
+long List_Card (RefListHeader header)
+// RefListHeader header;
 {
     long n = 0;
     
@@ -423,18 +425,18 @@ RefListHeader header;
 
 /*==============================================================================*/
 
-long List_IsUnlink (links)
-RefListLinks links;
+long List_IsUnlink (RefListLinks links)
+// RefListLinks links;
 {
     return (links->Next == NULL && links->Prev == NULL);
 }
 
 /*==============================================================================*/
 
-void List_Cut (header, atom, newHeader)
-RefListHeader	header;
-Ref			atom;
-RefListHeader	newHeader;
+void List_Cut (RefListHeader header, Ref atom, RefListHeader newHeader)
+// RefListHeader	header;
+// Ref			atom;
+// RefListHeader	newHeader;
 {
     RefListGetLinksProc  getLinks = header->GetLinks;
 
