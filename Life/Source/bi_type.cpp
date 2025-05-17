@@ -170,8 +170,8 @@ static long c_smallest()
   return success;
 }
 
-long isSubTypeValue(arg1, arg2)  // REV401PLUS changed to long
-ptr_psi_term arg1, arg2;
+long isSubTypeValue(ptr_psi_term arg1, ptr_psi_term arg2)  // REV401PLUS changed to long
+// ptr_psi_term arg1, arg2;
 {
   long ans=TRUE;
   
@@ -203,8 +203,8 @@ ptr_psi_term arg1, arg2;
 }
 
 /* Boolean utility function that implements isa */
-static long isa(arg1,arg2)
-ptr_psi_term arg1, arg2;
+static long isa(ptr_psi_term arg1, ptr_psi_term arg2)
+// ptr_psi_term arg1, arg2;
 {
   long ans;
 
@@ -244,9 +244,9 @@ ptr_psi_term arg1, arg2;
 #define isa_ncmp_sel 11
 
 /* Utility that selects one of several isa functions */
-static long isa_select(arg1,arg2,sel)
-ptr_psi_term arg1,arg2;
-long sel;
+static long isa_select(ptr_psi_term arg1, ptr_psi_term arg2, long sel)
+// ptr_psi_term arg1,arg2;
+// long sel;
 {
   long ans;
 
@@ -284,8 +284,8 @@ long sel;
 /******** C_ISA_MAIN
   Main routine to handle all the isa built-in functions.
 */
-static long c_isa_main(sel)
-long sel;
+static long c_isa_main(long sel)
+// long sel;
 {
   long success=TRUE,ans;
   ptr_psi_term arg1,arg2,funct,result;
@@ -561,8 +561,8 @@ long c_isa_subsort() // changed to long REV401PLUS
 
 
 
-long isValue(p)  // REV401PLUS to long
-ptr_psi_term p;
+long isValue(ptr_psi_term p)  // REV401PLUS to long
+// ptr_psi_term p;
 {
 	return (p->value_3 != NULL);
 }
