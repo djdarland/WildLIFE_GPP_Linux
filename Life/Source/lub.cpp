@@ -31,9 +31,9 @@ static char vcid[] = "$Id: lub.c,v 1.3 1995/08/25 21:34:37 duchier Exp $";
 #include "defs.h"
 #endif
 
-ptr_int_list appendIntList(tail, more)
-ptr_int_list tail;				/* attach copies of more to tail */
-ptr_int_list more;
+ptr_int_list appendIntList(ptr_int_list tail, ptr_int_list more)
+// ptr_int_list tail;				/* attach copies of more to tail */
+// ptr_int_list more;
 {
 	while (more)
 	{
@@ -48,9 +48,9 @@ ptr_int_list more;
 
 /* Set flags bit for all ancestors (i.e., higher up) of head */
 void
-mark_ancestors(def, flags)
-     ptr_definition def;
-     long *flags;
+mark_ancestors(ptr_definition def, long *flags)
+//     ptr_definition def;
+//     long *flags;
 {
   ptr_int_list par;
   
@@ -69,11 +69,12 @@ mark_ancestors(def, flags)
   }
 }
 
-static long bfs(p, ans, pattern, flags)
-ptr_definition p;
-ptr_int_list ans;
-ptr_int_list pattern;
-long *flags;
+static long bfs(ptr_definition p, ptr_int_list ans,
+		ptr_int_list pattern, long *flags)
+// ptr_definition p;
+// ptr_int_list ans;
+// ptr_int_list pattern;
+// long *flags;
 {
 	ptr_int_list head = STACK_ALLOC(int_list);
 	ptr_int_list tail;
@@ -135,8 +136,8 @@ long *flags;
 /* make a decoded type list from one type */
 /******************************************/
 
-static ptr_int_list makeUnitList(x)
-ptr_definition x;
+static ptr_int_list makeUnitList(ptr_definition x)
+// ptr_definition x;
 {
 	ptr_int_list ans;
 
@@ -153,10 +154,10 @@ ptr_definition x;
  */
 /*****************************************************************************/
 
-ptr_int_list lub(a,b,pp)
-ptr_psi_term a;
-ptr_psi_term b;
-ptr_psi_term *pp;
+ptr_int_list lub(ptr_psi_term a,ptr_psi_term b,ptr_psi_term *pp)
+// ptr_psi_term a;
+// ptr_psi_term b;
+// ptr_psi_term *pp;
 {
 	extern long type_count;		/* the number of sorts in the hierarchy */
 	ptr_definition ta;			/* type of psi term a */
