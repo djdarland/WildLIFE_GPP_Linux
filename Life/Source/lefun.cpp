@@ -15,8 +15,8 @@ static long attr_missing;
 static long check_func_flag;
 
 /* Create a new psi_term on the stack with value '@' (top) and no attributes. */
-ptr_psi_term stack_psi_term(stat)
-long stat;
+ptr_psi_term stack_psi_term(long stat)
+// long stat;
 {
   ptr_psi_term result;
 
@@ -38,9 +38,9 @@ long stat;
 
 
 /* Create a new psi_term on the stack with a real number value. */
-ptr_psi_term real_stack_psi_term(stat,thereal)
-long stat;
-REAL thereal;
+ptr_psi_term real_stack_psi_term(long stat,REAL thereal)
+// long stat;
+// REAL thereal;
 {
   ptr_psi_term result;
 
@@ -63,8 +63,8 @@ REAL thereal;
 
 
 /* Create a new psi_term on the heap with value '@' (top) and no attributes. */
-ptr_psi_term heap_psi_term(stat)
-long stat;
+ptr_psi_term heap_psi_term(long stat)
+// long stat;
 {
   ptr_psi_term result;
 
@@ -95,8 +95,8 @@ long stat;
   Also store the other variable, so that its sort can be used in the
   'bestsort' calculation needed to implement disequality constraints.
 */
-void residuate_double(t,u) /* 21.9 */
-ptr_psi_term t,u;
+void residuate_double(ptr_psi_term t,ptr_psi_term u) /* 21.9 */
+// ptr_psi_term t,u;
 {
   ptr_resid_list curr;
 
@@ -113,8 +113,8 @@ ptr_psi_term t,u;
 /******** RESIDUATE(t)
   Residuate the current expression with T in the Residuation Variable set.
 */
-void residuate(t)
-ptr_psi_term t;
+void residuate(ptr_psi_term t)
+// ptr_psi_term t;
 {
   ptr_resid_list curr;
 
@@ -130,8 +130,8 @@ ptr_psi_term t;
 /******** RESIDUATE2(u,v)
   Residuate the current function on the two variables U and V.
 */
-void residuate2(u,v)
-ptr_psi_term u,v;
+void residuate2(ptr_psi_term u,ptr_psi_term v)
+// /ptr_psi_term u,v;
 {
   residuate(u);
   if (v && u!=v) residuate(v);
@@ -142,8 +142,8 @@ ptr_psi_term u,v;
 /******** RESIDUATE3(u,v,w)
   Residuate the current function on the three variables U, V, and W.
 */
-void residuate3(u,v,w)
-ptr_psi_term u,v,w;
+void residuate3(ptr_psi_term u,ptr_psi_term v,ptr_psi_term w)
+// ptr_psi_term u,v,w;
 {
   residuate(u);
   if (v && u!=v) residuate(v);
@@ -172,9 +172,9 @@ void curry()
   implement complete disequality semantics).  The 'othervar' parameter
   is needed for this.
 */
-long residuateGoalOnVar(g, var, othervar)
-ptr_goal g;
-ptr_psi_term var,othervar;
+long residuateGoalOnVar(ptr_goal g, ptr_psi_term var, ptr_psi_term othervar)
+// ptr_goal g;
+// ptr_psi_term var,othervar;
 {
   long result;
   long resflag,resflag2;
@@ -382,9 +382,9 @@ void do_currying()
   Two versions of this routine exist: one which trails t and one which never
   trails t.
 */
-void release_resid_main(t,trailflag)
-ptr_psi_term t;
-long trailflag;
+void release_resid_main(ptr_psi_term t,long trailflag)
+// ptr_psi_term t;
+// long trailflag;
 {
   ptr_goal g;
   ptr_residuation r;
@@ -412,14 +412,14 @@ long trailflag;
   }
 }
 
-void release_resid(t)
-ptr_psi_term t;
+void release_resid(ptr_psi_term t)
+// ptr_psi_term t;
 {
   release_resid_main(t,TRUE);
 }
 
-void release_resid_notrail(t)
-ptr_psi_term t;
+void release_resid_notrail(ptr_psi_term t)
+// ptr_psi_term t;
 {
   release_resid_main(t,FALSE);
 }
@@ -432,8 +432,8 @@ ptr_psi_term t;
   since RELEASE_RESID ensures that the same constraint is not released more
   than once.
 */
-void append_resid(u,v)
-ptr_psi_term u,v;
+void append_resid(ptr_psi_term u,ptr_psi_term v)
+// ptr_psi_term u,v;
 {
   ptr_residuation *g;
   
@@ -551,9 +551,9 @@ long eval_aim()
 
 
 /* Match the corresponding arguments */
-/* RESID */ void match_attr1(u,v,rb) //REV401PLUS add void 
-ptr_node *u,v;
-/* RESID */ ptr_resid_block rb;
+/* RESID */ void match_attr1(ptr_node *u,ptr_node v,ptr_resid_block rb) //REV401PLUS add void 
+	    //ptr_node *u,v;
+	    /* RESID */ // ptr_resid_block rb;
 {
   long cmp;
   ptr_node temp;
@@ -591,9 +591,9 @@ ptr_node *u,v;
 
 
 /* Evaluate the lone arguments (for lazy failure + eager success) */
-/* RESID */ void match_attr2(u,v,rb) // REV401PLUS add void
-ptr_node *u,v;
-/* RESID */ ptr_resid_block rb;
+/* RESID */ void match_attr2(ptr_node *u,ptr_node v,ptr_resid_block rb) // REV401PLUS add void
+	    // ptr_node *u,v;
+	    /* RESID */ //ptr_resid_block rb;
 {
   long cmp;
   ptr_node temp;
@@ -642,9 +642,9 @@ ptr_node *u,v;
 
 
 /* Evaluate the corresponding arguments */
-/* RESID */ void match_attr3(u,v,rb) // REV401PLUS add void
-ptr_node *u,v;
-/* RESID */ ptr_resid_block rb;
+/* RESID */ void match_attr3(ptr_node *u,ptr_node v,ptr_resid_block rb) // REV401PLUS add void
+	    //ptr_node *u,v;
+	    /* RESID */ //ptr_resid_block rb;
 {
   long cmp;
   ptr_node temp;
@@ -691,9 +691,9 @@ ptr_node *u,v;
   This routine is careful to push nested eval and match goals in
   descending order of feature names.
 */
-void match_attr(u,v,rb)
-ptr_node *u,v;
-ptr_resid_block rb;
+void match_attr(ptr_node *u,ptr_node v,ptr_resid_block rb)
+//ptr_node *u,v;
+//ptr_resid_block rb;
 {
   match_attr1(u,v,rb); /* Match corresponding arguments (third) */
   match_attr2(u,v,rb); /* Evaluate lone arguments (second) */
@@ -820,8 +820,8 @@ long eval_args();
   N is an attribute tree, the attributes must be examined, if any reveal
   themselves to need evaluating then return FALSE.
 */
-long i_eval_args(n)
-ptr_node n;
+long i_eval_args(ptr_node n)
+// ptr_node n;
 {
   check_func_flag=FALSE;
   return eval_args(n);
@@ -829,8 +829,8 @@ ptr_node n;
 
 
 
-long eval_args(n)
-ptr_node n;
+long eval_args(ptr_node n)
+// ptr_node n;
 {
   long flag=TRUE;
   
@@ -848,8 +848,8 @@ ptr_node n;
 /******** CHECK_DISJ(t)
   Deal with disjunctions.
 */
-void check_disj(t)
-ptr_psi_term t;
+void check_disj(ptr_psi_term t)
+// ptr_psi_term t;
 {
   Traceline("push disjunction goal %P\n",t);
   if (t->value_3) 
@@ -864,8 +864,8 @@ ptr_psi_term t;
   Deal with an unevaluated function: push an 'eval' goal for it, which will
   cause it to be evaluated.
 */
-void check_func(t)
-ptr_psi_term t;
+void check_func(ptr_psi_term t)
+//ptr_psi_term t;
 {
   ptr_psi_term result,t1,copy;
 
@@ -925,8 +925,8 @@ ptr_psi_term t;
   :: W:wife(spouse => husband(spouse => W)).
 
 */
-long check_type(t)
-ptr_psi_term t;
+long check_type(ptr_psi_term t)
+// ptr_psi_term t;
 {
   long flag=FALSE;
 
@@ -988,22 +988,22 @@ ptr_psi_term t;
     nested functions.  This is done as part of dereferencing, which is part
     of unification, matching, built-ins, and user-defined routines.
 */
-long i_check_out(t)
-ptr_psi_term t;
+long i_check_out(ptr_psi_term t)
+// ptr_psi_term t;
 {
   check_func_flag=FALSE;
   return check_out(t);
 }
 
-long f_check_out(t)
-ptr_psi_term t;
+long f_check_out(ptr_psi_term t)
+// ptr_psi_term t;
 {
   check_func_flag=TRUE;
   return check_out(t);
 }
 
-long check_out(t)
-ptr_psi_term t;
+long check_out(ptr_psi_term t)
+// ptr_psi_term t;
 {
   long flag=FALSE;
   
@@ -1092,8 +1092,8 @@ void deref_rec_args();
 void deref_rec_args_exc();
 
 /* Ensure evaluation of top of psi-term */
-long deref_eval(t)
-ptr_psi_term t;
+long deref_eval(ptr_psi_term t)
+// ptr_psi_term t;
 {
   ptr_goal save=goal_stack;
 
@@ -1128,8 +1128,8 @@ ptr_psi_term t;
 }
 
 /* Ensure evaluation of *all* of psi-term */
-long deref_rec_eval(t)
-ptr_psi_term t;
+long deref_rec_eval(ptr_psi_term t)
+// ptr_psi_term t;
 {
   ptr_goal save=goal_stack;
 
@@ -1140,8 +1140,8 @@ ptr_psi_term t;
   return (deref_flag);
 }
 
-void deref_rec_body(t)
-ptr_psi_term t;
+void deref_rec_body(ptr_psi_term t)
+// ptr_psi_term t;
 {
   if (t->status==0) {
     if (t->type->type_def==(def_type)function_it) {
@@ -1164,8 +1164,8 @@ ptr_psi_term t;
   }
 }
 
-void deref_rec_args(n)
-ptr_node n;
+void deref_rec_args(ptr_node n)
+// ptr_node n;
 {
   ptr_psi_term t1;
   
@@ -1180,9 +1180,9 @@ ptr_node n;
 
 /* Same as deref_rec_eval, but doesn't look at either the top level or */
 /* the arguments in the set. */
-long deref_args_eval(t,set)
-ptr_psi_term t;
-long set;
+long deref_args_eval(ptr_psi_term t,long set)
+// ptr_psi_term t;
+// long set;
 {
   ptr_goal save = goal_stack;
   ptr_goal top = aim;
@@ -1197,9 +1197,9 @@ long set;
 /* Return TRUE iff string (considered as number) is in the set */
 /* This routine only recognizes the strings "1", "2", "3",     */
 /* represented as numbers 1, 2, 4.                             */
-long in_set(str,set)
-char *str;
-long set;
+long in_set(char *str,long set)
+// char *str;
+// long set;
 {
   if (set&1 && !featcmp(str,"1")) return TRUE;
   if (set&2 && !featcmp(str,"2")) return TRUE;
@@ -1208,9 +1208,9 @@ long set;
   return FALSE;
 }
 
-void deref_rec_args_exc(n,set)
-ptr_node n;
-long set;
+void deref_rec_args_exc(ptr_node n,long set)
+// ptr_node n;
+//long set;
 {
   ptr_psi_term t;
   
@@ -1229,8 +1229,8 @@ long set;
 /* These two needed only for match_aim and match_attr: */
 
 /* Same as deref_eval, but assumes goal_stack already restored. */
-void deref2_eval(t)
-ptr_psi_term t;
+void deref2_eval(ptr_psi_term t)
+//ptr_psi_term t;
 {
   deref_ptr(t);
   if (t->status==0) {
@@ -1250,8 +1250,8 @@ ptr_psi_term t;
 }
 
 /* Same as deref_rec_eval, but assumes goal_stack already restored. */
-void deref2_rec_eval(t)
-ptr_psi_term t;
+void deref2_rec_eval(ptr_psi_term t)
+// ptr_psi_term t;
 {
   deref_ptr(t);
   deref_rec_body(t);
@@ -1261,9 +1261,9 @@ ptr_psi_term t;
 
 /* Saving & restoring residuation information */
 
-void save_resid(rb,match_date)
-ptr_resid_block rb;
-ptr_psi_term match_date;
+void save_resid(ptr_resid_block rb,ptr_psi_term match_date)
+// ptr_resid_block rb;
+// ptr_psi_term match_date;
 {
    if (rb) {
       rb->cc_cr = (can_curry<<1) + curried; /* 11.9 */
@@ -1275,9 +1275,9 @@ ptr_psi_term match_date;
    }
 }
 
-void restore_resid(rb,match_date)
-ptr_resid_block rb;
-ptr_psi_term *match_date;
+void restore_resid(ptr_resid_block rb,ptr_psi_term *match_date)
+// ptr_resid_block rb;
+// ptr_psi_term *match_date;
 {
    if (rb) {
       can_curry = (rb->cc_cr&2)?TRUE:FALSE; /* 11.9 */
@@ -1296,9 +1296,9 @@ ptr_psi_term *match_date;
   Dereference a global variable.
   */
 
-void eval_global_var(t)     /*  RM: Feb 10 1993  */
+void eval_global_var(ptr_psi_term t)     /*  RM: Feb 10 1993  */
 
-     ptr_psi_term t;
+//     ptr_psi_term t;
 {
   deref_ptr(t);
 
