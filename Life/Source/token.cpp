@@ -22,9 +22,9 @@ static char vcid[] = "$Id: token.c,v 1.4 1995/07/27 19:22:17 duchier Exp $";
 /* or the stack. */
 /* All these routines are NON-backtrackable. */
 
-void TOKEN_ERROR(p)    /*  RM: Feb  1 1993  */
+void TOKEN_ERROR(ptr_psi_term p)    /*  RM: Feb  1 1993  */
 
-     ptr_psi_term p;
+//     ptr_psi_term p;
 {
   if(p->type==error_psi_term->type) {
     Syntaxerrorline("Module violation (%E).\n");
@@ -50,10 +50,10 @@ void stdin_cleareof()
 
 /* Add an attribute whose value is an integer to a psi-term */
 /* that does not yet contains this attribute. */
-void heap_add_int_attr(t, attrname, value)
-ptr_psi_term t;
-char *attrname;
-long value;
+void heap_add_int_attr(ptr_psi_term t, char *attrname, long value)
+// ptr_psi_term t;
+// char *attrname;
+// long value;
 {
   ptr_psi_term t1;
 
@@ -65,28 +65,40 @@ long value;
   heap_insert(FEATCMP,heap_copy_string(attrname),&(t->attr_list), (GENERIC)t1); // REV401PLUS cast
 }
 
-void stack_add_int_attr(t, attrname, value)
-ptr_psi_term t;
-char *attrname;
-long value;
+REAL cp2R(char *cp_in)
+{
+  union {
+    REAL R;
+    char *cp;
+  } it;
+    it.cp = cp_in; 
+  return it.R;
+}
+
+
+void stack_add_int_attr(ptr_psi_term t, char *attrname, char *value)
+// ptr_psi_term t;
+// char *attrname;
+// long value;
 {
   ptr_psi_term t1;
 
   t1=stack_psi_term(4);
   t1->type=integer;
   t1->value_3=heap_alloc(sizeof(REAL)); /* 12.5 */
-  *(REAL *)t1->value_3 = (REAL) value;
-
+  //  *(REAL *)t1->value_3cp =  value;
+  // *(REAL *)t1->value_3 = (REAL) value;
+  *(REAL *)t1->value_3 = cp2R(value);
   stack_insert(FEATCMP,heap_copy_string(attrname),&(t->attr_list), (GENERIC)t1); // REV401PLUS cast
 }
 
 
 /* Modify an attribute whose value is an integer to a psi-term */
 /* that already contains this attribute with another integer value. */
-void heap_mod_int_attr(t, attrname, value)
-ptr_psi_term t;
-char *attrname;
-long value;
+void heap_mod_int_attr(ptr_psi_term t, char *attrname, long value)
+// ptr_psi_term t;
+// char *attrname;
+// long value;
 {
   ptr_node n;
   ptr_psi_term t1;
@@ -114,10 +126,10 @@ long value;
 
 /* Add an attribute whose value is a string to a psi-term */
 /* that does not yet contains this attribute. */
-void heap_add_str_attr(t, attrname, str)
-ptr_psi_term t;
-char *attrname;
-char *str;
+void heap_add_str_attr(ptr_psi_term t, char *attrname, char *str)
+// ptr_psi_term t;
+// char *attrname;
+// char *str;
 {
   ptr_psi_term t1;
 
@@ -129,10 +141,10 @@ char *str;
  
 }
 
-void stack_add_str_attr(t, attrname, str)
-ptr_psi_term t;
-char *attrname;
-char *str;
+void stack_add_str_attr(ptr_psi_term t, char *attrname, char *str)
+// ptr_psi_term t;
+// char *attrname;
+// char *str;
 {
   ptr_psi_term t1;
 
@@ -146,10 +158,10 @@ char *str;
 
 /* Modify an attribute whose value is a string to a psi-term */
 /* that already contains this attribute with another integer value. */
-void heap_mod_str_attr(t, attrname, str)
-ptr_psi_term t;
-char *attrname;
-char *str;
+void heap_mod_str_attr(ptr_psi_term t, char *attrname, char *str)
+// ptr_psi_term t;
+// char *attrname;
+// char *str;
 {
   ptr_node n;
   ptr_psi_term t1;
@@ -177,43 +189,43 @@ char *str;
 
 
 /* Attach a psi-term to another as an attribute. */
-void heap_add_psi_attr(t, attrname, g)
-ptr_psi_term t;
-char *attrname;
-ptr_psi_term g;
+void heap_add_psi_attr(ptr_psi_term t, char *attrname, ptr_psi_term g)
+// ptr_psi_term t;
+// char *attrname;
+// ptr_psi_term g;
 {
   heap_insert(FEATCMP,heap_copy_string(attrname),&(t->attr_list), (GENERIC)g); // REV401PLUS cast
 }
 
-void stack_add_psi_attr(t, attrname, g)
-ptr_psi_term t;
-char *attrname;
-ptr_psi_term g;
+void stack_add_psi_attr(ptr_psi_term t, char *attrname, ptr_psi_term g)
+// ptr_psi_term t;
+// char *attrname;
+// ptr_psi_term g;
 {
   stack_insert(FEATCMP,heap_copy_string(attrname),&(t->attr_list), (GENERIC)g); // REV401PLUS cast
 }
 
-void bk_stack_add_psi_attr(t, attrname, g)
-ptr_psi_term t;
-char *attrname;
-ptr_psi_term g;
+void bk_stack_add_psi_attr(ptr_psi_term t, char *attrname, ptr_psi_term g)
+// ptr_psi_term t;
+// char *attrname;
+// ptr_psi_term g;
 {
   bk_stack_insert(FEATCMP,heap_copy_string(attrname),&(t->attr_list), (GENERIC)g); // REV401PLUS
 }
 
 
 /* Get the GENERIC value of a psi-term's attribute */
-GENERIC get_attr(t, attrname)
-ptr_psi_term t;
-char *attrname;
+GENERIC get_attr(ptr_psi_term t, char *attrname)
+// ptr_psi_term t;
+// char *attrname;
 {
   ptr_node n=find(FEATCMP,attrname,t->attr_list);
   return (GENERIC) n->data;
 }
 
 /* Get the psi-term's STREAM attribute */
-FILE *get_stream(t)
-ptr_psi_term t;
+FILE *get_stream(ptr_psi_term t)
+// ptr_psi_term t;
 {
   return (FILE *) ((ptr_psi_term)get_attr(t,STREAM))->value_3;
 }
@@ -223,8 +235,8 @@ ptr_psi_term t;
 
 
 /* Save global state into an existing file state psi-term t */
-void save_state(t)
-ptr_psi_term t;
+void save_state(ptr_psi_term t)
+// ptr_psi_term t;
 {
   ptr_node n;
   ptr_psi_term t1;
@@ -260,8 +272,8 @@ ptr_psi_term t;
 
 
 /* Restore global state from an existing file state psi-term t */
-void restore_state(t)
-ptr_psi_term t;
+void restore_state(ptr_psi_term t)
+// ptr_psi_term t;
 {
   long i;
   char *str;
@@ -294,8 +306,8 @@ ptr_psi_term t;
 
 
 /* Create a new file state psi-term that reflects the current global state */
-void new_state(t)
-ptr_psi_term *t;
+void new_state(ptr_psi_term *t)
+// ptr_psi_term *t;
 {
   ptr_psi_term t1;
 
@@ -343,8 +355,8 @@ ptr_psi_term *t;
 
 /* Parser/tokenizer state handling */
 
-void save_parse_state(pb)
-ptr_parse_block pb;
+void save_parse_state(ptr_parse_block pb)
+// ptr_parse_block pb;
 {
    if (pb) {
      pb->lc   = line_count;
@@ -358,8 +370,8 @@ ptr_parse_block pb;
 }
 
 
-void restore_parse_state(pb)
-ptr_parse_block pb;
+void restore_parse_state(ptr_parse_block pb)
+//ptr_parse_block pb;
 {
    if (pb) {
      line_count         = pb->lc;
@@ -442,11 +454,11 @@ void end_terminal_io()
   For the time being all this does is replace '~' by the HOME directory
   if no user is given, or tries to find the user.
 */
-char *expand_file_name(s)
-char *s;
+char *expand_file_name(char *s)
+// char *s;
 {
   char *r;
-  char *home, *getenv();
+  char *home; //, *getenv();
   struct passwd *pw;
   /* char *user="eight character name"; 18.5 */
   char userbuf[STRLEN];
@@ -497,8 +509,8 @@ char *s;
   state for it.
   If the file can't be opened, print an error and open "stdin" instead.
 */   
-long open_input_file(file)
-char *file;
+long open_input_file(char *file)
+// char *file;
 {
   long ok=TRUE;
   long stdin_flag;
@@ -547,8 +559,8 @@ char *file;
   Same thing as OPEN_INPUT_FILE, only for output. If FILE="stdout" then
   output_stream=stdout.
 */
-long open_output_file(file)
-string file;
+long open_output_file(string file)
+// string file;
 {
   long ok=TRUE;
 
@@ -626,8 +638,8 @@ long read_char()
   Put back one character, if there already are 2 saved characters then report
   an error (= bug).
 */
-void put_back_char(c)
-long c;
+void put_back_char(long c)
+// long c;
 {
   if (old_saved_char)
     Errorline("in tokenizer, put_back_char three times (last=%d).\n",c);
@@ -640,8 +652,8 @@ long c;
   Put back a psi_term, if there already are two saved then report an
   error (= bug).
 */
-void put_back_token(t)
-psi_term t;
+void put_back_token(psi_term t)
+// psi_term t;
 {  
   if (old_saved_psi_term!=NULL)
     Errorline("in parser, put_back_token three times (last=%P).\n",t);
@@ -669,8 +681,8 @@ void psi_term_error()
 /******** READ_COMMENT
   Read a comment starting with '%' to the end of the line.
 */
-void read_comment(tok)
-ptr_psi_term tok;
+void read_comment(ptr_psi_term tok)
+// ptr_psi_term tok;
 {
   long c;
   
@@ -681,9 +693,8 @@ ptr_psi_term tok;
   tok->type=comment;
 }
 
-void
-read_string_error(n)
-     int n;
+void read_string_error(int n)
+//     int n;
 {
   if (stringparse) parse_ok=FALSE;
   else
@@ -697,9 +708,8 @@ read_string_error(n)
     }
 }
 
-int
-base2int(n)
-     int n;
+int base2int(int n)
+//      int n;
 {
   switch (n) {
   case '0': return 0;
@@ -736,9 +746,9 @@ base2int(n)
   Read a string ending with character E, where E=" or '. Transform a double
   occurrence into a single one so that 'ab""cd' is the string 'ab"cd'.
 */
-void read_string(tok,e)
-ptr_psi_term tok;
-long e;
+void read_string(ptr_psi_term tok,long e)
+// ptr_psi_term tok;
+// long e;
 {
   long c;
   string str;
@@ -843,8 +853,8 @@ long e;
 /******** SYMBOLIC(character)
   Tests if character is a symbol (see macro).
 */
-long symbolic(c)
-long c;
+long symbolic(long c)
+// long c;
 {
   return SYMBOL(c);
 }
@@ -854,8 +864,8 @@ long c;
 /******** LEGAL_IN_NAME(character)
   Tests if character is legal in a name or a variable (see macros).
 */
-long legal_in_name(c)
-long c;
+long legal_in_name(long c)
+// long c;
 {
   return
     UPPER(c) ||
@@ -871,11 +881,11 @@ long c;
   Read in the name starting with character C followed by character of whose
   type function is F. The result is a psi_term of symbol type TYP.
 */
-void read_name(tok,ch,f,typ)
-ptr_psi_term tok;
-long ch;
-long (*f)();
-ptr_definition typ;
+void read_name(ptr_psi_term tok,long ch,long (*f)(long),ptr_definition typ)
+// ptr_psi_term tok;
+// long ch;
+// long (*f)();
+// ptr_definition typ;
 {
   long c;
   string str;
@@ -979,9 +989,9 @@ ptr_definition typ;
   Accepted syntax: digit+ [ . digit+ ] [ {e|E} {+|-|empty} digit* ]
   Negative numbers are dealt with in the parser.
 */
-void read_number(tok,c)
-ptr_psi_term tok;
-long c;
+void read_number(ptr_psi_term tok,long c)
+// ptr_psi_term tok;
+// long c;
 {
   long c2;
   REAL f,p;
@@ -1056,19 +1066,19 @@ void read_token_main(); /* Forward declaration */
 
 /* Used in the parser */
 /* Set prompt to the 'partial input' prompt */
-void read_token(tok)
-ptr_psi_term tok;
+void read_token(ptr_psi_term tok)
+// ptr_psi_term tok;
 { read_token_main(tok, TRUE); }
 
 /* Used as a built-in */
 /* Prompt is unchanged */
-void read_token_b(tok)
-ptr_psi_term tok;
+void read_token_b(ptr_psi_term tok)
+// ptr_psi_term tok;
 { read_token_main(tok, FALSE); }
 
-void read_token_main(tok, for_parser)
-ptr_psi_term tok;
-long for_parser;
+void read_token_main(ptr_psi_term tok, long for_parser)
+// ptr_psi_term tok;
+// long for_parser;
 {
   long c, c2;
   ptr_node n;
