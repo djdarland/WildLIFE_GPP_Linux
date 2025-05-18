@@ -34,24 +34,24 @@
  - regsub - perform substitutions after a regexp match
  */
 void
-regsub(prog, source, dest)
-regexp *prog;
-char *source;
-char *dest;
+regsub(regexp *prog, char *source, char *dest)
+// regexp *prog;
+// char *source;
+// char *dest;
 {
-	register char *src;
-	register char *dst;
-	register char c;
-	register int no;
-	register int len;
+	char *src;
+	char *dst;
+	char c;
+	int no;
+	int len;
 	//	extern char *strncpy();
 
 	if (prog == NULL || source == NULL || dest == NULL) {
-		regerror("NULL parm to regsub");
+	  regerror((char*)"NULL parm to regsub");
 		return;
 	}
 	if (UCHARAT(prog->program) != MAGIC) {
-		regerror("damaged regexp fed to regsub");
+		regerror((char*)"damaged regexp fed to regsub");
 		return;
 	}
 
@@ -74,7 +74,7 @@ char *dest;
 			(void) strncpy(dst, prog->startp[no], len);
 			dst += len;
 			if (len != 0 && *(dst-1) == '\0') {	/* strncpy hit NUL. */
-				regerror("damaged match string");
+				regerror((char*)"damaged match string");
 				return;
 			}
 		}

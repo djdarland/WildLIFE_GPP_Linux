@@ -1,0 +1,2 @@
+g++    -c -o regsub.o regsub.cpp
+g++  -Wno-write-strings -fpermissive   Try.o regexp.o regsub.o -o Try

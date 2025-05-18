@@ -1,4 +1,4 @@
-CC=gcc
+CC=g++  -Wno-write-strings -fpermissive 
 
 # Things you might want to put in ENV and LENV:
 # -Dvoid=int		compilers that don't do void
@@ -19,15 +19,15 @@ TEST=-I.
 # -Dstatic='/* */'	make everything global so profiler can see it.
 # -p			profiler
 PROF=
-
+# -Wno-write-strings  -fpermissive 
 CFLAGS=-O $(ENV) $(TEST) $(PROF)
 LINTFLAGS=$(LENV) $(TEST) -ha
 LDFLAGS=
 
 OBJ=regexp.o regsub.o
-LSRC=regexp.c regsub.c regerror.c
-DTR=README dMakefile regexp.3 regexp.h regexp.c regsub.c regerror.c \
-	regmagic.h Try.c timer.c tests
+LSRC=regexp.cpp regsub.cpp regerror.cpp
+DTR=README dMakefile regexp.3 regexp.h regexp.cpp regsub.cpp regerror.cpp \
+	regmagic.h Try.cpp timer.cpp tests
 DEST = ..
 
 Try:	Try.o $(OBJ)
@@ -38,7 +38,7 @@ Try:	Try.o $(OBJ)
 timer:	timer.o $(OBJ)
 	$(CC) $(LDFLAGS) $(PROF) timer.o $(OBJ) -o timer
 
-timer.o:	timer.c timer.t.h
+timer.o:	timer.cpp timer.t.h
 
 timer.t.h:	tests
 	sed 's/	/","/g;s/\\/&&/g;s/.*/{"&"},/' tests >timer.t.h
@@ -50,11 +50,11 @@ r:	Try tests
 
 lint:	timer.t.h
 	@echo 'Complaints about multiply-declared regerror() are legit.'
-	lint $(LINTFLAGS) $(LSRC) Try.c
-	lint $(LINTFLAGS) $(LSRC) timer.c
+	lint $(LINTFLAGS) $(LSRC) Try.cpp
+	lint $(LINTFLAGS) $(LSRC) timer.cpp
 
-regexp.o:	regexp.c regexp.h regmagic.h
-regsub.o:	regsub.c regexp.h regmagic.h
+regexp.o:	regexp.cpp regexp.h regmagic.h
+regsub.o:	regsub.cpp regexp.h regmagic.h
 
 clean:
 	rm -f *~ *.o core mon.out timer.t.h dMakefile dtr Try timer
@@ -71,8 +71,8 @@ mv:	$(OBJ) regerror.o
 foo: foo.o regexp.o
 	$(CC) -o foo foo.o regexp.o
 
-DISTSOURCE = Makefile README Try.c regerror.c regexp.3 regexp.README \
-	regexp.c regexp.h regmagic.h regsub.c tests timer.c
+DISTSOURCE = Makefile README Try.cpp regerror.cpp regexp.3 regexp.README \
+	regexp.cpp regexp.h regmagic.h regsub.cpp tests timer.cpp
 
 dist:
 	test -d $(distdir)/Source/regexp || $(MKDIRHIER) $(distdir)/Source/regexp

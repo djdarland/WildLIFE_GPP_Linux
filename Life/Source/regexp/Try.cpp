@@ -18,7 +18,7 @@
  *	3. Altered versions must be plainly marked as such, and must not
  *		be misrepresented as being the original software.
  *
- * Usage: try re [string [output [-]]]
+ * Usage: wl_try re [string [output [-]]]
  * The re is compiled and dumped, regexeced against the string, the result
  * is applied to output using regsub().  The - triggers a running narrative
  * from regexec().  Dumping and narrative don't happen unless DEBUG.
@@ -37,7 +37,7 @@
 void multiple();
 void error(char *s1, char *s2);
 void complain(char *s1, char *s2);
-void try(char **fields);
+void wl_try(char **fields);
 
 
 #ifdef ERRAVAIL
@@ -56,9 +56,9 @@ char *errseen = NULL;		/* Error message. */
 int status = 0;			/* Exit status. */
 
 /* ARGSUSED */
-int main(argc, argv)
-int argc;
-char *argv[];
+int main(int argc, char *argv[])
+// int argc;
+// char *argv[];
 {
 	regexp *r;
 	int i;
@@ -74,7 +74,7 @@ char *argv[];
 
 	r = regcomp(argv[1]);
 	if (r == NULL)
-		error("regcomp failure", "");
+	  error((char*)"regcomp failure", (char*)"");
 #ifdef DEBUG
 	regdump(r);
 	if (argc > 4)
@@ -95,14 +95,13 @@ char *argv[];
 	exit(status);
 }
 
-void
-regerror(s)
-char *s;
+void regerror(char *s)
+// char *s;
 {
 	if (errreport)
 		errseen = s;
 	else
-		error(s, "");
+	  error(s, (char*)"");
 }
 
 #ifndef ERRAVAIL
@@ -126,7 +125,7 @@ void multiple()
 	char *scan;
 	int i;
 	regexp *r;
-	extern char *strchr();
+	//	extern char *strchr();
 
 	errreport = 1;
 	lineno = 0;
@@ -137,62 +136,62 @@ void multiple()
 		for (i = 0; i < 5; i++) {
 			field[i] = scan;
 			if (field[i] == NULL) {
-				complain("bad testfile format", "");
+			  complain((char*)"bad testfile format", (char*)"");
 				exit(1);
 			}
 			scan = strchr(scan, '\t');
 			if (scan != NULL)
 				*scan++ = '\0';
 		}
-		try(field);
+		wl_try(field);
 	}
 
 	/* And finish up with some internal testing... */
 	lineno = 9990;
 	errseen = NULL;
 	if (regcomp((char *)NULL) != NULL || errseen == NULL)
-		complain("regcomp(NULL) doesn't complain", "");
+	  complain((char*)"regcomp(NULL) doesn't complain", (char*)"");
 	lineno = 9991;
 	errseen = NULL;
-	if (regexec((regexp *)NULL, "foo") || errseen == NULL)
-		complain("regexec(NULL, ...) doesn't complain", "");
+	if (regexec((regexp *)NULL, (char*) "foo") || errseen == NULL)
+		complain((char*)"regexec(NULL, ...) doesn't complain", (char*)"");
 	lineno = 9992;
-	r = regcomp("foo");
+	r = regcomp((char*)"foo");
 	if (r == NULL) {
-		complain("regcomp(\"foo\") fails", "");
+		complain((char*)"regcomp(\"foo\") fails", (char*)"");
 		return;
 	}
 	lineno = 9993;
 	errseen = NULL;
 	if (regexec(r, (char *)NULL) || errseen == NULL)
-		complain("regexec(..., NULL) doesn't complain", "");
+	  complain((char*)"regexec(..., NULL) doesn't complain", (char*)"");
 	lineno = 9994;
 	errseen = NULL;
-	regsub((regexp *)NULL, "foo", rbuf);
+	regsub((regexp *)NULL, (char*)"foo", rbuf);
 	if (errseen == NULL)
-		complain("regsub(NULL, ..., ...) doesn't complain", "");
+		complain((char*)"regsub(NULL, ..., ...) doesn't complain", (char*)"");
 	lineno = 9995;
 	errseen = NULL;
 	regsub(r, (char *)NULL, rbuf);
 	if (errseen == NULL)
-		complain("regsub(..., NULL, ...) doesn't complain", "");
+		complain((char*)"regsub(..., NULL, ...) doesn't complain", (char*)"");
 	lineno = 9996;
 	errseen = NULL;
-	regsub(r, "foo", (char *)NULL);
+	regsub(r, (char*)"foo", (char *)NULL);
 	if (errseen == NULL)
-		complain("regsub(..., ..., NULL) doesn't complain", "");
+		complain((char*)"regsub(..., ..., NULL) doesn't complain", (char*)"");
 	lineno = 9997;
 	errseen = NULL;
-	if (regexec(&badregexp, "foo") || errseen == NULL)
-		complain("regexec(nonsense, ...) doesn't complain", "");
+	if (regexec(&badregexp, (char*)"foo") || errseen == NULL)
+		complain((char*)"regexec(nonsense, ...) doesn't complain", (char*)"");
 	lineno = 9998;
 	errseen = NULL;
-	regsub(&badregexp, "foo", rbuf);
+	regsub(&badregexp, (char*)"foo", rbuf);
 	if (errseen == NULL)
-		complain("regsub(nonsense, ..., ...) doesn't complain", "");
+		complain((char*)"regsub(nonsense, ..., ...) doesn't complain", (char*)"");
 }
 
-void try(char **fields)
+void wl_try(char **fields)
 {
 	regexp *r;
 	char dbuf[BUFSIZ];
@@ -201,41 +200,41 @@ void try(char **fields)
 	r = regcomp(fields[0]);
 	if (r == NULL) {
 		if (*fields[2] != 'c')
-			complain("regcomp failure in `%s'", fields[0]);
+			complain((char*)"regcomp failure in `%s'", fields[0]);
 		return;
 	}
 	if (*fields[2] == 'c') {
-		complain("unexpected regcomp success in `%s'", fields[0]);
+		complain((char*)"unexpected regcomp success in `%s'", fields[0]);
 		free((char *)r);
 		return;
 	}
 	if (!regexec(r, fields[1])) {
 		if (*fields[2] != 'n')
-			complain("regexec failure in `%s'", "");
+			complain((char*)"regexec failure in `%s'", (char*)"");
 		free((char *)r);
 		return;
 	}
 	if (*fields[2] == 'n') {
-		complain("unexpected regexec success", "");
+		complain((char*)"unexpected regexec success", (char*)"");
 		free((char *)r);
 		return;
 	}
 	errseen = NULL;
 	regsub(r, fields[3], dbuf);
 	if (errseen != NULL) {
-		complain("regsub complaint", "");
+		complain((char*)"regsub complaint", (char*)"");
 		free((char *)r);
 		return;
 	}
 	if (strcmp(dbuf, fields[4]) != 0)
-		complain("regsub result `%s' wrong", dbuf);
+		complain((char*)"regsub result `%s' wrong", dbuf);
 	free((char *)r);
 }
 
 void complain(char *s1, char *s2)
 {
-	fprintf(stderr, "try: %d: ", lineno);
+	fprintf(stderr, (char*)"wl_try: %d: ", lineno);
 	fprintf(stderr, s1, s2);
-	fprintf(stderr, " (%s)\n", (errseen != NULL) ? errseen : "");
+	fprintf(stderr, (char*)" (%s)\n", (errseen != NULL) ? errseen : (char*)"");
 	status = 1;
 }

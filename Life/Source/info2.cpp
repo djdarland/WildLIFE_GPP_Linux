@@ -40,7 +40,7 @@ void title()
   if(quietflag)
     return; /*  RM: Feb 17 1993  */
   
-  printf("Wild_Life Interpreter Version 4.20 Sat May 17 01:26:19 AM CDT 2025\n");
+  printf("Wild_Life Interpreter Version 4.20 Sun May 18 03:20:48 PM CDT 2025\n");
   printf("Copyright (C) 1991-93 DEC Paris Research Laboratory\n");
   printf("Extensions, Copyright (C) 1994-1995 Intelligent Software Group, SFU\n"); 
   printf("Ported to Linux and Cygwin December 2022 after many efforts since 1995\n");
