@@ -40,9 +40,9 @@ void init_modules()
   Return a module if it exists.
   */
 
-ptr_module find_module(module)
+ptr_module find_module(char *module)
 
-     char *module;
+//     char *module;
 {
   ptr_node nodule;
 
@@ -59,27 +59,27 @@ ptr_module find_module(module)
   Create a new module.
   */
 
-ptr_module create_module(module)
+ptr_module create_module(char *module)
 
-     char *module;
+//     char *module;
 {
-  ptr_module new;
+  ptr_module wl_new;
 
 
-  new=find_module(module);
-  if(!new) {
-    new=HEAP_ALLOC(struct wl_module);
-    new->module_name=heap_copy_string(module);
-    new->source_file=heap_copy_string(input_file_name);
-    new->open_modules=NULL;
-    new->inherited_modules=NULL;
-    new->symbol_table=hash_create(16); /*  RM: Feb  3 1993  */
+  wl_new=find_module(module);
+  if(!wl_new) {
+    wl_new=HEAP_ALLOC(struct wl_module);
+    wl_new->module_name=heap_copy_string(module);
+    wl_new->source_file=heap_copy_string(input_file_name);
+    wl_new->open_modules=NULL;
+    wl_new->inherited_modules=NULL;
+    wl_new->symbol_table=hash_create(16); /*  RM: Feb  3 1993  */
 
-    heap_insert(STRCMP,new->module_name,&module_table,(GENERIC)new); // REV401PLUS cast
+    heap_insert(STRCMP,wl_new->module_name,&module_table,(GENERIC)wl_new); // REV401PLUS cast
 
     /* printf("*** New module: '%s' from file %s\n",input_file_name); */
   }
-  return new;
+  return wl_new;
 }
 
 
@@ -88,9 +88,9 @@ ptr_module create_module(module)
   Set the current module to a given string.
   */
 
-ptr_module set_current_module(module)
+ptr_module set_current_module(ptr_module module)
 
-     ptr_module module;
+//     ptr_module module;
 {
   current_module=module;
   /* printf("*** Current module: '%s'\n",current_module->module_name); */
@@ -104,9 +104,9 @@ ptr_module set_current_module(module)
   Return NULL if only "#symbol".
   */
 
-ptr_module extract_module_from_name(str)
+ptr_module extract_module_from_name(char *str)
 
-     char *str;
+//     char *str;
 {
   char *s;
   ptr_module result=NULL;
@@ -132,9 +132,9 @@ ptr_module extract_module_from_name(str)
   Return the sub-string of symbol without the module prefix.
   */
 
-char *strip_module_name(str)
+char *strip_module_name(char *str)
 
-     char *str;
+//     char *str;
 {
   char *s=str;
 
@@ -157,9 +157,9 @@ char *strip_module_name(str)
   otherwise return the symbol for that term.
   */
 
-char *string_val(term)
+char *string_val(ptr_psi_term term)
 
-     ptr_psi_term term;
+//     ptr_psi_term term;
 {
   deref_ptr(term);
   if(term->value_3 && term->type==quoted_string)
@@ -178,17 +178,17 @@ char *string_val(term)
   The result must be immediately stored in a newly allocated string.
   */
 
-char *make_module_token(module,str)
+char *make_module_token(ptr_module module,char *str)
 
-     ptr_module module;
-     char *str;
+//     ptr_module module;
+//     char *str;
 {
-  ptr_module explicit;
+  ptr_module wl_explicit;
 
 
   /* Check if the string already contains a module */
-  explicit=extract_module_from_name(str);
-  if(explicit)
+  wl_explicit=extract_module_from_name(str);
+  if(wl_explicit)
     strcpy(module_buffer,str);
   else
     if(module!=no_module) {
@@ -208,9 +208,9 @@ char *make_module_token(module,str)
   Create a definition for a key.
   */
 
-ptr_definition new_definition(key)    /*  RM: Feb 22 1993  */
+ptr_definition new_definition(ptr_keyword key)    /*  RM: Feb 22 1993  */
 
-     ptr_keyword key;
+//     ptr_keyword key;
 {
   ptr_definition result;
 
@@ -230,7 +230,7 @@ ptr_definition new_definition(key)    /*  RM: Feb 22 1993  */
   result->date=0;
   result->type_def=(def_type)undef_it;
   result->always_check=TRUE;
-  result->protected=TRUE;
+  result->wl_protected=TRUE;
   result->evaluate_args=TRUE;
   result->already_loaded=FALSE;
   result->children=NULL;
@@ -257,9 +257,9 @@ ptr_definition new_definition(key)    /*  RM: Feb 22 1993  */
   definition by scanning the opened modules.
   */
 
-ptr_definition update_symbol(module,symbol)   /*  RM: Jan  8 1993  */
-     ptr_module module;
-     char *symbol;
+ptr_definition update_symbol(ptr_module module,char *symbol)   /*  RM: Jan  8 1993  */
+//     ptr_module module;
+//     char *symbol;
 {
   ptr_keyword key;
   ptr_definition result=NULL;
@@ -283,7 +283,7 @@ ptr_definition update_symbol(module,symbol)   /*  RM: Jan  8 1993  */
   key=hash_lookup(module->symbol_table,symbol);
   
   if(key)
-    if(key->public || module==current_module)
+    if(key->wl_public || module==current_module)
       result=key->definition;
     else {
       Errorline("qualified call to private symbol '%s'\n",
@@ -304,7 +304,7 @@ ptr_definition update_symbol(module,symbol)   /*  RM: Jan  8 1993  */
 	key->module=module;
 	key->symbol=heap_copy_string(symbol);
 	key->combined_name=heap_copy_string(make_module_token(module,symbol));
-	key->public=FALSE;
+	key->wl_public=FALSE;
 	key->private_feature=FALSE; /*  RM: Mar 11 1993  */
 	key->definition=NULL;
 	
@@ -321,7 +321,7 @@ ptr_definition update_symbol(module,symbol)   /*  RM: Jan  8 1993  */
 	    tempkey=hash_lookup(opened->symbol_table,symbol);
 	    
 	    if(tempkey)
-	      if(openkey && openkey->public && tempkey->public) {
+	      if(openkey && openkey->wl_public && tempkey->wl_public) {
 		if(openkey->definition==tempkey->definition) {
 		  Warningline("benign module name clash: %s and %s\n",
 			      openkey->combined_name,
@@ -336,7 +336,7 @@ ptr_definition update_symbol(module,symbol)   /*  RM: Jan  8 1993  */
 		}
 	      }
 	      else
-		if(!openkey || !openkey->public)
+		if(!openkey || !openkey->wl_public)
 		  openkey=tempkey;
 	  }
 	  
@@ -345,10 +345,10 @@ ptr_definition update_symbol(module,symbol)   /*  RM: Jan  8 1993  */
 	
 	if(!result) { /*  RM: Feb  1 1993  */
 	  
-	  if(openkey && openkey->public) {
+	  if(openkey && openkey->wl_public) {
 	    /* Found the symbol in an open module */
 	    
-	    if(!openkey->public)
+	    if(!openkey->wl_public)
 	      Warningline("implicit reference to non-public symbol: %s\n",
 			  openkey->combined_name);
 	    
@@ -422,9 +422,9 @@ ptr_definition update_symbol(module,symbol)   /*  RM: Jan  8 1993  */
   Returns the string to be used to display keyword K.
   */
 
-char *print_symbol(k)
+char *print_symbol(ptr_keyword k)
      
-     ptr_keyword k;
+//     ptr_keyword k;
      
 {
   k=k->definition->keyword;
@@ -439,9 +439,9 @@ char *print_symbol(k)
   Prints the string to be used to display keyword K.
   */
 
-void pretty_symbol(k)
+void pretty_symbol(ptr_keyword k)
      
-     ptr_keyword k;
+//     ptr_keyword k;
 {
   k=k->definition->keyword;
   if(display_modules) {
@@ -457,9 +457,9 @@ void pretty_symbol(k)
   Prints the string to be used to display keyword K, with quotes if required.
   */
 
-void pretty_quote_symbol(k)
+void pretty_quote_symbol(ptr_keyword k)
      
-     ptr_keyword k;
+//     ptr_keyword k;
 {
   k=k->definition->keyword;
   if(display_modules) {
@@ -527,9 +527,9 @@ long c_open_module()
 
 
 
-void open_module_tree(n, onefailed)  // REV401PLUS void
-ptr_node n;
-int *onefailed;
+void open_module_tree(ptr_node n, int *onefailed)  // REV401PLUS void
+// ptr_node n;
+// int *onefailed;
 {
   if (n) {
     ptr_psi_term t;
@@ -544,9 +544,9 @@ int *onefailed;
 
 
 
-void open_module_one(t, onefailed)  // REV401PLUS void
-ptr_psi_term t;
-int *onefailed;
+void open_module_one(ptr_psi_term t, int *onefailed)  // REV401PLUS void
+// ptr_psi_term t;
+// int *onefailed;
 {
   ptr_module open_module;
   ptr_int_list opens;
@@ -573,7 +573,7 @@ int *onefailed;
 	/* Check for name conflicts */
 	/*  RM: Feb 23 1993  */
 	for (i=0;i<open_module->symbol_table->size;i++)
-	  if ((key1=open_module->symbol_table->data[i]) && key1->public) {
+	  if ((key1=open_module->symbol_table->data[i]) && key1->wl_public) {
 	    key2=hash_lookup(current_module->symbol_table,key1->symbol);
 	    if (key2 && key1->definition!=key2->definition)
 	      Errorline("symbol clash '%s' and '%s'\n",
@@ -594,10 +594,10 @@ int *onefailed;
   Make a term public.
   */
 
-long make_public(term,bool)   /*  RM: Feb 22 1993  Modified */
+long make_public(ptr_psi_term term,long wl_bool)   /*  RM: Feb 22 1993  Modified */
      
-     ptr_psi_term term;
-     long bool;
+//     ptr_psi_term term;
+//     long wl_bool;
 {
   int ok=TRUE;
   ptr_keyword key;
@@ -608,7 +608,7 @@ long make_public(term,bool)   /*  RM: Feb 22 1993  Modified */
   key=hash_lookup(current_module->symbol_table,term->type->keyword->symbol);
   if(key) {
     
-    if(key->definition->keyword->module!=current_module && !bool) {
+    if(key->definition->keyword->module!=current_module && !wl_bool) {
       Warningline("local definition of '%s' overrides '%s'\n",
 	       key->definition->keyword->symbol,
 	       key->definition->keyword->combined_name);
@@ -616,11 +616,11 @@ long make_public(term,bool)   /*  RM: Feb 22 1993  Modified */
       new_definition(key);
     }
     
-    key->public=bool;
+    key->wl_public=wl_bool;
   }
   else {
     def=update_symbol(current_module,term->type->keyword->symbol);
-    def->keyword->public=bool;
+    def->keyword->wl_public=wl_bool;
   }
   
   return ok;
@@ -634,9 +634,9 @@ long make_public(term,bool)   /*  RM: Feb 22 1993  Modified */
 /* Do for all arguments, for the built-ins
    c_public, c_private, and c_private_feature.
 */
-void traverse_tree(n,flag)   // REV401PLUS void
-ptr_node n;
-int flag;
+void traverse_tree(ptr_node n,int flag)   // REV401PLUS void
+// ptr_node n;
+// int flag;
 {
   if (n) {
     ptr_psi_term t;
@@ -821,30 +821,30 @@ long c_trace_input()
 
 
 
-/******** REPLACE(old,new,term)
+/******** REPLACE(old,wl_new,term)
   Replace all occurrences of type OLD with NEW in TERM.
   */
 
 void rec_replace();
 void replace_attr();
 
-void replace(old,new,term)  // REV401PLUS changed to void from int
+void replace(ptr_definition old,ptr_definition wl_new,ptr_psi_term term)  // REV401PLUS changed to void from int
      
-     ptr_definition old;
-     ptr_definition new;
-     ptr_psi_term term;
+//     ptr_definition old;
+//     ptr_definition new;
+//     ptr_psi_term term;
 {
   clear_copy();
-  rec_replace(old,new,term);
+  rec_replace(old,wl_new,term);
 }
 
 
 
-void rec_replace(old,new,term)
+void rec_replace(ptr_definition old,ptr_definition wl_new,ptr_psi_term term)
      
-     ptr_definition old;
-     ptr_definition new;
-     ptr_psi_term term;
+//     ptr_definition old;
+//     ptr_definition new;
+//     ptr_psi_term term;
 {
   ptr_psi_term done;
   long info;
@@ -857,23 +857,24 @@ void rec_replace(old,new,term)
     
     if(term->type==old && !term->value_3) {
       push_ptr_value(def_ptr,(GENERIC *)&(term->type)); // REV401PLUS cast
-      term->type=new;
+      term->type=wl_new;
     }
     old_attr=term->attr_list;
     if(old_attr) {
       push_ptr_value(int_ptr,(GENERIC *)&(term->attr_list));  // REV401PLUS cast
       term->attr_list=NULL;
-      replace_attr(old_attr,term,old,new);
+      replace_attr(old_attr,term,old,wl_new);
     }
   }
 }
 
 
-void replace_attr(old_attr,term,old,new)
-     ptr_node old_attr;
-     ptr_psi_term term;
-     ptr_definition old;
-     ptr_definition new;
+void replace_attr(ptr_node old_attr,ptr_psi_term term,
+		  ptr_definition old,ptr_definition wl_new)
+//     ptr_node old_attr;
+//     ptr_psi_term term;
+//     ptr_definition old;
+//     ptr_definition new;
      
 {
   ptr_psi_term value;
@@ -881,20 +882,20 @@ void replace_attr(old_attr,term,old,new)
   char *newlabel;
   
   if(old_attr->left)
-    replace_attr(old_attr->left,term,old,new);
+    replace_attr(old_attr->left,term,old,wl_new);
   
   value=(ptr_psi_term)old_attr->data;
-  rec_replace(old,new,value);
+  rec_replace(old,wl_new,value);
   
   if(old->keyword->private_feature)  /*  RM: Mar 12 1993  */
     oldlabel=old->keyword->combined_name;
   else
     oldlabel=old->keyword->symbol;
   
-  if(new->keyword->private_feature)  /*  RM: Mar 12 1993  */
-    newlabel=new->keyword->combined_name;
+  if(wl_new->keyword->private_feature)  /*  RM: Mar 12 1993  */
+    newlabel=wl_new->keyword->combined_name;
   else
-    newlabel=new->keyword->symbol;
+    newlabel=wl_new->keyword->symbol;
   
   if(!strcmp(old_attr->key,oldlabel))
     stack_insert(FEATCMP,newlabel,&(term->attr_list),(GENERIC)value);
@@ -902,7 +903,7 @@ void replace_attr(old_attr,term,old,new)
     stack_insert(FEATCMP,old_attr->key,&(term->attr_list),(GENERIC)value);
   
   if(old_attr->right)
-    replace_attr(old_attr->right,term,old,new);
+    replace_attr(old_attr->right,term,old,wl_new);
 }
 
 
@@ -1028,10 +1029,10 @@ long c_module_access()
 
 int global_unify_attr();   /*  RM: Feb  9 1993  */
 
-int global_unify(u,v)      /*  RM: Feb 11 1993  */
+int global_unify(ptr_psi_term u,ptr_psi_term v)      /*  RM: Feb 11 1993  */
      
-     ptr_psi_term u;
-     ptr_psi_term v;
+//     ptr_psi_term u;
+//     ptr_psi_term v;
 {
   int success=TRUE;
   int compare;
@@ -1110,10 +1111,10 @@ int global_unify(u,v)      /*  RM: Feb 11 1993  */
   This is really matching, so all features of U must appear in V.
   */
 
-int global_unify_attr(u,v)    /*  RM: Feb  9 1993  */
+int global_unify_attr(ptr_node u,ptr_node v)    /*  RM: Feb  9 1993  */
 
-     ptr_node u;
-     ptr_node v;
+//     ptr_node u;
+//     ptr_node v;
 {
   int success=TRUE;
   ptr_node temp;
@@ -1200,10 +1201,10 @@ long c_alias()
   Convert a psi-term to a module. The psi-term must be a string.
   */
 
-int get_module(psi,module)
+int get_module(ptr_psi_term psi,ptr_module *module)
 
-     ptr_psi_term psi;
-     ptr_module *module;
+//     ptr_psi_term psi;
+//     ptr_module *module;
 {
   int success=TRUE;
   char *s;
@@ -1232,9 +1233,9 @@ int get_module(psi,module)
   Make a feature private.
   */
 
-int make_feature_private(term)  /*  RM: Mar 11 1993  */
+int make_feature_private(ptr_psi_term term)  /*  RM: Mar 11 1993  */
      
-     ptr_psi_term term;
+//     ptr_psi_term term;
 {
   int ok=TRUE;
   ptr_keyword key;
@@ -1264,7 +1265,7 @@ int make_feature_private(term)  /*  RM: Mar 11 1993  */
   }
 
   
-  if(ok && def->keyword->public) {
+  if(ok && def->keyword->wl_public) {
     Warningline("feature '%s' is now private, but was also declared public\n",
 		def->keyword->combined_name);
   }
@@ -1308,22 +1309,22 @@ long c_private_feature()    /*  RM: Mar 11 1993  */
   May return NULL if the FEATURE is not visible from MODULE.
   */
 
-ptr_definition update_feature(module,feature)
+ptr_definition update_feature(ptr_module module,char *feature)
 
-     ptr_module module;
-     char *feature;
+//     ptr_module module;
+//     char *feature;
 {
   ptr_keyword key;
-  ptr_module explicit;
+  ptr_module wl_explicit;
 
   /* Check if the feature already contains a module name */
 
   if(!module)
     module=current_module;
   
-  explicit=extract_module_from_name(feature);
-  if(explicit)
-    if(explicit!=module)
+  wl_explicit=extract_module_from_name(feature);
+  if(wl_explicit)
+    if(wl_explicit!=module)
       return NULL; /* Feature isn't visible */
     else
       return update_symbol(NULL,feature);
@@ -1365,7 +1366,7 @@ long all_public_symbols()   // REV401PLUS change to long
   list=stack_nil();
   
   for(d=first_definition;d;d=d->next)
-    if(d->keyword->public && (!module || d->keyword->module==module)) {
+    if(d->keyword->wl_public && (!module || d->keyword->module==module)) {
       car=stack_psi_term(4);
       car->type=d;
       list=stack_cons(car,list);
