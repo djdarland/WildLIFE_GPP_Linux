@@ -282,7 +282,7 @@ static long c_bitvector_xor()
 #define BV_NOT   0
 #define BV_COUNT 1
 
-static long bitvector_unop_code(unsigned long *bv1,ptr_psi_term result,int op)
+static long bitvector_unop_code(unsigned long *bv1,ptr_psi_term result,int op) // 
 //     unsigned long *bv1;
 //     ptr_psi_term result;
 //     int op;
@@ -457,7 +457,7 @@ static long regexp_compile_internal(ptr_psi_term args[],
 //     ptr_psi_term args[],result,funct;
 {
   ptr_psi_term temp_result;
-  regexp * re = regcomp(args[0]->value_3);
+  regexp * re = regcomp((char*)args[0]->value_3);
   long bytes;
   if (re == NULL) {
     Errorline("compilation of regular expression failed in %P.\n",funct);
@@ -621,7 +621,7 @@ ptr_psi_term fileptr2stream(FILE *fp,
   return result;
 }
 
-static long int2stream_internal(ptr_psi_term args,
+static long int2stream_internal(ptr_psi_term args[],
 				ptr_psi_term result,
 				ptr_psi_term funct)
 //     ptr_psi_term args[],result,funct;
@@ -692,7 +692,7 @@ static long c_fclose()
 				  ptr_psi_term, ptr_psi_term, GENERIC))fclose_internal,NARGS(args),args,0);
 }
 
-static long fwrite_internal(ptr_psi_term args,
+static long fwrite_internal(ptr_psi_term args[],
 			    ptr_psi_term result,
 			    ptr_psi_term funct)
 //     ptr_psi_term args[],result,funct;
@@ -781,7 +781,7 @@ struct text_buffer {
 int text_buffer_next(struct text_buffer *buf,
 		     int idx,
 		     char c,
-		     struct text_bufferr **rbuf,
+		     struct text_buffer **rbuf,
 		     int *ridx)
 //     struct text_buffer *buf,**rbuf;
 //     char c;
@@ -1145,7 +1145,7 @@ int is_ipaddr(char *s)
 
 static long bind_or_connect_internal(ptr_psi_term args[],
 				     ptr_psi_term result,
-				     ptr_psi_tem funct,
+				     ptr_psi_term funct,
 				     void *info)
 //     ptr_psi_term args[],result,funct;
 //     void*info;
@@ -1231,12 +1231,12 @@ static long c_connect()
   SETARG(args,2,"port",integer,OPTIONAL);
   SETARG(args,3,"path",quoted_string,OPTIONAL);
   return call_primitive((long (*)(wl_psi_term**,
-				  ptr_psi_term, ptr_psi_term, GENERIC))bind_or_connect_internal,NARGS(args),args,(void*)1);
+				  ptr_psi_term, ptr_psi_term, GENERIC))bind_or_connect_internal,NARGS(args),args,(GENERIC)1);
 }
 
 static long listen_internal(ptr_psi_term args[],
 			    ptr_psi_term result,
-			    pr_psi_term funct)
+			    ptr_psi_term funct)
 //     ptr_psi_term args[],result,funct;
 {
   int fd = fileno(((ptr_stream)BYTEDATA_DATA(args[0]))->fp); /**(FILE**)BYTEDATA_DATA(args[0]));*/
@@ -1291,7 +1291,7 @@ static long c_accept()
 /* SYSTEM ERRORS *
  *****************/
 
-static long errno_internal(ptr_psi_tem args[],
+static long errno_internal(ptr_psi_term args[],
 			   ptr_psi_term result,
 			   ptr_psi_term funct)
 //     ptr_psi_term args[],result,funct;
@@ -1367,7 +1367,7 @@ static long import_symbol_internal(ptr_psi_term args[],
     key->symbol=args[0]->type->keyword->symbol;
     key->combined_name=
       heap_copy_string(make_module_token(current_module,key->symbol));
-    key->public=FALSE;
+    key->wl_public=FALSE;
     key->private_feature=FALSE;
     key->definition=args[0]->type; /* use given definition */
 	
@@ -1515,7 +1515,7 @@ static long c_wait()
 				  ptr_psi_term, ptr_psi_term, GENERIC))wait_internal,0,NULL,0);
 }
 
-static long waitpid_internal(ptr_psi_term args,
+static long waitpid_internal(ptr_psi_term args[],
 			     ptr_psi_term result,
 			     ptr_psi_term funct)
 //     ptr_psi_term args[],result,funct;
@@ -1535,9 +1535,10 @@ static long c_waitpid()
 				  ptr_psi_term, ptr_psi_term, GENERIC))waitpid_internal,NARGS(args),args,0);
 }
 
-static long
-kill_internal(args,result,funct)
-     ptr_psi_term args[],result,funct;
+static long kill_internal(ptr_psi_term args[],
+			  ptr_psi_term result,
+			  ptr_psi_term funct)
+//     ptr_psi_term args[],result,funct;
 {
   return (kill((pid_t)*(REAL*)args[0]->value_3,
 	       (int)*(REAL*)args[1]->value_3)==0)?TRUE:FALSE;
