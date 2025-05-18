@@ -468,7 +468,12 @@ void raw_setup_builtins ();
 #endif
 // from sys.c
 
-long call_primitive(long (*fun)(),int num,psi_arg argi[],GENERIC info);
+// long call_primitive(long (*fun)(),int num,psi_arg argi[],GENERIC info);
+long call_primitive(long (*fun)(ptr_psi_term[],
+			   ptr_psi_term,
+			   ptr_psi_term,
+			   GENERIC),
+	       int num,psi_arg argi[],GENERIC info);
 ptr_psi_term fileptr2stream(FILE *fp, ptr_definition typ); // removed * 2nd arg
 int text_buffer_next(struct text_buffer *buf, int idx, char c, struct text_buffer **rbuf, int *ridx);
 char* text_buffer_cmp(struct text_buffer *buf, int idx, char *str);

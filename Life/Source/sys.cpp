@@ -41,12 +41,16 @@ static char vcid[] = "$Id: sys.c,v 1.9 1996/01/17 00:33:09 duchier Exp $";
 // ptr_definition sys_file_stream;
 // ptr_definition sys_socket_stream;
 
-long
-call_primitive(fun,num,argi,info)
-     int num;
-     psi_arg argi[];
-     long (*fun)();
-     GENERIC info;   // REV410PLUS was void *
+long call_primitive(long (*fun)(ptr_psi_term[],
+				ptr_psi_term,
+				ptr_psi_term,
+				//			   ptr_psi_term),
+				GENERIC),
+		    int num,psi_arg argi[],GENERIC info)
+//     int num;
+//     psi_arg argi[];
+//     long (*fun)();
+//     GENERIC info;   // REV410PLUS was void *
 {
 #define ARGNN 10
   ptr_psi_term funct,arg,result,argo[ARGNN]; /* no more than 10 arguments */
@@ -143,10 +147,9 @@ call_primitive(fun,num,argi,info)
   construct a psi term of the given sort whose value points
   to a bytedata block that can hold the given number of bytes
   */
-static ptr_psi_term
-make_bytedata(sort,bytes)
-     ptr_definition sort;
-     unsigned long bytes;
+static ptr_psi_term make_bytedata(ptr_definition sort, unsigned long bytes)
+//     ptr_definition sort;
+//     unsigned long bytes;
 {
   ptr_psi_term temp_result;
   char *b = (char *) heap_alloc(bytes+sizeof(bytes));
@@ -168,9 +171,10 @@ make_bytedata(sort,bytes)
   make a bitvector that can hold at least the given number of bits
 */
 
-static long
-make_bitvector_internal(args,result,funct)
-     ptr_psi_term args[],result,funct;
+static long make_bitvector_internal(ptr_psi_term args[],
+				    ptr_psi_term result,
+				    ptr_psi_term funct)
+//     ptr_psi_term args[],result,funct;
 {
   long bits = *(REAL *)args[0]->value_3;
   if (bits < 0) {
@@ -185,23 +189,25 @@ make_bitvector_internal(args,result,funct)
     return TRUE; }
 }
 
-static long
-c_make_bitvector()
+static long c_make_bitvector()
 {
   psi_arg args[1];
   SETARG(args,0, "1" , integer , REQUIRED );
-  return call_primitive(make_bitvector_internal,NARGS(args),args,0);
+  return call_primitive((long (*)(wl_psi_term**,
+				  ptr_psi_term, ptr_psi_term, GENERIC))
+			make_bitvector_internal,NARGS(args),args,0);
 }
 
 #define BV_AND 0
 #define BV_OR  1
 #define BV_XOR 2
 
-static long
-bitvector_binop_code(bv1,bv2,result,op)
-     unsigned long *bv1,*bv2;
-     ptr_psi_term result;
-     int op;
+static long bitvector_binop_code(unsigned long *bv1,
+				 unsigned long *bv2,
+				 ptr_psi_term result, int op)
+//     unsigned long *bv1,*bv2;
+//     ptr_psi_term result;
+//     int op;
 {
   unsigned long size1 = *bv1;
   unsigned long size2 = *bv2;
@@ -236,10 +242,12 @@ bitvector_binop_code(bv1,bv2,result,op)
 /******** BITVECTOR_BINOP
 */
 
-static long
-bitvector_binop_internal(args,result,funct,op)
-     ptr_psi_term args[],result,funct;
-     void* op;
+static long bitvector_binop_internal(ptr_psi_term args[],
+				     ptr_psi_term result,
+				     ptr_psi_term funct,
+				     void *op)
+//     ptr_psi_term args[],result,funct;
+//     void* op;
 {
   return bitvector_binop_code((unsigned long *)args[0]->value_3,
 			      (unsigned long *)args[1]->value_3,
