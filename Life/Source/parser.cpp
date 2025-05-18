@@ -24,8 +24,8 @@ static char vcid[] = "$Id: parser.c,v 1.2 1994/12/08 23:32:03 duchier Exp $";
   Example: "A=)+6."  would otherwise be parsed as: "=(A,+(')',6))", this was
 	             going a bit far.
 */
-int bad_psi_term(t)   // REV401PLUS add int
-ptr_psi_term t;
+int bad_psi_term(ptr_psi_term t)   // REV401PLUS add int
+// ptr_psi_term t;
 {
   char *s,c;
   long r;
@@ -56,8 +56,8 @@ ptr_psi_term t;
   This prints the parser's stack, for debugging purposes
   only, LIMIT marks the bottom of the current stack.
 */
-void show(limit)
-long limit;
+void show(long limit)
+// long limit;
 {
   long i;
   
@@ -95,10 +95,10 @@ long limit;
 /******** PUSH(tok,prec,op)
   Push psi_term and precedence and operator onto parser stack.
 */
-void push(tok,prec,op)
-psi_term tok;
-long prec;
-operator op;   
+void push(psi_term tok,long prec,wl_operator op)
+// psi_term tok;
+// long prec;
+// operator op;   
 {
   if (parser_stack_index==PARSER_STACK_SIZE) {
     perr("*** Parser error ");
@@ -119,9 +119,9 @@ operator op;
   This function pops PSI_TERM and OP off the parser stack and returns
   its precedence.
 */
-long pop(tok,op)
-ptr_psi_term tok;
-operator *op;   
+long pop(ptr_psi_term tok,wl_operator *op)
+// ptr_psi_term tok;
+// operator *op;   
 {
   long r=0;
   
@@ -163,9 +163,9 @@ long look()
   Note that this allows both a binary and unary minus.
   The result is NOP if tok is not an operator.
 */
-long precedence(tok,typ)
-psi_term tok;
-operator typ;  
+long precedence(psi_term tok,wl_operator typ)
+// psi_term tok;
+// operator typ;  
 {
   long r=NOP;
   ptr_operator_data o;
@@ -187,8 +187,8 @@ operator typ;
   Return the address of a copy of TOK on the STACK.
   All psi_terms read in by the parser are read into the stack.
 */
-ptr_psi_term stack_copy_psi_term(t)
-psi_term t;
+ptr_psi_term stack_copy_psi_term(psi_term t)
+// psi_term t;
 {
   ptr_psi_term p;
   
@@ -206,8 +206,8 @@ psi_term t;
 /******** HEAP_COPY_PSI_TERM(tok)
   Return the address of a copy of TOK on the HEAP.
 */
-ptr_psi_term heap_copy_psi_term(t)
-psi_term t;
+ptr_psi_term heap_copy_psi_term(psi_term t)
+//psi_term t;
 {
   ptr_psi_term p;
   
@@ -228,10 +228,10 @@ psi_term t;
   If the feature already exists, create a call to the unification
   function.
 */
-void feature_insert(keystr,tree,psi)  // REV401PLUS add void
-char *keystr;
-ptr_node *tree;
-ptr_psi_term psi;
+void feature_insert(char *keystr,ptr_node *tree,ptr_psi_term psi)  // REV401PLUS add void
+// char *keystr;
+// ptr_node *tree;
+// ptr_psi_term psi;
 {
   ptr_node loc;
   /* ptr_psi_term stk_psi=stack_copy_psi_term(*psi); 19.8 */
@@ -257,9 +257,9 @@ ptr_psi_term psi;
   Returns the atom NIL to mark the end of a list.
   */
 
-psi_term list_nil(type) /*  RM: Feb  1 1993  */
+psi_term list_nil(ptr_definition type) /*  RM: Feb  1 1993  */
 
-     ptr_definition type;
+//     ptr_definition type;
 {
   psi_term nihil;
 
@@ -306,9 +306,9 @@ psi_term list_nil(type) /*  RM: Feb  1 1993  */
   SEPARATOR="," will read lists such as [1,2,a,b,c|d]
   */
 
-psi_term parse_list(typ,e,s)
-     ptr_definition typ;
-     char e,s;
+psi_term parse_list(ptr_definition typ,char e,char s)
+//     ptr_definition typ;
+//     char e,s;
 
 {
   ptr_psi_term car=NULL;
@@ -548,8 +548,8 @@ psi_term read_psi_term()
   Example:
   a:V:b:5:long => V: <a,b,5,int> (= conjunction list).
 */
-psi_term make_life_form(tok,arg1,arg2)
-ptr_psi_term tok,arg1,arg2;
+psi_term make_life_form(ptr_psi_term tok,ptr_psi_term arg1,ptr_psi_term arg2)
+// ptr_psi_term tok,arg1,arg2;
 {  
   ptr_list l;
   ptr_psi_term a1,a2;
@@ -638,12 +638,12 @@ ptr_psi_term tok,arg1,arg2;
   is <= PREC, and replace it with the corresponding psi-term. Do not go any
   further than LIMIT which is the end of the current expression.
 */
-void crunch(prec,limit)
-long prec;
-long limit;
+void crunch(long prec,long limit)
+// long prec;
+// long limit;
 {
   psi_term t,t1,t2,t3;
-  operator op1,op2,op3;
+  wl_operator op1,op2,op3;
   
   if(parse_ok && prec>=look() && parser_stack_index>limit) {
     
@@ -702,8 +702,8 @@ long limit;
   precedence is dealt with by the CRUNCH function. Each time an opening
   parenthesis is encountered a new expression is started.
 */
-psi_term read_life_form(ch1,ch2)
-char ch1,ch2;
+psi_term read_life_form(char ch1,char ch2)
+// char ch1,ch2;
 {
   psi_term t,t2;
   long limit,pr_op,pr_1,pr_2,start=0;
@@ -711,7 +711,7 @@ char ch1,ch2;
   long state=0;
   long prec=0;
   
-  operator op;
+  wl_operator op;
   
   limit=parser_stack_index+1;
   
@@ -880,8 +880,8 @@ char ch1,ch2;
   It handles psi_terms rather than pointers which causes a lot of messy code
   and is somewhat slower.
 */
-psi_term parse(q)
-long *q;
+psi_term parse(long *q)
+// long *q;
 {
   psi_term s,t,u;
   long c;
