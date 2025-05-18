@@ -82,8 +82,8 @@ GENERIC unique_name()
   Converts the string S into a positive integer.
   Returns -1 if s is not an integer.
 */
-long str_to_int(s)
-char *s;
+long str_to_int(char *s)
+// char *s;
 {
   long v=0;
   char c;
@@ -109,8 +109,8 @@ char *s;
   Print the integer B under binary format (currently 26 is printed **-*-).
   This is used to print the binary codes used in type encryption.
 */
-void print_bin(b)
-long b;
+void print_bin(long b)
+// long b;
 {
   long p;
 
@@ -126,9 +126,9 @@ long b;
 /******** PRINT_CODE(s,c)
   Print a binary code C to a stream s (as used in type encoding).
 */
-void print_code(s,c)
-FILE *s;
-ptr_int_list c;
+void print_code(FILE *s,ptr_int_list c)
+// FILE *s;
+// ptr_int_list c;
 {
   outfile=s;
 
@@ -152,9 +152,9 @@ void go_through();
 /******** PRINT_OPERATOR_KIND(s,kind)
   Print the kind of an operator.
 */
-void print_operator_kind(s,kind)
-FILE *s;
-operator kind;
+void print_operator_kind(FILE *s,wl_operator kind)
+// FILE *s;
+// operator kind;
 {
   switch (kind) {
   case xf:
@@ -192,8 +192,8 @@ operator kind;
   be used.
   If P has not already been seen, then explore the psi_term it points to.
 */
-void check_pointer(p)
-ptr_psi_term p;
+void check_pointer(ptr_psi_term p)
+// ptr_psi_term p;
 {
   ptr_node n;
   
@@ -215,8 +215,8 @@ ptr_psi_term p;
   Explore all the pointers in the attribute tree T.
   Pointers that occur more than once will need a tag.
 */
-void go_through_tree(t)
-ptr_node t;
+void go_through_tree(ptr_node t)
+// ptr_node t;
 {
   if (t) {
     go_through_tree(t->left);
@@ -232,8 +232,8 @@ ptr_node t;
   pointers need to have names given to them for printing because they are
   referred to elsewhere. T is a dereferenced psi_term.
 */
-void go_through(t)
-ptr_psi_term t;
+void go_through(ptr_psi_term t)
+// ptr_psi_term t;
 {
   ptr_list l;
 
@@ -257,9 +257,9 @@ ptr_psi_term t;
   If FORCE is TRUE then variables will be printed as TAGS, even if not
   referred to elsewhere.
 */
-void insert_variables(vars,force)
-ptr_node vars;
-long force;
+void insert_variables(ptr_node vars,long force)
+// ptr_node vars;
+// long force;
 {
   ptr_psi_term p;
   ptr_node n;
@@ -284,8 +284,8 @@ long force;
   NAME:value inside a psi-term.
   Each variable is printed as NAME = VALUE by the PRINT_VARIABLES routine.
 */
-void forbid_variables(n)
-ptr_node n;
+void forbid_variables(ptr_node n)
+// ptr_node n;
 {
   ptr_psi_term v;
   
@@ -324,10 +324,10 @@ PAGE_WIDTH columns by inserting line feeds whereever possible */
 
 /* Does the work of prettyf and prettyf_quote */
 /* The q argument is a flag telling whether to quote or not. */
-void prettyf_inner(s,q,c)
-char *s;
-long q;
-char c; /* the quote character */
+void prettyf_inner(char *s,long q,char c)
+// char *s;
+// long q;
+// char c; /* the quote character */
 {
   char *sb=buffer;
 
@@ -354,15 +354,15 @@ char c; /* the quote character */
 
 
 /* Return TRUE iff s starts with a non-lowercase character. */
-long starts_nonlower(s)
-char *s;
+long starts_nonlower(char *s)
+// char *s;
 {
   return (*s && !LOWER(s[0]));
 }
 
 /* Return TRUE iff s contains a character that is not alphanumeric. */
-long has_non_alpha(s)
-char *s;
+long has_non_alpha(char *s)
+// char *s;
 {
   while (*s) {
     if (!ISALPHA(*s)) return TRUE;
@@ -372,8 +372,8 @@ char *s;
 }
 
 /* Return TRUE iff s contains only SYMBOL characters. */
-long all_symbol(s)
-char *s;
+long all_symbol(char *s)
+// char *s;
 {
   while (*s) {
     if (!SYMBOL(*s)) return FALSE;
@@ -383,8 +383,8 @@ char *s;
 }
 
 /* Return TRUE if s represents an integer. */
-long is_integer(s)
-char *s;
+long is_integer(char *s)
+// char *s;
 {
   if (!*s) return FALSE;
   if (*s=='-') s++;
@@ -398,8 +398,8 @@ char *s;
 /* Return TRUE if s does not have to be quoted, i.e., */
 /* s starts with '_' or a lowercase symbol and contains */
 /* all digits, letters, and '_'. */
-long no_quote(s)
-char *s;
+long no_quote(char *s)
+// char *s;
 {
   if (!s[0]) return FALSE;
 
@@ -422,15 +422,15 @@ char *s;
 /******** PRETTYF(s)
   This prints the string S into the BUFFER.
 */
-void prettyf(s)
-char *s;
+void prettyf(char *s)
+// char *s;
 {
   prettyf_inner(s,FALSE,'\'');
 }
 
 
-void prettyf_quoted_string(s)
-char *s;
+void prettyf_quoted_string(char *s)
+// char *s;
 {
   prettyf_inner(s,const_quote,'"');
 }
@@ -449,8 +449,8 @@ char *s;
     (4) if S has only one character, it is a single space or underscore.
   When S is surrounded by quotes, a quote inside S is printed as two quotes.
 */
-void prettyf_quote(s)
-char *s;
+void prettyf_quote(char *s)
+//char *s;
 {
   prettyf_inner(s, const_quote && !no_quote(s), '\'');
 }
@@ -488,8 +488,8 @@ void end_tab()
   Mark a tabbing position T.
   Make the current item point to tabbing position T.
 */
-void mark_tab(t)
-ptr_tab_brk t;
+void mark_tab(ptr_tab_brk t)
+//ptr_tab_brk t;
 {
   end_tab();
   indx->tab=t;
@@ -500,8 +500,8 @@ ptr_tab_brk t;
 /******** NEW_TAB(t)
   Create a new tabulation mark T.
 */
-void new_tab(t)
-ptr_tab_brk *t;
+void new_tab(ptr_tab_brk *t)
+// ptr_tab_brk *t;
 {
   (*t)=HEAP_ALLOC(tab_brk);
   (*t)->broken=FALSE;
@@ -515,9 +515,9 @@ ptr_tab_brk *t;
 /* is pos? */
 /* Same as strlen, except that the length count starts with pos and */
 /* \n resets it. */
-long strpos(pos, str)
-long pos;
-char *str;
+long strpos(long pos, char *str)
+// long pos;
+// char *str;
 {
   while (*str) {
     if (str[0]=='\n') pos=0; else pos++;
@@ -594,9 +594,9 @@ void work_out_length()
   Return the number of features of a tree.
   */
 
-long count_features(t)
+long count_features(ptr_node t)
 
-     ptr_node t;
+//     ptr_node t;
 {
   long c=0;
   if(t) {
@@ -617,9 +617,9 @@ long count_features(t)
   '2' and that the 2nd is either nil or also long check_legal_cons(t,t_type)
 */
 
-long check_legal_cons(t,t_type)
-     ptr_psi_term t;
-     ptr_definition t_type;
+long check_legal_cons(ptr_psi_term t,ptr_definition t_type)
+//      ptr_psi_term t;
+//     ptr_definition t_type;
      
 {
   return (t->type==t_type &&
@@ -637,11 +637,11 @@ long check_legal_cons(t,t_type)
   On entry we know that T is a legal CONS pair, so we can immediately print
   the opening bracket etc...
 */
-void pretty_list(t,depth)
-ptr_psi_term t;
-long depth;
+void pretty_list(ptr_psi_term t,long depth)
+// ptr_psi_term t;
+// long depth;
 {
-  ptr_tab_brk new;
+  ptr_tab_brk wl_new;
   ptr_list l;
   ptr_definition t_type;
   ptr_psi_term car,cdr;
@@ -683,10 +683,10 @@ long depth;
   
   /* RM: Dec 11 1992  New code for printing lists */
   
-  new_tab(&new);
+  new_tab(&wl_new);
   list_depth=0; /* 20.8 */
   while(!done) {
-    mark_tab(new);
+    mark_tab(wl_new);
     if(list_depth==print_depth)
       prettyf("...");
 
@@ -737,10 +737,10 @@ long depth;
   Print a psi-term, but first precede it with the appropriate TAG. Don't
   reprint the same psi-term twice.
 */
-void pretty_tag_or_psi_term(p, sprec, depth)
-ptr_psi_term p;
-long sprec;
-long depth;
+void pretty_tag_or_psi_term(ptr_psi_term p, long sprec, long depth)
+// ptr_psi_term p;
+// long sprec;
+// long depth;
 {
   ptr_node n,n2;
 
@@ -792,8 +792,8 @@ long depth;
 /* If only argument "1" exists, returns 1. */
 /* If only arguments "1" and "2"  exist, returns 3. */
 /* Existence of any other arguments causes third bit to be set as well. */
-long check_opargs(n)
-ptr_node n;
+long check_opargs(ptr_node n)
+// ptr_node n;
 {
   if (n) {
     long f=check_opargs(n->left) | check_opargs(n->right);
@@ -816,12 +816,12 @@ ptr_node n;
 /* {INFIX, PREFIX, POSTFIX} and also its precedence and type.        */
 /* If t is not an operator, or it has wrong arguments, return NOTOP  */
 /* and prec=0.                                                       */
-long opcheck(t, prec, type)
-ptr_psi_term t;
-long *prec;
-operator *type;
+long opcheck(ptr_psi_term t, long *prec, wl_operator *type)
+// ptr_psi_term t;
+// long *prec;
+// operator *type;
 {
-  operator op;
+  wl_operator op;
   long result=NOTOP;
   long numarg=check_opargs(t->attr_list);
   ptr_operator_data opdat=t->type->op_data;
@@ -848,14 +848,14 @@ operator *type;
 /* Write an expression with its operators. */
 /* Return TRUE iff the arguments of t are written here (i.e. t was indeed */
 /* a valid operator, and is therefore taken care of here).                */
-long pretty_psi_with_ops(t,sprec,depth)
-ptr_psi_term t;
-long sprec;
-long depth;
+long pretty_psi_with_ops(ptr_psi_term t,long sprec,long depth)
+// ptr_psi_term t;
+// long sprec;
+// long depth;
 {
-  ptr_tab_brk new;
+  ptr_tab_brk wl_new;
   ptr_psi_term arg1, arg2;
-  operator ttype, a1type, a2type;
+  wl_operator ttype, a1type, a2type;
   long tprec, a1prec, a2prec;
   long tkind, a1kind, a2kind;
   long p1, p2, argswritten;
@@ -954,15 +954,15 @@ long depth;
 /******** PRETTY_PSI_TERM(t,sprec,depth)  
   Pretty print a psi_term T with sugar for lists.
 */
-void pretty_psi_term(t,sprec,depth)
-     ptr_psi_term t;
-     long sprec;
-     long depth;
+void pretty_psi_term(ptr_psi_term t,long sprec,long depth)
+//      ptr_psi_term t;
+//     long sprec;
+//     long depth;
 {
   char buf[STRLEN]; /* Big enough for a long number */
   ptr_residuation r;
   long argswritten;
-  double fmod();
+  //  double fmod();
   
   if (t) {
     deref_ptr(t); /* PVR */
@@ -1089,12 +1089,12 @@ void pretty_psi_term(t,sprec,depth)
   but
   "p(2=>a,3=>b)" is printed as "p(2 => a,3 => b)".
 */
-void do_pretty_attr(t,tab,cnt,two,depth)
-ptr_node t;
-ptr_tab_brk tab;
-long *cnt;
-long two;
-long depth;
+void do_pretty_attr(ptr_node t,ptr_tab_brk tab,long *cnt,long two,long depth)
+//ptr_node t;
+// ptr_tab_brk tab;
+// long *cnt;
+// long two;
+// long depth;
 {
   long v;
   /* char *s="nnn"; 18.5 */
@@ -1145,8 +1145,8 @@ long depth;
 
 
 /* Return true if number of attributes is greater than 1 */
-long two_or_more(t)
-ptr_node t;
+long two_or_more(ptr_node t)
+// ptr_node t;
 {
   if (t) {
     if (t->left || t->right) return TRUE; else return FALSE;
@@ -1160,17 +1160,17 @@ ptr_node t;
   Pretty print the attributes. This calls DO_PRETTY_ATTR which does the real
   work.
 */
-void pretty_attr(t,depth)
-ptr_node t;
-long depth;
+void pretty_attr(ptr_node t,long depth)
+// ptr_node t;
+// long depth;
 {
-  ptr_tab_brk new;
+  ptr_tab_brk wl_new;
   long cnt=1;
 
   prettyf("(");
-  new_tab(&new);
+  new_tab(&wl_new);
 
-  do_pretty_attr(t,new,&cnt,two_or_more(t),depth);
+  do_pretty_attr(t,wl_new,&cnt,two_or_more(t),depth);
 
   prettyf(")");
 }
@@ -1199,9 +1199,9 @@ void pretty_output()
 /******** PRETTY_VARIABLES(n,tab)
   Pretty print the variables at position TAB.
 */
-void pretty_variables(n,tab)
-ptr_node n;
-ptr_tab_brk tab;
+void pretty_variables(ptr_node n,ptr_tab_brk tab)
+// ptr_node n;
+// ptr_tab_brk tab;
 {
   ptr_psi_term tok;
   ptr_node n2;
@@ -1250,11 +1250,11 @@ ptr_tab_brk tab;
   Returns TRUE iff the set of query variables is nonempty.
 */
 
-long print_variables(printflag)
+long print_variables(long printflag)
      
-     long printflag;
+//     long printflag;
 {
-  ptr_tab_brk new;
+  ptr_tab_brk wl_new;
   GENERIC old_heap_pointer;
   
   if (!printflag) return FALSE; /* 21.1 */
@@ -1278,10 +1278,10 @@ long print_variables(printflag)
   indx=pretty_things;
 
   if (var_tree) {
-    new_tab(&new);
-    pretty_variables(var_tree,new);
+    new_tab(&wl_new);
+    pretty_variables(var_tree,wl_new);
     prettyf(".");
-    mark_tab(new);
+    mark_tab(wl_new);
     prettyf("\n");
     end_tab();
 
@@ -1300,9 +1300,9 @@ long print_variables(printflag)
   Used by all versions of the built-in predicate write,
   and by the built-in predicate listing.
 */
-void write_attributes(n,tab)
-ptr_node n;
-ptr_tab_brk tab;
+void write_attributes(ptr_node n,ptr_tab_brk tab)
+//ptr_node n;
+// ptr_tab_brk tab;
 {
   if(n) {
     write_attributes(n->left,tab);
@@ -1320,9 +1320,9 @@ ptr_tab_brk tab;
 void main_pred_write();
 
 /* For the listing built-in */
-void listing_pred_write(n,fflag)
-ptr_node n;
-long fflag;
+void listing_pred_write(ptr_node n,long fflag)
+// ptr_node n;
+// long fflag;
 {
   long old_print_depth;
 
@@ -1344,8 +1344,8 @@ long fflag;
 
 /* For all write builtins */
 /* I.e: write, writeq, pretty_write, pretty_writeq, write_err, writeq_err. */
-void pred_write(n)
-ptr_node n;
+void pred_write(ptr_node n)
+//ptr_node n;
 {
   listing_flag=FALSE;
   /* write_stderr=FALSE; */
@@ -1354,12 +1354,12 @@ ptr_node n;
   fflush(outfile);
 }
 
-void main_pred_write(n)
-ptr_node n;
+void main_pred_write(ptr_node n)
+// ptr_node n;
 {
   if (n) {
     GENERIC old_heap_pointer;
-    ptr_tab_brk new;
+    ptr_tab_brk wl_new;
  
     if (!write_corefs) main_pred_write(n->left);
 
@@ -1376,13 +1376,13 @@ ptr_node n;
     *buffer=0;
     
     indx=pretty_things;
-    new_tab(&new);
+    new_tab(&wl_new);
 
     if (write_corefs) {
-      write_attributes(n,new);
+      write_attributes(n,wl_new);
     }
     else {
-      mark_tab(new);
+      mark_tab(wl_new);
       pretty_tag_or_psi_term((ptr_psi_term)n->data,MAX_PRECEDENCE+1,0); // REV401PLUS cast
     }
 
@@ -1406,8 +1406,8 @@ void main_display_psi_term(); /* Forward declaration */
 /******** DISPLAY_PSI_STDOUT(t)
   Print the psi_term T to stdout as simply as possible (no indenting).
 */
-void display_psi_stdout(t)
-ptr_psi_term t;
+void display_psi_stdout(ptr_psi_term t)
+//ptr_psi_term t;
 {
   outfile=stdout;
   main_display_psi_term(t);
@@ -1417,8 +1417,8 @@ ptr_psi_term t;
 /******** DISPLAY_PSI_STDERR(t)
   Print the psi_term T to stderr as simply as possible (no indenting).
 */
-void display_psi_stderr(t)
-ptr_psi_term t;
+void display_psi_stderr(ptr_psi_term t)
+// ptr_psi_term t;
 {
   outfile=stderr;
   main_display_psi_term(t);
@@ -1428,8 +1428,8 @@ ptr_psi_term t;
 /******** DISPLAY_PSI_STREAM(t)
   Print the psi_term T to output_stream as simply as possible (no indenting).
 */
-void display_psi_stream(t)
-ptr_psi_term t;
+void display_psi_stream(ptr_psi_term t)
+// ptr_psi_term t;
 {
   outfile=output_stream;
   main_display_psi_term(t);
@@ -1439,9 +1439,9 @@ ptr_psi_term t;
 /******** DISPLAY_PSI(stream,t)
   Print the psi_term T to the given stream.
 */
-void display_psi(s,t)
-FILE *s;
-ptr_psi_term t;
+void display_psi(FILE *s,ptr_psi_term t)
+// FILE *s;
+// ptr_psi_term t;
 {
   outfile=s;
   main_display_psi_term(t);
@@ -1449,11 +1449,11 @@ ptr_psi_term t;
 
 
 /* Main loop for previous two entry points */
-void main_display_psi_term(t)
-ptr_psi_term t;
+void main_display_psi_term(ptr_psi_term t)
+// ptr_psi_term t;
 {
   GENERIC old_heap_pointer;
-  ptr_tab_brk new;
+  ptr_tab_brk wl_new;
 
   listing_flag=FALSE;
   if(t) {
@@ -1474,8 +1474,8 @@ ptr_psi_term t;
     *buffer=0;
     indx=pretty_things;
 
-    new_tab(&new);
-    mark_tab(new);
+    new_tab(&wl_new);
+    mark_tab(wl_new);
     pretty_tag_or_psi_term(t,MAX_PRECEDENCE+1,0);
     end_tab();
     if (indent) {
@@ -1495,13 +1495,13 @@ ptr_psi_term t;
   Print a couple of psi-terms (u,v) with the correct co-referencing. Print
   string S in between.
 */
-void display_couple(u,s,v)
-ptr_psi_term u;
-char *s;
-ptr_psi_term v;
+void display_couple(ptr_psi_term u,char *s,ptr_psi_term v)
+// ptr_psi_term u;
+// char *s;
+// ptr_psi_term v;
 {
   GENERIC old_heap_pointer;
-  ptr_tab_brk new;
+  ptr_tab_brk wl_new;
 
   output_stream=stdout;
   listing_flag=FALSE;
@@ -1520,8 +1520,8 @@ ptr_psi_term v;
   write_canon=FALSE;
   *buffer=0;
   indx=pretty_things;
-  new_tab(&new);
-  mark_tab(new);
+  new_tab(&wl_new);
+  mark_tab(wl_new);
   pretty_tag_or_psi_term(u,MAX_PRECEDENCE+1,0);
   prettyf(s);
   pretty_tag_or_psi_term(v,MAX_PRECEDENCE+1,0);
@@ -1541,12 +1541,12 @@ ptr_psi_term v;
   This is called in trace mode to print the residuated goal along with the
   RV set.
 */
-void print_resid_message(t,r)
-ptr_psi_term t;
-ptr_resid_list r; /* 21.9 */
+void print_resid_message(ptr_psi_term t,ptr_resid_list r)
+// ptr_psi_term t;
+// ptr_resid_list r; /* 21.9 */
 {
   GENERIC old_heap_pointer;
-  ptr_tab_brk new;
+  ptr_tab_brk wl_new;
   ptr_resid_list r2; /* 21.9 */
   
   outfile=stdout;
@@ -1573,8 +1573,8 @@ ptr_resid_list r; /* 21.9 */
   write_canon=FALSE;
   *buffer=0;
   indx=pretty_things;
-  new_tab(&new);
-  mark_tab(new);
+  new_tab(&wl_new);
+  mark_tab(wl_new);
 
   prettyf("residuating ");
   pretty_tag_or_psi_term(t,MAX_PRECEDENCE+1,0);
