@@ -17,10 +17,9 @@ static char vcid[] = "$Id: templates.c,v 1.2 1994/12/08 23:33:53 duchier Exp $";
   return FALSE if bad argument.
 */
 
-long get_arg (g, arg, number)
-
-ptr_psi_term g, *arg;
-char *number;
+long get_arg (ptr_psi_term g, ptr_psi_term *arg, char *number)
+// ptr_psi_term g, *arg;
+// char *number;
 {
     ptr_node n;
 
