@@ -143,7 +143,8 @@ VERSION     = 4.20
 
 # $(LIBOBJECT) regexp/regexp.o regexp/regsub.o
 
-all: wild_life++ wild_life_X++
+# all: wild_life++ wild_life_X++
+all: wild_life++
 	@echo
 	@echo "Life generation done"
 	@echo
@@ -327,10 +328,10 @@ RegExp:
 	cd regexp; $(MAKE) r CC="$(CC)" CFLAGS="$(CFLAGS)"
 
 wild_life++: life2.o $(LIBOBJECT) regexp/regexp.o regexp/regsub.o
-	$(CC) -o wild_life life2.o $(LIBOBJECT) $(LIBS) regexp/regexp.o regexp/regsub.o
+	$(CC) -o wild_life++ life2.o $(LIBOBJECT) $(LIBS) regexp/regexp.o regexp/regsub.o
 
 wild_life_X++: life2_x.o $(LIBOBJECT_X) regexp/regexp.o regexp/regsub.o
-	$(CC) -o wild_life_X life2_x.o $(LIBOBJECT_X) $(LIBS)  $(XLIBRARIES) regexp/regexp.o regexp/regsub.o -lX11
+	$(CC) -o wild_life_X++ life2_x.o $(LIBOBJECT_X) $(LIBS)  $(XLIBRARIES) regexp/regexp.o regexp/regsub.o -lX11
 
 # $(PROGRAM): life2.o $(LIBOBJECT) regexp/regexp.o regexp/regsub.o
 #	$(CC) -o $(PROGRAM) life2.o $(LDFLAGS) $(LIBS) $(XLIBRARIES) $(LIBOBJECT) regexp/regexp.o regexp/regsub.o

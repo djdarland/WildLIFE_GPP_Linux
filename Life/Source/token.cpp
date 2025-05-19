@@ -65,6 +65,7 @@ void heap_add_int_attr(ptr_psi_term t, char *attrname, long value)
   heap_insert(FEATCMP,heap_copy_string(attrname),&(t->attr_list), (GENERIC)t1); // REV401PLUS cast
 }
 
+#ifdef NEVER
 REAL cp2R(char *cp_in)
 {
   union {
@@ -74,9 +75,9 @@ REAL cp2R(char *cp_in)
     it.cp = cp_in; 
   return it.R;
 }
+#endif
 
-
-void stack_add_int_attr(ptr_psi_term t, char *attrname, char *value)
+void stack_add_int_attr(ptr_psi_term t, char *attrname, long value)
 // ptr_psi_term t;
 // char *attrname;
 // long value;
@@ -87,8 +88,8 @@ void stack_add_int_attr(ptr_psi_term t, char *attrname, char *value)
   t1->type=integer;
   t1->value_3=heap_alloc(sizeof(REAL)); /* 12.5 */
   //  *(REAL *)t1->value_3cp =  value;
-  // *(REAL *)t1->value_3 = (REAL) value;
-  *(REAL *)t1->value_3 = cp2R(value);
+  *(REAL *)t1->value_3 = (REAL) value;
+  //*(REAL *)t1->value_3 = cp2R(value);
   stack_insert(FEATCMP,heap_copy_string(attrname),&(t->attr_list), (GENERIC)t1); // REV401PLUS cast
 }
 

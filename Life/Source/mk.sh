@@ -12,13 +12,13 @@ if [ $select -ne 999 ]
 then
     if [ $select -eq 0 ]
        then
-	   rm info2.c
-	   rm lib2.c
-	   rm life2.c
+	   rm info2.cpp
+	   rm lib2.cpp
+	   rm life2.cpp
 	   rm regexp/*.o
 	   rm *.o
-	   rm wild_life
-	   rm wild_life_X
+	   rm wild_life++
+	   rm wild_life_X++
     fi
 fi
 
