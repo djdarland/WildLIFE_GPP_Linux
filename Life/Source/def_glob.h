@@ -79,15 +79,25 @@ EXTERN float garbage_time;
   \brief time life started - seconds
 
 */
-
+#ifdef __unix__
 EXTERN struct tms life_start;
+EXTERN struct tms life_end;
+EXTERN struct tms start_time;
+EXTERN struct tms end_time;
+#endif
+#ifdef _WIN64
+EXTERN clock_t life_end;
+EXTERN clock_t life_start;
+EXTERN clock_t start_time;
+EXTERN clock_t end_time;
+#endif
+
 
 /*! \var life_start
   \brief time life ended - seconds
 
 */
 
-EXTERN struct tms life_end;
 
 /*! \var other_base
   \brief mem_size memory allocated in init_memory by malloc 
@@ -936,7 +946,6 @@ EXTERN long clean_succ;
 
 /* ptr_choice_point prompt_choice_stack; 12.7 */
 
-EXTERN struct tms start_time,end_time;
 
 EXTERN long xeventdelay;
 EXTERN long xcount;

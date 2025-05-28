@@ -455,6 +455,7 @@ void end_terminal_io()
   For the time being all this does is replace '~' by the HOME directory
   if no user is given, or tries to find the user.
 */
+#ifdef __unix__
 char *expand_file_name(char *s)
 // char *s;
 {
@@ -501,8 +502,17 @@ char *expand_file_name(char *s)
   
   return r;
 }
+#endif
 
+#ifdef _WIN64
+char *expand_file_name(char *s)
+{
+  static char r[STRLEN];
+  sprintf(r, "C:\\Users\\pal\\dsa\\life_local\\Source\\%s", s);
+  return r;
+}
 
+#endif
   
 /******** OPEN_INPUT_FILE(file)
   Open the input file specified by the string FILE.  If the file is "stdin",

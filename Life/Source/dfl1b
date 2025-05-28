@@ -1,0 +1,3 @@
+diff -wy -W80 --suppress-common-lines   ~/Dropbox/0WildLIFE_src/Linux_Working/Source/$1 ~/Dropbox/0WildLIFE_src/MS_Compiles/wild_life++/$1 >/media/ramdisk/dfl1.txt
+$EDITOR /media/ramdisk/dfl1.txt
+

@@ -1,0 +1,79 @@
+echo "WildLife Edit Utility"
+echo "Diff any .c file NEXT to Working C++ Version?"
+echo "enter 0 to proceed 999 to quit"
+read select
+while [ $select -ne 999 ]
+do 
+echo "-----------"
+echo ".c files for wild life NEXT to def_glob.h"
+echo "-----------"
+echo "1 arity.cpp"
+echo "2 bi_math.cpp"
+echo "3 bi_sys.cpp"
+echo "4 bi_type.cpp"
+echo "5 built_ins.cpp"
+echo "6 copy.cpp"
+echo "7 error.cpp"
+echo "8 hash_table.cpp"
+echo "9 info.cpp"
+echo "10 interrupt.cpp"
+echo "11 lefun.cpp"
+echo "12 lib.cpp"
+echo "13 life.cpp"
+echo "14 list.cpp"
+echo "15 login.cpp"
+echo "16 lub.cpp"
+echo "17 memory.cpp"
+echo "18 modules.cpp"
+echo "19 parser.cpp"
+echo "20 print.cpp"
+echo "21 raw.cpp"
+echo "22 sys.cpp"
+echo "23 sys_dbm.cpp"
+echo "24 templates.cpp"
+echo "25 token.cpp"
+echo "26 trees.cpp"
+echo "27 types.cpp"
+echo "28 xdisplaylist.cpp"
+echo "29 xpred.cpp"
+echo "777 NOTES_DJD.txt"
+
+echo "999 quit"
+echo "select"
+read select
+case $select in
+1) ./dfl2  arity.cpp   ;;
+2) ./dfl2 bi_math.cpp   ;;
+3) ./dfl2 bi_sys.cpp   ;;
+4) ./dfl2 bi_type.cpp   ;;
+5) ./dfl2 built_ins.cpp   ;;
+6) ./dfl2 copy.cpp   ;;
+7) ./dfl2 error.cpp   ;;
+8) ./dfl2 hash_table.cpp   ;;
+9) ./dfl2 info.cpp   ;;
+10) ./dfl2 interrupt.cpp   ;;
+11) ./dfl2 lefun.cpp   ;;
+12) ./dfl2 lib.cpp   ;;
+13) ./dfl2 life.cpp   ;;
+14) ./dfl2 list.cpp   ;;
+15) ./dfl2 login.cpp   ;;
+16) ./dfl2 lub.cpp   ;;
+17) ./dfl2  memory.cpp   ;;
+18) ./dfl2  modules.cpp   ;;
+19) ./dfl2 parser.cpp   ;;
+20) ./dfl2 print.cpp   ;;
+21) ./dfl2 raw.cpp   ;;
+22) ./dfl2 sys.cpp   ;;
+23) ./dfl2 sys_dbm.cpp   ;;
+24) ./dfl2 templates.cpp   ;;
+25) ./dfl2 token.cpp   ;;
+26) ./dfl2 trees.cpp   ;;
+27) ./dfl2 types.cpp   ;;
+28) ./dfl2 xdisplaylist.cpp   ;;
+29) ./dfl2 xpred.cpp   ;;
+
+777) $EDITOR NOTES_DJD.txt ;;
+
+esac
+done
+

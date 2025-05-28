@@ -1,0 +1,2 @@
+diff -wy -W80 --suppress-common-lines $1 ~/Dropbox/0WildLIFE_src/Linux_Conditional/Source/$1 >/media/ramdisk/dfl2.txt
+$EDITOR /media/ramdisk/dfl2.txt

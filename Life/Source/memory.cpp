@@ -23,8 +23,16 @@ static long pass;
 
 #define LONELY 1
 
-static struct tms last_garbage_time;
 static float gc_time, life_time;
+
+#ifdef _WIN64
+static clock_t last_garbage_time;
+#endif
+#ifdef __unix__
+static struct tms last_garbage_time;
+#endif
+
+
 
 #define ALIGNUP(X) { (X) = (GENERIC)( ((long) (X) + (ALIGN-1)) & ~(ALIGN-1) ); }
 
@@ -1453,15 +1461,30 @@ void print_gc_info(long timeflag)
 void garbage()
 {
   GENERIC addr;
+  #ifdef __unix__
   struct tms garbage_start_time,garbage_end_time;
+#endif
+#ifdef _WIN64
+  time_t garbage_start_time, garbage_end_time; 
+#endif
+
+  //  struct tms garbage_start_time,garbage_end_time;
   long start_number_cells, end_number_cells;
 
   start_number_cells = (stack_pointer-mem_base) + (mem_limit-heap_pointer);
-
+#ifdef _WIN64
+  garbage_start_time = clock();
+  life_time=(garbage_start_time - last_garbage_time)/CLOCKS_PER_SEC;
+#endif
+#ifdef __unix__
   times(&garbage_start_time);
+  life_time=(garbage_start_time.tms_utime - last_garbage_time.tms_utime)/60.0;
+#endif
+
+  //  times(&garbage_start_time);
 
   /* Time elapsed since last garbage collection */
-  life_time=(garbage_start_time.tms_utime - last_garbage_time.tms_utime)/60.0;
+  // life_time=(garbage_start_time.tms_utime - last_garbage_time.tms_utime)/60.0;
 
 
   if (verbose) {
@@ -1501,9 +1524,18 @@ void garbage()
 
   printed_pointers=NULL;
   pointer_names=NULL;
-  
+    /* Time elapsed since last garbage collection */
+#ifdef __unix__
   times(&garbage_end_time);
   gc_time=(garbage_end_time.tms_utime - garbage_start_time.tms_utime)/60.0;
+#endif
+#ifdef _WIN64
+  garbage_end_time = clock();
+  gc_time=(garbage_end_time - garbage_start_time)/CLOCKS_PER_SEC;
+#endif
+
+  //  times(&garbage_end_time);
+  //  gc_time=(garbage_end_time.tms_utime - garbage_start_time.tms_utime)/60.0;
   garbage_time+=gc_time;
 
   if (verbose) {

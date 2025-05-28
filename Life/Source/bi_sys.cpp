@@ -178,6 +178,183 @@ long c_quiet()
 /******** C_CPUTIME
   Return the cpu-time in seconds used by the Wild_Life interpreter.
 */
+
+#ifdef __unix__
+
+static long c_cputime()
+{
+  ptr_psi_term result, t;
+  REAL thetime,val;
+  long num,success;
+  
+  t=aim->aaaa_1;
+  deref_args(t,set_empty);
+  result=aim->bbbb_1;
+  deref_ptr(result);
+  success=get_real_value(result,&val,&num);
+  if (success) {
+    times(&life_end);
+    thetime= ((REAL)life_end.tms_utime-life_start.tms_utime)/(REAL)sysconf(_SC_CLK_TCK);
+    if (num)
+      success=(val==thetime);
+    else
+      success=unify_real_result(result,thetime);
+  }
+  return success;
+}
+
+#endif
+
+/******** C_REALTIME
+  Return the time in seconds since 00:00:00 GMT, January 1, 1970.
+  This is useful for building real-time applications such as clocks.
+*/
+
+// REV401PLUS I had revised c_realtime as below in prior work on X
+
+static long c_realtime()
+{
+  ptr_psi_term result, t;
+  REAL thetime,val;
+  long num,success;
+#ifdef _WIN64
+  time_t rawtime;
+#endif
+#ifdef __unix__
+  struct timeval tp;
+  struct timezone tzp;
+#endif
+  t=aim->aaaa_1;
+  deref_args(t,set_empty);
+  result=aim->bbbb_1;
+  deref_ptr(result);
+  success=get_real_value(result,&val,&num);
+  if (success) {
+#ifdef _WIN64
+    time(&rawtime);
+    thetime = (REAL)rawtime;
+#endif
+#ifdef __unix__
+    gettimeofday(&tp, &tzp);
+    
+    thetime=(REAL)tp.tv_sec + ((REAL)tp.tv_usec/1000000.0);
+    
+#endif
+    success=unify_real_result(result,thetime);
+  }
+  return success;
+}
+#if FALSE
+
+// origin below
+
+static long c_realtime()
+{
+  ptr_psi_term result, t;
+  REAL thetime,val;
+  long num,success;
+  struct timeval tp;
+  struct timezone tzp;
+  
+  t=aim->aaaa_1;
+  deref_args(t,set_empty);
+  result=aim->bbbb_1;
+  deref_ptr(result);
+  success=get_real_value(result,&val,&num);
+  if (success) {
+    gettimeofday(&tp, &tzp);
+    thetime=(REAL)tp.tv_sec + ((REAL)tp.tv_usec/1000000.0);
+    /* thetime=times(&life_end)/60.0; */
+    if (num)
+      success=(val==thetime);
+    else
+      success=unify_real_result(result,thetime);
+  }
+  return success;
+}
+
+#endif
+
+
+/******** C_LOCALTIME
+  Return a psi-term containing the local time split up into year, month, day,
+  hour, minute, second, and weekday.
+  This is useful for building real-time applications such as clocks.
+*/
+
+#ifdef _WIN64
+static long c_localtime()
+{
+  ptr_psi_term result, t, psitime;
+  long success=TRUE;
+  // struct timeval tp;
+  // struct timezone tzp;
+  // struct tm *thetime;
+  time_t rawtime;
+  struct tm *thetime;
+
+
+  t=aim->aaaa_1;
+  deref_args(t,set_empty);
+  result=aim->bbbb_1;
+  deref_ptr(result);
+
+  time(&rawtime);
+  thetime=localtime(&rawtime);
+
+  psitime=stack_psi_term(4);
+  psitime->type=timesym;
+  stack_add_int_attr(psitime, year_attr,    thetime->tm_year+1900);
+  stack_add_int_attr(psitime, month_attr,   thetime->tm_mon+1);
+  stack_add_int_attr(psitime, day_attr,     thetime->tm_mday);
+  stack_add_int_attr(psitime, hour_attr,    thetime->tm_hour);
+  stack_add_int_attr(psitime, minute_attr,  thetime->tm_min);
+  stack_add_int_attr(psitime, second_attr,  thetime->tm_sec);
+  stack_add_int_attr(psitime, weekday_attr, thetime->tm_wday);
+
+  push_goal(unify,result,psitime,NULL);
+
+  return success;
+}
+#endif
+
+#ifdef __unix__
+static long c_localtime()
+{
+  ptr_psi_term result, t, psitime;
+  long success=TRUE;
+  struct timeval tp;
+  struct timezone tzp;
+  struct tm *thetime;
+  
+  t=aim->aaaa_1;
+  deref_args(t,set_empty);
+  result=aim->bbbb_1;
+  deref_ptr(result);
+
+  gettimeofday(&tp, &tzp);
+  thetime=localtime((time_t *) &(tp.tv_sec));
+
+  psitime=stack_psi_term(4);
+  psitime->type=timesym;
+  stack_add_int_attr(psitime, year_attr,    thetime->tm_year+1900);
+  stack_add_int_attr(psitime, month_attr,   thetime->tm_mon+1);
+  stack_add_int_attr(psitime, day_attr,     thetime->tm_mday);
+  stack_add_int_attr(psitime, hour_attr,    thetime->tm_hour);
+  stack_add_int_attr(psitime, minute_attr,  thetime->tm_min);
+  stack_add_int_attr(psitime, second_attr,  thetime->tm_sec);
+  stack_add_int_attr(psitime, weekday_attr, thetime->tm_wday);
+
+  push_goal(unify,result,psitime,NULL);
+
+  return success;
+}
+
+#endif
+
+#ifdef OBSOLETE
+
+
 static long c_cputime()
 {
   ptr_psi_term result, t;
@@ -299,6 +476,9 @@ static long c_localtime()
 
   return success;
 }
+
+#endif
+
 
 /******** C_STATISTICS
   Print some information about Wild_Life: stack size, heap size, total memory.

@@ -1,0 +1,79 @@
+echo "WildLife Edit Utility"
+echo "Edit any .cpp file NEXT to Conditional C++ Version?"
+echo "enter 0 to proceed 999 to quit"
+read select
+while [ $select -ne 999 ]
+do 
+echo "-----------"
+echo ".c files for wild life NEXT to def_glob.h"
+echo "-----------"
+echo "1 arity.cpp"
+echo "2 bi_math.cpp"
+echo "3 bi_sys.cpp"
+echo "4 bi_type.cpp"
+echo "5 built_ins.cpp"
+echo "6 copy.cpp"
+echo "7 error.cpp"
+echo "8 hash_table.cpp"
+echo "9 info.cpp"
+echo "10 interrupt.cpp"
+echo "11 lefun.cpp"
+echo "12 lib.cpp"
+echo "13 life.cpp"
+echo "14 list.cpp"
+echo "15 login.cpp"
+echo "16 lub.cpp"
+echo "17 memory.cpp"
+echo "18 modules.cpp"
+echo "19 parser.cpp"
+echo "20 print.cpp"
+echo "21 raw.cpp"
+echo "22 sys.cpp"
+echo "23 sys_dbm.cpp"
+echo "24 templates.cpp"
+echo "25 token.cpp"
+echo "26 trees.cpp"
+echo "27 types.cpp"
+echo "28 xdisplaylist.cpp"
+echo "29 xpred.cpp"
+echo "777 NOTES_DJD.txt"
+
+echo "999 quit"
+echo "select"
+read select
+case $select in
+1) ./ed2  arity.cpp   ;;
+2) ./ed2 bi_math.cpp   ;;
+3) ./ed2 bi_sys.cpp   ;;
+4) ./ed2 bi_type.cpp   ;;
+5) ./ed2 built_ins.cpp   ;;
+6) ./ed2 copy.cpp   ;;
+7) ./ed2 error.cpp   ;;
+8) ./ed2 hash_table.cpp   ;;
+9) ./ed2 info.cpp   ;;
+10) ./ed2 interrupt.cpp   ;;
+11) ./ed2 lefun.cpp   ;;
+12) ./ed2 lib.cpp   ;;
+13) ./ed2 life.cpp   ;;
+14) ./ed2 list.cpp   ;;
+15) ./ed2 login.cpp   ;;
+16) ./ed2 lub.cpp   ;;
+17) ./ed2  memory.cpp   ;;
+18) ./ed2  modules.cpp   ;;
+19) ./ed2 parser.cpp   ;;
+20) ./ed2 print.cpp   ;;
+21) ./ed2 raw.cpp   ;;
+22) ./ed2 sys.cpp   ;;
+23) ./ed2 sys_dbm.cpp   ;;
+24) ./ed2 templates.cpp   ;;
+25) ./ed2 token.cpp   ;;
+26) ./ed2 trees.cpp   ;;
+27) ./ed2 types.cpp   ;;
+28) ./ed2 xdisplaylist.cpp   ;;
+29) ./ed2 xpred.cpp   ;;
+
+777) $EDITOR NOTES_DJD.txt ;;
+
+esac
+done
+

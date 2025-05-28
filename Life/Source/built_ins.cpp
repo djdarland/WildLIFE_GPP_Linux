@@ -2089,7 +2089,52 @@ long c_halt()   /*  RM: Jan  8 1993  Used to be 'void' */ // REV401PLUS chg to l
   exit_life(TRUE);
   return 0L; // to avoid error
 }
+#ifdef _WIN64
 
+void exit_life(long nl_flag)
+// long nl_flag;  // DJD
+{
+  exit(0);
+  open_input_file("stdin");   // CHAR * MSVC
+  life_end = clock();
+  if (NOTQUIET) { /* 21.1 */
+    if (nl_flag) printf("\n");
+    printf("*** Exiting Wild_Life  ");
+    printf("[%1.3lfs cpu, %1.3lfs gc (%2.1lf%%)]\n",
+           ((REAL)(life_end-life_start)/(REAL)CLOCKS_PER_SEC,
+           garbage_time,
+           (REAL)garbage_time * 100.0) / (REAL) (life_end-life_start));
+  }
+#endif
+  
+  
+#ifdef __unix__
+
+void exit_life(long nl_flag)
+// long nl_flag;
+{
+  exit(0);  // DJD
+  open_input_file("stdin");
+  times(&life_end);
+  if (NOTQUIET) { /* 21.1 */
+    if (nl_flag) printf("\n");
+    printf("*** Exiting Wild_Life  ");
+    printf("[%1.3lfs cpu, %1.3lfs gc (%2.1lf%%)]\n",
+           ((REAL)(life_end.tms_utime-life_start.tms_utime)/(REAL)sysconf(_SC_CLK_TCK)),
+           garbage_time,
+           (REAL)garbage_time * 100.0) / (REAL) (life_end.tms_utime-life_start.tms_utime)/(REAL)sysconf(_SC_CLK_TCK);
+  }
+
+#ifdef ARITY  /*  RM: Mar 29 1993  */
+  arity_end();
+#endif
+  
+  exit(1);
+}
+
+#endif
+
+#ifdef OBSOLETE
 
 void exit_life(long nl_flag)
 // long nl_flag;
@@ -2112,6 +2157,7 @@ void exit_life(long nl_flag)
   exit(1);
 }
 
+#endif
 
 
 /******** C_ABORT
@@ -3912,7 +3958,13 @@ static long c_chdir()
   if(arg1) {
     deref_ptr(arg1);
     if(matches(arg1->type,quoted_string,&smaller) && arg1->value_3)
+      #ifdef _WIN64
+      success=!_chdir(expand_file_name((char *)arg1->value_3));
+    #endif
+      #ifdef __unix__
       success=!chdir(expand_file_name((char *)arg1->value_3));
+    #endif
+      //      success=!chdir(expand_file_name((char *)arg1->value_3));
     else
       Errorline("bad argument in %P\n",funct);
   }
@@ -5680,10 +5732,13 @@ long c_random()
 
   if (success && all_args) {
       if (c_arg1) {
-#ifdef SOLARIS
-	c_result=(rand_r(&randomseed)<<15) + rand_r(&randomseed);
-#else
+	//#ifdef SOLARIS
+	//c_result=(rand_r(&randomseed)<<15) + rand_r(&randomseed);
+#ifdef __unix__
         c_result=random();
+#endif
+#ifdef _WIN64
+        c_result=rand();
 #endif
         c_result=c_result-(c_result/c_arg1)*c_arg1;
       }
@@ -5742,11 +5797,16 @@ long c_initrandom()
     }
   }
 
-#ifdef SOLARIS
-  if (success && all_args) randomseed=c_arg1;
-#else
+  // #ifdef SOLARIS
+  // if (success && all_args) randomseed=c_arg1;
+#ifdef __unix__
   if (success && all_args) srandom(c_arg1);
 #endif
+#ifdef _WIN64
+  if (success && all_args) srand(c_arg1);
+#endif
+
+  
 
   return success;
 }
