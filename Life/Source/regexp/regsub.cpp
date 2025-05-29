@@ -19,6 +19,7 @@
  *	3. Altered versions must be plainly marked as such, and must not
  *		be misrepresented as being the original software.
  */
+#define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
 #include <string.h>
 #include "regexp.h"

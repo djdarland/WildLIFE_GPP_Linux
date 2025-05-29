@@ -12,7 +12,7 @@
 static char vcid[] = "$Id: parser.c,v 1.2 1994/12/08 23:32:03 duchier Exp $";
 #endif /* lint */
 #define REV401PLUS
-
+#define EXTERN extern
 #ifdef REV401PLUS
 #include "defs.h"
 #endif

@@ -7,7 +7,7 @@
 static char vcid[] = "$Id: copy.c,v 1.2 1994/12/08 23:21:30 duchier Exp $";
 #endif /* lint */
 #define REV401PLUS
-
+#define EXTERN extern
 #ifdef REV401PLUS
 #include "defs.h"
 #endif
@@ -310,7 +310,8 @@ ptr_psi_term copy(ptr_psi_term t, long copy_flag, long heap_flag)
 	u->attr_list=copy_tree(t->attr_list, local_copy_flag, heap_flag);
       
       if (copy_flag==EVAL_FLAG) {
-	switch((long)t->type->type_def) {
+	switch(t->type->wl_type) {
+	// switch((long)t->type->type_def) {
 	case type_it:
 	  if (t->type->properties)
 	    curr_status=0;
@@ -545,7 +546,8 @@ void mark_eval_new(ptr_psi_term t)
       else
 	mark_quote_tree_new(t->attr_list);
 
-      switch((long)t->type->type_def) {
+      switch(t->type->wl_type) {
+ //     switch((long)t->type->type_def) {
       case type_it:
         if (t->type->properties)
           curr_status=0;

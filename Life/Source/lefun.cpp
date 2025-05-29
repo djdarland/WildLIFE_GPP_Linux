@@ -6,7 +6,7 @@
 #ifndef lint
 static char vcid[] = "$Id: lefun.c,v 1.4 1995/01/14 00:24:55 duchier Exp $";
 #endif /* lint */
-
+#define EXTERN extern
 #define REV401PLUS
 #ifdef REV401PLUS
 #include "defs.h"
@@ -742,7 +742,7 @@ long match_aim()
               else if (overlap_type(v->type,sys_bytedata)) {
 		unsigned long ulen = *((unsigned long *) u->value_3);
 		unsigned long vlen = *((unsigned long *) v->value_3);
-                success=(ulen==vlen && bcmp((char *)u->value_3,(char *)v->value_3,ulen)==0);
+                success=(ulen==vlen && memcmp((char *)u->value_3,(char *)v->value_3,ulen)==0);
 	      }
             }
             else
@@ -1018,7 +1018,8 @@ long check_out(ptr_psi_term t)
   else {
     t->status |= RMASK;
 
-    switch((long)t->type->type_def) { /*  RM: Feb  8 1993  */
+    switch(t->type->wl_type) { /*  RM: Feb  8 1993  */
+   // switch((long)t->type->type_def) { /*  RM: Feb  8 1993  */
       
     case function_it:
       if (check_func_flag) {
@@ -1102,12 +1103,14 @@ long deref_eval(ptr_psi_term t)
   goal_stack=aim;
 
   if (t->status==0) {
-    if(t->type->type_def==(def_type)function_it) {
+    if(t->type->wl_type==function_it) {
+    // if(t->type->type_def==(def_type)function_it) {
       check_func(t);    /* Push eval goals to evaluate the function. */
       deref_flag=TRUE;  /* TRUE so that caller will return to main_prove. */
     }
     else
-      if(t->type->type_def==(def_type)global_it) { /*  RM: Feb 10 1993  */
+      if(t->type->wl_type==global_it) { /*  RM: Feb 10 1993  */
+     //  if(t->type->type_def==(def_type)global_it) { /*  RM: Feb 10 1993  */
 	eval_global_var(t);
 	deref_ptr(t);/*  RM: Jun 25 1993  */
 	deref_flag=deref_eval(t);
@@ -1145,12 +1148,14 @@ void deref_rec_body(ptr_psi_term t)
 // ptr_psi_term t;
 {
   if (t->status==0) {
-    if (t->type->type_def==(def_type)function_it) {
+    if (t->type->wl_type==function_it) {
+    // if (t->type->type_def==(def_type)function_it) {
       check_func(t);
       deref_flag=TRUE;
     }
     else
-      if(t->type->type_def==(def_type)global_it) { /*  RM: Feb 10 1993  */
+      if(t->type->wl_type==global_it) { /*  RM: Feb 10 1993  */
+      // if(t->type->type_def==(def_type)global_it) { /*  RM: Feb 10 1993  */
 	eval_global_var(t);
 	deref_ptr(t);/*  RM: Jun 25 1993  */
 	deref_rec_body(t);
@@ -1235,11 +1240,13 @@ void deref2_eval(ptr_psi_term t)
 {
   deref_ptr(t);
   if (t->status==0) {
-    if (t->type->type_def==(def_type)function_it) {
+    if (t->type->wl_type==function_it) {
+    // if (t->type->type_def==(def_type)function_it) {
       check_func(t);
     }
     else 
-      if(t->type->type_def==(def_type)global_it) { /*  RM: Feb 10 1993  */
+      if(t->type->wl_type==global_it) { /*  RM: Feb 10 1993  */
+      // if(t->type->type_def==(def_type)global_it) { /*  RM: Feb 10 1993  */
       	eval_global_var(t);
 	deref_ptr(t);/*  RM: Jun 25 1993  */
 	deref2_eval(t);
@@ -1329,7 +1336,8 @@ void eval_global_var(ptr_psi_term t)     /*  RM: Feb 10 1993  */
 
   /* var_occurred=TRUE; RM: Feb  4 1994  */
 
-  if(t->type->type_def==(def_type) global_it && t!=t->type->global_value) {
+  if(t->type->wl_type== global_it && t!=t->type->global_value) {
+//  if(t->type->type_def==(def_type) global_it && t!=t->type->global_value) {
     /*Traceline("dereferencing variable %P\n",t);*/
     push_psi_ptr_value(t,(GENERIC *)&(t->coref)); // REV401PLUS cast
     t->coref=t->type->global_value;

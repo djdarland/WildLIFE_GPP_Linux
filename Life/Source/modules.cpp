@@ -11,7 +11,7 @@
 static char vcid[] = "$Id: modules.c,v 1.3 1994/12/15 22:05:39 duchier Exp $";
 #endif /* lint */
 #define REV401PLUS
-
+#define EXTERN extern
 #ifdef REV401PLUS
 #include "defs.h"
 #endif
@@ -229,7 +229,8 @@ ptr_definition new_definition(ptr_keyword key)    /*  RM: Feb 22 1993  */
   result->rule=NULL;
   result->properties=NULL;
   result->date=0;
-  result->type_def=(def_type)undef_it;
+  result->wl_type=undef_it;
+  // result->type_def=(def_type)undef_it;
   result->always_check=TRUE;
   result->wl_protected=TRUE;
   result->evaluate_args=TRUE;
@@ -284,7 +285,8 @@ ptr_definition update_symbol(ptr_module module,char *symbol)   /*  RM: Jan  8 19
   key=hash_lookup(module->symbol_table,symbol);
   
   if(key)
-    if(key->wl_public || module==current_module)
+        if(key->wl_public || module==current_module || (strcmp(key->combined_name, "built_ins#set_module") == 0) || (strcmp(key->combined_name, "built_ins#built_in") == 0))
+	  // if(key->wl_public || module==current_module)
       result=key->definition;
     else {
       Errorline("qualified call to private symbol '%s'\n",

@@ -1,5 +1,6 @@
 #include <stdio.h>
-
+#include <stdlib.h>
+#ifdef NEEDED
 void regerror(char *s)
 // char *s;
 {
@@ -11,3 +12,4 @@ void regerror(char *s)
 #endif
 	/* NOTREACHED */
 }
+#endif

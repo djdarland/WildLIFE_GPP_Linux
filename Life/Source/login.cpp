@@ -7,7 +7,7 @@
 static char vcid[] = "$Id: login.c,v 1.4 1995/01/14 00:25:33 duchier Exp $";
 #endif /* lint */
 #define REV401PLUS
-
+#define EXTERN extern
 #ifdef REV401PLUS
 #include "defs.h"
 #endif
@@ -150,7 +150,7 @@ void get_one_arg_addr(ptr_node t,ptr_psi_term **a)
   The global flag ASSERT_FIRST indicates whether to do the insertion at the
   head or the tail of the existing list.
   */
-void add_rule(ptr_psi_term head,ptr_psi_term body,def_type typ)
+void add_rule(ptr_psi_term head,ptr_psi_term body,char typ)
 //     ptr_psi_term head;
 //     ptr_psi_term body;
 //     def_type typ;
@@ -160,7 +160,8 @@ void add_rule(ptr_psi_term head,ptr_psi_term body,def_type typ)
   ptr_definition def;
   ptr_pair_list p, *p2;
   
-  if (!body && typ==(def_type)predicate_it) {
+  if (!body && typ==predicate_it) {
+  //if (!body && typ==(def_type)predicate_it) {
     succ.type=succeed;
     succ.value_3=NULL;
     succ.coref=NULL;
@@ -179,7 +180,8 @@ void add_rule(ptr_psi_term head,ptr_psi_term body,def_type typ)
     
     def=head->type;
     
-    if (def->type_def==(def_type)undef_it || def->type_def==(def_type)typ)
+    if (def->wl_type==undef_it || def->wl_type==typ)
+    // if (def->type_def==(def_type)undef_it || def->type_def==(def_type)typ)
       
       /*  RM: Jan 27 1993  */
       if(TRUE
@@ -189,10 +191,12 @@ void add_rule(ptr_psi_term head,ptr_psi_term body,def_type typ)
 	 ) {
 	if (def->rule && (unsigned long)def->rule<=MAX_BUILT_INS) {
 	  Errorline("the built-in %T '%s' may not be redefined.\n",
-		    def->type_def, def->keyword->symbol);
+		    def->wl_type, def->keyword->symbol);
+		    // def->type_def, def->keyword->symbol);
 	}
 	else {
-	  def->type_def=typ;
+	  def->wl_type=typ;
+	  // def->type_def=typ;
 	  
 	  /* PVR single allocation in source */
 	  p=HEAP_ALLOC(pair_list);
@@ -220,13 +224,15 @@ void add_rule(ptr_psi_term head,ptr_psi_term body,def_type typ)
       }
       else { /*  RM: Jan 27 1993  */
 	Errorline("the %T '%s' may not be redefined from within module %s.\n",
-		  def->type_def,
+		  def->wl_type,
+		  // def->type_def,
 		  def->keyword->combined_name,
 		  current_module->module_name);
       }
     else {
       Errorline("the %T '%s' may not be redefined as a %T.\n",
-                def->type_def, def->keyword->symbol, typ);
+                def->wl_type, def->keyword->symbol, typ);
+                // def->type_def, def->keyword->symbol, typ);
     }
   }
 }
@@ -239,7 +245,7 @@ void add_rule(ptr_psi_term head,ptr_psi_term body,def_type typ)
   The psi_term T is of the form 'H :- B' or 'H -> B', but it may be incorrect
   (report errors). TYP is the type, function or predicate.
   */
-void assert_rule(psi_term t,def_type typ)
+void assert_rule(psi_term t,char typ)
 //     psi_term t;
 //     def_type typ;
 {
@@ -298,10 +304,10 @@ void assert_clause(ptr_psi_term t)
       */
   
   if (equ_tok((*t),":-"))
-    assert_rule((*t),(def_type)predicate_it);
+    assert_rule((*t),predicate_it);
   else
     if (equ_tok((*t),"->"))
-      assert_rule((*t),(def_type)function_it);
+      assert_rule((*t),function_it);
     else
       if (equ_tok((*t),"::"))
 	assert_attributes(t);
@@ -321,7 +327,7 @@ void assert_clause(ptr_psi_term t)
 	  if (equ_tok((*t),"<|") || equ_tok((*t),":="))
 	    assert_complicated_type(t);
 	  else
-	    add_rule(t,NULL,(def_type)predicate_it);
+	    add_rule(t,NULL,predicate_it);
   
   /* if (!assert_ok && warning()) perr("the declaration is ignored.\n"); */
 }
@@ -334,7 +340,12 @@ void assert_clause(ptr_psi_term t)
 
 void start_chrono()
 {
+#ifdef __unix__
   times(&start_time);
+#endif
+#ifdef _WIN64
+  start_time = clock();
+#endif
 }
 
 
@@ -1094,9 +1105,17 @@ void show_count()
   if (verbose) {
     printf("  [");
     
+#ifdef __unix__
     times(&end_time);
     t = (end_time.tms_utime - start_time.tms_utime)/60.0;
-    
+#endif
+
+#ifdef _WIN64
+    end_time = clock();
+    t = (float)(end_time - start_time) / (float)CLOCKS_PER_SEC;
+#endif
+
+
     printf("%1.3fs cpu, %ld goal%s",t,goal_count,(goal_count!=1?"s":""));
     
     if (t!=0.0) printf(" (%0.0f/s)",goal_count/t);
@@ -1307,8 +1326,10 @@ long unify_body(long eval_flag)
     if (u>v) { tmp=v; v=u; u=tmp; }
       
     /**** Check for curried functions ****/
-    u_func=(u->type->type_def==(def_type)function_it);
-    v_func=(v->type->type_def==(def_type)function_it);
+    u_func=(u->type->wl_type==function_it);
+    // u_func=(u->type->type_def==(def_type)function_it);
+    v_func=(v->type->wl_type==function_it);
+    // v_func=(v->type->type_def==(def_type)function_it);
     old1stat=u->status; /* 18.2.94 */
     old2stat=v->status; /* 18.2.94 */
     
@@ -1422,7 +1443,7 @@ long unify_body(long eval_flag)
 	      unsigned long ulen = *((unsigned long *)u->value_3);
 	      unsigned long vlen = *((unsigned long *)v->value_3);
               success=(ulen==vlen &&
-		       (bcmp((char *)u->value_3,(char *)v->value_3,ulen)==0));
+		       (memcmp((char *)u->value_3,(char *)v->value_3,ulen)==0));
 	    }
             else if (u->type==cut && v->type==cut) { /* 22.9 */
               GENERIC mincut;
@@ -1507,7 +1528,9 @@ long unify_body(long eval_flag)
 	/**** VERIFY CONSTRAINTS ****/
 	/* if ((old1stat<4 || old2stat<4) &&
 	     (u->type->type==type || v->type->type==type)) { 18.2.94 */
-        if (new_stat<4 && u->type->type_def==(def_type)type_it) {
+	     // (u->type->type==type || v->type->type==type)) { 18.2.94 */
+        if (new_stat<4 && u->type->wl_type==type_it) {
+        // if (new_stat<4 && u->type->type_def==(def_type)type_it) {
           /* This does not check the already-checked properties     */
           /* (i.e. those in types t with t>=old1 or t>=old2),       */
           /* and it does not check anything if u has no attributes. */
@@ -1578,16 +1601,20 @@ long prove_aim()
 	    
 	    if ((unsigned long)rule==DEFRULES) {
 	      rule=(ptr_pair_list)thegoal->type->rule;
-	      if (thegoal->type->type_def==(def_type)predicate_it) {
+	      if (thegoal->type->wl_type==predicate_it) {
+	      // if (thegoal->type->type_def==(def_type)predicate_it) {
 		if (!rule) /* This can happen when RETRACT is used */
 		  success=FALSE;
 	      }
-	      else if ( thegoal->type->type_def==(def_type)function_it
-			|| ( thegoal->type->type_def==(def_type)type_it
+	      else if ( thegoal->type->wl_type==function_it
+	      // else if ( thegoal->type->type_def==(def_type)function_it
+			|| ( thegoal->type->wl_type==type_it
+			// || ( thegoal->type->type_def==(def_type)type_it
 			 && sub_type(boolean,thegoal->type)
 			 )
 	              ) {
-		if (thegoal->type->type_def==(def_type)function_it && !rule)
+		if (thegoal->type->wl_type==function_it && !rule)
+		// if (thegoal->type->type_def==(def_type)function_it && !rule)
 		  /* This can happen when RETRACT is used */
 		  success=FALSE;
 		else {
@@ -1606,7 +1633,8 @@ long prove_aim()
 		  return success; /* We're done! */
 		}
 	      }
-	      else if (!thegoal->type->wl_protected && thegoal->type->type_def==(def_type)undef_it) {
+	      else if (!thegoal->type->wl_protected && thegoal->type->wl_type==undef_it) {
+	      // else if (!thegoal->type->wl_protected && thegoal->type->type_def==(def_type)undef_it) {
 		/* Don't give an error message for undefined dynamic objects */
 		/* that do not yet have a definition */
 		success=FALSE;
@@ -2209,7 +2237,9 @@ void main_prove()
     
   xcount=0;
   xeventdelay=XEVENTDELAY;
+#ifdef __unix__
   interrupted=FALSE;
+#endif
   main_loop_ok=TRUE;
   
   while (main_loop_ok && goal_stack) {
@@ -2413,7 +2443,8 @@ void main_prove()
       goal_count++;
       p=(ptr_pair_list*)aim->aaaa_1;
       Traceline("deleting clause (%P%s%P)\n",
-                (*p)->aaaa_2,((*p)->aaaa_2->type->type_def==(def_type)function_it?"->":":-"),(*p)->bbbb_2);
+                (*p)->aaaa_2,((*p)->aaaa_2->type->wl_type==function_it?"->":":-"),(*p)->bbbb_2);
+               // (*p)->aaaa_2,((*p)->aaaa_2->type->type_def==(def_type)function_it?"->":":-"),(*p)->bbbb_2);
       (*p)->aaaa_2=NULL;
       (*p)->bbbb_2=NULL;
       (*p)=(*p)->next; /* Remove retracted element from pairlist */
@@ -2431,64 +2462,80 @@ void main_prove()
     }
 
     if (main_loop_ok) {
-    
-      if (success) {
+
+        if (success) {
 
 #ifdef X11
-	/* Polling on external events */
-	if (xcount<=0 && aim->type==prove) {
-	  if (x_exist_event()) {
-	    /* printf("At event, xeventdelay = %ld.\n",xeventdelay); */
-	    xeventdelay=0;
-	    release_resid(xevent_existing);
-	  } else {
-	    if (xeventdelay<XEVENTDELAY)
-	      /* If XEVENTDELAY=1000 it takes 90000 goals to get back */
-	      /* from 100 at the pace of 1%. */
-	      xeventdelay=(xeventdelay*101)/100+2;
-	    else
-	      xeventdelay=XEVENTDELAY;
-	  }
-	  xcount=xeventdelay;
-	}
-	else
-	  xcount--;
+            /* Polling on external events */
+            if (xcount <= 0 && aim->type == prove) {
+                if (x_exist_event()) {
+                    /* printf("At event, xeventdelay = %ld.\n",xeventdelay); */
+                    xeventdelay = 0;
+                    release_resid(xevent_existing);
+                }
+                else {
+                    if (xeventdelay < XEVENTDELAY)
+                        /* If XEVENTDELAY=1000 it takes 90000 goals to get back */
+                        /* from 100 at the pace of 1%. */
+                        xeventdelay = (xeventdelay * 101) / 100 + 2;
+                    else
+                        xeventdelay = XEVENTDELAY;
+                }
+                xcount = xeventdelay;
+            }
+            else
+                xcount--;
 #endif
-	
-      }
-      else {
-        if (choice_stack) {
-	  backtrack();
-          Traceline("backtracking\n");
-	  success=TRUE;
+
         }
-        else /* if (goal_stack) */ {
-          undo(NULL); /* 8.10 */
-	  Infoline("\n*** No");
-	  /* printf("\n*** No (in main_prove)."); */
-          show_count();
+        else {
+            if (choice_stack) {
+                backtrack();
+                Traceline("backtracking\n");
+                success = TRUE;
+            }
+            else /* if (goal_stack) */ {
+                undo(NULL); /* 8.10 */
+                Infoline("\n*** No");
+                /* printf("\n*** No (in main_prove)."); */
+                show_count();
 #ifdef TS
-	  /* global_time_stamp=INIT_TIME_STAMP; */ /* 9.6 */
+                /* global_time_stamp=INIT_TIME_STAMP; */ /* 9.6 */
 #endif
-	  main_loop_ok=FALSE;
+                main_loop_ok = FALSE;
+            }
         }
-      }
-      
-      if (heap_pointer-stack_pointer < GC_THRESHOLD)
-        memory_check();
-      
-      if (interrupted || (stepflag && steptrace))
-        handle_interrupt();
-      else if (stepcount>0) {
-        stepcount--;
-        if (stepcount==0 && !stepflag) {
-          stepflag=TRUE;
-          handle_interrupt();
+
+        if (heap_pointer - stack_pointer < GC_THRESHOLD)
+            memory_check();
+#ifdef __unix__
+        if (interrupted || (stepflag && steptrace))
+            handle_interrupt();
+        else if (stepcount > 0) {
+            stepcount--;
+            if (stepcount == 0 && !stepflag) {
+                stepflag = TRUE;
+                handle_interrupt();
+            }
+    }
+#endif
+#ifdef _WIN64
+
+        if (stepcount > 0) {
+            stepcount--;
+            if (stepcount == 0 && !stepflag) {
+                stepflag = TRUE;
+            }
         }
+#endif
+
+
+
+
+
       }
     }
   }
-}
 
 
 int dummy_printf(char *f,char *s,char *t)

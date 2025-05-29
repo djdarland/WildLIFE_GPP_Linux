@@ -14,7 +14,7 @@ static char vcid[] = "$Id: types.c,v 1.7 1994/12/15 22:28:56 duchier Exp $";
 
  ****************************************************************************/
 #define REV401PLUS
-
+#define EXTERN extern
 #ifdef REV401PLUS
 #include "defs.h"
 #endif
@@ -102,7 +102,8 @@ long redefine(ptr_psi_term t)
   deref_ptr(t);
   d=t->type;
   if (d->date<file_date) {
-    if (d->type_def==(def_type)type_it) {
+    if (d->wl_type==type_it) {
+    // if (d->type_def==(def_type)type_it) {
       /* Except for top, sorts are always unprotected, with a warning. */
       if (FALSE /*d==top*/) {
         Errorline("the top sort '@' may not be extended.\n");
@@ -113,31 +114,36 @@ long redefine(ptr_psi_term t)
         Warningline("extending definition of sort '%s'.\n",d->keyword->symbol);
 	*/
     }
-    else if (d->wl_protected && d->type_def!=(def_type)undef_it) {
+    else if (d->wl_protected && d->wl_type!=undef_it) {
+    // else if (d->wl_protected && d->type_def!=(def_type)undef_it) {
       if (d->date>0) {
         /* The term was entered in a previous file, and therefore */
         /* cannot be altered. */
         Errorline("the %T '%s' may not be changed.\n", /*  RM: Jan 27 1993  */
-                  d->type_def, d->keyword->combined_name);
+                  d->wl_type, d->keyword->combined_name);
+                  // d->type_def, d->keyword->combined_name);
         success=FALSE;
       }
       else {
         if (d->rule && (unsigned long)d->rule<=MAX_BUILT_INS /*&& input_stream==stdin*/) {
           /* d is a built-in, and therefore cannot be altered. */
           Errorline("the built-in %T '%s' may not be extended.\n",
-                    d->type_def, d->keyword->symbol);
+                    d->wl_type, d->keyword->symbol);
+                    // d->type_def, d->keyword->symbol);
           success=FALSE;
         }
         else {
           /* d is not a built-in, and therefore can be altered. */
-          Warningline("extending the %T '%s'.\n",d->type_def,d->keyword->symbol);
+          Warningline("extending the %T '%s'.\n",d->wl_type,d->keyword->symbol);
+          // Warningline("extending the %T '%s'.\n",d->type_def,d->keyword->symbol);
           if (warningflag) if (!yes_or_no()) success=FALSE;
         }
       }
     }
     
     if (success) {
-      if (d->type_def==(def_type)type_it) { /* d is an already existing type */
+      if (d->wl_type==type_it) { /* d is an already existing type */
+      //if (d->type_def==(def_type)type_it) { /* d is an already existing type */
         /* Remove cycles in the type hierarchy of d */
         /* This is done by Richard's version, and I don't know why. */
         /* It seems to be a no-op. */
@@ -209,17 +215,23 @@ long assert_less(ptr_psi_term t1,ptr_psi_term t2)
   if (!redefine(t2)) return FALSE;
   d1=t1->type;
   d2=t2->type;
-  if (d1->type_def==(def_type)predicate_it || d1->type_def==(def_type)function_it) {
+  if (d1->wl_type==predicate_it || d1->wl_type==function_it) {
+  // if (d1->type_def==(def_type)predicate_it || d1->type_def==(def_type)function_it) {
     Errorline("the %T '%s' may not be redefined as a sort.\n",  
-              d1->type_def, d1->keyword->symbol);
+              d1->wl_type, d1->keyword->symbol);
+              // d1->type_def, d1->keyword->symbol);
   }
-  else if (d2->type_def==(def_type)predicate_it || d2->type_def==(def_type)function_it) {
+  else if (d2->wl_type==predicate_it || d2->wl_type==function_it) {
+  // else if (d2->type_def==(def_type)predicate_it || d2->type_def==(def_type)function_it) {
     Errorline("the %T '%s' may not be redefined as a sort.\n",  
-              d2->type_def, d2->keyword->symbol);
+              d2->wl_type, d2->keyword->symbol);
+              // d2->type_def, d2->keyword->symbol);
   }
   else {
-    d1->type_def=(def_type)type_it;
-    d2->type_def=(def_type)type_it;
+    d1->wl_type=type_it;
+    // d1->type_def=(def_type)type_it;
+    d2->wl_type=type_it;
+    // d2->type_def=(def_type)type_it;
     types_modified=TRUE;
     make_type_link(d1, d2); /* 1.7 */
     /* d1->parents=cons(d2,d1->parents); */
@@ -247,7 +259,8 @@ void assert_protected(ptr_node n,long prot)
     t=(ptr_psi_term)n->data;
     deref_ptr(t);
     if (t->type) {
-      if (t->type->type_def==(def_type)type_it) {
+      if (t->type->wl_type==type_it) {
+      // if (t->type->type_def==(def_type)type_it) {
         Warningline("'%s' is a sort. It can be extended without a declaration.\n",
                     t->type->keyword->symbol);
       }
@@ -284,7 +297,8 @@ void assert_args_not_eval(ptr_node n)
     t=(ptr_psi_term)n->data;
     deref_ptr(t);
     if (t->type) {
-      if (t->type->type_def==(def_type)type_it) {
+      if (t->type->wl_type==type_it) {
+      // if (t->type->type_def==(def_type)type_it) {
         Warningline("'%s' is a sort--only functions and predicates\
  can have unevaluated arguments.\n",t->type->keyword->symbol);
       }
@@ -413,7 +427,7 @@ void assert_complicated_type(ptr_psi_term t)
               ok=assert_less(arg2,typ1);
               if (ok) any_ok=TRUE;
               if (ok && (arg2->attr_list || pred!=NULL)) {
-                add_rule(arg2,pred,(def_type)type_it);
+                add_rule(arg2,pred,type_it);
               }
             }
             else {
@@ -435,7 +449,7 @@ void assert_complicated_type(ptr_psi_term t)
         if (ok) any_ok=TRUE;
         typ2->type=typ1->type;
         if (ok && (typ2->attr_list || pred!=NULL))
-          add_rule(typ2,pred,(def_type)type_it);
+          add_rule(typ2,pred,type_it);
         else
           assert_ok=TRUE;
       }
@@ -446,7 +460,7 @@ void assert_complicated_type(ptr_psi_term t)
         ok=assert_less(typ1,typ2);
         if (ok) any_ok=TRUE;
         if (ok && (typ1->attr_list || pred!=NULL))
-          add_rule(typ1,pred,(def_type)type_it);
+          add_rule(typ1,pred,type_it);
         else
           assert_ok=TRUE;
       }
@@ -490,14 +504,17 @@ void assert_attributes(ptr_psi_term t)
     if (arg1 && wl_const_3(*arg1)) {  // REV401PLUS need correct macro for value_3
       /* if (!redefine(arg1)) return;   RM: Feb 19 1993  */
       d=arg1->type;
-      if (d->type_def==(def_type)predicate_it || d->type_def==(def_type)function_it) {
+      if (d->wl_type==predicate_it || d->wl_type==function_it) {
+      // if (d->type_def==(def_type)predicate_it || d->type_def==(def_type)function_it) {
         Errorline("the %T '%s' may not be redefined as a sort.\n",
-                  d->type_def, d->keyword->symbol);
+                  d->wl_type, d->keyword->symbol);
+                  // d->type_def, d->keyword->symbol);
       }
       else {
-        d->type_def=(def_type)type_it;
+        d->wl_type=type_it;
+        // d->type_def=(def_type)type_it;
         types_modified=TRUE;
-        add_rule(typ,pred,(def_type)type_it);
+        add_rule(typ,pred,type_it);
       }
     }
     else {
@@ -523,7 +540,8 @@ void find_adults()       /*  RM: Feb  3 1993  */
   ptr_int_list l;
 
   for(d=first_definition;d;d=d->next)
-    if(d->type_def==(def_type)type_it && d->parents==NULL) {
+    if(d->wl_type==type_it && d->parents==NULL) {
+    // if(d->type_def==(def_type)type_it && d->parents==NULL) {
       l=HEAP_ALLOC(int_list);
       l->value_1=(GENERIC)d;
       l->next=adults;
@@ -675,7 +693,8 @@ long count_sorts(long c0)  /*  RM: Feb  3 1993  */
   ptr_definition d;
 
   for(d=first_definition;d;d=d->next)
-    if (d->type_def==(def_type)type_it) c0++;
+    if (d->wl_type==type_it) c0++;
+    // if (d->type_def==(def_type)type_it) c0++;
   
   return c0;
 }
@@ -691,7 +710,8 @@ void clear_coding()   /*  RM: Feb  3 1993  */
   ptr_definition d;
 
   for(d=first_definition;d;d=d->next)
-    if (d->type_def==(def_type)type_it) d->code=NOT_CODED;
+    if (d->wl_type==type_it) d->code=NOT_CODED;
+    // if (d->type_def==(def_type)type_it) d->code=NOT_CODED;
 }
 
 
@@ -706,7 +726,8 @@ void least_sorts()  /*  RM: Feb  3 1993  */
   ptr_definition d;
 
   for(d=first_definition;d;d=d->next)
-    if (d->type_def==(def_type)type_it && d->children==NULL && d!=nothing)
+    if (d->wl_type==type_it && d->children==NULL && d!=nothing)
+    // if (d->type_def==(def_type)type_it && d->children==NULL && d!=nothing)
       nothing->parents=cons((GENERIC)d,nothing->parents);  // REV401PLUS cast
 }
 
@@ -722,7 +743,8 @@ void all_sorts()   /*  RM: Feb  3 1993  */
   ptr_definition d;
   
   for(d=first_definition;d;d=d->next)
-    if (d->type_def==(def_type)type_it && d!=nothing)
+    if (d->wl_type==type_it && d!=nothing)
+    // if (d->type_def==(def_type)type_it && d!=nothing)
       nothing->parents=cons((GENERIC)d,nothing->parents);  // REV401PLUS cast
 }
   
@@ -815,7 +837,8 @@ void equalize_codes(int len) /*  RM: Feb  3 1993  */ // REV401PLUS void
   int w;
   
   for(d=first_definition;d;d=d->next)
-    if (d->type_def==(def_type)type_it) {
+    if (d->wl_type==type_it) {
+    // if (d->type_def==(def_type)type_it) {
       c = d->code;
       ci = &(d->code);  /*  RM: Feb 15 1993  */
       w=len;
@@ -983,7 +1006,8 @@ void one_pass_always_check(long *ch)
   
   
   for(d=first_definition;d;d=d->next)
-    if (d->type_def==(def_type)type_it && !d->always_check)
+    if (d->wl_type==type_it && !d->always_check)
+    // if (d->type_def==(def_type)type_it && !d->always_check)
       propagate_always_check(d,ch);
 }
 

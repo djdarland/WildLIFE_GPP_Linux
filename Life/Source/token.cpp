@@ -8,7 +8,7 @@ static char vcid[] = "$Id: token.c,v 1.4 1995/07/27 19:22:17 duchier Exp $";
 #endif /* lint */
 
 #define REV401PLUS
-
+#define EXTERN extern
 #ifdef REV401PLUS
 #include "defs.h"
 #endif
@@ -504,17 +504,60 @@ char *expand_file_name(char *s)
   return r;
 }
 #endif
-
 #ifdef _WIN64
-char *expand_file_name(char *s)
-{
-  static char r[STRLEN];
-  sprintf(r, "C:\\Users\\pal\\dsa\\life_local\\Source\\%s", s);
-  return r;
-}
 
-#endif
+
+
+
+
+
+char* expand_file_name(char* s)
+// char *s;
+{
+    char* r,*r2,*r3,*s2;
+    char* home;
+    int slash_count,i;
+    if (strcmp(s, "stdin") == 0) return s;
+    if (strcmp(s, "stdout") == 0) return s;
+    if (strcmp(s, "stderr") == 0) return s;
+    
+    if (s[0] == '~')
+        r2 = s + 2;
+    else
+        r2 = s;
+            home = getenv("HOME");
+            printf("HOME = %s\n",home);
+            if (home) {
+                r = (char*)malloc(strlen(home) + strlen(r2) + 1);
+                sprintf(r, "%s/%s", home, r2);
+                printf("r = %s", r);
+            }
+            else
+                if (warning()) printf("no HOME directory.\n");
+       
+            for (slash_count = 0, i = 0; r[i] != 0; i++)
+                if (r[i] == '/') slash_count++;
+            printf("slash_count = %d\n", slash_count);
+            
+            r3 = (char*)malloc(strlen(r) + slash_count + 1);
   
+            for (i = 0;i < strlen(r); i++) {
+                if (r[i] == '/')
+                    r3[i] = '\\';
+                else
+                    r3[i] = r[i];
+            }
+            r3[i] = 0;
+            
+
+
+    printf("*** Using file name: '%s'\n",r3); 
+    // exit(0);
+    return r3;
+}
+#endif
+
+
 /******** OPEN_INPUT_FILE(file)
   Open the input file specified by the string FILE.  If the file is "stdin",
   restore the stdin state.  Otherwise, open the file and create a new global
@@ -967,7 +1010,8 @@ void read_name(ptr_psi_term tok,long ch,long (*f)(long),ptr_definition typ)
     TOKEN_ERROR(tok); /*  RM: Feb  1 1993  */
 
     /* PVR 4.2.94 for correct level incrementing */
-    if (tok->type->type_def==(def_type)global_it) {
+    if (tok->type->wl_type==global_it) {
+    // if (tok->type->type_def==(def_type)global_it) {
       var_occurred=TRUE;
     }
     if (FALSE /*tok->type->type==global && tok->type->global_value*/) {

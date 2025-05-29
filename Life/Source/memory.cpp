@@ -7,7 +7,7 @@
 static char vcid[] = "$Id: memory.c,v 1.10 1995/07/27 19:03:24 duchier Exp $";
 #endif /* lint */
 #define REV401PLUS
-
+#define EXTERN extern
 #ifdef REV401PLUS
 #include "defs.h"
 #endif
@@ -656,7 +656,8 @@ void check_definition(ptr_definition *d)
     check_pair_list(&((*d)->rule));
     check_triple_list(&((*d)->properties));
     
-    if ((*d)->type_def==(def_type)type_it) {
+    if ((*d)->wl_type==type_it) {
+    // if ((*d)->type_def==(def_type)type_it) {
       check_kids(&((*d)->parents));
       check_kids(&((*d)->children));
     }
@@ -719,7 +720,8 @@ static void check_def_rest(ptr_definition *d)
     check_pair_list(&((*d)->rule));
     check_triple_list(&((*d)->properties));
     
-    if ((*d)->type_def==(def_type)type_it) {
+    if ((*d)->wl_type==type_it) {
+    // if ((*d)->type_def==(def_type)type_it) {
       check_kids(&((*d)->parents));
       check_kids(&((*d)->children));
     }
@@ -1563,7 +1565,123 @@ void garbage()
 
 */
 
+/****************************************************************************
 
+  MEMORY ALLOCATION ROUTINES.
+
+*/
+
+
+/******** HEAP_ALLOC(s)
+  This returns a pointer to S bytes of memory in the heap.
+  Alignment is taken into account in the following manner:
+  the macro ALIGN is supposed to be a power of 2 and the pointer returned
+  is a multiple of ALIGN.
+*/
+GENERIC heap_alloc(unsigned long s)
+// long s;
+{
+    if (s & (ALIGN - 1))
+        s = s - (s & (ALIGN - 1)) + ALIGN;
+    /* assert(s % sizeof(*heap_pointer) == 0); */
+    s /= sizeof(*heap_pointer);
+
+    heap_pointer -= s;
+
+    if (stack_pointer > heap_pointer)
+        Errorline("the heap overflowed into the stack.\n");
+
+    return heap_pointer;
+}
+
+
+
+/******** STACK_ALLOC(s)
+  This returns a pointer to S bytes of memory in the stack.
+  Alignment is taken into account in the following manner:
+  the macro ALIGN is supposed to be a power of 2 and the pointer returned
+  is a multiple of ALIGN.
+*/
+GENERIC stack_alloc(unsigned long s)
+// long s;
+{
+    GENERIC r;
+
+    r = stack_pointer;
+
+    if (s & (ALIGN - 1))
+        s = s - (s & (ALIGN - 1)) + ALIGN;
+    /* assert(s % sizeof(*stack_pointer) == 0); */
+    s /= sizeof(*stack_pointer);
+
+    stack_pointer += s;
+
+    if (stack_pointer > heap_pointer)
+        Errorline("the stack overflowed into the heap.\n");
+
+    return r;
+}
+
+
+
+/******** INIT_MEMORY()
+  Get two big blocks of memory to work in.
+  The second is only used for the half-space garbage collector.
+  The start and end addresses of the blocks are re-aligned correctly.
+  to allocate.
+*/
+
+
+void init_memory()
+{
+  // printf("ALLOC_WORDS = %ld\n", ALLOC_WORDS);
+    //   alloc_words=GetIntOption("memory",ALLOC_WORDS);
+    alloc_words = ALLOC_WORDS;
+    mem_size = alloc_words * sizeof(long);
+
+    mem_base = (GENERIC)malloc(mem_size);
+    other_base = (GENERIC)malloc(mem_size);
+    // printf("mem_base = %p other_base = %p \n", (void*)mem_base, (void*)other_base);
+    if (mem_base && other_base) {
+        /* Rewrote some rather poor code... RM: Mar  1 1994  */
+        // ALIGNUP(mem_base);
+        stack_pointer = mem_base;
+        // printf("stack_pointer = %p\n", (void*)stack_pointer);
+        mem_limit = mem_base + alloc_words - 2;
+        // ALIGNUP(mem_limit);
+        heap_pointer = mem_limit;
+        // printf("heap_pointer = %p\n", (void*)heap_pointer);
+        // ALIGNUP(other_base);
+        other_pointer = other_base;
+        // printf("other_pointer=%p\n", (void*)other_pointer);
+        other_limit = other_base + alloc_words - 2;
+        // printf("other_limit = %p\n", (void*)other_limit);
+        // ALIGNUP(other_limit);
+
+        delta = other_base - mem_base;
+        // printf("delta =%ld\n", delta);
+        buffer = (char*)malloc(PRINT_BUFFER); /* The printing buffer */
+
+        /*  RM: Oct 22 1993  */
+        /* Fill the memory with rubbish data */
+        /*
+        {
+          int i;
+
+          for(i=0;i<alloc_words;i++) {
+        mem_base[i]= -1234;
+        other_base[i]= -1234;
+          }
+        }
+        */
+    }
+    else
+        Errorline("Wild_life could not allocate sufficient memory to run.\n\n");
+}
+
+
+
+#ifdef MAYBE_OBSOLETE
 
 /******** HEAP_ALLOC(s)
   This returns a pointer to S bytes of memory in the heap.
@@ -1614,8 +1732,121 @@ GENERIC stack_alloc(long s)
   
     return r;
 }
+#endif
+
+#ifdef ALSO
+
+/******** HEAP_ALLOC(s)
+  This returns a pointer to S bytes of memory in the heap.
+  Alignment is taken into account in the following manner:
+  the macro ALIGN is supposed to be a power of 2 and the pointer returned
+  is a multiple of ALIGN.
+*/
+GENERIC heap_alloc(unsigned long s)
+// long s;
+{
+    if (s & (ALIGN - 1))
+        s = s - (s & (ALIGN - 1)) + ALIGN;
+    /* assert(s % sizeof(*heap_pointer) == 0); */
+    s /= sizeof(*heap_pointer);
+
+    heap_pointer -= s;
+
+    if (stack_pointer > heap_pointer)
+        Errorline("the heap overflowed into the stack.\n");
+
+    return heap_pointer;
+}
 
 
+
+/******** STACK_ALLOC(s)
+  This returns a pointer to S bytes of memory in the stack.
+  Alignment is taken into account in the following manner:
+  the macro ALIGN is supposed to be a power of 2 and the pointer returned
+  is a multiple of ALIGN.
+*/
+GENERIC stack_alloc(unsigned long s)
+// long s;
+{
+    GENERIC r;
+
+    r = stack_pointer;
+
+    if (s & (ALIGN - 1))
+        s = s - (s & (ALIGN - 1)) + ALIGN;
+    /* assert(s % sizeof(*stack_pointer) == 0); */
+    s /= sizeof(*stack_pointer);
+
+    stack_pointer += s;
+
+    if (stack_pointer > heap_pointer)
+        Errorline("the stack overflowed into the heap.\n");
+
+    return r;
+}
+
+
+/******** INIT_MEMORY()
+  Get two big blocks of memory to work in.
+  The second is only used for the half-space garbage collector.
+  The start and end addresses of the blocks are re-aligned correctly.
+  to allocate.
+*/
+
+
+void init_memory()
+{
+  // printf("ALLOC_WORDS =                            %ld\n", ALLOC_WORDS);
+    //   alloc_words=GetIntOption("memory",ALLOC_WORDS);
+    alloc_words = ALLOC_WORDS;
+    mem_size = alloc_words * sizeof(long);
+    mem_size = ALLOC_WORDS;
+    mem_base = (GENERIC)malloc(mem_size);
+    other_base = (GENERIC)malloc(mem_size);
+
+    //printf("mem_baswe =                                 %p\n", (void*)mem_base);
+    // printf("other_base =                                %p\n", (void*)other_base);
+
+    if (mem_base && other_base) {
+        /* Rewrote some rather poor code... RM: Mar  1 1994  */
+       //  ALIGNUP(mem_base);
+        stack_pointer = mem_base;
+        // printf("stack_pointer =                           %p\n", (void*)stack_pointer);
+        mem_limit = mem_base + alloc_words - 2;
+        // ALIGNUP(mem_limit);
+        heap_pointer = mem_limit;
+        // printf("heap_pointer =                            %p\n", (void*)heap_pointer);
+        // ALIGNUP(other_base);
+        other_pointer = other_base;
+        // printf("other_pointer=                            %p\n", (void*)other_pointer);
+        other_limit = other_base + alloc_words - 2;
+        // printf("other_limit =                             %p\n", (void*)other_limit);
+        // ALIGNUP(other_limit);
+
+        delta = other_base - mem_base;
+        // printf("delta =%                                  ld\n", delta);
+        buffer = (char*)malloc(PRINT_BUFFER); /* The printing buffer */
+
+        /*  RM: Oct 22 1993  */
+        /* Fill the memory with rubbish data */
+        /*
+        {
+          int i;
+
+          for(i=0;i<alloc_words;i++) {
+        mem_base[i]= -1234;
+        other_base[i]= -1234;
+          }
+        }
+        */
+    }
+    else
+        Errorline("Wild_life could not allocate sufficient memory to run.\n\n");
+}
+#endif
+
+#ifdef MAYBE_OBSOLETE
 
 /******** INIT_MEMORY()
   Get two big blocks of memory to work in.
@@ -1668,7 +1899,7 @@ void init_memory ()
     Errorline("Wild_life could not allocate sufficient memory to run.\n\n");
 }
 
-
+#endif
 
 /******** MEMORY_CHECK()
   This function tests to see whether enough memory is available to allow

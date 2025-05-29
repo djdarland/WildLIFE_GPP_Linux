@@ -7,7 +7,7 @@
 static char vcid[] = "$Id: bi_sys.c,v 1.2 1994/12/08 23:08:17 duchier Exp $";
 #endif /* lint */
 #define REV401PLUS
-
+#define EXTERN extern
 #ifdef REV401PLUS
 #include "defs.h"
 #endif
@@ -43,7 +43,7 @@ long c_trace()
     else if (arg1->type==lf_false)
       trace=FALSE;
     else {
-      Errorline("bad first argument in %P.\n",t);
+      Errorline((char*)"bad first argument in %P.\n",t);
       /* report_error(t,"bad first argument"); */
       success=FALSE;
     }
@@ -59,7 +59,7 @@ long c_trace()
     else if (arg2->type==lf_false)
       stepflag=FALSE;
     else {
-      Errorline("bad second argument in %P.\n",t);
+      Errorline((char*)"bad second argument in %P.\n",t);
       /* report_error(t,"bad second argument"); */
       success=FALSE;
     }
@@ -124,7 +124,7 @@ static long c_warning()
   warningflag = !warningflag;
 
   /*  RM: Sep 24 1993  */
-  Infoline("*** Warning messages are%s printed\n",warningflag?"":" not");
+  Infoline((char*)"*** Warning messages are%s printed\n",warningflag?"":" not");
   
   return TRUE;
 }
@@ -179,6 +179,35 @@ long c_quiet()
 /******** C_CPUTIME
   Return the cpu-time in seconds used by the Wild_Life interpreter.
 */
+
+
+#ifdef _WIN64
+
+static long c_cputime()
+{
+  ptr_psi_term result, t;
+  REAL thetime,val;
+  long num,success;
+  
+  t=aim->aaaa_1;
+  deref_args(t,set_empty);
+  result=aim->bbbb_1;
+  deref_ptr(result);
+  success=get_real_value(result,&val,&num);
+  if (success) {
+    life_end = clock();
+    thetime= ((REAL)life_end-life_start)/(REAL)CLOCKS_PER_SEC;
+    if (num)
+      success=(val==thetime);
+    else
+      success=unify_real_result(result,thetime);
+  }
+  return success;
+}
+
+#endif
+
+
 
 #ifdef __unix__
 
@@ -558,10 +587,10 @@ static long c_getenv()
       }
     }
     else
-      Errorline("bad argument in %P\n",funct);
+      Errorline((char*)"bad argument in %P\n",funct);
   }
   else
-    Errorline("argument missing in %P\n",funct);
+    Errorline((char*)"argument missing in %P\n",funct);
   
   return success;
 }
@@ -589,7 +618,7 @@ static long c_system()
 	value=(REAL)system((char *)arg1->value_3);
 	if(value==127) {
 	  success=FALSE;
-          Errorline("could not execute shell in %P.\n",funct);
+          Errorline((char*)"could not execute shell in %P.\n",funct);
 	  /* report_error(funct,"couldn't execute shell"); */
 	}
 	else
@@ -598,11 +627,11 @@ static long c_system()
       else {
 	/* residuate(arg1); */ /*  RM: Feb 10 1993  */
         success=FALSE;
-        Errorline("bad argument in %P.\n",funct);
+        Errorline((char*)"bad argument in %P.\n",funct);
       }
     else {
       success=FALSE;
-      Errorline("bad argument in %P.\n",funct);
+      Errorline((char*)"bad argument in %P.\n",funct);
       /* report_error(funct,"bad argument"); */
     }
   }
@@ -784,7 +813,7 @@ static long c_residuate()
 
 	get_two_args(pred->attr_list, &arg1, &arg2);
 	if ((!arg1)||(!arg2)) {
-	  Errorline("%P requires two arguments.\n",pred);
+	  Errorline((char*)"%P requires two arguments.\n",pred);
 	  return FALSE;
         }
 	
@@ -817,7 +846,7 @@ static long c_mresiduate()
   
   get_two_args(pred->attr_list, &arg1, &arg2);
   if ((!arg1)||(!arg2)) {
-    Errorline("%P requires two arguments.\n",pred);
+    Errorline((char*)"%P requires two arguments.\n",pred);
     return FALSE;
   }
   
@@ -840,7 +869,7 @@ static long c_mresiduate()
   }
   
   if(!tmp || tmp->type!=nil) {
-    Errorline("%P should be a nil-terminated list in mresiduate.\n",arg1);
+    Errorline((char*)"%P should be a nil-terminated list in mresiduate.\n",arg1);
     success=FALSE;
   }
 
@@ -848,25 +877,48 @@ static long c_mresiduate()
 }
 
 
+#ifdef OLD_WAY
+void insert_system_builtins()
+{
+  new_built_in(bi_module,(char*)"trace",(def_type)predicate_it,c_trace);
+  new_built_in(bi_module,(char*)"step",(def_type)predicate_it,c_step);
+  new_built_in(bi_module, (char*)"verbose",(def_type)predicate_it,c_verbose);
+  new_built_in(bi_module, (char*)"warning",(def_type)predicate_it,c_warning);
+  new_built_in(bi_module, (char*)"maxint",(def_type)function_it,c_maxint);
+  new_built_in(bi_module, (char*)"cpu_time",(def_type)function_it,c_cputime);
+  new_built_in(bi_module, (char*)"quiet",(def_type)function_it,c_quiet); /* 21.1 */
+  new_built_in(bi_module, (char*)"real_time",(def_type)function_it,c_realtime);
+  new_built_in(bi_module, (char*)"local_time",(def_type)function_it,c_localtime);
+  new_built_in(bi_module, (char*)"statistics",(def_type)predicate_it,c_statistics);
+  new_built_in(bi_module, (char*)"gc",(def_type)predicate_it,c_garbage);
+  new_built_in(bi_module, (char*)"system",(def_type)function_it,c_system);
+  new_built_in(bi_module, (char*)"getenv",(def_type)function_it,c_getenv);
+  new_built_in(bi_module, (char*)"encode",(def_type)predicate_it,c_encode);
+  new_built_in(bi_module, (char*)"rlist",(def_type)function_it,c_residList);
+  new_built_in(bi_module, (char*)"residuate",(def_type)predicate_it,c_residuate);
+  new_built_in(bi_module, (char*)"mresiduate",(def_type)predicate_it,c_mresiduate);
+  new_built_in(bi_module, (char*)"tprove",(def_type)predicate_it,c_tprove);
+}
+#endif
 
 void insert_system_builtins()
 {
-  new_built_in(bi_module,"trace",(def_type)predicate_it,c_trace);
-  new_built_in(bi_module,"step",(def_type)predicate_it,c_step);
-  new_built_in(bi_module,"verbose",(def_type)predicate_it,c_verbose);
-  new_built_in(bi_module,"warning",(def_type)predicate_it,c_warning);
-  new_built_in(bi_module,"maxint",(def_type)function_it,c_maxint);
-  new_built_in(bi_module,"cpu_time",(def_type)function_it,c_cputime);
-  new_built_in(bi_module,"quiet",(def_type)function_it,c_quiet); /* 21.1 */
-  new_built_in(bi_module,"real_time",(def_type)function_it,c_realtime);
-  new_built_in(bi_module,"local_time",(def_type)function_it,c_localtime);
-  new_built_in(bi_module,"statistics",(def_type)predicate_it,c_statistics);
-  new_built_in(bi_module,"gc",(def_type)predicate_it,c_garbage);
-  new_built_in(bi_module,"system",(def_type)function_it,c_system);
-  new_built_in(bi_module,"getenv",(def_type)function_it,c_getenv);
-  new_built_in(bi_module,"encode",(def_type)predicate_it,c_encode);
-  new_built_in(bi_module,"rlist",(def_type)function_it,c_residList);
-  new_built_in(bi_module,"residuate",(def_type)predicate_it,c_residuate);
-  new_built_in(bi_module,"mresiduate",(def_type)predicate_it,c_mresiduate);
-  new_built_in(bi_module,"tprove",(def_type)predicate_it,c_tprove);
+  new_built_in(bi_module,(char*)"trace",predicate_it,c_trace);
+  new_built_in(bi_module,(char*)"step",predicate_it,c_step);
+  new_built_in(bi_module, (char*)"verbose",predicate_it,c_verbose);
+  new_built_in(bi_module, (char*)"warning",predicate_it,c_warning);
+  new_built_in(bi_module, (char*)"maxint",function_it,c_maxint);
+  new_built_in(bi_module, (char*)"cpu_time",function_it,c_cputime);
+  new_built_in(bi_module, (char*)"quiet",function_it,c_quiet); /* 21.1 */
+  new_built_in(bi_module, (char*)"real_time",function_it,c_realtime);
+  new_built_in(bi_module, (char*)"local_time",function_it,c_localtime);
+  new_built_in(bi_module, (char*)"statistics",predicate_it,c_statistics);
+  new_built_in(bi_module, (char*)"gc",predicate_it,c_garbage);
+  new_built_in(bi_module, (char*)"system",function_it,c_system);
+  new_built_in(bi_module, (char*)"getenv",function_it,c_getenv);
+  new_built_in(bi_module, (char*)"encode",predicate_it,c_encode);
+  new_built_in(bi_module, (char*)"rlist",function_it,c_residList);
+  new_built_in(bi_module, (char*)"residuate",predicate_it,c_residuate);
+  new_built_in(bi_module, (char*)"mresiduate",predicate_it,c_mresiduate);
+  new_built_in(bi_module, (char*)"tprove",predicate_it,c_tprove);
 }

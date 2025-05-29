@@ -13,7 +13,7 @@ static char vcid[] = "$Id: list.c,v 1.2 1994/12/08 23:28:16 duchier Exp $";
 ** with 2 entries (first and last element)
 ** Links belongs to each atom
 */
-
+#define EXTERN extern
 #define REV401PLUS
 #ifdef REV401PLUS
 #include "defs.h"
