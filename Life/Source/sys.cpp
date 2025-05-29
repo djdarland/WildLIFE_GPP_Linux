@@ -10,6 +10,7 @@
 #ifndef lint
 static char vcid[] = "$Id: sys.c,v 1.9 1996/01/17 00:33:09 duchier Exp $";
 #endif /* lint */
+#define REV401PLUS
 
 #ifdef REV102
 #include <unistd.h>

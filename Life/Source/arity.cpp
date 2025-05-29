@@ -8,6 +8,7 @@ static int dummy;
 
 #ifdef ARITY
 
+#define REV401PLUS
 #ifdef REV401PLUS
 #include "defs.h"
 #endif

@@ -13,7 +13,18 @@
   \brief used by collect_symbols in built_ins.c 
 
 */
- 
+
+// #ifndef TRUE
+// #define TRUE 1
+// #endif
+// #ifndef FALSE
+// #define FALSE 0
+// #endif
+// #ifndef NULL
+// #define NULL 0
+// #endif
+
+
 #define least_sel 0
 
 /*! \def greatest_sel

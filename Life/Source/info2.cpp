@@ -6,6 +6,7 @@
 #ifndef lint
 static char vcid[] = "$Id: info.c,v 1.4 1995/01/30 21:03:55 duchier Exp $";
 #endif /* lint */
+#define REV401PLUS
 
 #ifdef REV401PLUS
 #include "defs.h"
@@ -40,7 +41,7 @@ void title()
   if(quietflag)
     return; /*  RM: Feb 17 1993  */
   
-  printf("Wild_Life Interpreter Version 4.20 Wed May 28 01:09:42 PM CDT 2025\n");
+  printf("Wild_Life Interpreter Version 4.20 Wed May 28 05:04:38 PM CDT 2025\n");
   printf("Copyright (C) 1991-93 DEC Paris Research Laboratory\n");
   printf("Extensions, Copyright (C) 1994-1995 Intelligent Software Group, SFU\n"); 
   printf("Ported to Linux and Cygwin December 2022 after many efforts since 1995\n");

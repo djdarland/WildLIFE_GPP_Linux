@@ -6,6 +6,7 @@
 #ifndef lint
 static char vcid[] = "$Id: trees.c,v 1.3 1995/07/27 21:22:21 duchier Exp $";
 #endif /* lint */
+#define REV401PLUS
 
 #ifdef REV401PLUS
 #include "defs.h"

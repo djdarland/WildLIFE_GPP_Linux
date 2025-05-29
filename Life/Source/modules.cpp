@@ -10,6 +10,7 @@
 #ifndef lint
 static char vcid[] = "$Id: modules.c,v 1.3 1994/12/15 22:05:39 duchier Exp $";
 #endif /* lint */
+#define REV401PLUS
 
 #ifdef REV401PLUS
 #include "defs.h"

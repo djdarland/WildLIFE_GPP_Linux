@@ -10,6 +10,7 @@ static char vcid[] = "$Id: lib.c,v 1.2 1994/12/08 23:26:47 duchier Exp $";
 /* VERSION of Wild-LIFE for calling from C */
 /*  RM: Mar 31 1993  */
 
+#define REV401PLUS
 #ifdef REV401PLUS
 #include "defs.h"
 #endif

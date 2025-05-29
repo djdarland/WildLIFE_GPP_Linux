@@ -18,6 +18,7 @@ static char vcid[] = "$Id: xpred.c,v 1.4 1997/07/18 14:50:52 duchier Exp $";
 // Added next define due to error
 #define __alpha 1
 
+#define REV401PLUS
 #ifdef REV401PLUS
 #include "defs.h"
 #endif

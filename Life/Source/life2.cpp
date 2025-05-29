@@ -7,6 +7,7 @@
 static char vcid[] = "$Id: life.c,v 1.2 1994/12/08 23:27:02 duchier Exp $";
 #endif /* lint */
 
+#define REV401PLUS
 #ifdef REV401PLUS
 #include "defs.h"
 #endif

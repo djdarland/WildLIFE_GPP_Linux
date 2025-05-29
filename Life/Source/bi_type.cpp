@@ -21,6 +21,7 @@
 #ifndef lint
 static char vcid[] = "$Id: bi_type.c,v 1.2 1994/12/08 23:08:52 duchier Exp $";
 #endif /* lint */
+#define REV401PLUS
 
 #ifdef REV401PLUS
 #include "defs.h"

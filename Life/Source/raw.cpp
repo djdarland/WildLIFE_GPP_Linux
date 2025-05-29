@@ -12,6 +12,7 @@ static char vcid[] = "$Id: raw.c,v 1.3 1995/07/27 19:21:19 duchier Exp $";
     */
 
 #ifndef NORAW
+#define REV401PLUS
 
 #ifdef REV401PLUS
 #include "defs.h"

@@ -33,6 +33,7 @@ static char vcid[] = "$Id: bi_math.c,v 1.2 1994/12/08 23:07:37 duchier Exp $";
 #endif
 */
 
+#define REV401PLUS
 #ifdef REV401PLUS
 #include "defs.h"
 #endif

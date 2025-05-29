@@ -10,6 +10,7 @@ static char vcid[] = "$Id: xdisplaylist.c,v 1.2 1994/12/08 23:37:00 duchier Exp 
 
 #ifdef X11
 
+#define REV401PLUS
 #ifdef REV401PLUS
 #include "defs.h"
 #endif

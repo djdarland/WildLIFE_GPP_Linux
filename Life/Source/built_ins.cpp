@@ -6,6 +6,7 @@
 #ifndef lint
 static char vcid[] = "$Id: built_ins.c,v 1.14 1995/07/27 21:26:28 duchier Exp $";
 #endif /* lint */
+#define REV401PLUS
 
 #ifdef REV401PLUS
 #include "defs.h"
