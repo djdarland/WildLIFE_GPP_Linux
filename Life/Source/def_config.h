@@ -31,3 +31,5 @@
 */
 
 #define NORAW 1
+
+#define SETUP "~/life_local/Source/.set_up"

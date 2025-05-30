@@ -39,9 +39,9 @@ static void pnf(char *s,long n)
 void title()
 {
   if(quietflag)
-    return; /*  RM: Feb 17 1993  */
-  
-  printf("Wild_Life Interpreter Version +VERSION+ +DATE+\n");
+    printf("Wild_Life Interpreter +VERSION+  +DATE+\n");
+  //printf("Wild_Life Interpreter @VERSION@  @DATE@\n"); // replace @ w + if lost and save this
+
   printf("Copyright (C) 1991-93 DEC Paris Research Laboratory\n");
   printf("Extensions, Copyright (C) 1994-1995 Intelligent Software Group, SFU\n"); 
   printf("Ported to Linux and Cygwin December 2022 after many efforts since 1995\n");

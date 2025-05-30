@@ -139,7 +139,7 @@ MANPAGE = $(PROGRAM).1
 # VERSION     = 1.02
 # Saved above to use above for test suite
 DATE = `date`
-VERSION     = 4.20
+VERSION     = 5.00
 
 # $(LIBOBJECT) regexp/regexp.o regexp/regsub.o
 

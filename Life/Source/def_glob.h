@@ -922,6 +922,7 @@ EXTERN long psi_term_line_number;
 
 EXTERN long warningflag;
 EXTERN long quietflag;  // 21.1 
+EXTERN long cygwin_flag;  // 21.1 
 EXTERN long trace;
 EXTERN long verbose; // 21.1 
 

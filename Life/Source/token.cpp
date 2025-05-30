@@ -456,8 +456,7 @@ void end_terminal_io()
   For the time being all this does is replace '~' by the HOME directory
   if no user is given, or tries to find the user.
 */
-#ifdef __unix__
-char *expand_file_name(char *s)
+char *unix_expand_file_name(char *s)
 // char *s;
 {
   char *r;
@@ -503,20 +502,28 @@ char *expand_file_name(char *s)
   
   return r;
 }
+
+#ifdef __unix__
+char *expand_file_name(char *s)
+{
+  return unix_expand_file_name(s);
+}
+
 #endif
+
 #ifdef _WIN64
-
-
-
-
-
 
 char* expand_file_name(char* s)
 // char *s;
 {
+  
     char* r,*r2,*r3,*s2;
     char* home;
     int slash_count,i;
+
+    if (cygwin_flag)
+      return unix_expand_file_name(s);
+    
     if (strcmp(s, "stdin") == 0) return s;
     if (strcmp(s, "stdout") == 0) return s;
     if (strcmp(s, "stderr") == 0) return s;

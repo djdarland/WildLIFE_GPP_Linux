@@ -39,11 +39,14 @@ int main(int argc, char *argv[])  // REV401PLUS correct main proto
   for(i=0;i<256;i++)
     rand_array[i]=random();
 #endif
-#ifdef __unix__
-  for (i = 0;i < 256;i++)
-      rand_array[i] = rand();
-  #endif
 
+#ifdef _WIN64
+  for(i=0;i<256;i++)
+    rand_array[i]=rand();
+#endif
+
+
+  
   init_globals();
   arg_c=argc;
   if (argc < 10)
@@ -72,12 +75,10 @@ int main(int argc, char *argv[])  // REV401PLUS correct main proto
   tzset();
   times(&life_start);
 #endif
-
 #ifdef _WIN64
   _tzset();
-  life_start= clock();
+  life_start = clock();
 #endif
-
   assert(stack_pointer==mem_base); /* 8.10 */
 
   init_modules(); /*  RM: Jan  8 1993  */
@@ -110,9 +111,9 @@ int main(int argc, char *argv[])  // REV401PLUS correct main proto
 #endif
 
   
-  open_input_file("life_local/Source/.set_up");
+  open_input_file("~/life_local/Source/.set_up");
 
-  push_goal(load,input_state,(ptr_psi_term)file_date,(GENERIC)heap_copy_string("life_local/Source/.set_up")); // REV401PLUS casts
+  push_goal(load,input_state,(ptr_psi_term)file_date,(GENERIC)heap_copy_string("~/life_local/Source/.set_up")); // REV401PLUS casts
 
   file_date+=2;
   main_prove();

@@ -571,6 +571,7 @@ void insert_own_prop(ptr_definition d)
   l->next=children;
   children=l;
 
+  if (!d) return;
   rule = d->rule;
   while (rule) {
     t= &(d->properties);
@@ -655,7 +656,7 @@ void propagate_definitions()
     
     while (adults) {
       d=(ptr_definition)adults->value_1;
-      
+      if (!d) break;
       insert_own_prop(d);
       children=children->next;
       
@@ -874,6 +875,20 @@ void equalize_codes(int len) /*  RM: Feb  3 1993  */ // REV401PLUS void
   such as INT or LIST.
   This routine also makes sure that top has no links.
 */
+
+
+void make_type_link(ptr_definition t1,ptr_definition t2)
+// ptr_definition t1, t2;
+{
+  if (t2 && t2!=top && t1 && !type_member(t2,t1->parents))
+    t1->parents=cons((GENERIC)t2,t1->parents);  // REV401PLUS cast
+  if (t2 && t2!=top && !type_member(t1,t2->children))
+    t2->children=cons((GENERIC)t1,t2->children);  // REV401PLUS cast
+}
+
+#ifdef TRIED
+// caused int may not be unified from login.cpp
+
 void make_type_link(ptr_definition t1, ptr_definition t2)
 // ptr_definition t1, t2;
 {    // DJD added checks to avoid NULL reference
@@ -890,6 +905,7 @@ void make_type_link(ptr_definition t1, ptr_definition t2)
 
 }
 
+#endif
 
 
 
@@ -1107,6 +1123,7 @@ void encode_types()
           
           while (kids) {
             kdef=(ptr_definition)kids->value_1;
+            if (!kdef) break;
             or_codes(code,kdef->code);
             kids=kids->next;
           }
@@ -1138,7 +1155,9 @@ void encode_types()
             kids=ddef->children;
             
             while(kids && possible) {
+                
               kdef=(ptr_definition)kids->value_1;
+              if (!kdef) break;
               if(kdef->code==NOT_CODED)
                 possible=FALSE;
               kids=kids->next;
