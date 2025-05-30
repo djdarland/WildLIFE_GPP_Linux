@@ -285,8 +285,8 @@ ptr_definition update_symbol(ptr_module module,char *symbol)   /*  RM: Jan  8 19
   key=hash_lookup(module->symbol_table,symbol);
   
   if(key)
-        if(key->wl_public || module==current_module || (strcmp(key->combined_name, "built_ins#set_module") == 0) || (strcmp(key->combined_name, "built_ins#built_in") == 0))
-	  // if(key->wl_public || module==current_module)
+    if(key->wl_public || module==current_module || (strcmp(key->combined_name, "built_ins#set_module") == 0) || (strcmp(key->combined_name, "built_ins#built_in") == 0))
+      // if(key->wl_public || module==current_module)
       result=key->definition;
     else {
       Errorline("qualified call to private symbol '%s'\n",

@@ -334,7 +334,7 @@ static long bitvector_unop_internal(ptr_psi_term args[],
 // long* op;   // REV401PLUS
 {
   return bitvector_unop_code((unsigned long *)args[0]->value_3,
-			     result,(int)op); // REV401PLUS
+			     result,*op); // REV401PLUS
 }
 
 static long bitvector_unop(long op)

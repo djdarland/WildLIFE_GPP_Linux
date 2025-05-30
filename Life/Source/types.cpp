@@ -1,3 +1,4 @@
+
 /* Copyright 1991 Digital Equipment Corporation.
 ** All Rights Reserved.
 *****************************************************************/
@@ -862,7 +863,9 @@ void equalize_codes(int len) /*  RM: Feb  3 1993  */ // REV401PLUS void
 
 
 
-long type_member();
+// long type_member();
+
+//long type_member();
 
 
 /******** MAKE_TYPE_LINK(t1,t2)
@@ -871,14 +874,22 @@ long type_member();
   such as INT or LIST.
   This routine also makes sure that top has no links.
 */
-void make_type_link(ptr_definition t1,ptr_definition t2)
+void make_type_link(ptr_definition t1, ptr_definition t2)
 // ptr_definition t1, t2;
-{
-  if (t2!=top && !type_member(t2,t1->parents))
-    t1->parents=cons((GENERIC)t2,t1->parents);  // REV401PLUS cast
-  if (t2!=top && !type_member(t1,t2->children))
-    t2->children=cons((GENERIC)t1,t2->children);  // REV401PLUS cast
+{    // DJD added checks to avoid NULL reference
+    if (t1 && t2) {
+      //        printf("t1 = %p t2 = %p t1->parents = %p t2->children = %p\n", t1, t2, t1->parents, t2->children);
+        // exit(0);
+
+
+        if (t2 != top && t1->parents && !type_member(t2, t1->parents))
+            t1->parents = cons((GENERIC)t2, t1->parents);  // REV401PLUS cast
+        if (t2 != top && t2->children && !type_member(t1, t2->children))
+            t2->children = cons((GENERIC)t1, t2->children);  // REV401PLUS cast
+    }
+
 }
+
 
 
 
