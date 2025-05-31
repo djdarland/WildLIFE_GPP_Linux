@@ -39,7 +39,7 @@ static void pnf(char *s,long n)
 void title()
 {
   if(quietflag)
-    printf("Wild_Life Interpreter 5.00  Fri May 30 03:35:52 PM CDT 2025\n");
+    printf("Wild_Life Interpreter 5.00  Fri May 30 11:47:32 PM CDT 2025\n");
   //printf("Wild_Life Interpreter @VERSION@  @DATE@\n"); // replace @ w + if lost and save this
 
   printf("Copyright (C) 1991-93 DEC Paris Research Laboratory\n");
