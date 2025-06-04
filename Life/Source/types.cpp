@@ -880,7 +880,7 @@ void equalize_codes(int len) /*  RM: Feb  3 1993  */ // REV401PLUS void
 void make_type_link(ptr_definition t1,ptr_definition t2)
 // ptr_definition t1, t2;
 {
-  if (t2!=top && !type_member(t2,t1->parents))
+  if (t2!=top && t1 && !type_member(t2,t1->parents))
     t1->parents=cons((GENERIC)t2,t1->parents);  // REV401PLUS cast
   if (t2!=top && !type_member(t1,t2->children))
     t2->children=cons((GENERIC)t1,t2->children);  // REV401PLUS cast

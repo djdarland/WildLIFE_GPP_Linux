@@ -1191,7 +1191,7 @@ static long long c_project()
 	if(arg2->value_3 && sub_type(arg2->type,integer)) { /* 10.8 */
 	  v= *(REAL *)arg2->value_3;
 	  if(v==floor(v)) {
-	    sprintf(thebuffer,"%ld",(long long)v);
+	    sprintf(thebuffer,"%lld",(long long)v);
 	    label=heap_copy_string(thebuffer); /* A little voracious */
 	  }
 	  else { /*  RM: Jul 28 1993  */
@@ -3341,7 +3341,7 @@ static long long c_exist_feature()  /*  PVR: Dec 17 1992  */  /* PVR 11.4.94 */
       label=(char *)arg1->value_3;
     else if (arg1->value_3 && sub_type(arg1->type,integer)) {
       v= *(REAL *)arg1->value_3;
-      sprintf(thebuffer,"%ld",(long long)v);
+      sprintf(thebuffer,"%lld",(long long)v);
       label=heap_copy_string(thebuffer); /* A little voracious */
     } else if (arg1->type->keyword->private_feature) {
       label=arg1->type->keyword->combined_name;

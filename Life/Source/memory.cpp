@@ -123,9 +123,9 @@ int GetIntOption(char *name,int def)
 void pchoices() /*  RM: Oct 28 1993  For debugging. */
 {
   ptr_choice_point c;
-  printf("stack pointer is: %lx\n",(unsigned long long)stack_pointer); // REV401PLUS  "%x" -> "%lx" and cast
+  printf("stack pointer is: %llx\n",(unsigned long long)stack_pointer); // REV401PLUS  "%x" -> "%lx" and cast
   for(c=choice_stack;c;c=c->next)
-    printf("\tc=%lx\ts=%lx\tg=%lx\tu=%lx\n",(unsigned long long)c,(unsigned long long)c->stack_top,(unsigned long long)c->goal_stack,(unsigned long long)c->undo_point);
+    printf("\tc=%llx\ts=%llx\tg=%llx\tu=%llx\n",(unsigned long long)c,(unsigned long long)c->stack_top,(unsigned long long)c->goal_stack,(unsigned long long)c->undo_point);
 }
 
 
@@ -153,7 +153,7 @@ void print_undo_stack()
   while (u) {
     if ((GENERIC)u->aaaa_3<(GENERIC)mem_base || (GENERIC)u->aaaa_3>(GENERIC)mem_limit ||
         (GENERIC)u->next<(GENERIC)mem_base || (GENERIC)u->next>(GENERIC)mem_limit) {
-      printf("UNDO: type:%ld a:%lx b:%lx next:%lx\n",u->type,(unsigned long long)u->aaaa_3,(unsigned long long)u->bbbb_3,(unsigned long long)u->next);
+      printf("UNDO: type:%lld a:%llx b:%llx next:%llx\n",u->type,(unsigned long long)u->aaaa_3,(unsigned long long)u->bbbb_3,(unsigned long long)u->next);
       fflush(stdout);
     }
     u=u->next;
@@ -172,10 +172,10 @@ long long bounds_undo_stack()
        || (!VALID_ADDRESS(u->aaaa_3) && !(u->type & undo_action))
        ) {
       if ((GENERIC)u<mem_base || (GENERIC)u>mem_limit) {
-        printf("\nUNDO: u=%lx\n",(long long)u);
+        printf("\nUNDO: u=%llx\n",(long long)u);
       }
       else {
-        printf("\nUNDO: u:%lx type:%ld a:%lx b:%lx next:%lx\n",
+        printf("\nUNDO: u:%llx type:%lld a:%llx b:%llx next:%llx\n",
                (unsigned long long)u,(unsigned long long)u->type,(unsigned long long)u->aaaa_3,(unsigned long long)u->bbbb_3,(unsigned long long)u->next);
       }
       fflush(stdout);
@@ -1446,13 +1446,13 @@ static void check()
 void print_gc_info(long long timeflag)
 // long long timeflag;
 {
-  fprintf(stderr," [%ld%% free (%ldK), %ld%% heap, %ld%% stack",
+  fprintf(stderr," [%lld%% free (%lldK), %lld%% heap, %lld%% stack",
           (100*((unsigned long long)heap_pointer-(unsigned long long)stack_pointer)+mem_size/2)/mem_size,
           ((unsigned long long)heap_pointer-(unsigned long long)stack_pointer+512)/1024,
           (100*((unsigned long long)mem_limit-(unsigned long long)heap_pointer)+mem_size/2)/mem_size,
           (100*((unsigned long long)stack_pointer-(unsigned long long)mem_base)+mem_size/2)/mem_size);
   if (timeflag) {
-    fprintf(stderr,", %1.3fs cpu (%ld%%)",
+    fprintf(stderr,", %1.3fs cpu (%lld%%)",
             gc_time,
             (unsigned long long)(0.5+100*gc_time/(life_time+gc_time)));
   }

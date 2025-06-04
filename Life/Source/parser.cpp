@@ -67,7 +67,7 @@ void show(long long limit)
       printf("-> ");
     else
       printf("   ");
-    printf("%3ld: ",i);   // REV401PLUS add l
+    printf("%3lld: ",i);   // REV401PLUS add l
     switch (op_stack[i]) {
     case fx:
       printf("FX  ");
@@ -84,7 +84,7 @@ void show(long long limit)
     default:
       printf("??? ");
     }
-    printf(" prec=%4ld  ",int_stack[i]);  // REV401PLUS add l
+    printf(" prec=%4lld  ",int_stack[i]);  // REV401PLUS add l
     display_psi_stdout(&(psi_term_stack[i]));
     printf("\n");
   }
@@ -468,7 +468,7 @@ psi_term read_psi_term()
 	    if(equ_tok(t3,"=>")) {
 	      t3=read_life_form(',',')');
 	      v= *(REAL *)t2.value_3;   // REV401PLUS
-	      sprintf(s,"%ld",v);  // REV401PLUS remove extra 0
+	      sprintf(s,"%lld",v);  // REV401PLUS remove extra 0
               feature_insert(s,&(t.attr_list),&t3);
 	      f2=FALSE;
 	    }
@@ -480,7 +480,7 @@ psi_term read_psi_term()
 	    put_back_token(t2);
 	    t2=read_life_form(',',')');
 	    ++count;
-	    sprintf(s,"%ld",count); // REV401PLUS remove extra 0
+	    sprintf(s,"%lld",count); // REV401PLUS remove extra 0
             feature_insert(s,&(t.attr_list),&t2);
 	  }
 	  

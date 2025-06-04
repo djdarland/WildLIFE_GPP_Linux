@@ -1010,7 +1010,7 @@ void pretty_psi_term(ptr_psi_term t,long long sprec,long long depth)
 	      val=floor(val/(double)PRINT_SPLIT);
 	      seg++;
 	    }
-	    sprintf(segbuf[seg],"%s%ld",(neg?"-":""),(unsigned long long)val);
+	    sprintf(segbuf[seg],"%s%lld",(neg?"-":""),(unsigned long long)val);
 	    for (i=seg; i>=0; i--) prettyf(segbuf[i]);
 	    if (!equal_types(t->type,integer)) {
 	      prettyf(DOTDOT);
@@ -1039,7 +1039,7 @@ void pretty_psi_term(ptr_psi_term t,long long sprec,long long depth)
 	    pretty_quote_symbol(t->type->keyword);
 	  }
 	  else if (equal_types(t->type,stream)) {
-	    sprintf(buf,"stream(%ld)",(long long)t->value_3);  // REV401PLUS cast
+	    sprintf(buf,"stream(%lld)",(long long)t->value_3);  // REV401PLUS cast
 	    prettyf(buf);
 	  }
 	  else if (equal_types(t->type,eof))
@@ -1129,7 +1129,7 @@ void do_pretty_attr(ptr_node t,ptr_tab_brk tab,long long *cnt,long long two,long
     else if (v== *cnt)
       (*cnt)++ ;
     else {
-      sprintf(s,"%ld",v);
+      sprintf(s,"%lld",v);
       prettyf(s); /* 6.10 */
       prettyf(" => ");
     }

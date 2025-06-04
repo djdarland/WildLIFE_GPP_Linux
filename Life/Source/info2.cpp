@@ -26,7 +26,7 @@ static void pnf(char *s,long long n)
   printf("        %s ",s);
   i=strlen(s);
   while(++i<40) printf(".");
-  printf(" %3ld bytes.\n",n);  // REV401 -> %3ld
+  printf(" %3lld bytes.\n",n);  // REV401 -> %3ld
 }
 
 
@@ -39,7 +39,7 @@ static void pnf(char *s,long long n)
 void title()
 {
   if(quietflag)
-    printf("Wild_Life Interpreter 5.00  Wed Jun  4 11:58:51 AM CDT 2025\n");
+    printf("Wild_Life Interpreter 5.00  Wed Jun  4 12:38:51 PM CDT 2025\n");
   //printf("Wild_Life Interpreter @VERSION@  @DATE@\n"); // replace @ w + if lost and save this
 
   printf("Copyright (C) 1991-93 DEC Paris Research Laboratory\n");

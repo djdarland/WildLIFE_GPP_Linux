@@ -1116,7 +1116,7 @@ void show_count()
 #endif
 
 
-    printf("%1.3fs cpu, %ld goal%s",t,goal_count,(goal_count!=1?"s":""));
+    printf("%1.3fs cpu, %lld goal%s",t,goal_count,(goal_count!=1?"s":""));
     
     if (t!=0.0) printf(" (%0.0f/s)",goal_count/t);
     
@@ -2032,7 +2032,7 @@ long long what_next_aim()
     pr += strlen(pr);
     for(i=1;i<=lev;i++) { *pr='-'; pr++; *pr='-'; pr++; }
     if (level>0)
-      sprintf(pr,"%ld",level);
+      sprintf(pr,"%lld",level);
     strcat(pr,PROMPT);
     
     prompt=prompt_buffer;

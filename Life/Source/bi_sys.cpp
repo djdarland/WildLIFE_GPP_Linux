@@ -528,9 +528,9 @@ static long long c_statistics()
 
   printf("\n");
   /* printf("************** SYSTEM< INFORMATION **************\n"); */
-  printf("Stack size  : %8ld bytes (%5ldK) (%ld%%)\n",t1,t1/1024,100*t1/t3);
-  printf("Heap size   : %8ld bytes (%5ldK) (%ld%%)\n",t2,t2/1024,100*t2/t3);
-  printf("Total memory: %8ld bytes (%5ldK)\n",t3,t3/1024);
+  printf("Stack size  : %8lld bytes (%5lldK) (%lld%%)\n",t1,t1/1024,100*t1/t3);
+  printf("Heap size   : %8lld bytes (%5lldK) (%lld%%)\n",t2,t2/1024,100*t2/t3);
+  printf("Total memory: %8lld bytes (%5lldK)\n",t3,t3/1024);
 
 #ifdef X11
   printf("X predicates are installed.\n");

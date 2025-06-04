@@ -1460,7 +1460,7 @@ char *get_numeric_feature(long long n)
   else if (n==3) return three;
   else {
     char buf[100];
-    sprintf(buf,"%ld",n);   // REV401PLUS add l
+    sprintf(buf,"%lld",n);   // REV401PLUS add l
     return heap_copy_string(buf);
   }
 }
@@ -1633,7 +1633,7 @@ static long long lazy_project_internal(ptr_psi_term args[],
     return TRUE;
   }
   if (sub_type(args[1]->type,integer) && args[1]->value_3)
-    sprintf(buffer,"%ld",(long long)*(REAL*)args[1]->value_3); // REV401PLUS added l
+    sprintf(buffer,"%lld",(long long)*(REAL*)args[1]->value_3); // REV401PLUS added l
   else if (sub_type(args[1]->type,quoted_string) && args[1]->value_3)
     strcpy(buffer,(char*)args[1]->value_3);
   else
@@ -1672,7 +1672,7 @@ static long long wait_on_feature_internal(ptr_psi_term args[],
     return TRUE;
   }
   if (sub_type(args[1]->type,integer) && args[1]->value_3)
-    sprintf(buffer,"%ld",(long long)*(REAL*)args[1]->value_3); // REV401PLUS add l
+    sprintf(buffer,"%lld",(long long)*(REAL*)args[1]->value_3); // REV401PLUS add l
   else if (sub_type(args[1]->type,quoted_string) && args[1]->value_3)
     strcpy(buffer,(char*)args[1]->value_3);
   else
@@ -1709,7 +1709,7 @@ static long long my_wait_on_feature_internal(ptr_psi_term args[],
     return TRUE;
   }
   if (sub_type(args[1]->type,integer) && args[1]->value_3)
-    sprintf(buffer,"%ld",(long long)*(REAL*)args[1]->value_3); // REV401PLUS add l
+    sprintf(buffer,"%lld",(long long)*(REAL*)args[1]->value_3); // REV401PLUS add l
   else if (sub_type(args[1]->type,quoted_string) && args[1]->value_3)
     strcpy(buffer,(char*)args[1]->value_3);
   else

@@ -91,7 +91,7 @@ void stack_info(FILE *outfile)
     gn=depth_gs();
     cn=depth_cs();
     tn=depth_ts();
-    fprintf(outfile,"%ld goal%s, %ld choice point%s, %ld trail entr%s",
+    fprintf(outfile,"%lld goal%s, %lld choice point%s, %lld trail entr%s",
             gn,(gn!=1?"s":""),
             cn,(cn!=1?"s":""),
             tn,(tn!=1?"ies":"y"));
@@ -688,10 +688,10 @@ void tracing()
   long long i;
   long long indent_loc;
 
-  printf("T%04ld",goal_count);
-  printf(" C%02ld",depth_cs());
+  printf("T%04lld",goal_count);
+  printf(" C%02lld",depth_cs());
   indent_loc=depth_gs();
-  if (indent_loc>=MAX_TRACE_INDENT) printf(" G%02ld",indent_loc);
+  if (indent_loc>=MAX_TRACE_INDENT) printf(" G%02lld",indent_loc);
   indent_loc = indent_loc % MAX_TRACE_INDENT;
   for (i=indent_loc; i>=0; i--) printf(" ");
   steptrace=TRUE;

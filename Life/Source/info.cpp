@@ -26,7 +26,7 @@ static void pnf(char *s,long long n)
   printf("        %s ",s);
   i=strlen(s);
   while(++i<40) printf(".");
-  printf(" %3ld bytes.\n",n);  // REV401 -> %3ld
+  printf(" %3lld bytes.\n",n);  // REV401 -> %3ld
 }
 
 
