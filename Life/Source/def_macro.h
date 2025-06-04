@@ -296,7 +296,6 @@
 #define HEAPDONE(R) (to_heap && ONHEAP(R))
 
 // from memory.c
-#define ALIGNUP(X) { (X) = (GENERIC)( ((long) (X) + (ALIGN-1)) & ~(ALIGN-1) ); }
 
 #define Infoline   if (NOTQUIET) infoline
 #define Warningline if (warningflag) warningline

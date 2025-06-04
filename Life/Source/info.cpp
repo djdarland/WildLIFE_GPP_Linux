@@ -46,7 +46,7 @@ void title()
   printf("Extensions, Copyright (C) 1994-1995 Intelligent Software Group, SFU\n"); 
   printf("Ported to Linux and Cygwin December 2022 after many efforts since 1995\n");
   printf("By Dennis J. Darland dennis.darland@hotmail.com\n");
-  
+ 
   
 #ifndef X11
   printf("X interface not installed.\n");

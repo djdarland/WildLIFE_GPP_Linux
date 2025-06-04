@@ -16,6 +16,21 @@ static char vcid[] = "$Id: memory.c,v 1.10 1995/07/27 19:03:24 duchier Exp $";
 static long amount_used;
 #endif
 
+#define WORDALIGN 1 
+
+/*! \def WORD 
+  \brief Memory Word Size
+
+*/
+
+#define WORD sizeof(double)
+
+#ifdef WORDALIGN
+#define ALIGN WORD
+#else
+#define ALIGN 8
+#endif
+
 #ifdef CLIFE
 long pass;
 #else 
@@ -35,7 +50,8 @@ static struct tms last_garbage_time;
 
 
 
-#define ALIGNUP(X) { (X) = (GENERIC)( ((long) (X) + (ALIGN-1)) & ~(ALIGN-1) ); }
+//#define ALIGNUP(X) { (X) = (GENERIC)( ((long) (X) + (ALIGN-1)) & ~(ALIGN-1) ); }
+#define ALIGNUP(X) {(X)}
 
 static long delta;
 #define LONELY 1
@@ -1477,6 +1493,7 @@ void garbage()
   start_number_cells = (stack_pointer-mem_base) + (mem_limit-heap_pointer);
 #ifdef _WIN64
   garbage_start_time = clock();
+  printf("gstart = %d\n",garbage_start_time);
   life_time=(garbage_start_time - last_garbage_time)/CLOCKS_PER_SEC;
 #endif
 #ifdef __unix__
@@ -1534,12 +1551,14 @@ void garbage()
 #endif
 #ifdef _WIN64
   garbage_end_time = clock();
+  printf("gend %d\n", garbage_end_time);
   gc_time=(garbage_end_time - garbage_start_time)/CLOCKS_PER_SEC;
+  printf("gc end %f\n", gc_time);
 #endif
 
   //  times(&garbage_end_time);
   //  gc_time=(garbage_end_time.tms_utime - garbage_start_time.tms_utime)/60.0;
-  garbage_time+=gc_time;
+  garbage_time = garbage_time + (long)gc_time;
 
   if (verbose) {
     fprintf(stderr,"*** End  ");

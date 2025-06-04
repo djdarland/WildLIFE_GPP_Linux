@@ -2110,10 +2110,10 @@ void exit_life(long nl_flag)
   if (NOTQUIET) { /* 21.1 */
       if (nl_flag) printf("\n");
       printf("*** Exiting Wild_Life  ");
-      printf("[%1.3lfs cpu, %1.3lfs gc (%2.1lf%%)]\n",
-          ((REAL)(life_end - life_start) / (REAL)CLOCKS_PER_SEC,
-              garbage_time,
-              (REAL)garbage_time * 100.0) / (REAL)(life_end - life_start));
+      printf("[%1.3lfs cpu, %1.3lfs gc (%2.1lf% %)]\n",
+	     ((REAL)(life_end - life_start) / (REAL)CLOCKS_PER_SEC),
+	     ((REAL)garbage_time),
+	     ((REAL)((garbage_time * 100.0) / (REAL)(life_end - life_start))));
 
   }
   exit(0);
@@ -2132,7 +2132,7 @@ void exit_life(long nl_flag)
   if (NOTQUIET) { /* 21.1 */
     if (nl_flag) printf("\n");
     printf("*** Exiting Wild_Life  ");
-    printf("[%1.3lfs cpu, %1.3lfs gc (%2.1lf%%)]\n",
+    printf("[%1.3lfs cpu, %1.3fs gc (%2.1lf%%)]\n",
            ((REAL)(life_end.tms_utime-life_start.tms_utime)/(REAL)sysconf(_SC_CLK_TCK)),
            garbage_time,
            (REAL)garbage_time * 100.0) / (REAL) (life_end.tms_utime-life_start.tms_utime)/(REAL)sysconf(_SC_CLK_TCK);

@@ -70,20 +70,6 @@
 
 */
 
-#define WORDALIGN 1 
-
-/*! \def WORD 
-  \brief Memory Word Size
-
-*/
-
-#define WORD sizeof(long)
-
-#ifdef WORDALIGN
-#define ALIGN WORD
-#else
-#define ALIGN 8
-#endif
 
 /*! \def TS
   \brief Time stamp technique 

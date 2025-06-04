@@ -892,7 +892,7 @@ void make_type_link(ptr_definition t1,ptr_definition t2)
 void make_type_link(ptr_definition t1, ptr_definition t2)
 // ptr_definition t1, t2;
 {    // DJD added checks to avoid NULL reference
-    if (t1 && t2) {
+  // if (t1 && t2) {
       //        printf("t1 = %p t2 = %p t1->parents = %p t2->children = %p\n", t1, t2, t1->parents, t2->children);
         // exit(0);
 
@@ -901,7 +901,7 @@ void make_type_link(ptr_definition t1, ptr_definition t2)
             t1->parents = cons((GENERIC)t2, t1->parents);  // REV401PLUS cast
         if (t2 != top && t2->children && !type_member(t1, t2->children))
             t2->children = cons((GENERIC)t1, t2->children);  // REV401PLUS cast
-    }
+}//
 
 }
 

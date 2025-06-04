@@ -39,14 +39,14 @@ static void pnf(char *s,long n)
 void title()
 {
   if(quietflag)
-    printf("Wild_Life Interpreter 5.00  Fri May 30 11:58:40 PM CDT 2025\n");
+    printf("Wild_Life Interpreter 5.00  Tue Jun  3 11:49:20 PM CDT 2025\n");
   //printf("Wild_Life Interpreter @VERSION@  @DATE@\n"); // replace @ w + if lost and save this
 
   printf("Copyright (C) 1991-93 DEC Paris Research Laboratory\n");
   printf("Extensions, Copyright (C) 1994-1995 Intelligent Software Group, SFU\n"); 
   printf("Ported to Linux and Cygwin December 2022 after many efforts since 1995\n");
   printf("By Dennis J. Darland dennis.darland@hotmail.com\n");
-  
+ 
   
 #ifndef X11
   printf("X interface not installed.\n");

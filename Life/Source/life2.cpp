@@ -114,7 +114,8 @@ int main(int argc, char *argv[])  // REV401PLUS correct main proto
   
   open_input_file(SETUP);
   push_goal(load,input_state,(ptr_psi_term)file_date,(GENERIC)heap_copy_string(SETUP)); // REV401PLUS casts
-
+  garbage_time = 0.0;
+  
   file_date+=2;
   main_prove();
 
