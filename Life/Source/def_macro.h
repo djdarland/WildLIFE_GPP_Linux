@@ -117,9 +117,9 @@
 /* #define VALID_RANGE(A) ((GENERIC)A>=mem_base && (GENERIC)A<mem_limit) \
   ?TRUE \
   :printf("*** Address out of range: %ld, base=%ld, limit=%ld\n",   \
-	  (unsigned long) A,   \
-	  (unsigned long) mem_base,   \
-	  (unsigned long) mem_limit),FALSE;
+	  (unsigned long long) A,   \
+	  (unsigned long long) mem_base,   \
+	  (unsigned long long) mem_limit),FALSE;
 
 	    RM: Jan  4 1993   An idea
 */
@@ -195,9 +195,9 @@
 
 #define include_var_builtin(NBARGS) \
         ptr_psi_term g, args[NBARGS]; \
-	long num[NBARGS]; \
-	long val[NBARGS]; \
-	long ii, success=TRUE, resi=FALSE
+	long long num[NBARGS]; \
+	long long val[NBARGS]; \
+	long long ii, success=TRUE, resi=FALSE
 
 
 #define begin_builtin(FUNCNAME, NBARGS, NBARGSIN, TYPES) \
@@ -222,13 +222,13 @@
 	    success = matches (args[ii]->type, types[ii], &num[ii]); \
 	    if (args[ii]->value_3 != NULL && num[ii]) \
 	        if (types[ii] == integer) \
-		    val[ii] = *(long *) args[ii]->value_3; \
+		    val[ii] = *(long long *) args[ii]->value_3; \
 		else \
 		if (types[ii] == real) \
 		    val[ii] = *(REAL *) args[ii]->value_3; \
 		else \
 		if (types[ii] == quoted_string) \
-		    val[ii] = (long) args[ii]->value_3; \
+		    val[ii] = (long long) args[ii]->value_3; \
 		else \
 		    Errorline ("in template: type %T not expected (built-in FUNCNAME).\n", types[ii]); \
 	    else \
@@ -275,7 +275,7 @@
 
 // from copy.c
 /* Simple hash function */
-#define HASH(A) (((long) A + ((long) A >> 3)) & (HASHSIZE-1))
+#define HASH(A) (((long long) A + ((long long) A >> 3)) & (HASHSIZE-1))
 
 /* TRUE iff R is on the heap */
 #define ONHEAP(R) ((GENERIC)R>=heap_pointer)
@@ -308,7 +308,7 @@
 
 #ifdef TS
 extern void push_psi_ptr_value(); /* 9.6 */
-extern unsigned long global_time_stamp; /* 9.6 */
+extern unsigned long long global_time_stamp; /* 9.6 */
 /* Trail if q was last modified before the topmost choice point */
 #define TRAIL_CONDITION(Q) (choice_stack && \
                             choice_stack->time_stamp>=Q->time_stamp)

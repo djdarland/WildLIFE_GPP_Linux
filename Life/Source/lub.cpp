@@ -49,16 +49,16 @@ ptr_int_list appendIntList(ptr_int_list tail, ptr_int_list more)
 
 /* Set flags bit for all ancestors (i.e., higher up) of head */
 void
-mark_ancestors(ptr_definition def, long *flags)
+mark_ancestors(ptr_definition def, long long *flags)
 //     ptr_definition def;
-//     long *flags;
+//     long long *flags;
 {
   ptr_int_list par;
   
   par=def->parents;
   while (par) {
     ptr_definition p;
-    long len;
+    long long len;
   
     p=(ptr_definition)par->value_1;
     len=bit_length(p->code);
@@ -70,18 +70,18 @@ mark_ancestors(ptr_definition def, long *flags)
   }
 }
 
-static long bfs(ptr_definition p, ptr_int_list ans,
-		ptr_int_list pattern, long *flags)
+static long long bfs(ptr_definition p, ptr_int_list ans,
+		ptr_int_list pattern, long long *flags)
 // ptr_definition p;
 // ptr_int_list ans;
 // ptr_int_list pattern;
-// long *flags;
+// long long *flags;
 {
 	ptr_int_list head = STACK_ALLOC(int_list);
 	ptr_int_list tail;
 	ptr_int_list par;
-	long len;
-	long found = 0;
+	long long len;
+	long long found = 0;
 	
 	if (p == top)
 	{
@@ -160,15 +160,15 @@ ptr_int_list lub(ptr_psi_term a,ptr_psi_term b,ptr_psi_term *pp)
 // ptr_psi_term b;
 // ptr_psi_term *pp;
 {
-	extern long type_count;		/* the number of sorts in the hierarchy */
+	extern long long type_count;		/* the number of sorts in the hierarchy */
 	ptr_definition ta;			/* type of psi term a */
 	ptr_definition tb;			/* type of psi term b */
-	long *flags;					/* set to 1 if this type has been checked in
+	long long *flags;					/* set to 1 if this type has been checked in
 								 * the lub search.
 								 */
 	ptr_int_list ans;
 	ptr_int_list pattern;
-	long found;
+	long long found;
 	
 	ta = a->type;
 	tb = b->type;
@@ -206,8 +206,8 @@ ptr_int_list lub(ptr_psi_term a,ptr_psi_term b,ptr_psi_term *pp)
 	
 	/* initialize the table to be non-searched */
 	
-	flags = (long *)stack_alloc(sizeof(unsigned long) * type_count);
-	memset(flags, 0, sizeof(unsigned long) * type_count);
+	flags = (long long *)stack_alloc(sizeof(unsigned long long) * type_count);
+	memset(flags, 0, sizeof(unsigned long long) * type_count);
 
 	/* now do a breadth first search for each of arg1 and arg2 */
 

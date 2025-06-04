@@ -12,7 +12,7 @@ static char vcid[] = "$Id: interrupt.c,v 1.2 1994/12/08 23:25:19 duchier Exp $";
 #include "defs.h"
 #endif
 
-// long interrupted=FALSE;  // REV401PLUS moved down removed for MINT
+// long long interrupted=FALSE;  // REV401PLUS moved down removed for MINT
 
 /******** INTERRUPT()
   This routine is called whenever the user types CONTROL C which generates an
@@ -53,8 +53,8 @@ void handle_interrupt()
   ptr_psi_term old_state;
   char *old_prompt;
   int old_quiet; /* 21.1 */
-  long c,d; /* 21.12 (prev. char) */
-  long count;
+  long long c,d; /* 21.12 (prev. char) */
+  long long count;
 
   if (interrupted) printf("\n");
   interrupted=FALSE;

@@ -24,53 +24,53 @@ static char vcid[] = "$Id: error.c,v 1.3 1995/07/11 01:53:03 duchier Exp $";
 // 
 
 /* REMOVED for MINT
-long warningflag=TRUE;
-long quietflag=FALSE;  // 21.1 
-long trace=FALSE;
-long verbose=FALSE; // 21.1 
-long stepflag;
-long steptrace;
-long stepcount;
+long long warningflag=TRUE;
+long long quietflag=FALSE;  // 21.1 
+long long trace=FALSE;
+long long verbose=FALSE; // 21.1 
+long long stepflag;
+long long steptrace;
+long long stepcount;
 */   
-/*! \fn static long depth_gs()
+/*! \fn static long long depth_gs()
   \brief depth_gs
 
   Depth of goal stack 
 */
 
-static long depth_gs()
+static long long depth_gs()
 {
-  long i=0;
+  long long i=0;
   ptr_goal g=goal_stack;
 
   while (g) { i++; g=g->next; }
   return i;
 }
 
-/*! \fn static long depth_cs()
+/*! \fn static long long depth_cs()
   \brief depth_cs
 
   Depth of choice point stack 
 */
-static long depth_cs()
+static long long depth_cs()
 {
-  long i=0;
+  long long i=0;
   ptr_choice_point c=choice_stack;
 
   while (c) { i++; c=c->next; }
   return i;
 }
 
-/*! \fn static long depth_ts()
+/*! \fn static long long depth_ts()
   \brief depth_ts
 
   Depth of trail (undo) stack 
 */
 
-static long depth_ts()
+static long long depth_ts()
 {
   ptr_stack t=undo_stack;
-  long i=0;
+  long long i=0;
 
   while (t) { i++; t=t->next; }
   return i;
@@ -86,7 +86,7 @@ void stack_info(FILE *outfile)
 {
   /* Information about size of embedded stacks */
   if (verbose) {
-    long gn,cn,tn;
+    long long gn,cn,tn;
     fprintf(outfile,"*** Stack depths [");
     gn=depth_gs();
     cn=depth_cs();
@@ -112,7 +112,7 @@ void outputline(char *format,...)
   // int l;	    
   char buffer_loc[5];   
   char *p; 
-  unsigned long lng2; 
+  unsigned long long lng2; 
   char *cptr; 
   ptr_int_list pil;  
   ptr_psi_term psi;  
@@ -134,7 +134,7 @@ void outputline(char *format,...)
 	      buffer_loc[1] = 'l'; 
 	      buffer_loc[2] = *p; 
 	      buffer_loc[3] = 0; 
-	      lng2 = va_arg(VarArg, long); 
+	      lng2 = va_arg(VarArg, long long); 
 	      fprintf(output_stream, buffer_loc, lng2); 
 	      break; 
 	    case 's': 
@@ -197,7 +197,7 @@ void traceline(char *format,...)
   //  int l;	    
   char buffer_loc[5];   
   char *p; 
-  unsigned long lng2; 
+  unsigned long long lng2; 
   char *cptr; 
   ptr_int_list pil;  
   ptr_psi_term psi;  
@@ -228,7 +228,7 @@ void traceline(char *format,...)
 		  buffer_loc[1] = 'l'; 
 		  buffer_loc[2] = *p; 
 		  buffer_loc[3] = 0; 
-		  lng2 = va_arg(VarArg, long); 
+		  lng2 = va_arg(VarArg, long long); 
 		  fprintf(stdout, buffer_loc, lng2); 
 		  break; 
 		case 's': 
@@ -292,7 +292,7 @@ void infoline(char *format,...)
   //  int l;	    
   char buffer_loc[5];   
   char *p; 
-  unsigned long lng2; 
+  unsigned long long lng2; 
   char *cptr; 
   ptr_int_list pil;  
   ptr_psi_term psi;  
@@ -318,7 +318,7 @@ void infoline(char *format,...)
 		  buffer_loc[1] = 'l'; 
 		  buffer_loc[2] = *p; 
 		  buffer_loc[3] = 0; 
-		  lng2 = va_arg(VarArg,long); 
+		  lng2 = va_arg(VarArg,long long); 
 		  fprintf(stdout, buffer_loc, lng2); 
 		  break; 
 		case 's': 
@@ -382,7 +382,7 @@ void warningline(char *format,...)
   //  int l;		      
   char buffer_loc[5];	      
   char *p;	      
-  unsigned long lng2;   
+  unsigned long long lng2;   
   char *cptr;	      
   ptr_int_list pil;     
   ptr_psi_term psi;     
@@ -411,7 +411,7 @@ void warningline(char *format,...)
 		buffer_loc[1] = 'l'; 
 		buffer_loc[2] = *p; 
 		buffer_loc[3] = 0; 
-		lng2 = va_arg(VarArg,long); 
+		lng2 = va_arg(VarArg,long long); 
 		fprintf(stderr, buffer_loc, lng2); 
 		break; 
 	      case 's': 
@@ -476,7 +476,7 @@ void Errorline(char *format,...)
   //  int l;	    
   char buffer_loc[5];   
   char *p; 
-  unsigned long lng2; 
+  unsigned long long lng2; 
   char *cptr; 
   ptr_int_list pil;  
   ptr_psi_term psi;  
@@ -484,9 +484,9 @@ void Errorline(char *format,...)
   def_type t ; 
   
   va_start(VarArg,format);
-  //  fprintf(stderr,"format = %lx %s\n",(long)format,format);fflush(stdout);
+  //  fprintf(stderr,"format = %lx %s\n",(long long)format,format);fflush(stdout);
   fprintf(stderr,"*** Error: ");
-  //  fprintf(stderr,"format2 = %lx %s\n",(long)format,format);
+  //  fprintf(stderr,"format2 = %lx %s\n",(long long)format,format);
   // vinfoline(format, stderr, VarArg);
   //#define vinfoline(format, stderr, xxxx)  { 
   for (p=format;p &&  *p; p++) 
@@ -502,7 +502,7 @@ void Errorline(char *format,...)
 	      buffer_loc[1] = 'l'; 
 	      buffer_loc[2] = *p; 
 	      buffer_loc[3] = 0; 
-	      lng2 = va_arg(VarArg,long); 
+	      lng2 = va_arg(VarArg,long long); 
 	      fprintf(stderr, buffer_loc, lng2); 
 	      break; 
 	    case 's': 
@@ -568,18 +568,18 @@ void Syntaxerrorline(char *format,...)
   //  int l;	    
   char buffer_loc[5];   
   char *p; 
-  unsigned long lng2; 
+  unsigned long long lng2; 
   char *cptr; 
   ptr_int_list pil;  
   ptr_psi_term psi;  
   wl_operator kind; 
   def_type t ; 
   va_start(VarArg,format);
-  //  fprintf(stderr,"format = %lx %s\n",(long)format,format);fflush(stdout);
+  //  fprintf(stderr,"format = %lx %s\n",(long long)format,format);fflush(stdout);
   if(parse_ok) { /*  RM: Feb  1 1993  */
     parse_ok=FALSE; /*  RM: Feb  1 1993  */
     fprintf(stderr,"*** Syntax error: ");
-    //    fprintf(stderr,"format2 = %lx %s\n",(long)format,format);
+    //    fprintf(stderr,"format2 = %lx %s\n",(long long)format,format);
     // vinfoline(format, stderr, VarArg);
     //#define vinfoline(format, outfile, xxxx)  {	
     for (p=format;p &&  *p; p++) 
@@ -595,7 +595,7 @@ void Syntaxerrorline(char *format,...)
 		buffer_loc[1] = 'l'; 
 		buffer_loc[2] = *p; 
 		buffer_loc[3] = 0; 
-		lng2 = va_arg(VarArg,long); 
+		lng2 = va_arg(VarArg,long long); 
 		fprintf(stderr, buffer_loc, lng2); 
 		break; 
 	      case 's': 
@@ -685,8 +685,8 @@ void reset_step()
 
 void tracing()
 {
-  long i;
-  long indent_loc;
+  long long i;
+  long long indent_loc;
 
   printf("T%04ld",goal_count);
   printf(" C%02ld",depth_cs());
@@ -697,13 +697,13 @@ void tracing()
   steptrace=TRUE;
 }
 
-/*! \fn void new_trace(long newtrace)
+/*! \fn void new_trace(long long newtrace)
   \brief new_trace
-  \param newtrace - long newtrace
+  \param newtrace - long long newtrace
 
 */
 
-void new_trace(long newtrace)
+void new_trace(long long newtrace)
 {
   trace = newtrace;
   printf("*** Tracing is turned ");
@@ -712,13 +712,13 @@ void new_trace(long newtrace)
   printf("\n");
 }
 
-/*! \fn void new_step(long newstep)
+/*! \fn void new_step(long long newstep)
   \brief new_step
-  \brief long newstep
+  \brief long long newstep
 
 */
 
-void new_step(long newstep)
+void new_step(long long newstep)
 {
   stepflag = newstep;
   printf("*** Single stepping is turned ");
@@ -798,35 +798,35 @@ void perr_s2(char *s1,char *s2,char *s3)
   fprintf(stderr,s1,s2,s3);
 }
 
-/*! \fn void perr_i(char *str,long i)
+/*! \fn void perr_i(char *str,long long i)
   \brief perr_i
   \param str - char *str
-  \param i - long i
+  \param i - long long i
 
 */
 
-void perr_i(char *str,long i)
+void perr_i(char *str,long long i)
 {
   fprintf(stderr,str,i);
 }
 
-/*! \fn long warning()
+/*! \fn long long warning()
   \brief warning
 
 */
 
-long warning()
+long long warning()
 {
   if (warningflag) perr("*** Warning: ");
   return warningflag;
 }
 
-/*! \fn long warningx()
+/*! \fn long long warningx()
   \brief warningx
 
 */
 
-long warningx()
+long long warningx()
 {
   if (warningflag) perr("*** Warning");
   return warningflag;
@@ -866,7 +866,7 @@ void report_error(ptr_psi_term g,char *s)
   report_error_main(g,s,"Error");
 }
 
-/*! \fn long reportAndAbort(ptr_psi_term g,char *s)
+/*! \fn long long reportAndAbort(ptr_psi_term g,char *s)
   \brief reportAndAbort
   \param g - ptr_psi_term g
   \param s - char *s
@@ -877,7 +877,7 @@ void report_error(ptr_psi_term g,char *s)
   Format: '*** Error: %s in 'g'.'
 */
 
-long reportAndAbort(ptr_psi_term g,char *s)
+long long reportAndAbort(ptr_psi_term g,char *s)
 {
   report_error_main(g,s,"Error");
   return abort_life(TRUE); // djd added TRUE
@@ -971,7 +971,7 @@ void nonnum_warning(ptr_psi_term t,ptr_psi_term arg1,ptr_psi_term arg2)
 
 /* Error checking routines for bit_and, bit_or, shift, and modulo */
 
-/*! \fn long nonint_warning(ptr_psi_term arg, REAL val, char *msg)
+/*! \fn long long nonint_warning(ptr_psi_term arg, REAL val, char *msg)
   \brief nonint_warning
   \param arg - ptr_psi_term arg
   \param val - REAL val
@@ -979,9 +979,9 @@ void nonnum_warning(ptr_psi_term t,ptr_psi_term arg1,ptr_psi_term arg2)
 
 */
 
-long nonint_warning(ptr_psi_term arg, REAL val, char *msg)
+long long nonint_warning(ptr_psi_term arg, REAL val, char *msg)
 {
-  long err=FALSE;
+  long long err=FALSE;
 
   if (val!=floor(val)) {
     report_warning2(arg, msg);
@@ -990,55 +990,55 @@ long nonint_warning(ptr_psi_term arg, REAL val, char *msg)
   return err;
 }
 
-/*! \fn long bit_and_warning(ptr_psi_term arg, REAL val)
+/*! \fn long long bit_and_warning(ptr_psi_term arg, REAL val)
   \brief bit_and_warning
   \param arg - ptr_psi_term arg
   \param val - REAL val
 
 */
 
-long bit_and_warning(ptr_psi_term arg, REAL val)
+long long bit_and_warning(ptr_psi_term arg, REAL val)
 {
   return nonint_warning(arg,val,"of bitwise 'and' operation is not an integer");
 }
 
-/*! \fn long bit_or_warning(ptr_psi_term arg, REAL val)
+/*! \fn long long bit_or_warning(ptr_psi_term arg, REAL val)
   \brief bit_or_warning
   \param arg - ptr_psi_term arg
   \param val - REAL val
 
 */
 
-long bit_or_warning(ptr_psi_term arg, REAL val)
+long long bit_or_warning(ptr_psi_term arg, REAL val)
 {
   return nonint_warning(arg,val,"of bitwise 'or' operation is not an integer");
 }
 
-/*! \fn long bit_not_warning(ptr_psi_term arg, REAL val)
+/*! \fn long long bit_not_warning(ptr_psi_term arg, REAL val)
   \brief bit_not_warning
   \param arg - ptr_psi_term arg
   \param val - REAL val
 
 */
 
-long bit_not_warning(ptr_psi_term arg, REAL val)
+long long bit_not_warning(ptr_psi_term arg, REAL val)
 {
   return nonint_warning(arg,val,"of bitwise 'not' operation is not an integer");
 }
 
-/*! \fn long int_div_warning(ptr_psi_term arg, REAL val)
+/*! \fn long long int_div_warning(ptr_psi_term arg, REAL val)
   \brief int_div_warning
   \param arg - ptr_psi_term arg
   \param val - REAL val
 
 */
 
-long int_div_warning(ptr_psi_term arg, REAL val)
+long long int_div_warning(ptr_psi_term arg, REAL val)
 {
   return nonint_warning(arg,val,"of integer division is not an integer");
 }
 
-/*! \fn long mod_warning(ptr_psi_term arg, REAL val,int zero)
+/*! \fn long long mod_warning(ptr_psi_term arg, REAL val,int zero)
   \brief  mod_warning
   \param arg - ptr_psi_term arg
   \param val - REAL val
@@ -1046,7 +1046,7 @@ long int_div_warning(ptr_psi_term arg, REAL val)
 
 */
 
-long mod_warning(ptr_psi_term arg, REAL val,int zero)
+long long mod_warning(ptr_psi_term arg, REAL val,int zero)
 {
   int err;
 
@@ -1058,15 +1058,15 @@ long mod_warning(ptr_psi_term arg, REAL val,int zero)
   return err;
 }
 
-/*! \fn long shift_warning(long dir, ptr_psi_term arg, REAL val)
+/*! \fn long long shift_warning(long long dir, ptr_psi_term arg, REAL val)
   \brief shift_warning
-  \param dir - long dir
+  \param dir - long long dir
   \param arg - ptr_psi_term arg
   \param val - REAL val
 
 */
 
-long shift_warning(long dir, ptr_psi_term arg, REAL val)
+long long shift_warning(long long dir, ptr_psi_term arg, REAL val)
 {
   if (dir)
     return nonint_warning(arg,val,"of right shift operation is not an integer");

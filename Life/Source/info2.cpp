@@ -17,11 +17,11 @@ static char vcid[] = "$Id: info.c,v 1.4 1995/01/30 21:03:55 duchier Exp $";
   This prints one line of info cleanly. The string S is the name of the
   structure, N the number of bytes it uses
 */
-static void pnf(char *s,long n)
+static void pnf(char *s,long long n)
 // char *s;
-// long n;
+// long long n;
 {
-  long i;
+  long long i;
   
   printf("        %s ",s);
   i=strlen(s);
@@ -39,15 +39,22 @@ static void pnf(char *s,long n)
 void title()
 {
   if(quietflag)
-    printf("Wild_Life Interpreter 5.00  Tue Jun  3 11:49:20 PM CDT 2025\n");
+    printf("Wild_Life Interpreter 5.00  Wed Jun  4 11:58:51 AM CDT 2025\n");
   //printf("Wild_Life Interpreter @VERSION@  @DATE@\n"); // replace @ w + if lost and save this
 
   printf("Copyright (C) 1991-93 DEC Paris Research Laboratory\n");
   printf("Extensions, Copyright (C) 1994-1995 Intelligent Software Group, SFU\n"); 
   printf("Ported to Linux and Cygwin December 2022 after many efforts since 1995\n");
   printf("By Dennis J. Darland dennis.darland@hotmail.com\n");
- 
-  
+  #ifdef NOT
+  printf("sizeof(long long) = %d\n",sizeof(long long));
+  printf("sizeof(long long) = %d\n",sizeof(long long));
+  printf("sizeof(double) = %d\n",sizeof(double));
+  printf("sizeof(REAL) = %d\n",sizeof(REAL));
+  printf("sizeof(GENERIC) = %d\n",sizeof(GENERIC));
+  printf("sizeof(char) = %d\n",sizeof(char));
+  printf("sizeof(int) = %d\n",sizeof(int));
+  #endif
 #ifndef X11
   printf("X interface not installed.\n");
 #endif
@@ -67,8 +74,8 @@ void title()
     
     printf("\n- Size of C built-in types:\n");
     pnf("REAL",sizeof(REAL));
-    pnf("long",sizeof(long));
-    pnf("int",sizeof(unsigned long));
+    pnf("long long",sizeof(long long));
+    pnf("int",sizeof(unsigned long long));
     pnf("pointer",sizeof(char *));
     
     printf("\n- System constants:\n");

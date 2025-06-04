@@ -14,7 +14,7 @@ static char vcid[] = "$Id: token.c,v 1.4 1995/07/27 19:22:17 duchier Exp $";
 #endif
 
 // REV401PLUS moved down
-// long trace_input=FALSE;
+// long long trace_input=FALSE;
 
 /***********************************************/
 /* Utilities */
@@ -51,10 +51,10 @@ void stdin_cleareof()
 
 /* Add an attribute whose value is an integer to a psi-term */
 /* that does not yet contains this attribute. */
-void heap_add_int_attr(ptr_psi_term t, char* attrname, long value)
+void heap_add_int_attr(ptr_psi_term t, char* attrname, long long value)
 // ptr_psi_term t;
 // char *attrname;
-// long value;
+// long long value;
 {
 	ptr_psi_term t1;
 
@@ -78,10 +78,10 @@ REAL cp2R(char* cp_in)
 }
 #endif
 
-void stack_add_int_attr(ptr_psi_term t, char* attrname, long value)
+void stack_add_int_attr(ptr_psi_term t, char* attrname, long long value)
 // ptr_psi_term t;
 // char *attrname;
-// long value;
+// long long value;
 {
 	ptr_psi_term t1;
 
@@ -97,10 +97,10 @@ void stack_add_int_attr(ptr_psi_term t, char* attrname, long value)
 
 /* Modify an attribute whose value is an integer to a psi-term */
 /* that already contains this attribute with another integer value. */
-void heap_mod_int_attr(ptr_psi_term t, char* attrname, long value)
+void heap_mod_int_attr(ptr_psi_term t, char* attrname, long long value)
 // ptr_psi_term t;
 // char *attrname;
-// long value;
+// long long value;
 {
 	ptr_node n;
 	ptr_psi_term t1;
@@ -114,7 +114,7 @@ void heap_mod_int_attr(ptr_psi_term t, char* attrname, long value)
 void stack_mod_int_attr(t, attrname, value)
 ptr_psi_term t;
 char *attrname;
-long value;
+long long value;
 {
   ptr_node n;
   ptr_psi_term t1;
@@ -277,7 +277,7 @@ void save_state(ptr_psi_term t)
 void restore_state(ptr_psi_term t)
 // ptr_psi_term t;
 {
-	long i;
+	long long i;
 	char* str;
 
 
@@ -404,7 +404,7 @@ void init_parse_state()
 /****************************************************************************/
 
 
-static long inchange, outchange;
+static long long inchange, outchange;
 static FILE* out;
 // ptr_psi_term old_state=NULL; /*  RM: Feb 17 1993  */
 
@@ -571,11 +571,11 @@ char* expand_file_name(char* s)
   state for it.
   If the file can't be opened, print an error and open "stdin" instead.
 */
-long open_input_file(char* file)
+long long open_input_file(char* file)
 // char *file;
 {
-	long ok = TRUE;
-	long stdin_flag;
+	long long ok = TRUE;
+	long long stdin_flag;
 
 	/* Save global input file state */
 	if (input_state != NULL) save_state(input_state);
@@ -621,10 +621,10 @@ long open_input_file(char* file)
   Same thing as OPEN_INPUT_FILE, only for output. If FILE="stdout" then
   output_stream=stdout.
 */
-long open_output_file(string file)
+long long open_output_file(string file)
 // string file;
 {
-	long ok = TRUE;
+	long long ok = TRUE;
 
 
 	file = expand_file_name(file);
@@ -654,9 +654,9 @@ long open_output_file(string file)
   If stringparse==TRUE then read characters from the input string
   instead of from a file.
 */
-long read_char()
+long long read_char()
 {
-	long c = 0;
+	long long c = 0;
 
 	if (c = saved_char) {
 		saved_char = old_saved_char;
@@ -700,8 +700,8 @@ long read_char()
   Put back one character, if there already are 2 saved characters then report
   an error (= bug).
 */
-void put_back_char(long c)
-// long c;
+void put_back_char(long long c)
+// long long c;
 {
 	if (old_saved_char)
 		Errorline("in tokenizer, put_back_char three times (last=%d).\n", c);
@@ -746,7 +746,7 @@ void psi_term_error()
 void read_comment(ptr_psi_term tok)
 // ptr_psi_term tok;
 {
-	long c;
+	long long c;
 
 	do {
 		c = read_char();
@@ -808,15 +808,15 @@ int base2int(int n)
   Read a string ending with character E, where E=" or '. Transform a double
   occurrence into a single one so that 'ab""cd' is the string 'ab"cd'.
 */
-void read_string(ptr_psi_term tok, long e)
+void read_string(ptr_psi_term tok, long long e)
 // ptr_psi_term tok;
-// long e;
+// long long e;
 {
-	long c;
+	long long c;
 	string str;
-	long len = 0;
-	long store = TRUE;
-	long flag = TRUE;
+	long long len = 0;
+	long long store = TRUE;
+	long long flag = TRUE;
 
 	str[len] = 0;
 
@@ -892,7 +892,7 @@ void read_string(ptr_psi_term tok, long e)
 			}
 		if (store)
 			if (len == STRLEN) {
-				Warningline("string too long, extra ignored (%E).\n");
+				Warningline("string too long long, extra ignored (%E).\n");
 				store = FALSE;
 			}
 			else {
@@ -915,8 +915,8 @@ void read_string(ptr_psi_term tok, long e)
 /******** SYMBOLIC(character)
   Tests if character is a symbol (see macro).
 */
-long symbolic(long c)
-// long c;
+long long symbolic(long long c)
+// long long c;
 {
 	return SYMBOL(c);
 }
@@ -926,8 +926,8 @@ long symbolic(long c)
 /******** LEGAL_IN_NAME(character)
   Tests if character is legal in a name or a variable (see macros).
 */
-long legal_in_name(long c)
-// long c;
+long long legal_in_name(long long c)
+// long long c;
 {
 	return
 		UPPER(c) ||
@@ -943,17 +943,17 @@ long legal_in_name(long c)
   Read in the name starting with character C followed by character of whose
   type function is F. The result is a psi_term of symbol type TYP.
 */
-void read_name(ptr_psi_term tok, long ch, long (*f)(long), ptr_definition typ)
+void read_name(ptr_psi_term tok, long long ch, long long (*f)(long long), ptr_definition typ)
 // ptr_psi_term tok;
-// long ch;
-// long (*f)();
+// long long ch;
+// long long (*f)();
 // ptr_definition typ;
 {
-	long c;
+	long long c;
 	string str;
-	long len = 1;
-	long store = TRUE;
-	long flag = TRUE;
+	long long len = 1;
+	long long store = TRUE;
+	long long flag = TRUE;
 	ptr_module module = NULL;
 	ptr_node n; /*  RM: Feb  9 1993  */
 
@@ -988,7 +988,7 @@ void read_name(ptr_psi_term tok, long ch, long (*f)(long), ptr_definition typ)
 			if (flag) {
 				if (store)
 					if (len == STRLEN) {
-						Warningline("name too long, extra ignored (%E).\n");
+						Warningline("name too long long, extra ignored (%E).\n");
 						store = FALSE;
 					}
 					else
@@ -1052,13 +1052,13 @@ void read_name(ptr_psi_term tok, long ch, long (*f)(long), ptr_definition typ)
   Accepted syntax: digit+ [ . digit+ ] [ {e|E} {+|-|empty} digit* ]
   Negative numbers are dealt with in the parser.
 */
-void read_number(ptr_psi_term tok, long c)
+void read_number(ptr_psi_term tok, long long c)
 // ptr_psi_term tok;
-// long c;
+// long long c;
 {
-	long c2;
+	long long c2;
 	REAL f, p;
-	long sgn, pwr, posflag;
+	long long sgn, pwr, posflag;
 
 	/* if (sgn=(c=='-')) c=read_char(); */
 
@@ -1143,11 +1143,11 @@ void read_token_b(ptr_psi_term tok)
 	read_token_main(tok, FALSE);
 }
 
-void read_token_main(ptr_psi_term tok, long for_parser)
+void read_token_main(ptr_psi_term tok, long long for_parser)
 // ptr_psi_term tok;
-// long for_parser;
+// long long for_parser;
 {
-	long c, c2;
+	long long c, c2;
 	ptr_node n;
 	char p[2];
 
@@ -1235,7 +1235,7 @@ void read_token_main(ptr_psi_term tok, long for_parser)
 		if (tok->type == variable) {
 			if (tok->value_3) {
 				/* If the variable read in has name "_", then it becomes 'top' */
-				/* and is no longer a variable whose name must be remembered.  */
+				/* and is no long longer a variable whose name must be remembered.  */
 				/* As a result, '@' and '_' are synonyms in the program input. */
 				if (!strcmp((char*)tok->value_3, "_")) {
 					p[0] = '@'; p[1] = 0;

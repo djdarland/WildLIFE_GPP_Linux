@@ -25,16 +25,16 @@ static char vcid[] = "$Id: copy.c,v 1.2 1994/12/08 23:21:30 duchier Exp $";
 
 static struct hashentry hashtable[HASHSIZE];
 static struct hashbucket *hashbuckets; /* Array of buckets */
-static long hashtime; /* Currently valid timestamp */
-static long hashfree; /* Index into array of buckets */
-static long numbuckets; /* Total number of buckets; initially=NUMBUCKETS */
+static long long hashtime; /* Currently valid timestamp */
+static long long hashfree; /* Index into array of buckets */
+static long long numbuckets; /* Total number of buckets; initially=NUMBUCKETS */
 
 /******** INIT_COPY()
   Execute once upon startup of Wild_Life.
 */
 void init_copy()
 {
-  long i;
+  long long i;
 
   /* for(i=0; i<HASHSTATS; i++) hashstats[i]=0; 20.8 */
 
@@ -61,13 +61,13 @@ void clear_copy()
   Add the translation of address A to address B in the translation table.
   Also add an info field.
 */
-/* static */ void insert_translation(ptr_psi_term a,ptr_psi_term b,long info)
+/* static */ void insert_translation(ptr_psi_term a,ptr_psi_term b,long long info)
 	     // ptr_psi_term a;
 	     // ptr_psi_term b;
-	     // long info;
+	     // long long info;
 {
-  long index;
-  long lastbucket;
+  long long index;
+  long long lastbucket;
   
   /* Ensure there are free buckets by doubling their number if necessary */
   if (hashfree >= numbuckets) {
@@ -99,13 +99,13 @@ void clear_copy()
   Get the translation of address A and the info field stored with it.
   Return NULL if none is found.
 */
-/* static */ ptr_psi_term translate(ptr_psi_term a,long **infoptr)   /*  RM: Jan 27 1993  */
+/* static */ ptr_psi_term translate(ptr_psi_term a,long long **infoptr)   /*  RM: Jan 27 1993  */
 	     //  ptr_psi_term a;
-	     //long **infoptr;
+	     //long long **infoptr;
 {
-  long index;
-  /* long i; 20.8 */
-  long bucket;
+  long long index;
+  /* long long i; 20.8 */
+  long long bucket;
 
   index = HASH(a);
   if (hashtable[index].timestamp != hashtime) return NULL;
@@ -137,7 +137,7 @@ void clear_copy()
 
 /* TRUE means: heap_flag==TRUE & only copy to heap those objects not */
 /* already on heap, i.e. incremental copy to heap.                   */
-// long to_heap;    // removed for MINT
+// long long to_heap;    // removed for MINT
 
 /* TRUE iff R is on the heap */
 #define ONHEAP(R) ((GENERIC)R>=heap_pointer)
@@ -161,9 +161,9 @@ void clear_copy()
 ptr_psi_term copy(); /* Forward declarations */
 void mark_quote_c();
 
-static ptr_node copy_tree(ptr_node t, long copy_flag, long heap_flag)
+static ptr_node copy_tree(ptr_node t, long long copy_flag, long long heap_flag)
 //ptr_node t;
-//long copy_flag, heap_flag;
+//long long copy_flag, heap_flag;
 {
   ptr_node r;
   ptr_psi_term t1,t2;
@@ -223,19 +223,19 @@ static ptr_node copy_tree(ptr_node t, long copy_flag, long heap_flag)
 /* See mark_quote_c: */ /* 15.9 */
 #define QUOTE_STUB 3
 
-ptr_psi_term exact_copy(ptr_psi_term t, long heap_flag)
+ptr_psi_term exact_copy(ptr_psi_term t, long long heap_flag)
 // ptr_psi_term t;
-// long heap_flag;
+// long long heap_flag;
 { to_heap=FALSE; return (copy(t, EXACT_FLAG, heap_flag)); }
 
-ptr_psi_term quote_copy(ptr_psi_term t, long heap_flag)
+ptr_psi_term quote_copy(ptr_psi_term t, long long heap_flag)
 // ptr_psi_term t;
-// long heap_flag;
+// long long heap_flag;
 { to_heap=FALSE; return (copy(t, QUOTE_FLAG, heap_flag)); }
 
-ptr_psi_term eval_copy(ptr_psi_term t, long heap_flag)
+ptr_psi_term eval_copy(ptr_psi_term t, long long heap_flag)
 // ptr_psi_term t;
-// long heap_flag;
+// long long heap_flag;
 { to_heap=FALSE; return (copy(t, EVAL_FLAG, heap_flag)); }
 
 /* There is a bug in inc_heap_copy */
@@ -243,18 +243,18 @@ ptr_psi_term inc_heap_copy(ptr_psi_term t)
 // ptr_psi_term t;
 { to_heap=TRUE; return (copy(t, EXACT_FLAG, TRUE)); }
 
-static long curr_status;
+static long long curr_status;
 
 
 
-ptr_psi_term copy(ptr_psi_term t, long copy_flag, long heap_flag)
+ptr_psi_term copy(ptr_psi_term t, long long copy_flag, long long heap_flag)
 //     ptr_psi_term t;
-//     long copy_flag,heap_flag;
+//     long long copy_flag,heap_flag;
 {
   ptr_psi_term u;
-  long old_status;
-  long local_copy_flag;
-  long *infoptr;
+  long long old_status;
+  long long local_copy_flag;
+  long long *infoptr;
 
   
   if (u=t) {    
@@ -311,7 +311,7 @@ ptr_psi_term copy(ptr_psi_term t, long copy_flag, long heap_flag)
       
       if (copy_flag==EVAL_FLAG) {
 	switch(t->type->wl_type) {
-	// switch((long)t->type->type_def) {
+	// switch((long long)t->type->type_def) {
 	case type_it:
 	  if (t->type->properties)
 	    curr_status=0;
@@ -423,12 +423,12 @@ ptr_psi_term distinct_copy(ptr_psi_term t)
 /* Assumes all translation table entries already exist. */
 /* The infoptr field is updated so that each subgraph is only traversed once. */
 /* This routine is called only from the main copy routine. */
-void mark_quote_c(ptr_psi_term t, long heap_flag)
+void mark_quote_c(ptr_psi_term t, long long heap_flag)
 // ptr_psi_term t;
-// long heap_flag;
+// long long heap_flag;
 {
   ptr_list l;
-  long *infoptr;
+  long long *infoptr;
   ptr_psi_term u;
 
   if (t) {
@@ -451,9 +451,9 @@ void mark_quote_c(ptr_psi_term t, long heap_flag)
   }
 }
 
-void mark_quote_tree_c(ptr_node n,long heap_flag)
+void mark_quote_tree_c(ptr_node n,long long heap_flag)
 // ptr_node n;
-// long heap_flag;
+// long long heap_flag;
 {
   if (n) {
     mark_quote_tree_c(n->left,heap_flag);
@@ -475,7 +475,7 @@ void mark_quote_new();
 void mark_eval_tree_new();
 void mark_quote_tree_new();
 
-static long mark_nonstrict_flag;
+static long long mark_nonstrict_flag;
 
 /* Mark a psi-term as to be evaluated (i.e. strict), except for arguments   */
 /* of a nonstrict term, which are marked quoted.  Set status correctly and  */
@@ -516,9 +516,9 @@ void mark_eval_new(ptr_psi_term t)
 // ptr_psi_term t;
 {
   ptr_list l;
-  long *infoptr,flag;
+  long long *infoptr,flag;
   ptr_psi_term u;
-  long old_status;
+  long long old_status;
 
   if (t) {
     deref_ptr(t);
@@ -547,7 +547,7 @@ void mark_eval_new(ptr_psi_term t)
 	mark_quote_tree_new(t->attr_list);
 
       switch(t->type->wl_type) {
- //     switch((long)t->type->type_def) {
+ //     switch((long long)t->type->type_def) {
       case type_it:
         if (t->type->properties)
           curr_status=0;
@@ -595,7 +595,7 @@ void mark_quote_new(ptr_psi_term t)
 // ptr_psi_term t;
 {
   ptr_list l;
-  long *infoptr;
+  long long *infoptr;
   ptr_psi_term u;
 
   if (t) {

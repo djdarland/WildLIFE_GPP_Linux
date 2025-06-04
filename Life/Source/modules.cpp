@@ -250,7 +250,7 @@ ptr_definition new_definition(ptr_keyword key)    /*  RM: Feb 22 1993  */
 
 /******** UPDATE_SYMBOL(m,s)
   S is a string of characters encountered during parsing, M is the module it
-  belongs too.
+  belong longs too.
 
   if M is NULL then extract the module name from S. If that fails then use the
   current module.
@@ -479,7 +479,7 @@ void pretty_quote_symbol(ptr_keyword k)
   state of the module mechanism from the heap.
   */
 
-long c_set_module()
+long long c_set_module()
      
 {
   ptr_psi_term arg1,arg2;
@@ -510,7 +510,7 @@ long c_set_module()
   fails.
 */
 
-long c_open_module()
+long long c_open_module()
      
 {
   ptr_psi_term call;
@@ -597,10 +597,10 @@ void open_module_one(ptr_psi_term t, int *onefailed)  // REV401PLUS void
   Make a term public.
   */
 
-long make_public(ptr_psi_term term,long wl_bool)   /*  RM: Feb 22 1993  Modified */
+long long make_public(ptr_psi_term term,long long wl_bool)   /*  RM: Feb 22 1993  Modified */
      
 //     ptr_psi_term term;
-//     long wl_bool;
+//     long long wl_bool;
 {
   int ok=TRUE;
   ptr_keyword key;
@@ -665,10 +665,10 @@ void traverse_tree(ptr_node n,int flag)   // REV401PLUS void
 
 /******** C_PUBLIC()
   The argument(s) are symbols.
-  Make them public in the current module if they belong to it.
+  Make them public in the current module if they belong long to it.
   */
 
-long c_public()
+long long c_public()
      
 {
   ptr_psi_term arg1,arg2;
@@ -691,10 +691,10 @@ long c_public()
 
 /******** C_PRIVATE()
   The argument is a single symbol or a list of symbols.
-  Make them private in the current module if they belong to it.
+  Make them private in the current module if they belong long to it.
   */
 
-long c_private()
+long long c_private()
      
 {
   ptr_psi_term arg1,arg2;
@@ -720,7 +720,7 @@ long c_private()
   Set the display modules switch.
   */
 
-long c_display_modules()
+long long c_display_modules()
      
 {
   ptr_psi_term arg1,arg2;
@@ -756,7 +756,7 @@ long c_display_modules()
   Set the display persistent switch.
   */
 
-long c_display_persistent()       /*  RM: Feb 12 1993  */
+long long c_display_persistent()       /*  RM: Feb 12 1993  */
      
 {
   ptr_psi_term arg1,arg2;
@@ -792,7 +792,7 @@ long c_display_persistent()       /*  RM: Feb 12 1993  */
   Set the trace_input switch.
   */
 
-long c_trace_input()
+long long c_trace_input()
      
 {
   ptr_psi_term arg1,arg2;
@@ -850,11 +850,11 @@ void rec_replace(ptr_definition old,ptr_definition wl_new,ptr_psi_term term)
 //     ptr_psi_term term;
 {
   ptr_psi_term done;
-  long info;
+  long long info;
   ptr_node old_attr;
   
   deref_ptr(term);
-  done=translate(term,(long **)&info); // REV401PLUS cast
+  done=translate(term,(long long **)&info); // REV401PLUS cast
   if(!done) {
     insert_translation(term,term,0);
     
@@ -915,7 +915,7 @@ void replace_attr(ptr_node old_attr,ptr_psi_term term,
   Replace all occurrences of type ARG1 with ARG2 in ARG3.
   */
 
-long c_replace()
+long long c_replace()
      
 {
   ptr_psi_term arg1=NULL;
@@ -954,10 +954,10 @@ long c_replace()
   Return the current module.
   */
 
-long c_current_module()
+long long c_current_module()
      
 {
-  long success=TRUE;
+  long long success=TRUE;
   ptr_psi_term result,g,other;
   
   
@@ -991,10 +991,10 @@ long c_current_module()
   Return the psi-term Module#Symbol
   */
 
-long c_module_access()
+long long c_module_access()
      
 {
-  long success=FALSE;
+  long long success=FALSE;
   ptr_psi_term result,module,symbol,call,other;
   
   
@@ -1121,7 +1121,7 @@ int global_unify_attr(ptr_node u,ptr_node v)    /*  RM: Feb  9 1993  */
 {
   int success=TRUE;
   ptr_node temp;
-  long cmp;
+  long long cmp;
 
   if(u)
     if(v) {
@@ -1161,9 +1161,9 @@ int global_unify_attr(ptr_node u,ptr_node v)    /*  RM: Feb  9 1993  */
   Alias one keyword to another.
   */
 
-long c_alias()
+long long c_alias()
 {
-  long success=TRUE;
+  long long success=TRUE;
   ptr_psi_term arg1,arg2,g;
   ptr_keyword key;
 
@@ -1285,7 +1285,7 @@ int make_feature_private(ptr_psi_term term)  /*  RM: Mar 11 1993  */
   Make this feature private to the current module.
   */
 
-long c_private_feature()    /*  RM: Mar 11 1993  */
+long long c_private_feature()    /*  RM: Mar 11 1993  */
      
 {
   ptr_psi_term arg1,arg2;
@@ -1346,7 +1346,7 @@ ptr_definition update_feature(ptr_module module,char *feature)
   Returns all public symbols from all modules or a specific module.
   */
 
-long all_public_symbols()   // REV401PLUS change to long
+long long all_public_symbols()   // REV401PLUS change to long long
 {
   ptr_psi_term arg1,arg2,funct,result;
   ptr_psi_term list;

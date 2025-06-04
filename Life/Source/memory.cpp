@@ -13,7 +13,7 @@ static char vcid[] = "$Id: memory.c,v 1.10 1995/07/27 19:03:24 duchier Exp $";
 #endif
 
 #ifdef prlDEBUG
-static long amount_used;
+static long long amount_used;
 #endif
 
 #define WORDALIGN 1 
@@ -32,9 +32,9 @@ static long amount_used;
 #endif
 
 #ifdef CLIFE
-long pass;
+long long pass;
 #else 
-static long pass;
+static long long pass;
 #endif /* CLIFE */
 
 #define LONELY 1
@@ -50,19 +50,19 @@ static struct tms last_garbage_time;
 
 
 
-//#define ALIGNUP(X) { (X) = (GENERIC)( ((long) (X) + (ALIGN-1)) & ~(ALIGN-1) ); }
-#define ALIGNUP(X) {(X)}
+#define ALIGNUP(X) { (X) = (GENERIC)( ((long long) (X) + (ALIGN-1)) & ~(ALIGN-1) ); }
+// #define ALIGNUP(X) {(X)}
 
-static long delta;
+static long long delta;
 #define LONELY 1
 #ifdef prlDEBUG
-static long amount_used;
+static long long amount_used;
 #endif
 
 #ifdef CLIFE
-long pass;
+long long pass;
 #else 
-// static long pass;
+// static long long pass;
 #endif /* CLIFE */
 
 #define LONELY 1
@@ -123,9 +123,9 @@ int GetIntOption(char *name,int def)
 void pchoices() /*  RM: Oct 28 1993  For debugging. */
 {
   ptr_choice_point c;
-  printf("stack pointer is: %lx\n",(unsigned long)stack_pointer); // REV401PLUS  "%x" -> "%lx" and cast
+  printf("stack pointer is: %lx\n",(unsigned long long)stack_pointer); // REV401PLUS  "%x" -> "%lx" and cast
   for(c=choice_stack;c;c=c->next)
-    printf("\tc=%lx\ts=%lx\tg=%lx\tu=%lx\n",(unsigned long)c,(unsigned long)c->stack_top,(unsigned long)c->goal_stack,(unsigned long)c->undo_point);
+    printf("\tc=%lx\ts=%lx\tg=%lx\tu=%lx\n",(unsigned long long)c,(unsigned long long)c->stack_top,(unsigned long long)c->goal_stack,(unsigned long long)c->undo_point);
 }
 
 
@@ -153,14 +153,14 @@ void print_undo_stack()
   while (u) {
     if ((GENERIC)u->aaaa_3<(GENERIC)mem_base || (GENERIC)u->aaaa_3>(GENERIC)mem_limit ||
         (GENERIC)u->next<(GENERIC)mem_base || (GENERIC)u->next>(GENERIC)mem_limit) {
-      printf("UNDO: type:%ld a:%lx b:%lx next:%lx\n",u->type,(unsigned long)u->aaaa_3,(unsigned long)u->bbbb_3,(unsigned long)u->next);
+      printf("UNDO: type:%ld a:%lx b:%lx next:%lx\n",u->type,(unsigned long long)u->aaaa_3,(unsigned long long)u->bbbb_3,(unsigned long long)u->next);
       fflush(stdout);
     }
     u=u->next;
   }
 }
 
-long bounds_undo_stack()
+long long bounds_undo_stack()
 /* Address field in undo_stack is within range */
 /* The only valid address outside this range is that of xevent_state */
 {
@@ -172,11 +172,11 @@ long bounds_undo_stack()
        || (!VALID_ADDRESS(u->aaaa_3) && !(u->type & undo_action))
        ) {
       if ((GENERIC)u<mem_base || (GENERIC)u>mem_limit) {
-        printf("\nUNDO: u=%lx\n",(long)u);
+        printf("\nUNDO: u=%lx\n",(long long)u);
       }
       else {
         printf("\nUNDO: u:%lx type:%ld a:%lx b:%lx next:%lx\n",
-               (unsigned long)u,(unsigned long)u->type,(unsigned long)u->aaaa_3,(unsigned long)u->bbbb_3,(unsigned long)u->next);
+               (unsigned long long)u,(unsigned long long)u->type,(unsigned long long)u->aaaa_3,(unsigned long long)u->bbbb_3,(unsigned long long)u->next);
       }
       fflush(stdout);
       return FALSE;
@@ -243,7 +243,7 @@ void check_resid_block();
 static void compress()
 {
     GENERIC addr, new_addr;
-    long len, i;
+    long long len, i;
   
     /* Compressing the stack: */
   
@@ -267,7 +267,7 @@ static void compress()
               assert(i>0 ? *(addr+delta)<len : TRUE);
           }
           assert(VALID_ADDRESS(new_addr));
-	  *(addr+delta) = (long)new_addr + 1; /* Set low bit */
+	  *(addr+delta) = (long long)new_addr + 1; /* Set low bit */
 #ifdef prlDEBUG
 	  if (*(addr+delta) & 1 == 0)
 	    printf ("compress: could be a bug ...\n");
@@ -327,7 +327,7 @@ static void compress()
 	  new_addr--;
 	  *new_addr = *addr;
           assert(VALID_ADDRESS(new_addr));
-	  *(addr+delta) = (long)new_addr + 1;
+	  *(addr+delta) = (long long)new_addr + 1;
         }
       }
       addr--;
@@ -352,18 +352,18 @@ static void compress()
 
 
 //#ifdef CLIFE
-long unchecked (GENERIC *p, long len)
+long long unchecked (GENERIC *p, long long len)
 // #else
-// static long unchecked (GENERIC *p, long len)
+// static long long unchecked (GENERIC *p, long long len)
 // #endif /* CLIFE */
 // GENERIC *p; 
-// long len;
+// long long len;
 {
   GENERIC addr;
-  long result=FALSE, value;
+  long long result=FALSE, value;
 
   assert(len>0);
-  if ((unsigned long)*p>MAX_BUILT_INS) {
+  if ((unsigned long long)*p>MAX_BUILT_INS) {
 #ifdef GCTEST
     if (!VALID_ADDRESS(*p)) {
       printf("p=%lx,*p=%lx\n",p,*p);
@@ -424,10 +424,10 @@ static void check_string (GENERIC *s)
 // GENERIC *s;
 {
   GENERIC addr;
-  long value;
-  long bytes;
+  long long value;
+  long long bytes;
 
-  if ((unsigned long) *s > MAX_BUILT_INS) {
+  if ((unsigned long long) *s > MAX_BUILT_INS) {
     switch (pass) {
     case 1:
       bytes=strlen((char *)*s)+1;
@@ -465,10 +465,10 @@ static void check_bytedata(GENERIC *s)
 //     GENERIC *s;
 {
   GENERIC addr;
-  long value;
-  if ((unsigned long) *s > MAX_BUILT_INS) {
-    unsigned long bytes = *((unsigned long *) *s);
-    unsigned long size = bytes + sizeof(bytes);
+  long long value;
+  if ((unsigned long long) *s > MAX_BUILT_INS) {
+    unsigned long long bytes = *((unsigned long long *) *s);
+    unsigned long long size = bytes + sizeof(bytes);
     switch (pass) {
     case 1:
       unchecked(s,size);
@@ -625,7 +625,7 @@ void check_hash_table(ptr_hash_table table) /*  RM: Feb  3 1993  */
      
 //     ptr_hash_table table;
 {
-  long i;
+  long long i;
   
   for(i=0;i<table->size;i++)
     if(table->data[i])
@@ -804,7 +804,7 @@ static void check_goal_stack(ptr_goal *g)
       
     case prove:
       check_psi_term(&((*g)->aaaa_1));
-      if ((unsigned long)(*g)->bbbb_1!=DEFRULES) check_pair_list((ptr_pair_list*)&((*g)->bbbb_1));
+      if ((unsigned long long)(*g)->bbbb_1!=DEFRULES) check_pair_list((ptr_pair_list*)&((*g)->bbbb_1));
       check_pair_list((ptr_pair_list*)&((*g)->cccc_1));
       break;
       
@@ -1057,7 +1057,7 @@ void check_attr(ptr_node *n)
 */
 void check_gamma_code()
 {
-  long i;
+  long long i;
 
   if (unchecked((GENERIC*)&gamma_table,type_count*sizeof(ptr_definition))) {
     for (i=0;i<type_count;i++)
@@ -1072,7 +1072,7 @@ void check_gamma_code()
 */
 static void check_gamma_rest()
 {
-  long i;
+  long long i;
 
   for (i=0;i<type_count;i++)
     check_def_rest(&(gamma_table[i]));
@@ -1443,18 +1443,18 @@ static void check()
 }
 
 
-void print_gc_info(long timeflag)
-// long timeflag;
+void print_gc_info(long long timeflag)
+// long long timeflag;
 {
   fprintf(stderr," [%ld%% free (%ldK), %ld%% heap, %ld%% stack",
-          (100*((unsigned long)heap_pointer-(unsigned long)stack_pointer)+mem_size/2)/mem_size,
-          ((unsigned long)heap_pointer-(unsigned long)stack_pointer+512)/1024,
-          (100*((unsigned long)mem_limit-(unsigned long)heap_pointer)+mem_size/2)/mem_size,
-          (100*((unsigned long)stack_pointer-(unsigned long)mem_base)+mem_size/2)/mem_size);
+          (100*((unsigned long long)heap_pointer-(unsigned long long)stack_pointer)+mem_size/2)/mem_size,
+          ((unsigned long long)heap_pointer-(unsigned long long)stack_pointer+512)/1024,
+          (100*((unsigned long long)mem_limit-(unsigned long long)heap_pointer)+mem_size/2)/mem_size,
+          (100*((unsigned long long)stack_pointer-(unsigned long long)mem_base)+mem_size/2)/mem_size);
   if (timeflag) {
     fprintf(stderr,", %1.3fs cpu (%ld%%)",
             gc_time,
-            (unsigned long)(0.5+100*gc_time/(life_time+gc_time)));
+            (unsigned long long)(0.5+100*gc_time/(life_time+gc_time)));
   }
   fprintf(stderr,"]\n");
 }
@@ -1488,12 +1488,12 @@ void garbage()
 #endif
 
   //  struct tms garbage_start_time,garbage_end_time;
-  long start_number_cells, end_number_cells;
+  long long start_number_cells, end_number_cells;
 
   start_number_cells = (stack_pointer-mem_base) + (mem_limit-heap_pointer);
 #ifdef _WIN64
   garbage_start_time = clock();
-  printf("gstart = %d\n",garbage_start_time);
+  //  printf("gstart = %d\n",garbage_start_time);
   life_time=(garbage_start_time - last_garbage_time)/CLOCKS_PER_SEC;
 #endif
 #ifdef __unix__
@@ -1551,14 +1551,14 @@ void garbage()
 #endif
 #ifdef _WIN64
   garbage_end_time = clock();
-  printf("gend %d\n", garbage_end_time);
+  //  printf("gend %d\n", garbage_end_time);
   gc_time=(garbage_end_time - garbage_start_time)/CLOCKS_PER_SEC;
-  printf("gc end %f\n", gc_time);
+  // printf("gc end %f\n", gc_time);
 #endif
 
   //  times(&garbage_end_time);
   //  gc_time=(garbage_end_time.tms_utime - garbage_start_time.tms_utime)/60.0;
-  garbage_time = garbage_time + (long)gc_time;
+  garbage_time = garbage_time + (long long)gc_time;
 
   if (verbose) {
     fprintf(stderr,"*** End  ");
@@ -1597,8 +1597,8 @@ void garbage()
   the macro ALIGN is supposed to be a power of 2 and the pointer returned
   is a multiple of ALIGN.
 */
-GENERIC heap_alloc(unsigned long s)
-// long s;
+GENERIC heap_alloc(unsigned long long s)
+// long long s;
 {
     if (s & (ALIGN - 1))
         s = s - (s & (ALIGN - 1)) + ALIGN;
@@ -1621,8 +1621,8 @@ GENERIC heap_alloc(unsigned long s)
   the macro ALIGN is supposed to be a power of 2 and the pointer returned
   is a multiple of ALIGN.
 */
-GENERIC stack_alloc(unsigned long s)
-// long s;
+GENERIC stack_alloc(unsigned long long s)
+// long long s;
 {
     GENERIC r;
 
@@ -1656,7 +1656,7 @@ void init_memory()
   // printf("ALLOC_WORDS = %ld\n", ALLOC_WORDS);
     //   alloc_words=GetIntOption("memory",ALLOC_WORDS);
     alloc_words = ALLOC_WORDS;
-    mem_size = alloc_words * sizeof(long);
+    mem_size = alloc_words * sizeof(long long);
 
     mem_base = (GENERIC)malloc(mem_size);
     other_base = (GENERIC)malloc(mem_size);
@@ -1706,9 +1706,9 @@ void init_memory()
   execution to continue.  It causes a garbage collection if not, and if that
   fails to release enough memory it returns FALSE.
 */
-long memory_check ()
+long long memory_check ()
 {
-  long success=TRUE;
+  long long success=TRUE;
   
   if (heap_pointer-stack_pointer < GC_THRESHOLD) {
     if(verbose) fprintf(stderr,"\n"); /*  RM: Feb  1 1993  */

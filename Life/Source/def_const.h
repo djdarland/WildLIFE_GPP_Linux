@@ -317,7 +317,7 @@
 
 */
 
-#define INT_SIZE 8*sizeof(unsigned long)
+#define INT_SIZE 8*sizeof(unsigned long long)
 
 /*! \def HEAP
   \brief Flag to indicate heap allocation 
@@ -1040,126 +1040,126 @@
 #define yfx 7
 
 /*! \def fail
-  \brief was enum (goal) -- but must be long for error.c - now typedef
+  \brief was enum (goal) -- but must be long long for error.c - now typedef
 
 */
 
 #define  fail 0L
 
 /*! \def prove
-  \brief was enum (goal) -- but must be long for error.c - now typedef
+  \brief was enum (goal) -- but must be long long for error.c - now typedef
 
 */
 
 #define  prove 1L
 
 /*! \def unify
-  \brief was enum (goal) -- but must be long for error.c - now typedef
+  \brief was enum (goal) -- but must be long long for error.c - now typedef
 
 */
 
 #define  unify 2L
 
 /*! \def unify_noeval
-  \brief was enum (goal) -- but must be long for error.c - now typedef
+  \brief was enum (goal) -- but must be long long for error.c - now typedef
 
 */
 
 #define  unify_noeval 3L
 
 /*! \def disj
-  \brief was enum (goal) -- but must be long for error.c - now typedef
+  \brief was enum (goal) -- but must be long long for error.c - now typedef
 
 */
 
 #define  disj 4L
 
 /*! \def what_next
-  \brief was enum (goal) -- but must be long for error.c - now typedef
+  \brief was enum (goal) -- but must be long long for error.c - now typedef
 
 */
 
 #define  what_next 5L
 
 /*! \def eval
-  \brief was enum (goal) -- but must be long for error.c - now typedef
+  \brief was enum (goal) -- but must be long long for error.c - now typedef
 
 */
 
 #define  eval 6L
 
 /*! \def eval_cut
-  \brief was enum (goal) -- but must be long for error.c - now typedef
+  \brief was enum (goal) -- but must be long long for error.c - now typedef
 
 */
 
 #define  eval_cut 7L
 
 /*! \def freeze_cut
-  \brief was enum (goal) -- but must be long for error.c - now typedef
+  \brief was enum (goal) -- but must be long long for error.c - now typedef
 
 */
 
 #define  freeze_cut 8L
 
 /*! \def implies_cut
-  \brief was enum (goal) -- but must be long for error.c - now typedef
+  \brief was enum (goal) -- but must be long long for error.c - now typedef
 
 */
 
 #define  implies_cut 9L
 
 /*! \def general_cut
-  \brief was enum (goal) -- but must be long for error.c - now typedef
+  \brief was enum (goal) -- but must be long long for error.c - now typedef
 
 */
 
 #define  general_cut 10L
 
 /*! \def match
-  \brief was enum (goal) -- but must be long for error.c - now typedef
+  \brief was enum (goal) -- but must be long long for error.c - now typedef
 
 */
 
 #define  match 11L
 
 /*! \def type_disj
-  \brief was enum (goal) -- but must be long for error.c - now typedef
+  \brief was enum (goal) -- but must be long long for error.c - now typedef
 
 */
 
 #define  type_disj 12L
 
 /*! \def clause
-  \brief was enum (goal) -- but must be long for error.c - now typedef
+  \brief was enum (goal) -- but must be long long for error.c - now typedef
 
 */
 
 #define  clause 13L
 
 /*! \def del_clause
-  \brief was enum (goal) -- but must be long for error.c - now typedef
+  \brief was enum (goal) -- but must be long long for error.c - now typedef
 
 */
 
 #define  del_clause 14L
 
 /*! \def retract
-  \brief was enum (goal) -- but must be long for error.c - now typedef
+  \brief was enum (goal) -- but must be long long for error.c - now typedef
 
 */
 
 #define  retract 15L
 
 /*! \def load
-  \brief was enum (goal) -- but must be long for error.c - now typedef
+  \brief was enum (goal) -- but must be long long for error.c - now typedef
 
 */
 
 #define  load 16L
 
 /*! \def c_what_next
-  \brief was enum (goal) -- but must be long for error.c - now typedef
+  \brief was enum (goal) -- but must be long long for error.c - now typedef
 
 */
 

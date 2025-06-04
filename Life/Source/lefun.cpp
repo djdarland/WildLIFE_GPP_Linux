@@ -12,12 +12,12 @@ static char vcid[] = "$Id: lefun.c,v 1.4 1995/01/14 00:24:55 duchier Exp $";
 #include "defs.h"
 #endif
 
-static long attr_missing;
-static long check_func_flag;
+static long long attr_missing;
+static long long check_func_flag;
 
 /* Create a new psi_term on the stack with value '@' (top) and no attributes. */
-ptr_psi_term stack_psi_term(long stat)
-// long stat;
+ptr_psi_term stack_psi_term(long long stat)
+// long long stat;
 {
   ptr_psi_term result;
 
@@ -39,8 +39,8 @@ ptr_psi_term stack_psi_term(long stat)
 
 
 /* Create a new psi_term on the stack with a real number value. */
-ptr_psi_term real_stack_psi_term(long stat,REAL thereal)
-// long stat;
+ptr_psi_term real_stack_psi_term(long long stat,REAL thereal)
+// long long stat;
 // REAL thereal;
 {
   ptr_psi_term result;
@@ -64,8 +64,8 @@ ptr_psi_term real_stack_psi_term(long stat,REAL thereal)
 
 
 /* Create a new psi_term on the heap with value '@' (top) and no attributes. */
-ptr_psi_term heap_psi_term(long stat)
-// long stat;
+ptr_psi_term heap_psi_term(long long stat)
+// long long stat;
 {
   ptr_psi_term result;
 
@@ -173,15 +173,15 @@ void curry()
   implement complete disequality semantics).  The 'othervar' parameter
   is needed for this.
 */
-long residuateGoalOnVar(ptr_goal g, ptr_psi_term var, ptr_psi_term othervar)
+long long residuateGoalOnVar(ptr_goal g, ptr_psi_term var, ptr_psi_term othervar)
 // ptr_goal g;
 // ptr_psi_term var,othervar;
 {
-  long result;
-  long resflag,resflag2;
+  long long result;
+  long long resflag,resflag2;
   GENERIC rescode,rescode2,resvalue,resvalue2;
   /* Set to FALSE if the goal is already residuated on the var: */
-  long not_found = TRUE;
+  long long not_found = TRUE;
   /* Points to a pointer to a residuation structure.  Used so we can */
   /* add the goal to the end of the residuation list, so that it can */
   /* can be undone later if backtracking happens.  See the call to   */
@@ -301,20 +301,20 @@ long residuateGoalOnVar(ptr_goal g, ptr_psi_term var, ptr_psi_term othervar)
   residuations.  This is too slow; eventually it should be sped up, 
   especially if equality constraints are often used.
 */
-long do_residuation(); /* forward declaration */
+long long do_residuation(); /* forward declaration */
 
 /* LIFE-defined routines reset the goal stack to what it was */
 /* before the function call. */
-long do_residuation_user()
+long long do_residuation_user()
 {
   goal_stack=resid_aim->next; /* reset goal stack */
   return do_residuation();
 }
 
 /* C-defined routines do all stack manipulation themselves */
-long do_residuation()
+long long do_residuation()
 {
-  long success;
+  long long success;
   ptr_psi_term t,u;
   ptr_goal *gs;
   
@@ -383,9 +383,9 @@ void do_currying()
   Two versions of this routine exist: one which trails t and one which never
   trails t.
 */
-void release_resid_main(ptr_psi_term t,long trailflag)
+void release_resid_main(ptr_psi_term t,long long trailflag)
 // ptr_psi_term t;
-// long trailflag;
+// long long trailflag;
 {
   ptr_goal g;
   ptr_residuation r;
@@ -455,9 +455,9 @@ void append_resid(ptr_psi_term u,ptr_psi_term v)
   correctly.
   It creates an extra psi-term (with value top) in which to write the result.
 */
-long eval_aim()
+long long eval_aim()
 {
-  long success=TRUE;
+  long long success=TRUE;
   ptr_psi_term funct,result,head,body;
   ptr_pair_list rule;
   /* RESID */ ptr_resid_block rb;
@@ -488,10 +488,10 @@ long eval_aim()
       
   if (rule) {
     Traceline("evaluate %P\n",funct);
-    if ((unsigned long)rule<=MAX_BUILT_INS) {
+    if ((unsigned long long)rule<=MAX_BUILT_INS) {
       
       resid_aim=aim;
-      success=c_rule[(unsigned long)rule]();
+      success=c_rule[(unsigned long long)rule]();
 
       if (curried)
 	do_currying();
@@ -556,7 +556,7 @@ long eval_aim()
 	    //ptr_node *u,v;
 	    /* RESID */ // ptr_resid_block rb;
 {
-  long cmp;
+  long long cmp;
   ptr_node temp;
   
   if (v) {
@@ -596,7 +596,7 @@ long eval_aim()
 	    // ptr_node *u,v;
 	    /* RESID */ //ptr_resid_block rb;
 {
-  long cmp;
+  long long cmp;
   ptr_node temp;
   
   if (v) {
@@ -647,7 +647,7 @@ long eval_aim()
 	    //ptr_node *u,v;
 	    /* RESID */ //ptr_resid_block rb;
 {
-  long cmp;
+  long long cmp;
   ptr_node temp;
   
   if (v) {
@@ -712,12 +712,12 @@ void match_attr(ptr_node *u,ptr_node v,ptr_resid_block rb)
   Residuate the expression if the calling term is more general than the
   function definition.
 */
-long match_aim()
+long long match_aim()
 {
-  long success=TRUE;
+  long long success=TRUE;
   ptr_psi_term u,v,tmp;
   REAL r;
-  long less,lesseq;
+  long long less,lesseq;
   ptr_resid_block rb;
   ptr_psi_term match_date;
   
@@ -740,8 +740,8 @@ long match_aim()
                 success=(strcmp((char *)u->value_3,(char *)v->value_3)==0);
 	      /* DENYS: BYTEDATA */
               else if (overlap_type(v->type,sys_bytedata)) {
-		unsigned long ulen = *((unsigned long *) u->value_3);
-		unsigned long vlen = *((unsigned long *) v->value_3);
+		unsigned long long ulen = *((unsigned long long *) u->value_3);
+		unsigned long long vlen = *((unsigned long long *) v->value_3);
                 success=(ulen==vlen && memcmp((char *)u->value_3,(char *)v->value_3,ulen)==0);
 	      }
             }
@@ -812,8 +812,8 @@ long match_aim()
 
 
 /* Forward declarations */
-long check_out();
-long eval_args();
+long long check_out();
+long long eval_args();
 
 
 
@@ -821,7 +821,7 @@ long eval_args();
   N is an attribute tree, the attributes must be examined, if any reveal
   themselves to need evaluating then return FALSE.
 */
-long i_eval_args(ptr_node n)
+long long i_eval_args(ptr_node n)
 // ptr_node n;
 {
   check_func_flag=FALSE;
@@ -830,10 +830,10 @@ long i_eval_args(ptr_node n)
 
 
 
-long eval_args(ptr_node n)
+long long eval_args(ptr_node n)
 // ptr_node n;
 {
-  long flag=TRUE;
+  long long flag=TRUE;
   
   if (n) {
     flag = eval_args(n->right);
@@ -926,10 +926,10 @@ void check_func(ptr_psi_term t)
   :: W:wife(spouse => husband(spouse => W)).
 
 */
-long check_type(ptr_psi_term t)
+long long check_type(ptr_psi_term t)
 // ptr_psi_term t;
 {
-  long flag=FALSE;
+  long long flag=FALSE;
 
   push2_ptr_value(int_ptr,(GENERIC *)&(t->status),(GENERIC)(t->status & SMASK)); // REV401PLUS casts
   /* push_ptr_value(int_ptr,&(t->status)); */
@@ -989,24 +989,24 @@ long check_type(ptr_psi_term t)
     nested functions.  This is done as part of dereferencing, which is part
     of unification, matching, built-ins, and user-defined routines.
 */
-long i_check_out(ptr_psi_term t)
+long long i_check_out(ptr_psi_term t)
 // ptr_psi_term t;
 {
   check_func_flag=FALSE;
   return check_out(t);
 }
 
-long f_check_out(ptr_psi_term t)
+long long f_check_out(ptr_psi_term t)
 // ptr_psi_term t;
 {
   check_func_flag=TRUE;
   return check_out(t);
 }
 
-long check_out(ptr_psi_term t)
+long long check_out(ptr_psi_term t)
 // ptr_psi_term t;
 {
-  long flag=FALSE;
+  long long flag=FALSE;
   
   deref_ptr(t);
 
@@ -1019,7 +1019,7 @@ long check_out(ptr_psi_term t)
     t->status |= RMASK;
 
     switch(t->type->wl_type) { /*  RM: Feb  8 1993  */
-   // switch((long)t->type->type_def) { /*  RM: Feb  8 1993  */
+   // switch((long long)t->type->type_def) { /*  RM: Feb  8 1993  */
       
     case function_it:
       if (check_func_flag) {
@@ -1056,7 +1056,7 @@ long check_out(ptr_psi_term t)
 /*                                                                  */
 /* New dereference routines for Wild_Life                           */
 /* These routines handle evaluation-by-need.  Check_out is changed  */
-/* to no longer call check_func, which is done in the new routines. */
+/* to no long longer call check_func, which is done in the new routines. */
 /* Functions inside of psi-terms are only evaluated if needed.  It  */
 /* is assumed that 'needed' is true when they are derefed.          */
 /*                                                                  */
@@ -1088,13 +1088,13 @@ long check_out(ptr_psi_term t)
 /*                                                                  */
 /********************************************************************/
 
-static long deref_flag;
+static long long deref_flag;
 void deref_rec_body();
 void deref_rec_args();
 void deref_rec_args_exc();
 
 /* Ensure evaluation of top of psi-term */
-long deref_eval(ptr_psi_term t)
+long long deref_eval(ptr_psi_term t)
 // ptr_psi_term t;
 {
   ptr_goal save=goal_stack;
@@ -1132,7 +1132,7 @@ long deref_eval(ptr_psi_term t)
 }
 
 /* Ensure evaluation of *all* of psi-term */
-long deref_rec_eval(ptr_psi_term t)
+long long deref_rec_eval(ptr_psi_term t)
 // ptr_psi_term t;
 {
   ptr_goal save=goal_stack;
@@ -1186,9 +1186,9 @@ void deref_rec_args(ptr_node n)
 
 /* Same as deref_rec_eval, but doesn't look at either the top level or */
 /* the arguments in the set. */
-long deref_args_eval(ptr_psi_term t,long set)
+long long deref_args_eval(ptr_psi_term t,long long set)
 // ptr_psi_term t;
-// long set;
+// long long set;
 {
   ptr_goal save = goal_stack;
   ptr_goal top = aim;
@@ -1203,9 +1203,9 @@ long deref_args_eval(ptr_psi_term t,long set)
 /* Return TRUE iff string (considered as number) is in the set */
 /* This routine only recognizes the strings "1", "2", "3",     */
 /* represented as numbers 1, 2, 4.                             */
-long in_set(char *str,long set)
+long long in_set(char *str,long long set)
 // char *str;
-// long set;
+// long long set;
 {
   if (set&1 && !featcmp(str,"1")) return TRUE;
   if (set&2 && !featcmp(str,"2")) return TRUE;
@@ -1214,9 +1214,9 @@ long in_set(char *str,long set)
   return FALSE;
 }
 
-void deref_rec_args_exc(ptr_node n,long set)
+void deref_rec_args_exc(ptr_node n,long long set)
 // ptr_node n;
-//long set;
+//long long set;
 {
   ptr_psi_term t;
   

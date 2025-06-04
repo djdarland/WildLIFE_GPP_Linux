@@ -9,9 +9,9 @@
   Use define instead of enums because quick masking is important 
 */
 
-typedef long type_ptr;
+typedef long long type_ptr;
 
-typedef long wl_operator; // Added REV401PLUS
+typedef long long wl_operator; // Added REV401PLUS
 
 /*! \typedef PsiTerm
 \brief Type for psi-terms, hidden from users 
@@ -27,14 +27,14 @@ typedef void *PsiTerm;
 /******************************* TYPES ************************************/
 
 /*! \typedef GENERIC 
-  \brief unsigned long *GENERIC 
+  \brief unsigned long long *GENERIC 
   
   GENERIC is the type of a pointer to any type.  This might not work on 
   some machines, but it should be possible as MALLOC() uses something of/
   that kind.  ANSI uses "void *" instead.  
 */
 
-typedef  unsigned long *GENERIC;
+typedef  unsigned long long *GENERIC;
 // typedef void * GENERIC; 
 
 /*! \typedef operator
@@ -48,10 +48,10 @@ typedef  unsigned long *GENERIC;
   \brief int - formerly enum
 
 */ 
-typedef long goals;
+typedef long long goals;
 
 #ifdef X11
-typedef long Action;
+typedef long long Action;
 #endif
 
 typedef char                      string[STRLEN];
@@ -74,7 +74,7 @@ typedef struct wl_choice_point *    ptr_choice_point;
 
 typedef struct wl_operator_data {
   wl_operator type;
-  long precedence;
+  long long precedence;
   ptr_operator_data next;
 } operator_data;
 
@@ -145,7 +145,7 @@ struct wl_hash_table {
 /* Definition of a keyword. */
 /* This includes the rules associated to the symbol and how old they are.  */
 typedef struct wl_definition {
-  long date;
+  long long date;
   ptr_keyword keyword; /*  RM: Jan 11 1993  */
   ptr_pair_list rule;
   ptr_triple_list properties;
@@ -169,7 +169,7 @@ typedef struct wl_definition {
 
 /* 22.9 */
 typedef struct wl_residuation {
-  long sortflag; /* bestsort == if TRUE ptr_definition else ptr_int_list */
+  long long sortflag; /* bestsort == if TRUE ptr_definition else ptr_int_list */
   GENERIC bestsort; /* 21.9 */
   GENERIC value_2; /* to handle psi-terms with a value field 6.10 */
   ptr_goal goal;
@@ -179,13 +179,13 @@ typedef struct wl_residuation {
 /* PSI_TERM */
 typedef struct wl_psi_term {
 #ifdef TS
-  unsigned long time_stamp; /* Avoid multiple trailing on a choice point. 9.6 */
+  unsigned long long time_stamp; /* Avoid multiple trailing on a choice point. 9.6 */
 #endif
   ptr_definition type;
-  long status; /* Indicates whether the properties of the type have been */
+  long long status; /* Indicates whether the properties of the type have been */
               /* checked or the function evaluated */
-  /* long curried; Distinguish between quoted and curried object 20.5 */
-  long flags; /* 14.9 */
+  /* long long curried; Distinguish between quoted and curried object 20.5 */
+  long long flags; /* 14.9 */
   GENERIC value_3;
   ptr_node attr_list;
   ptr_psi_term coref;
@@ -213,8 +213,8 @@ typedef struct wl_pair_list {
 /* Used for type properties */
 typedef struct wl_triple_list {
   ptr_psi_term aaaa_4;   /* Attributes */
-  ptr_psi_term bbbb_4;   /* Constralong */
-  ptr_definition cccc_4; /* Original type of attribute & constralong */
+  ptr_psi_term bbbb_4;   /* Constralong long */
+  ptr_definition cccc_4; /* Original type of attribute & constralong long */
   ptr_triple_list next;
 } triple_list;
 
@@ -247,7 +247,7 @@ typedef struct wl_goal {
 } goal;
 
 typedef struct wl_choice_point {
-  unsigned long time_stamp;
+  unsigned long long time_stamp;
   ptr_stack undo_point;
   ptr_goal goal_stack;
   ptr_choice_point next;
@@ -262,10 +262,10 @@ typedef struct wl_choice_point {
 typedef struct wl_resid_block *ptr_resid_block;
 
 typedef struct wl_resid_block {
-   long cc_cr; /* 11.9 */
+   long long cc_cr; /* 11.9 */
    ptr_goal ra;
-   /* long cc; 11.9 */
-   /* long cr; 11.9 */
+   /* long long cc; 11.9 */
+   /* long long cr; 11.9 */
    ptr_resid_list rv; /* 21.9 */
    ptr_psi_term md;
 } resid_block;
@@ -276,7 +276,7 @@ typedef void *			Ref;
 typedef struct wl_ListLinks *	RefListLinks;
 typedef struct wl_ListHeader *	RefListHeader;
 typedef RefListLinks		(*RefListGetLinksProc)	(Ref ); 
-typedef long			(*RefListEnumProc)	(Ref,Ref ); // REV401PLUS
+typedef long long			(*RefListEnumProc)	(Ref,Ref ); // REV401PLUS
 
 /*
   "First", "Last" are pointers to the first and last element of the list
@@ -310,9 +310,9 @@ typedef struct wl_ListLinks
 typedef struct wl_tab_brk *       ptr_tab_brk;
 typedef struct wl_item *          ptr_item;
 typedef struct wl_tab_brk {
-  long column;
-  long broken;
-  long printed;
+  long long column;
+  long long broken;
+  long long printed;
 } tab_brk;
 typedef struct wl_item {
   char *str;
@@ -372,13 +372,13 @@ typedef struct {
 // from token.h
 
 typedef struct wl_parse_block {
-  long lc;
-  long sol;
-  long sc;
-  long osc;
+  long long lc;
+  long long sol;
+  long long sc;
+  long long osc;
   ptr_psi_term spt;
   ptr_psi_term ospt;
-  long ef;
+  long long ef;
 } parse_block;
 
 typedef struct wl_parse_block *ptr_parse_block;
@@ -387,13 +387,13 @@ typedef struct wl_parse_block *ptr_parse_block;
 struct hashbucket {
    ptr_psi_term old_value;
    ptr_psi_term new_value;
-   long info;
-   long next;
+   long long info;
+   long long next;
 };
 
 struct hashentry {
-   long timestamp;
-   long bucketindex;
+   long long timestamp;
+   long long bucketindex;
 };
 
 #define TEXTBUFSIZE 5000

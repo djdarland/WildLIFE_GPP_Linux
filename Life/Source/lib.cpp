@@ -29,9 +29,9 @@ static unsigned int libseed;
 
 
 // REV401PLUS -- moved nex 4 down
-/* long noisy=TRUE;
-long file_date=3;
-long types_done=FALSE;
+/* long long noisy=TRUE;
+long long file_date=3;
+long long types_done=FALSE;
 float garbage_time=0;
 */ // REMOVED above for MINT
 
@@ -54,8 +54,8 @@ char **group_features(char **f,ptr_node n)
 }
 
 
-void exit_if_true(long exitflag)
-//     long exitflag;
+void exit_if_true(long long exitflag)
+//     long long exitflag;
 {
   if (exitflag) {
     printf("\n\n*** Execution is not allowed to continue.\n");
@@ -119,7 +119,7 @@ void init_system()
   init_global_vars(); /*  RM: Feb 15 1993  */
 }
 
-void WFInit(long argc, char *argv[])
+void WFInit(long long argc, char *argv[])
 {
   ptr_stack save_undo_stack;
   
@@ -208,7 +208,7 @@ void WFInit(long argc, char *argv[])
   
   
   setjmp(env);
-  /* printf("%ld\n",(long)(stack_pointer-mem_base)); */ /* 8.10 */
+  /* printf("%ld\n",(long long)(stack_pointer-mem_base)); */ /* 8.10 */
   init_system(); 
   init_trace();
   begin_terminal_io();
@@ -226,7 +226,7 @@ int WFInput(char *query)
 //     char *query;
 {
   ptr_psi_term t;
-  long sort;
+  long long sort;
   parse_block pb;
   int result=WFno;
   ptr_stack save_undo_stack;
@@ -286,7 +286,7 @@ int WFInput(char *query)
       
       if(goal_stack && goal_stack->type==c_what_next) {
 	  
-	if((unsigned long)(goal_stack->aaaa_1)==c_query_level) // REV401PLUS cast
+	if((unsigned long long)(goal_stack->aaaa_1)==c_query_level) // REV401PLUS cast
 	  if(choice_stack==old_choice) {
 	    result=WFyes;
 	    c_query_level--;

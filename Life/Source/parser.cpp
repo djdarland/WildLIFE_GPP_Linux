@@ -29,7 +29,7 @@ int bad_psi_term(ptr_psi_term t)   // REV401PLUS add int
 // ptr_psi_term t;
 {
   char *s,c;
-  long r;
+  long long r;
 
   
   if(t->type==final_dot || t->type==final_question) /*  RM: Jul  9 1993  */
@@ -57,10 +57,10 @@ int bad_psi_term(ptr_psi_term t)   // REV401PLUS add int
   This prints the parser's stack, for debugging purposes
   only, LIMIT marks the bottom of the current stack.
 */
-void show(long limit)
-// long limit;
+void show(long long limit)
+// long long limit;
 {
-  long i;
+  long long i;
   
   for (i=1;i<=parser_stack_index;i++) {
     if (i==limit)
@@ -96,9 +96,9 @@ void show(long limit)
 /******** PUSH(tok,prec,op)
   Push psi_term and precedence and operator onto parser stack.
 */
-void push(psi_term tok,long prec,wl_operator op)
+void push(psi_term tok,long long prec,wl_operator op)
 // psi_term tok;
-// long prec;
+// long long prec;
 // operator op;   
 {
   if (parser_stack_index==PARSER_STACK_SIZE) {
@@ -120,11 +120,11 @@ void push(psi_term tok,long prec,wl_operator op)
   This function pops PSI_TERM and OP off the parser stack and returns
   its precedence.
 */
-long pop(ptr_psi_term tok,wl_operator *op)
+long long pop(ptr_psi_term tok,wl_operator *op)
 // ptr_psi_term tok;
 // operator *op;   
 {
-  long r=0;
+  long long r=0;
   
   if (parser_stack_index==0) {
     /*
@@ -151,7 +151,7 @@ long pop(ptr_psi_term tok,wl_operator *op)
 /******** LOOK()
   This function returns the precedence of the stack top.
 */
-long look()
+long long look()
 {
   return int_stack[parser_stack_index];
 }
@@ -164,11 +164,11 @@ long look()
   Note that this allows both a binary and unary minus.
   The result is NOP if tok is not an operator.
 */
-long precedence(psi_term tok,wl_operator typ)
+long long precedence(psi_term tok,wl_operator typ)
 // psi_term tok;
 // operator typ;  
 {
-  long r=NOP;
+  long long r=NOP;
   ptr_operator_data o;
 
   o=tok.type->op_data;
@@ -407,7 +407,7 @@ psi_term read_psi_term()
 {
   psi_term t,t2,t3;
   char s[22];  // Modified 3/8/2021  DJD to prevent overflow - compiler warning
-  long count=0,f=TRUE,f2,v;
+  long long count=0,f=TRUE,f2,v;
   ptr_psi_term module;
 
   
@@ -547,7 +547,7 @@ psi_term read_psi_term()
 
   If TOK is ':' then a conjunction is created if necessary.
   Example:
-  a:V:b:5:long => V: <a,b,5,int> (= conjunction list).
+  a:V:b:5:long long => V: <a,b,5,int> (= conjunction list).
 */
 psi_term make_life_form(ptr_psi_term tok,ptr_psi_term arg1,ptr_psi_term arg2)
 // ptr_psi_term tok,arg1,arg2;
@@ -639,9 +639,9 @@ psi_term make_life_form(ptr_psi_term tok,ptr_psi_term arg1,ptr_psi_term arg2)
   is <= PREC, and replace it with the corresponding psi-term. Do not go any
   further than LIMIT which is the end of the current expression.
 */
-void crunch(long prec,long limit)
-// long prec;
-// long limit;
+void crunch(long long prec,long long limit)
+// long long prec;
+// long long limit;
 {
   psi_term t,t1,t2,t3;
   wl_operator op1,op2,op3;
@@ -707,10 +707,10 @@ psi_term read_life_form(char ch1,char ch2)
 // char ch1,ch2;
 {
   psi_term t,t2;
-  long limit,pr_op,pr_1,pr_2,start=0;
-  long fin=FALSE;
-  long state=0;
-  long prec=0;
+  long long limit,pr_op,pr_1,pr_2,start=0;
+  long long fin=FALSE;
+  long long state=0;
+  long long prec=0;
   
   wl_operator op;
   
@@ -881,11 +881,11 @@ psi_term read_life_form(char ch1,char ch2)
   It handles psi_terms rather than pointers which causes a lot of messy code
   and is somewhat slower.
 */
-psi_term parse(long *q)
-// long *q;
+psi_term parse(long long *q)
+// long long *q;
 {
   psi_term s,t,u;
-  long c;
+  long long c;
 
   parser_stack_index=0;
   parse_ok=TRUE;

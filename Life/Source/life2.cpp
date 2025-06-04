@@ -23,7 +23,7 @@ static unsigned int lifeseed;
 #endif
 
 /******** MAIN(argc,argv)
-This routine contains the Read-Solve-Prlong loop.
+This routine contains the Read-Solve-Prlong long loop.
 */
 
 int main(int argc, char *argv[])  // REV401PLUS correct main proto
@@ -31,8 +31,8 @@ int main(int argc, char *argv[])  // REV401PLUS correct main proto
   // next taken from REV233
   ptr_psi_term s;  
   ptr_stack save_undo_stack;
-  long sort,exitflag;
-  long c; /* 21.12 (prev. char) */ 
+  long long sort,exitflag;
+  long long c; /* 21.12 (prev. char) */ 
 
   int i;
 #ifdef __unix__
@@ -123,7 +123,7 @@ int main(int argc, char *argv[])  // REV401PLUS correct main proto
   /* Main loop of interpreter */
   do {
     setjmp(env);
-    /* printf("%ld\n",(long)(stack_pointer-mem_base)); */ /* 8.10 */
+    /* printf("%ld\n",(long long)(stack_pointer-mem_base)); */ /* 8.10 */
     init_system(); 
     init_trace();
 

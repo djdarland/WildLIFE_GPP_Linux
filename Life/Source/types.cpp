@@ -26,7 +26,7 @@ static char vcid[] = "$Id: types.c,v 1.7 1994/12/15 22:28:56 duchier Exp $";
 void print_def_type(def_type t)
 // def_type t;
 {
-  switch ((long)t) {
+  switch ((long long)t) {
   case predicate_it:
     perr("predicate");
     break;
@@ -46,10 +46,10 @@ void print_def_type(def_type t)
 
 
 /* Confirm an important change */
-long yes_or_no()
+long long yes_or_no()
 {
   char *old_prompt;
-  long c,d;
+  long long c,d;
   ptr_psi_term old_state;
 
   perr("*** Are you really sure you want to do that ");
@@ -93,12 +93,12 @@ void remove_cycles(ptr_definition d, ptr_int_list *dl) // REV401PLUS void
   This decides whether a definition (a sort, function, or predicate)
   may be extended or not.
 */
-long redefine(ptr_psi_term t)
+long long redefine(ptr_psi_term t)
 // ptr_psi_term t;
 {
   ptr_definition d,d2;
   ptr_int_list l,*l2;
-  long success=TRUE;
+  long long success=TRUE;
   
   deref_ptr(t);
   d=t->type;
@@ -126,7 +126,7 @@ long redefine(ptr_psi_term t)
         success=FALSE;
       }
       else {
-        if (d->rule && (unsigned long)d->rule<=MAX_BUILT_INS /*&& input_stream==stdin*/) {
+        if (d->rule && (unsigned long long)d->rule<=MAX_BUILT_INS /*&& input_stream==stdin*/) {
           /* d is a built-in, and therefore cannot be altered. */
           Errorline("the built-in %T '%s' may not be extended.\n",
                     d->wl_type, d->keyword->symbol);
@@ -190,11 +190,11 @@ ptr_int_list cons(GENERIC v,ptr_int_list l)
   Assert that T1 <| T2.
   Return false if some sort of error occurred.
 */
-long assert_less(ptr_psi_term t1,ptr_psi_term t2)
+long long assert_less(ptr_psi_term t1,ptr_psi_term t2)
 // ptr_psi_term t1,t2;
 {
   ptr_definition d1,d2; 
-  long ok=FALSE;
+  long long ok=FALSE;
   deref_ptr(t1);
   deref_ptr(t2);
 
@@ -248,9 +248,9 @@ long assert_less(ptr_psi_term t1,ptr_psi_term t2)
 /******** ASSERT_PROTECTED(n,prot)
   Mark all the nodes in the attribute tree N with protect flag prot.
 */
-void assert_protected(ptr_node n,long prot)
+void assert_protected(ptr_node n,long long prot)
 // ptr_node n;
-// long prot;
+// long long prot;
 {
   ptr_psi_term t;
 
@@ -265,8 +265,8 @@ void assert_protected(ptr_node n,long prot)
         Warningline("'%s' is a sort. It can be extended without a declaration.\n",
                     t->type->keyword->symbol);
       }
-      else if ((unsigned long)t->type->rule<MAX_BUILT_INS &&
-               (unsigned long)t->type->rule>0) {
+      else if ((unsigned long long)t->type->rule<MAX_BUILT_INS &&
+               (unsigned long long)t->type->rule>0) {
         if (!prot)
           Warningline("'%s' is a built-in--it has not been made dynamic.\n",
                       t->type->keyword->symbol);
@@ -395,8 +395,8 @@ void assert_complicated_type(ptr_psi_term t)
 {
   ptr_psi_term arg2,typ1,typ2,pred=NULL;
   ptr_list lst;
-  long eqflag = equ_tok((*t),":=");
-  long ok, any_ok=FALSE;
+  long long eqflag = equ_tok((*t),":=");
+  long long ok, any_ok=FALSE;
   
   get_two_args(t->attr_list,&typ1,&arg2);
   
@@ -564,7 +564,7 @@ void insert_own_prop(ptr_definition d)
   ptr_int_list l;
   ptr_pair_list rule;
   ptr_triple_list *t;
-  long flag;
+  long long flag;
 
   l=HEAP_ALLOC(int_list);
   l->value_1=(GENERIC)d;
@@ -606,7 +606,7 @@ void insert_prop(ptr_definition d, ptr_triple_list prop)
 {
   ptr_int_list l;
   ptr_triple_list *t;
-  long flag;
+  long long flag;
 
   l=HEAP_ALLOC(int_list);
   l->value_1=(GENERIC)d;
@@ -687,10 +687,10 @@ void propagate_definitions()
 /******** COUNT_SORTS(c)
   Count the number of sorts in the symbol table T.
   Overestimates in the module version.  RM: Jan 21 1993 
-  No longer !!   RM: Feb  3 1993 
+  No long longer !!   RM: Feb  3 1993 
   */
-long count_sorts(long c0)  /*  RM: Feb  3 1993  */
-//     long c0;
+long long count_sorts(long long c0)  /*  RM: Feb  3 1993  */
+//     long long c0;
 {
   ptr_definition d;
 
@@ -755,11 +755,11 @@ void all_sorts()   /*  RM: Feb  3 1993  */
 /******** TWO_TO_THE(p)
   Return the code worth 2^p.
 */
-ptr_int_list two_to_the(long p)
-//long p;
+ptr_int_list two_to_the(long long p)
+//long long p;
 {
   ptr_int_list result,code;
-  long v=1;
+  long long v=1;
 
   code=HEAP_ALLOC(int_list);
   code->value_1=0;
@@ -808,7 +808,7 @@ void or_codes(ptr_int_list u, ptr_int_list v)
 // ptr_int_list u,v;
 {
   while (v) {
-    u->value_1= (GENERIC)(((unsigned long)(u->value_1)) | ((unsigned long)(v->value_1)));
+    u->value_1= (GENERIC)(((unsigned long long)(u->value_1)) | ((unsigned long long)(v->value_1)));
     v=v->next;
     if (u->next==NULL && v) {
       u->next=HEAP_ALLOC(int_list);
@@ -824,7 +824,7 @@ void or_codes(ptr_int_list u, ptr_int_list v)
 
 
 /******** EQUALIZE_CODES(w)
-  Make sure all codes are w words long, by increasing the length of the
+  Make sure all codes are w words long long, by increasing the length of the
   shorter ones.
   This simplifies greatly the bitvector manipulation routines.
   This operation should be done after encoding.
@@ -835,7 +835,7 @@ void equalize_codes(int len) /*  RM: Feb  3 1993  */ // REV401PLUS void
 {
   ptr_definition d;
   ptr_int_list c,*ci;
-  long i;
+  long long i;
   int w;
   
   for(d=first_definition;d;d=d->next)
@@ -864,9 +864,9 @@ void equalize_codes(int len) /*  RM: Feb  3 1993  */ // REV401PLUS void
 
 
 
-// long type_member();
+// long long type_member();
 
-//long type_member();
+//long long type_member();
 
 
 /******** MAKE_TYPE_LINK(t1,t2)
@@ -880,9 +880,9 @@ void equalize_codes(int len) /*  RM: Feb  3 1993  */ // REV401PLUS void
 void make_type_link(ptr_definition t1,ptr_definition t2)
 // ptr_definition t1, t2;
 {
-  if (t2 && t2!=top && t1 && !type_member(t2,t1->parents))
+  if (t2!=top && !type_member(t2,t1->parents))
     t1->parents=cons((GENERIC)t2,t1->parents);  // REV401PLUS cast
-  if (t2 && t2!=top && !type_member(t1,t2->children))
+  if (t2!=top && !type_member(t1,t2->children))
     t2->children=cons((GENERIC)t1,t2->children);  // REV401PLUS cast
 }
 
@@ -914,7 +914,7 @@ void make_type_link(ptr_definition t1, ptr_definition t2)
   Return TRUE iff type t is in the list tlst.
 */
 
-long type_member(ptr_definition t,ptr_int_list tlst)
+long long type_member(ptr_definition t,ptr_int_list tlst)
 // ptr_definition t;
 // ptr_int_list tlst;
 {
@@ -957,13 +957,13 @@ void perr_sort_cycle(ptr_int_list anc)
   If cyclic, return a TRUE error condition and print an error message
   with a cycle.
 */
-long type_cyclicity(ptr_definition d,ptr_int_list anc)
+long long type_cyclicity(ptr_definition d,ptr_int_list anc)
 // ptr_definition d;
 // ptr_int_list anc;
 {
   ptr_int_list p=d->parents;
   ptr_definition pd;
-  long errflag;
+  long long errflag;
   int_list anc2;
 
   while (p) {
@@ -1000,9 +1000,9 @@ long type_cyclicity(ptr_definition d,ptr_int_list anc)
   Return a TRUE flag if a change was made somewhere (for the
   closure calculation).
 */
-void propagate_always_check(ptr_definition d,long *ch)
+void propagate_always_check(ptr_definition d,long long *ch)
 //ptr_definition d;
-//long *ch;
+//long long *ch;
 {
   ptr_int_list child_list;
   ptr_definition child;
@@ -1026,8 +1026,8 @@ void propagate_always_check(ptr_definition d,long *ch)
   flags of all sorts to their children.  Return a TRUE flag
   if a change was made somewhere (for the closure calculation).
 */
-void one_pass_always_check(long *ch)
-//     long *ch;
+void one_pass_always_check(long long *ch)
+//     long long *ch;
 {
   ptr_definition d;
   
@@ -1047,7 +1047,7 @@ void one_pass_always_check(long *ch)
 */
 void inherit_always_check()
 {
-  long change;
+  long long change;
 
   do {
     change=FALSE;
@@ -1068,7 +1068,7 @@ void inherit_always_check()
 */
 void encode_types()
 {
-  long p=0,i,possible,ok=TRUE;
+  long long p=0,i,possible,ok=TRUE;
   ptr_int_list layer,l,kids,dads,code;
   ptr_definition xdef,kdef,ddef,err;
   if (types_modified) {
@@ -1232,7 +1232,7 @@ void encode_types()
 */
 void print_codes()
 {
-  long i;
+  long long i;
 
   for (i=0; i<type_count; i++) {
     outputline("%C = %s\n",
@@ -1242,7 +1242,7 @@ void print_codes()
 }
 
 
-long sub_CodeType();
+long long sub_CodeType();
 
 
 /******** GLB_VALUE(result,f,c,value1,value2,value)
@@ -1258,12 +1258,12 @@ long sub_CodeType();
   value2   value field of second psi-term.
   value    output value field (if any).
 */
-long glb_value(long result,long f,GENERIC c,
+long long glb_value(long long result,long long f,GENERIC c,
 	       GENERIC value1,
 	       GENERIC value2,
 	       GENERIC *value)
-// long result;
-// long f;
+// long long result;
+// long long f;
 // GENERIC c;
 // GENERIC value1,value2,*value;
 {
@@ -1318,14 +1318,14 @@ long glb_value(long result,long f,GENERIC c,
   The routine handles a bunch of special cases that keep f3==TRUE.
   Other than that, it is almost a replica of the inner loop of glb(..).
 */
-long glb_code(long f1,GENERIC c1,
-	      long f2,GENERIC c2,
-	      long *f3, GENERIC *c3)
-// long f1,f2,*f3;
+long long glb_code(long long f1,GENERIC c1,
+	      long long f2,GENERIC c2,
+	      long long *f3, GENERIC *c3)
+// long long f1,f2,*f3;
 // GENERIC c1,c2,*c3;
 {
-  long result=0;
-  unsigned long v1,v2,v3;
+  long long result=0;
+  unsigned long long v1,v2,v3;
   ptr_int_list cd1,cd2,*cd3; /* sort codes */
 
   /* First, the cases where c1 & c2 are ptr_definitions: */
@@ -1394,8 +1394,8 @@ long glb_code(long f1,GENERIC c1,
     *cd3 = STACK_ALLOC(int_list);
     (*cd3)->next=NULL;
     
-    v1=(unsigned long)(cd1->value_1);
-    v2=(unsigned long)(cd2->value_1);
+    v1=(unsigned long long)(cd1->value_1);
+    v2=(unsigned long long)(cd2->value_1);
     v3=v1 & v2;
     (*cd3)->value_1=(GENERIC)v3;
     
@@ -1445,7 +1445,7 @@ long glb_code(long f1,GENERIC c1,
   result.
 */
 /*  RM: May  7 1993  Fixed bug in when multiple word code */
-long glb(ptr_definition t1,
+long long glb(ptr_definition t1,
 	 ptr_definition t2,
 	 ptr_definition *t3,
 	 ptr_int_list *c3)
@@ -1455,8 +1455,8 @@ long glb(ptr_definition t1,
 // ptr_int_list *c3;
 {
   ptr_int_list c1,c2;
-  long result=0;
-  unsigned long v1,v2,v3;
+  long long result=0;
+  unsigned long long v1,v2,v3;
   int e1,e2,b; /*  RM: May  7 1993  */
 
 
@@ -1495,8 +1495,8 @@ long glb(ptr_definition t1,
         *c3 = STACK_ALLOC(int_list);
         (*c3)->next=NULL;
 
-        v1=(unsigned long)(c1->value_1);
-        v2=(unsigned long)(c2->value_1);
+        v1=(unsigned long long)(c1->value_1);
+        v2=(unsigned long long)(c2->value_1);
         v3=v1 & v2;
 
 	/* printf("v1=%d, v2=%d, v3=%d\n",v1,v2,v3); */
@@ -1546,12 +1546,12 @@ long glb(ptr_definition t1,
   This is essentially the same thing as GLB, only it's faster 'cause we don't
   care about the resulting code.
 */
-long overlap_type(ptr_definition t1,ptr_definition t2)
+long long overlap_type(ptr_definition t1,ptr_definition t2)
 // ptr_definition t1;
 // ptr_definition t2;
 {
   ptr_int_list c1,c2;
-  long result=TRUE;
+  long long result=TRUE;
   
   if (t1!=t2 && t1!=top && t2!=top) {
     
@@ -1561,7 +1561,7 @@ long overlap_type(ptr_definition t1,ptr_definition t2)
 
     if (c1!=NOT_CODED && c2!=NOT_CODED) {     
       while (!result && c1 && c2) {          
-        result=(((unsigned long)(c1->value_1)) & ((unsigned long)(c2->value_1)));
+        result=(((unsigned long long)(c1->value_1)) & ((unsigned long long)(c2->value_1)));
         c1=c1->next;
         c2=c2->next;
       }
@@ -1582,13 +1582,13 @@ long overlap_type(ptr_definition t1,ptr_definition t2)
 
   We already know that t1 and t2 are not top.
 */
-long sub_CodeType(ptr_int_list c1,ptr_int_list c2)
+long long sub_CodeType(ptr_int_list c1,ptr_int_list c2)
 // ptr_int_list c1;
 // ptr_int_list c2;
 {
   if (c1!=NOT_CODED && c2!=NOT_CODED) {
     while (c1 && c2) {
-      if ((unsigned long)c1->value_1 & ~(unsigned long)c2->value_1) return FALSE;
+      if ((unsigned long long)c1->value_1 & ~(unsigned long long)c2->value_1) return FALSE;
       c1=c1->next;
       c2=c2->next;
     }
@@ -1604,7 +1604,7 @@ long sub_CodeType(ptr_int_list c1,ptr_int_list c2)
 /******** SUB_TYPE(t1,t2)
   Return TRUE if type T1 is <| than type T2, that is if T1 matches T2.
 */
-long sub_type(ptr_definition t1,ptr_definition t2)
+long long sub_type(ptr_definition t1,ptr_definition t2)
 // ptr_definition t1;
 // ptr_definition t2;
 {
@@ -1625,13 +1625,13 @@ long sub_type(ptr_definition t1,ptr_definition t2)
   Returns TRUE if GLB(t1,t2)!=bottom.
   Sets S to TRUE if type T1 is <| than type T2, that is if T1 matches T2.
 */
-long matches(ptr_definition t1,ptr_definition t2,long *smaller)
+long long matches(ptr_definition t1,ptr_definition t2,long long *smaller)
 // ptr_definition t1;
 // ptr_definition t2;
-// long *smaller;
+// long long *smaller;
 {
   ptr_int_list c1,c2;
-  long result=TRUE;
+  long long result=TRUE;
   
   *smaller=TRUE;
   
@@ -1646,8 +1646,8 @@ long matches(ptr_definition t1,ptr_definition t2,long *smaller)
         
         if (c1!=NOT_CODED && c2!=NOT_CODED) {          
           while (c1 && c2) {          
-            if ((unsigned long)c1->value_1 &  (unsigned long)c2->value_1) result=TRUE;
-            if ((unsigned long)c1->value_1 & ~(unsigned long)c2->value_1) *smaller=FALSE;
+            if ((unsigned long long)c1->value_1 &  (unsigned long long)c2->value_1) result=TRUE;
+            if ((unsigned long long)c1->value_1 & ~(unsigned long long)c2->value_1) *smaller=FALSE;
             c1=c1->next;
             c2=c2->next;
           }
@@ -1668,12 +1668,12 @@ long matches(ptr_definition t1,ptr_definition t2,long *smaller)
   this has to take the value field into account, and thus must
   be passed the whole psi-term.
 */
-long strict_matches(ptr_psi_term t1,ptr_psi_term t2,long *smaller)
+long long strict_matches(ptr_psi_term t1,ptr_psi_term t2,long long *smaller)
 // ptr_psi_term t1;
 // ptr_psi_term t2;
-// long *smaller;
+// long long *smaller;
 {
-  long result,sm;
+  long long result,sm;
 
   result=matches(t1->type,t2->type,&sm);
 
@@ -1708,13 +1708,13 @@ long strict_matches(ptr_psi_term t1,ptr_psi_term t2,long *smaller)
   C= 0000000      result=0
   
 */
-long bit_length(ptr_int_list c)
+long long bit_length(ptr_int_list c)
 // ptr_int_list c;
 {
-  unsigned long p=0,dp=0,v=0,dv=0;
+  unsigned long long p=0,dp=0,v=0,dv=0;
   
   while (c) {
-    v=(unsigned long)c->value_1;
+    v=(unsigned long long)c->value_1;
     if(v) {
       dp=p;
       dv=v;
@@ -1742,7 +1742,7 @@ ptr_int_list decode(ptr_int_list c)
 // ptr_int_list c;
 {
   ptr_int_list c2,c3,c4,result=NULL,*prev;
-  long p;
+  long long p;
   
   p=bit_length(c);
   
@@ -1759,7 +1759,7 @@ ptr_int_list decode(ptr_int_list c)
       prev= &(c3->next);
       *prev=NULL;
       
-      c3->value_1=(GENERIC)(((unsigned long)(c->value_1)) & ~((unsigned long)(c2->value_1)));
+      c3->value_1=(GENERIC)(((unsigned long long)(c->value_1)) & ~((unsigned long long)(c2->value_1)));
       
       c=c->next;
       c2=c2->next;

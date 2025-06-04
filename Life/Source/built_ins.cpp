@@ -28,7 +28,7 @@ static unsigned int randomseed;
   Create the NIL object on the stack.
   */
 
-static long built_in_index=0;
+static long long built_in_index=0;
 
 ptr_psi_term stack_nil()
 
@@ -88,8 +88,8 @@ ptr_psi_term stack_pair(ptr_psi_term left, ptr_psi_term right)
   create an INT object
   */
 
-ptr_psi_term stack_int(long n)
-//     long n;
+ptr_psi_term stack_int(long long n)
+//     long long n;
 {
   ptr_psi_term m;
   m=stack_psi_term(4);
@@ -134,7 +134,7 @@ ptr_psi_term stack_bytes(char *s, int n)
   Get the value of a Life string, or the name of a non-string psi-term.
   Return TRUE iff a valid string is found.
 */
-long psi_to_string(ptr_psi_term t, char **fn)
+long long psi_to_string(ptr_psi_term t, char **fn)
 // ptr_psi_term t;
 // char **fn;
 {
@@ -218,13 +218,13 @@ ptr_psi_term make_feature_list(ptr_node tree,ptr_psi_term tail,
 /******** CHECK_REAL(t,v,n)
   Like get_real_value, but does not force the type of T to be real.
 */
-long check_real(ptr_psi_term t,REAL *v,long *n)
+long long check_real(ptr_psi_term t,REAL *v,long long *n)
 // ptr_psi_term t;
 // REAL *v;
-// long *n;
+// long long *n;
 {
-  long success=FALSE;
-  long smaller;
+  long long success=FALSE;
+  long long smaller;
 
   if (t) {
     success=matches(t->type,real,&smaller);
@@ -247,13 +247,13 @@ long check_real(ptr_psi_term t,REAL *v,long *n)
   Also force the type of T to REAL if REAL <| T.
   This is used in all the arithmetic built-in functions to get their arguments.
 */
-long get_real_value(ptr_psi_term t,REAL *v,long *n)
+long long get_real_value(ptr_psi_term t,REAL *v,long long *n)
 // ptr_psi_term t;
 // REAL *v;
-// long *n;
+// long long *n;
 {
-  long success=FALSE;
-  long smaller;
+  long long success=FALSE;
+  long long smaller;
   
   if (t) {
     success=matches(t->type,real,&smaller);
@@ -286,13 +286,13 @@ long get_real_value(ptr_psi_term t,REAL *v,long *n)
   GET_REAL_VALUE. The values handled here have to be booleans.
   Check if psi_term T is a boolean. V <- TRUE or FALSE value of T.
 */
-static long get_bool_value(ptr_psi_term t,REAL *v,long *n)
+static long long get_bool_value(ptr_psi_term t,REAL *v,long long *n)
 // ptr_psi_term t;
 // REAL *v;
-// long *n;
+// long long *n;
 {
-  long success=FALSE;
-  long smaller;
+  long long success=FALSE;
+  long long smaller;
   
   
   if(t) {
@@ -331,9 +331,9 @@ static long get_bool_value(ptr_psi_term t,REAL *v,long *n)
   Unify psi_term T to the boolean value V = TRUE or FALSE.
   This is used by built-in logical functions to return their result.
 */
-void unify_bool_result(ptr_psi_term t,long v)
+void unify_bool_result(ptr_psi_term t,long long v)
 // ptr_psi_term t;
-// long v;
+// long long v;
 {
   ptr_psi_term u;
 
@@ -372,12 +372,12 @@ void unify_bool_result(ptr_psi_term t,long v)
   Unify psi_term T to the real value V.
   This is used by built-in arithmetic functions to return their result.
 */
-long unify_real_result(ptr_psi_term t,REAL v)
+long long unify_real_result(ptr_psi_term t,REAL v)
 // ptr_psi_term t;
 // REAL v;
 {
-  long smaller;
-  long success=TRUE;
+  long long smaller;
+  long long success=TRUE;
 
 #ifdef prlDEBUG
   if (t->value) {
@@ -423,11 +423,11 @@ long unify_real_result(ptr_psi_term t,REAL v)
 /******** C_GT
   Greater than.
 */
-static long c_gt()
+static long long c_gt()
 {
-  long success=TRUE;
+  long long success=TRUE;
   ptr_psi_term arg1,arg2,arg3,t;
-  long num1,num2,num3;
+  long long num1,num2,num3;
   REAL val1,val2,val3;
   
   t=aim->aaaa_1;
@@ -489,11 +489,11 @@ static long c_gt()
 /******** C_EQUAL
   Arithmetic equality.
 */
-static long c_equal()
+static long long c_equal()
 {
-  long success=TRUE;
+  long long success=TRUE;
   ptr_psi_term arg1,arg2,arg3,t;
-  long num1,num2,num3;
+  long long num1,num2,num3;
   REAL val1,val2,val3;
   
   t=aim->aaaa_1;
@@ -570,7 +570,7 @@ static long c_equal()
   Evaluate a disjunction.
   */
 
-static long c_eval_disjunction()
+static long long c_eval_disjunction()
      
 {
   ptr_psi_term arg1,arg2,funct,result;
@@ -614,11 +614,11 @@ static long c_eval_disjunction()
 /******** C_LT
   Less than.
 */
-static long c_lt()
+static long long c_lt()
 {
-  long success=TRUE;
+  long long success=TRUE;
   ptr_psi_term arg1,arg2,arg3,t;
-  long num1,num2,num3;
+  long long num1,num2,num3;
   REAL val1,val2,val3;
   
   t=aim->aaaa_1;
@@ -681,11 +681,11 @@ static long c_lt()
 /******** C_GTOE
   Greater than or equal.
 */
-static long c_gtoe()
+static long long c_gtoe()
 {
-  long success=TRUE;
+  long long success=TRUE;
   ptr_psi_term arg1,arg2,arg3,t;
-  long num1,num2,num3;
+  long long num1,num2,num3;
   REAL val1,val2,val3;
   
   t=aim->aaaa_1;
@@ -747,11 +747,11 @@ static long c_gtoe()
 /******** C_LTOE
   Less than or equal.
 */
-static long c_ltoe()
+static long long c_ltoe()
 {
-  long success=TRUE;
+  long long success=TRUE;
   ptr_psi_term arg1,arg2,arg3,t;
-  long num1,num2,num3;
+  long long num1,num2,num3;
   REAL val1,val2,val3;
   
   t=aim->aaaa_1;
@@ -816,9 +816,9 @@ static long c_ltoe()
   This predicate should never be called directly by the user.
 */
 
-static long c_boolpred()
+static long long c_boolpred()
 {
-  long success=TRUE,succ,lesseq;
+  long long success=TRUE,succ,lesseq;
   ptr_psi_term t,arg1;
 
   t=aim->aaaa_1;
@@ -872,7 +872,7 @@ static long c_boolpred()
   return success;
 }
 
-static long get_bool(ptr_definition typ)
+static long long get_bool(ptr_definition typ)
 // ptr_definition typ;
 {
   if (sub_type(typ,lf_true)) return TRUE;
@@ -880,7 +880,7 @@ static long get_bool(ptr_definition typ)
   else return UNDEF;
 }
 
-static void unify_bool(ptr_psi_term arg)  // was long but no return
+static void unify_bool(ptr_psi_term arg)  // was long long but no return
 // ptr_psi_term arg;
 {
   ptr_psi_term tmp;
@@ -892,14 +892,14 @@ static void unify_bool(ptr_psi_term arg)  // was long but no return
 
 /* Main routine to handle the and & or functions. */
 /* sel = TRUE (for and) or FALSE (for or) */
-static long c_logical_main(long sel)
-// long sel;
+static long long c_logical_main(long long sel)
+// long long sel;
 {
-  long success=TRUE;
+  long long success=TRUE;
   ptr_psi_term funct,arg1,arg2,arg3;
-  long sm1, sm2, sm3;
-  long a1comp, a2comp, a3comp;
-  long a1, a2, a3;
+  long long sm1, sm2, sm3;
+  long long a1comp, a2comp, a3comp;
+  long long a1, a2, a3;
 
   funct=aim->aaaa_1;
   deref_ptr(funct);
@@ -965,12 +965,12 @@ static long c_logical_main(long sel)
   Logical and & or.
   These functions do all possible local propagations.
 */
-static long c_and()
+static long long c_and()
 {
   return c_logical_main(TRUE);
 }
 
-static long c_or()
+static long long c_or()
 {
   return c_logical_main(FALSE);
 }
@@ -982,13 +982,13 @@ static long c_or()
   Logical not.
   This function does all possible local propagations.
 */
-static long c_not()
+static long long c_not()
 {
-  long success=TRUE;
+  long long success=TRUE;
   ptr_psi_term funct,arg1,arg2;
-  long sm1, sm2;
-  long a1comp, a2comp;
-  long a1, a2;
+  long long sm1, sm2;
+  long long a1comp, a2comp;
+  long long a1, a2;
 
   funct=aim->aaaa_1;
   deref_ptr(funct);
@@ -1035,13 +1035,13 @@ static long c_not()
   Logical exclusive or.
   This function does all possible local propagations.
 */
-static long c_xor()
+static long long c_xor()
 {
-  long success=TRUE;
+  long long success=TRUE;
   ptr_psi_term funct,arg1,arg2,arg3;
-  long sm1, sm2, sm3;
-  long a1comp, a2comp, a3comp;
-  long a1, a2, a3;
+  long long sm1, sm2, sm3;
+  long long a1comp, a2comp, a3comp;
+  long long a1, a2, a3;
 
   funct=aim->aaaa_1;
   deref_ptr(funct);
@@ -1114,9 +1114,9 @@ static long c_xor()
   This evaluates "apply(functor => F,Args)".  If F is
   a known function, then it builds the psi-term F(Args), and evaluates it.
 */
-static long c_apply()
+static long long c_apply()
 {
-  long success=TRUE;
+  long long success=TRUE;
   ptr_psi_term funct,other;
   ptr_node n,fattr;
   
@@ -1160,10 +1160,10 @@ static long c_apply()
   It is identical to C_PROJECT except that the order of the arguments is
   inversed.
 */
-static long c_project()
+static long long c_project()
 
 {
-  long success=TRUE;
+  long long success=TRUE;
   ptr_psi_term arg1,arg2,funct,result;
   ptr_node n;
   char *label;
@@ -1191,7 +1191,7 @@ static long c_project()
 	if(arg2->value_3 && sub_type(arg2->type,integer)) { /* 10.8 */
 	  v= *(REAL *)arg2->value_3;
 	  if(v==floor(v)) {
-	    sprintf(thebuffer,"%ld",(long)v);
+	    sprintf(thebuffer,"%ld",(long long)v);
 	    label=heap_copy_string(thebuffer); /* A little voracious */
 	  }
 	  else { /*  RM: Jul 28 1993  */
@@ -1262,11 +1262,11 @@ static long c_project()
 /******** C_DIFF
   Arithmetic not-equal.
 */
-static long c_diff()
+static long long c_diff()
 {
-  long success=TRUE;
+  long long success=TRUE;
   ptr_psi_term arg1,arg2,arg3,t;
-  long num1,num2,num3;
+  long long num1,num2,num3;
   REAL val1,val2,val3;
   
   t=aim->aaaa_1;
@@ -1341,7 +1341,7 @@ static long c_diff()
 /******** C_FAIL
   Always fail.
 */
-static long c_fail()
+static long long c_fail()
 {
   return FALSE;
 }
@@ -1351,7 +1351,7 @@ static long c_fail()
 /******** C_SUCCEED
   Always succeed.
 */
-static long c_succeed()
+static long long c_succeed()
 {
   ptr_psi_term t;
 
@@ -1365,7 +1365,7 @@ static long c_succeed()
 /******** C_REPEAT
   Succeed indefinitely on backtracking.
 */
-static long c_repeat()
+static long long c_repeat()
 {
   ptr_psi_term t;
 
@@ -1379,9 +1379,9 @@ static long c_repeat()
 /******** C_VAR
   Return true/false iff argument is/is not '@' (top with no attributes).
 */
-static long c_var()
+static long long c_var()
 {
-  long success=TRUE;
+  long long success=TRUE;
   ptr_psi_term arg1,result,g,other;
   
   g=aim->aaaa_1;
@@ -1410,9 +1410,9 @@ static long c_var()
 /******** C_NONVAR
   Return true/false iff argument is not/is '@' (top with no attributes).
 */
-static long c_nonvar()
+static long long c_nonvar()
 {
-  long success=TRUE;
+  long long success=TRUE;
   ptr_psi_term arg1,result,g,other;
   
   g=aim->aaaa_1;
@@ -1441,9 +1441,9 @@ static long c_nonvar()
 /******** C_IS_FUNCTION
   Succeed iff argument is a function (built-in or user-defined).
 */
-static long c_is_function()
+static long long c_is_function()
 {
-  long success=TRUE;
+  long long success=TRUE;
   ptr_psi_term arg1,result,g,other;
   
   g=aim->aaaa_1;
@@ -1473,9 +1473,9 @@ static long c_is_function()
 /******** C_IS_PREDICATE
   Succeed iff argument is a predicate (built-in or user-defined).
 */
-static long c_is_predicate()
+static long long c_is_predicate()
 {
-  long success=TRUE;
+  long long success=TRUE;
   ptr_psi_term arg1,result,g,other;
   
   g=aim->aaaa_1;
@@ -1505,9 +1505,9 @@ static long c_is_predicate()
 /******** C_IS_SORT
   Succeed iff argument is a sort (built-in or user-defined).
 */
-static long c_is_sort()
+static long long c_is_sort()
 {
-  long success=TRUE;
+  long long success=TRUE;
   ptr_psi_term arg1,result,g,other;
   
   g=aim->aaaa_1;
@@ -1536,7 +1536,7 @@ static long c_is_sort()
 
 
 /* Return TRUE iff t has only argument "1", and return the argument. */
-long only_arg1(ptr_psi_term t, ptr_psi_term *arg1)
+long long only_arg1(ptr_psi_term t, ptr_psi_term *arg1)
 // ptr_psi_term t;
 // ptr_psi_term *arg1;
 {
@@ -1556,7 +1556,7 @@ long only_arg1(ptr_psi_term t, ptr_psi_term *arg1)
   Mark all the arguments as 'unprotected', i.e. they may be changed
   by assert/retract/redefinition.
 */
-static long c_dynamic()
+static long long c_dynamic()
 {
   ptr_psi_term t=aim->aaaa_1;
   deref_ptr(t);
@@ -1571,7 +1571,7 @@ static long c_dynamic()
   Mark all the arguments as 'protected', i.e. they may not be changed
   by assert/retract/redefinition.
 */
-static long c_static()
+static long long c_static()
 {
   ptr_psi_term t=aim->aaaa_1;
   deref_ptr(t);
@@ -1585,10 +1585,10 @@ static long c_static()
 /******** C_DELAY_CHECK()
   Mark that the properties of the types in the arguments are delay checked
   during unification (i.e. they are only checked when the psi-term is
-  given attributes, and they are not checked as long as the psi-term has
+  given attributes, and they are not checked as long long as the psi-term has
   no attributes.)
 */
-static long c_delay_check()
+static long long c_delay_check()
 {
   ptr_psi_term t=aim->aaaa_1;
 
@@ -1605,7 +1605,7 @@ static long c_delay_check()
   Mark that the function or predicate's arguments are not evaluated when
   the function or predicate is called.
 */
-static long c_non_strict()
+static long long c_non_strict()
 {
   ptr_psi_term t=aim->aaaa_1;
 
@@ -1620,9 +1620,9 @@ static long c_non_strict()
 /******** C_OP()
   Declare an operator.
 */
-static long c_op()
+static long long c_op()
 {
-  //  long declare_operator();
+  //  long long declare_operator();
   ptr_psi_term t=aim->aaaa_1;
 
   return declare_operator(t);
@@ -1630,12 +1630,12 @@ static long c_op()
 
 
 
-long file_exists(char *s)
+long long file_exists(char *s)
 // char *s;
 {
   FILE *f;
   char *e;
-  long success=FALSE;
+  long long success=FALSE;
   
   e=expand_file_name(s);
   if (f=fopen(e,"r")) {
@@ -1650,11 +1650,11 @@ long file_exists(char *s)
 /******** C_EXISTS
   Succeed iff a file can be read in (i.e. if it exists).
 */
-static long c_exists()
+static long long c_exists()
 {
   ptr_psi_term g;
   ptr_node n;
-  long success=TRUE;
+  long long success=TRUE;
   ptr_psi_term arg1; 
   char *c_arg1; 
 
@@ -1690,9 +1690,9 @@ static long c_exists()
   Load a file.  This load accepts and executes any queries in the loaded
   file, including calls to user-defined predicates and other load predicates.
 */
-static long c_load()
+static long long c_load()
 {
-  long success=FALSE;
+  long long success=FALSE;
   ptr_psi_term arg1,arg2,t;
   char *fn;
 
@@ -1729,9 +1729,9 @@ static long c_load()
   Return the current state of the choice point stack (i.e., the time stamp
   of the current choice point).
 */
-static long c_get_choice()
+static long long c_get_choice()
 {
-  long gts,success=TRUE;
+  long long gts,success=TRUE;
   ptr_psi_term funct,result;
 
   funct=aim->aaaa_1;
@@ -1766,11 +1766,11 @@ static long c_get_choice()
   order (but not necessarily consecutive) from the bottom to the top of the
   choice point stack.
 */
-static long c_set_choice()
+static long long c_set_choice()
 {
   REAL gts_r;
-  long gts;
-  long num,success=TRUE;
+  long long gts;
+  long long num,success=TRUE;
   ptr_psi_term t,arg1;
   ptr_choice_point cutpt;
 
@@ -1783,7 +1783,7 @@ static long c_set_choice()
     success = get_real_value(arg1,&gts_r,&num);
     if (success) {
       if (num) {
-        gts=(unsigned long)gts_r;
+        gts=(unsigned long long)gts_r;
         if (choice_stack) {
           cutpt=choice_stack;
           while (cutpt && cutpt->time_stamp>gts) cutpt=cutpt->next;
@@ -1821,10 +1821,10 @@ static long c_set_choice()
   This function allows one to check whether a choice point exists between
   any two arbitrary execution points of the program.
 */
-static long c_exists_choice()
+static long long c_exists_choice()
 {
   REAL gts_r;
-  long ans,gts1,gts2,num,success=TRUE;
+  long long ans,gts1,gts2,num,success=TRUE;
   ptr_psi_term funct,result,arg1,arg2,ans_term;
   ptr_choice_point cp;
 
@@ -1839,10 +1839,10 @@ static long c_exists_choice()
     deref_args(funct,set_1_2);
     success = get_real_value(arg1,&gts_r,&num);
     if (success && num) {
-      gts1 = (unsigned long) gts_r;
+      gts1 = (unsigned long long) gts_r;
       success = get_real_value(arg2,&gts_r,&num);
       if (success && num) {
-        gts2 = (unsigned long) gts_r;
+        gts2 = (unsigned long long) gts_r;
         cp = choice_stack;
         if (cp) {
           while (cp && cp->time_stamp>gts2) cp=cp->next;
@@ -1876,9 +1876,9 @@ static long c_exists_choice()
   Print the global variables and their values,
   in the same way as is done in the user interface.
 */
-static long c_print_variables()
+static long long c_print_variables()
 {
-  long success=TRUE;
+  long long success=TRUE;
 
   print_variables(TRUE); /* 21.1 */
 
@@ -1887,9 +1887,9 @@ static long c_print_variables()
 
 
 
-static void set_parse_queryflag(ptr_node thelist, long sort)
+static void set_parse_queryflag(ptr_node thelist, long long sort)
 // ptr_node thelist;
-// long sort;
+// long long sort;
 {
   ptr_node n;             /* node pointing to argument 2  */
   ptr_psi_term arg;       /* argumenrt 2 psi-term */
@@ -1915,11 +1915,11 @@ static void set_parse_queryflag(ptr_node thelist, long sort)
   print_variables).  All variables in the parsed string
   are added to the set of global variables.
 */
-static long c_parse()
+static long long c_parse()
 {
-  long success=TRUE;
+  long long success=TRUE;
   ptr_psi_term arg1,arg2,arg3,funct,result;
-  long smaller,sort,old_var_occurred;
+  long long smaller,sort,old_var_occurred;
   ptr_node n;
   parse_block pb;
 
@@ -2004,17 +2004,17 @@ static long c_parse()
   of global variables.
 */
 
-static long c_read(long);
+static long long c_read(long long);
      
-static long c_read_psi() { return (c_read(TRUE)); }
+static long long c_read_psi() { return (c_read(TRUE)); }
 
-static long c_read_token() { return (c_read(FALSE)); }
+static long long c_read_token() { return (c_read(FALSE)); }
 
-static long c_read(long psi_flag)     
-// long psi_flag;
+static long long c_read(long long psi_flag)     
+// long long psi_flag;
 {
-  long success=TRUE;
-  long sort;
+  long long success=TRUE;
+  long long sort;
   ptr_psi_term arg1,arg2,arg3,g,t;
   ptr_node old_var_tree;
   ptr_node n;
@@ -2094,15 +2094,15 @@ static long c_read(long psi_flag)
 /******** C_HALT
   Exit the Wild_Life interpreter.
 */
-long c_halt()   /*  RM: Jan  8 1993  Used to be 'void' */ // REV401PLUS chg to long
+long long c_halt()   /*  RM: Jan  8 1993  Used to be 'void' */ // REV401PLUS chg to long long
 {
   exit_life(TRUE);
   return 0L; // to avoid error
 }
 #ifdef _WIN64
 
-void exit_life(long nl_flag)
-// long nl_flag;  // DJD
+void exit_life(long long nl_flag)
+// long long nl_flag;  // DJD
 {
   //  exit(0);
   open_input_file((char*)"stdin");   // CHAR * MSVC
@@ -2123,8 +2123,8 @@ void exit_life(long nl_flag)
   
 #ifdef __unix__
 
-void exit_life(long nl_flag)
-// long nl_flag;
+void exit_life(long long nl_flag)
+// long long nl_flag;
 {
   // exit(0);  // DJD
   open_input_file("stdin");
@@ -2147,14 +2147,14 @@ void exit_life(long nl_flag)
 /******** C_ABORT
   Return to the top level of the interpreter.
 */
-long c_abort()   /*  RM: Feb 15 1993  */
+long long c_abort()   /*  RM: Feb 15 1993  */
 {
   return (abort_life(TRUE));
 }
 
 
 /* 26.1 */
-long abort_life(int nlflag) /*  RM: Feb 15 1993  */
+long long abort_life(int nlflag) /*  RM: Feb 15 1993  */
 // int nlflag;
 {
   if ( aborthooksym->wl_type!=function_it ||
@@ -2195,7 +2195,7 @@ long abort_life(int nlflag) /*  RM: Feb 15 1993  */
 /******** C_NOT_IMPLEMENTED
   This function always fails, it is in fact identical to BOTTOM.
 */
-static long c_not_implemented()
+static long long c_not_implemented()
 {
   ptr_psi_term t;
   
@@ -2210,7 +2210,7 @@ static long c_not_implemented()
 /******** C_DECLARATION
   This function always fails, it is in fact identical to BOTTOM.
 */
-static long c_declaration()
+static long long c_declaration()
 {
   ptr_psi_term t;
   
@@ -2232,9 +2232,9 @@ static long c_declaration()
   made dynamic.  */
 
 
-static long c_setq()
+static long long c_setq()
 {
-  long success=FALSE;
+  long long success=FALSE;
   ptr_psi_term arg1,arg2,g;
   ptr_pair_list p;
   ptr_definition d;
@@ -2284,9 +2284,9 @@ static long c_setq()
   Assert a fact, inserting it as the first clause
   for that predicate or function.
 */
-static long c_assert_first()
+static long long c_assert_first()
 {
-  long success=FALSE;
+  long long success=FALSE;
   ptr_psi_term arg1,g;
   
   g=aim->aaaa_1;
@@ -2312,9 +2312,9 @@ static long c_assert_first()
 /******** C_ASSERT_LAST
   Assert a fact, inserting as the last clause for that predicate or function.
 */
-static long c_assert_last()
+static long long c_assert_last()
 {
-  long success=FALSE;
+  long long success=FALSE;
   ptr_psi_term arg1,g;
   
   g=aim->aaaa_1;
@@ -2342,11 +2342,11 @@ static long c_assert_last()
   This routine is used both for CLAUSE and RETRACT.
   If R==TRUE then delete the first clause which unifies with T.
 */
-long pred_clause(ptr_psi_term t,long r,ptr_psi_term g)
+long long pred_clause(ptr_psi_term t,long long r,ptr_psi_term g)
 // ptr_psi_term t, g;
-// long r;
+// long long r;
 {
-  long success=FALSE;
+  long long success=FALSE;
   ptr_psi_term head,body;
   
   bk_mark_quote(g); /*  RM: Apr  7 1993  */
@@ -2412,9 +2412,9 @@ long pred_clause(ptr_psi_term t,long r,ptr_psi_term g)
   The argument must be a predicate or a function.
   Use PRED_CLAUSE to perform the search.
 */
-static long c_clause()
+static long long c_clause()
 {
-  long success=FALSE;
+  long long success=FALSE;
   ptr_psi_term arg1,arg2,g;
   
   g=aim->aaaa_1;
@@ -2429,9 +2429,9 @@ static long c_clause()
   Retract the first clause that unifies with the argument.
   Use PRED_CLAUSE to perform the search.
 */
-static long c_retract()
+static long long c_retract()
 {
-  long success=FALSE;
+  long long success=FALSE;
   ptr_psi_term arg1,arg2,g;
   
   g=aim->aaaa_1;
@@ -2453,9 +2453,9 @@ void global_one();
   If there is an error anywhere in the declaration,
   then evaluate and declare nothing.
 */
-static long c_global()    /*  RM: Feb 10 1993  */
+static long long c_global()    /*  RM: Feb 10 1993  */
 {
-  long error_2=FALSE, eval_2 = FALSE; // REV401PLUS add _2 conflict with define
+  long long error_2=FALSE, eval_2 = FALSE; // REV401PLUS add _2 conflict with define
   ptr_psi_term g;
   
   g=aim->aaaa_1;
@@ -2476,9 +2476,9 @@ static long c_global()    /*  RM: Feb 10 1993  */
 
 
 
-void global_error_check(ptr_node n, long *error_2, long *eval_2)
+void global_error_check(ptr_node n, long long *error_2, long long *eval_2)
 // ptr_node n;
-// long *error_2, *eval_2; // REV401PLUS added _2 and made long 
+// long long *error_2, *eval_2; // REV401PLUS added _2 and made long long 
 {
   if (n) {
     ptr_psi_term t,a1,a2;
@@ -2568,9 +2568,9 @@ void global_one(ptr_psi_term t)
 /******** C_PERSISTENT
   Declare that a symbol is a persistent variable.
 */
-static long c_persistent()     /*  RM: Feb 10 1993  */
+static long long c_persistent()     /*  RM: Feb 10 1993  */
 {
-  long error=FALSE;
+  long long error=FALSE;
   ptr_psi_term g;
 
   g=aim->aaaa_1;
@@ -2589,9 +2589,9 @@ static long c_persistent()     /*  RM: Feb 10 1993  */
 }
 
 
-void persistent_error_check(ptr_node n, long *error) //REV401PLUS add void
+void persistent_error_check(ptr_node n, long long *error) //REV401PLUS add void
 // ptr_node n;
-// long *error;  // REV401PLUS long
+// long long *error;  // REV401PLUS long long
 {
   if (n) {
     ptr_psi_term t;
@@ -2646,9 +2646,9 @@ void persistent_one(ptr_psi_term t) // REV401PLUS add void
 /******** C_OPEN_IN
   Create a stream for input from the specified file.
 */
-static long c_open_in()
+static long long c_open_in()
 {
-  long success=FALSE;
+  long long success=FALSE;
   ptr_psi_term arg1,arg2,g;
   char *fn;
   
@@ -2690,9 +2690,9 @@ static long c_open_in()
 /******** C_OPEN_OUT
   Create a stream for output from the specified file.
 */
-static long c_open_out()
+static long long c_open_out()
 {
-  long success=FALSE;
+  long long success=FALSE;
   ptr_psi_term arg1,arg2,arg3,g;
   char *fn;
   
@@ -2737,9 +2737,9 @@ static long c_open_out()
   Set the current input stream to a given stream.
   If the given stream is closed, then do nothing.
 */
-static long c_set_input()
+static long long c_set_input()
 {
-  long success=FALSE;
+  long long success=FALSE;
   ptr_psi_term arg1,arg2,g;
   FILE *thestream;
   
@@ -2772,9 +2772,9 @@ static long c_set_input()
 /******** C_SET_OUTPUT
   Set the current output stream.
 */
-static long c_set_output()
+static long long c_set_output()
 {
-  long success=FALSE;
+  long long success=FALSE;
   ptr_psi_term arg1,arg2,g;
   
   g=aim->aaaa_1;
@@ -2799,10 +2799,10 @@ static long c_set_output()
 /******** C_CLOSE
   Close a stream.
 */
-static long c_close()
+static long long c_close()
 {
-  long success=FALSE;
-  long inclose,outclose;
+  long long success=FALSE;
+  long long inclose,outclose;
   ptr_psi_term arg1,arg2,g,s;
   
   g=aim->aaaa_1;
@@ -2854,11 +2854,11 @@ static long c_close()
   differs slightly from Edinburgh Prolog's get(X).
   At end of file, return the psi-term 'end_of_file'.
 */
-static long c_get()
+static long long c_get()
 {
-  long success=TRUE;
+  long long success=TRUE;
   ptr_psi_term arg1,arg2,g,t;
-  long c;
+  long long c;
   
   g=aim->aaaa_1;
   deref_ptr(g);
@@ -2907,22 +2907,22 @@ static long c_get()
   in the range 0..255), and any other psi-term (in which case its name is
   written).
 */
-static long c_put_main(long); /* Forward declaration */
+static long long c_put_main(long long); /* Forward declaration */
 
-static long c_put()
+static long long c_put()
 {
   return c_put_main(FALSE);
 }
 
-static long c_put_err()
+static long long c_put_err()
 {
   return c_put_main(TRUE);
 }
 
-static long c_put_main(long to_stderr)
-// long to_stderr;
+static long long c_put_main(long long to_stderr)
+// long long to_stderr;
 {
-  long i,success=FALSE;
+  long long i,success=FALSE;
   ptr_psi_term arg1,arg2,g;
   char tstr[2], *str=tstr;
   
@@ -2934,8 +2934,8 @@ static long c_put_main(long to_stderr)
     deref_args(g,set_1);
     if ((equal_types(arg1->type,integer) || equal_types(arg1->type,real))
         && arg1->value_3) {
-      i = (unsigned long) floor(*(REAL *) arg1->value_3);
-      if (i==(unsigned long)(unsigned char)i) {
+      i = (unsigned long long) floor(*(REAL *) arg1->value_3);
+      if (i==(unsigned long long)(unsigned char)i) {
         str[0] = i; str[1] = 0;
         success=TRUE;
       }
@@ -2960,7 +2960,7 @@ static long c_put_main(long to_stderr)
 /******** GENERIC_WRITE
   Implements write, writeq, pretty_write, pretty_writeq.
 */
-static long generic_write()
+static long long generic_write()
 {
   ptr_psi_term g;
 
@@ -2976,7 +2976,7 @@ static long generic_write()
   Write a list of arguments to stderr.  Print cyclical terms
   correctly, but don't use the pretty printer indentation.
 */
-static long c_write_err()
+static long long c_write_err()
 {
   indent=FALSE;
   const_quote=FALSE;
@@ -2992,7 +2992,7 @@ static long c_write_err()
   read in again.  Print cyclical terms correctly, but don't use the pretty
   printer indentation.
 */
-static long c_writeq_err()
+static long long c_writeq_err()
 {
   indent=FALSE;
   const_quote=TRUE;
@@ -3007,7 +3007,7 @@ static long c_writeq_err()
   Write a list of arguments. Print cyclical terms
   correctly, but don't use the pretty printer indentation.
 */
-static long c_write()
+static long long c_write()
 {
   indent=FALSE;
   const_quote=FALSE;
@@ -3023,7 +3023,7 @@ static long c_write()
   again.  Print cyclical terms correctly, but don't use the pretty
   printer indentation.
 */
-static long c_writeq()
+static long long c_writeq()
 {
   indent=FALSE;
   const_quote=TRUE;
@@ -3039,7 +3039,7 @@ static long c_writeq()
   again.  Print cyclical terms correctly, but don't use the pretty
   printer indentation.
 */
-static long c_write_canonical()
+static long long c_write_canonical()
 {
   indent=FALSE;
   const_quote=TRUE;
@@ -3053,7 +3053,7 @@ static long c_write_canonical()
 /******** C_PRETTY_WRITE
   The same as write, only indenting if output is wider than PAGEWIDTH.
 */
-static long c_pwrite()
+static long long c_pwrite()
 {
   indent=TRUE;
   const_quote=FALSE;
@@ -3068,7 +3068,7 @@ static long c_pwrite()
 /******** C_PRETTY_WRITEQ
   The same as writeq, only indenting if output is wider than PAGEWIDTH.
 */
-static long c_pwriteq()
+static long long c_pwriteq()
 {
   indent=TRUE;
   const_quote=TRUE;
@@ -3084,11 +3084,11 @@ static long c_pwriteq()
 /******** C_PAGE_WIDTH
   Set the page width.
 */
-static long c_page_width()
+static long long c_page_width()
 {
-  long success=FALSE;
+  long long success=FALSE;
   ptr_psi_term arg1,arg2,g;
-  long pw;
+  long long pw;
   
   g=aim->aaaa_1;
   deref_ptr(g);
@@ -3122,11 +3122,11 @@ static long c_page_width()
 /******** C_PRINT_DEPTH
   Set the depth limit of printing.
 */
-static long c_print_depth()
+static long long c_print_depth()
 {
-  long success=FALSE;
+  long long success=FALSE;
   ptr_psi_term arg1,arg2,g;
-  long dl;
+  long long dl;
   
   g=aim->aaaa_1;
   deref_ptr(g);
@@ -3164,9 +3164,9 @@ static long c_print_depth()
   Return the principal sort of the argument == create a copy with the
   attributes detached.
 */
-static long c_rootsort()
+static long long c_rootsort()
 {
-  long success=TRUE;
+  long long success=TRUE;
   ptr_psi_term arg1,arg2,arg3,g,other;
   
   g=aim->aaaa_1;
@@ -3199,9 +3199,9 @@ static long c_rootsort()
   both A and B being evaluated before the disjunction is.
   Disjunctions could be implemented in Life if there were a 'melt' predicate.
   */
-static long c_disj()
+static long long c_disj()
 {
-  long success=TRUE;
+  long long success=TRUE;
   ptr_psi_term arg1,arg2,g;
 
   g=aim->aaaa_1;
@@ -3228,13 +3228,13 @@ static long c_disj()
   If it returns false, return the Else value.  Either the Then or the Else
   values may be omitted, in which case they are considered to be true.
 */
-static long c_cond()
+static long long c_cond()
 {
-  long success=TRUE;
+  long long success=TRUE;
   ptr_psi_term arg1,arg2,result,g;
   ptr_psi_term *arg1addr;
   REAL val1;
-  long num1;
+  long long num1;
   ptr_node n;
   
   g=aim->aaaa_1;
@@ -3305,9 +3305,9 @@ static long c_cond()
   Added optional 3rd argument which is unified with the feature value if it exists.
   */
 
-static long c_exist_feature()  /*  PVR: Dec 17 1992  */  /* PVR 11.4.94 */
+static long long c_exist_feature()  /*  PVR: Dec 17 1992  */  /* PVR 11.4.94 */
 {
-  long success=TRUE,v;
+  long long success=TRUE,v;
   ptr_psi_term arg1,arg2,arg3,funct,result,ans;
   ptr_node n;
   char *label;
@@ -3341,7 +3341,7 @@ static long c_exist_feature()  /*  PVR: Dec 17 1992  */  /* PVR 11.4.94 */
       label=(char *)arg1->value_3;
     else if (arg1->value_3 && sub_type(arg1->type,integer)) {
       v= *(REAL *)arg1->value_3;
-      sprintf(thebuffer,"%ld",(long)v);
+      sprintf(thebuffer,"%ld",(long long)v);
       label=heap_copy_string(thebuffer); /* A little voracious */
     } else if (arg1->type->keyword->private_feature) {
       label=arg1->type->keyword->combined_name;
@@ -3370,9 +3370,9 @@ static long c_exist_feature()  /*  PVR: Dec 17 1992  */  /* PVR 11.4.94 */
   Convert the feature names of a psi_term into a list of psi-terms.
   This uses the MAKE_FEATURE_LIST routine.
 */
-static long c_features()
+static long long c_features()
 {
-  long success=TRUE;
+  long long success=TRUE;
   ptr_psi_term arg1,arg2,funct,result;
   ptr_psi_term the_list; /*  RM: Dec  9 1992
 			     Modified the routine to use 'cons'
@@ -3426,9 +3426,9 @@ static long c_features()
 /******** C_FEATURES
   Return the list of values of the features of a term.
   */
-static long c_feature_values()
+static long long c_feature_values()
 {
-  long success=TRUE;
+  long long success=TRUE;
   ptr_psi_term arg1,arg2,funct,result;
   ptr_psi_term the_list; /*  RM: Dec  9 1992
 			     Modified the routine to use 'cons'
@@ -3479,7 +3479,7 @@ static long c_feature_values()
 
 /* Return TRUE iff T is a type that should not show up as part of the
    type hierarchy, i.e. it is an internal hidden type. */
-long hidden_type(ptr_definition t)
+long long hidden_type(ptr_definition t)
 // ptr_definition t;
 {
    return (/* (t==conjunction) || 19.8 */
@@ -3504,14 +3504,14 @@ long hidden_type(ptr_definition t)
    If the number of symbols is very large, this routine may run out of space
    before garbage collection.
 */
-ptr_psi_term collect_symbols(long sel) /*  RM: Feb  3 1993  */
-//     long sel;
+ptr_psi_term collect_symbols(long long sel) /*  RM: Feb  3 1993  */
+//     long long sel;
 
 
 {
   ptr_psi_term wl_new;
   ptr_definition def;
-  long botflag;
+  long long botflag;
   ptr_psi_term result;
 
 
@@ -3592,9 +3592,9 @@ ptr_psi_term collect_symbols(long sel) /*  RM: Feb  3 1993  */
   Return a list of all operators (represented as 3-tuples op(prec,type,atom)).
   This function has no arguments.
 */
-static long c_ops()
+static long long c_ops()
 {
-  long success=TRUE;
+  long long success=TRUE;
   ptr_psi_term result, g, t;
 
   g=aim->aaaa_1;
@@ -3631,9 +3631,9 @@ static ptr_node copy_attr_list(ptr_node n)
   Return the attributes of a psi-term, that is, a psi-term of type @ but with
   all the attributes of the argument.
 */
-static long c_strip()
+static long long c_strip()
 {
-  long success=TRUE;
+  long long success=TRUE;
   ptr_psi_term arg1,arg2,funct,result;
   
   funct=aim->aaaa_1;
@@ -3659,12 +3659,12 @@ static long c_strip()
 /******** C_SAME_ADDRESS
   Return TRUE if two arguments share the same address.
 */
-static long c_same_address()
+static long long c_same_address()
 {
-  long success=TRUE;
+  long long success=TRUE;
   ptr_psi_term arg1,arg2,funct,result;
   REAL val3;
-  long num3;
+  long long num3;
   
   funct=aim->aaaa_1;
   deref_ptr(funct);
@@ -3701,12 +3701,12 @@ static long c_same_address()
 /******** C_DIFF_ADDRESS
   Return TRUE if two arguments have different addresses.
 */
-static long c_diff_address()
+static long long c_diff_address()
 {
-  long success=TRUE;
+  long long success=TRUE;
   ptr_psi_term arg1,arg2,funct,result;
   REAL val3;
-  long num3;
+  long long num3;
   
   funct=aim->aaaa_1;
   deref_ptr(funct);
@@ -3744,9 +3744,9 @@ static long c_diff_address()
 /******** C_EVAL
   Evaluate an expression and return its value.
 */
-static long c_eval()
+static long long c_eval()
 {
-  long success=TRUE;
+  long long success=TRUE;
   ptr_psi_term arg1, copy_arg1, arg2, funct, result;
 
   funct = aim->aaaa_1;
@@ -3757,7 +3757,7 @@ static long c_eval()
   if (arg1) {
     deref(arg1);
     deref_args(funct,set_1);
-    assert((unsigned long)(arg1->type)!=4);
+    assert((unsigned long long)(arg1->type)!=4);
     clear_copy();
     copy_arg1 = eval_copy(arg1,STACK);
     resid_aim = NULL;
@@ -3775,9 +3775,9 @@ static long c_eval()
 /******** C_EVAL_INPLACE
   Evaluate an expression and return its value.
 */
-static long c_eval_inplace()
+static long long c_eval_inplace()
 {
-  long success=TRUE;
+  long long success=TRUE;
   ptr_psi_term arg1, copy_arg1, arg2, funct, result;
 
   funct = aim->aaaa_1;
@@ -3806,9 +3806,9 @@ static long c_eval_inplace()
   evaluated.
   This works if the function is declared as non_strict.
 */
-static long c_quote()
+static long long c_quote()
 {
-  long success=TRUE;
+  long long success=TRUE;
   ptr_psi_term arg1,arg2,funct,result;
 
   funct = aim->aaaa_1;
@@ -3830,11 +3830,11 @@ static long c_quote()
   Split a double into two 32-bit words.
   */
 
-static long c_split_double()
+static long long c_split_double()
 {
-  long success=FALSE;
+  long long success=FALSE;
   ptr_psi_term arg1,arg2,funct,result;
-  long n;  // REV401PLUS chg to long
+  long long n;  // REV401PLUS chg to long long
   union {
     double d;
     struct {
@@ -3843,7 +3843,7 @@ static long c_split_double()
     } w2;
   }hack;
   double hi,lo;
-  long n1,n2;   // REV401PLUS chg to long
+  long long n1,n2;   // REV401PLUS chg to long long
   
   funct = aim->aaaa_1;
   deref_ptr(funct);
@@ -3891,13 +3891,13 @@ static long c_split_double()
   Return the address of a string.
   */
 
-static long c_string_address()
+static long long c_string_address()
 {
-  long success=FALSE;
+  long long success=FALSE;
   ptr_psi_term arg1,arg2,funct,result,t;
   double val;
-  long num;  // REV401PLUS chg long
-  long smaller;  // REV401PLUS chg long
+  long long num;  // REV401PLUS chg long long
+  long long smaller;  // REV401PLUS chg long long
   
   
   funct = aim->aaaa_1;
@@ -3911,14 +3911,14 @@ static long c_string_address()
       success=matches(arg1->type,quoted_string,&smaller);
       if (success) {
 	if (arg1->value_3) {
-	  unify_real_result(result,(REAL)(long)(arg1->value_3));
+	  unify_real_result(result,(REAL)(long long)(arg1->value_3));
 	}
 	else {
 	  if(success=get_real_value(result,&val,&num)) {
 	    if(num) {
 	      t=stack_psi_term(4);
 	      t->type=quoted_string;
-	      t->value_3=(GENERIC)(long)val;
+	      t->value_3=(GENERIC)(long long)val;
 	      push_goal(unify,t,arg1,NULL);
 	    }
 	    else
@@ -3944,13 +3944,13 @@ static long c_string_address()
   Change the current working directory
   */
 
-static long c_chdir()
+static long long c_chdir()
 {
-  long success=FALSE;
+  long long success=FALSE;
   ptr_psi_term arg1,arg2,funct,result,t;
   double val;
-  long num;  // REV401PLUS chg long
-  long smaller;  // REV401PLUS chg long
+  long long num;  // REV401PLUS chg long long
+  long long smaller;  // REV401PLUS chg long long
   
   
   funct = aim->aaaa_1;
@@ -3983,9 +3983,9 @@ static long c_chdir()
   An implicit cut is performed: only only solution is given.
 */
 #if 0	/* DENYS Jan 25 1995 */
-static long c_call_once()
+static long long c_call_once()
 {
-  long success=TRUE;
+  long long success=TRUE;
   ptr_psi_term arg1,arg2,funct,result,other;
   ptr_choice_point cutpt; 
 
@@ -4035,9 +4035,9 @@ static long c_call_once()
   Prove a predicate, return true or false if it succeeds or fails.
   No implicit cut is performed.
 */
-static long c_call()
+static long long c_call()
 {
-  long success=TRUE;
+  long long success=TRUE;
   ptr_psi_term arg1,arg2,funct,result,other;
   ptr_choice_point cutpt; 
 
@@ -4084,9 +4084,9 @@ static long c_call()
 /******** C_BK_ASSIGN()
   This implements backtrackable assignment.
 */
-static long c_bk_assign()
+static long long c_bk_assign()
 {
-  long success=FALSE;
+  long long success=FALSE;
   ptr_psi_term arg1,arg2,g;
   
   g=aim->aaaa_1;
@@ -4142,9 +4142,9 @@ static long c_bk_assign()
   this assignment was reached. It is complicated by the fact that the assigned
   term has to be copied into the heap as it becomes a permanent object.
 */
-static long c_assign()
+static long long c_assign()
 {
-  long success=FALSE;
+  long long success=FALSE;
   ptr_psi_term arg1,arg2,g,perm,smallest;
   
   g=aim->aaaa_1;
@@ -4176,9 +4176,9 @@ static long c_assign()
   copied again onto the heap.
   */
 
-static long c_global_assign()
+static long long c_global_assign()
 {
-  long success=FALSE;
+  long long success=FALSE;
   ptr_psi_term arg1,arg2,g,perm,smallest;
   ptr_psi_term wl_new;
   
@@ -4216,9 +4216,9 @@ static long c_global_assign()
 /******** C_UNIFY_FUNC
   An explicit unify function that curries on its two arguments.
 */
-static long c_unify_func()
+static long long c_unify_func()
 {
-  long success=TRUE;
+  long long success=TRUE;
   ptr_psi_term funct,arg1,arg2,result;
 
   funct=aim->aaaa_1;
@@ -4244,9 +4244,9 @@ static long c_unify_func()
 /******** C_UNIFY_PRED()
   This unifies its two arguments (i.e. implements the predicate A=B).
 */
-static long c_unify_pred()
+static long long c_unify_pred()
 {
-  long success=FALSE;
+  long long success=FALSE;
   ptr_psi_term arg1,arg2,g;
   
   g=aim->aaaa_1;
@@ -4271,9 +4271,9 @@ static long c_unify_pred()
   arguments as before (i.e., copying the sort and feature table but not
   the feature values).
 */
-static long c_copy_pointer()   /*  PVR: Dec 17 1992  */
+static long long c_copy_pointer()   /*  PVR: Dec 17 1992  */
 {
-  long success=TRUE;
+  long long success=TRUE;
   ptr_psi_term funct,arg1,result,other;
 
   funct=aim->aaaa_1;
@@ -4301,9 +4301,9 @@ static long c_copy_pointer()   /*  PVR: Dec 17 1992  */
   Make a fresh copy of the input argument, keeping its structure
   but with no connections to the input.
 */
-static long c_copy_term()
+static long long c_copy_term()
 {
-  long success=TRUE;
+  long long success=TRUE;
   ptr_psi_term funct,arg1,copy_arg1,result;
 
   funct=aim->aaaa_1;
@@ -4338,9 +4338,9 @@ static long c_copy_term()
   stack the pair (ADDRESS=NULL, VALUE=GOAL) onto the trail and when undoing
   push the goal onto the goal-stack.
 */
-static long c_undo()
+static long long c_undo()
 {
-  long success=TRUE;
+  long long success=TRUE;
   ptr_psi_term arg1,arg2,g;
   
   g=aim->aaaa_1;
@@ -4381,10 +4381,10 @@ static long c_undo()
   predicate is called as before except that matching is used instead
   of unification to decide whether to enter a clause.
 */
-static long c_freeze_inner(long freeze_flag)
-// long freeze_flag;
+static long long c_freeze_inner(long long freeze_flag)
+// long long freeze_flag;
 {
-  long success=TRUE;
+  long long success=TRUE;
   ptr_psi_term arg1,g;
   ptr_psi_term head, body;
   ptr_pair_list rule;
@@ -4420,13 +4420,13 @@ static long c_freeze_inner(long freeze_flag)
     can_curry=TRUE; /* 8.9 */
 
     if (!rule) rule=arg1->type->rule; /* 8.9 */
-    /* if ((unsigned long)rule==(ptr_psi_term)DEFRULES) rule=arg1->type->rule; 8.9 */
+    /* if ((unsigned long long)rule==(ptr_psi_term)DEFRULES) rule=arg1->type->rule; 8.9 */
 
     if (rule) {
       Traceline("evaluate frozen predicate %P\n",g);
       /* resid_limit=(ptr_goal )stack_pointer; 12.6 */
       
-      if ((unsigned long)rule<=MAX_BUILT_INS) {
+      if ((unsigned long long)rule<=MAX_BUILT_INS) {
         success=FALSE; /* 8.9 */
         Errorline((char*)"the argument %P of freeze must be user-defined.\n",arg1); /* 8.9 */
         return success; /* 8.9 */
@@ -4488,7 +4488,7 @@ static long c_freeze_inner(long freeze_flag)
 /******** C_FREEZE()
   See c_freeze_inner.
 */
-static long c_freeze()
+static long long c_freeze()
 {
   return c_freeze_inner(TRUE);
 }
@@ -4497,7 +4497,7 @@ static long c_freeze()
 /******** C_IMPLIES()
   See c_freeze_inner.
 */
-static long c_implies()
+static long long c_implies()
 {
   return c_freeze_inner(FALSE);
 }
@@ -4508,14 +4508,14 @@ static long c_implies()
 /******** C_CHAR
   Create a 1 character string from an ASCII code.
 */
-static long c_char()
+static long long c_char()
 
 
 {
-  long success=TRUE;
+  long long success=TRUE;
   ptr_psi_term arg1,arg2,funct,result;
-  long smaller;
-  long num1;
+  long long smaller;
+  long long num1;
   REAL val1;
   char *str;
   
@@ -4562,12 +4562,12 @@ static long c_char()
   Return the Ascii code of the first character of a string or of a
   psi-term's name.
 */
-static long c_ascii()
+static long long c_ascii()
 {
-  long success=TRUE;
+  long long success=TRUE;
   ptr_psi_term arg1,arg2,funct,result;
-  long smaller;
-  long num1;
+  long long smaller;
+  long long num1;
   REAL val1;
   
   funct=aim->aaaa_1;
@@ -4612,11 +4612,11 @@ static long c_ascii()
 /******** C_STRING2PSI(P)
   Convert a string to a psi-term whose name is the string's value.
 */
-static long c_string2psi()
+static long long c_string2psi()
 {
-  long success=TRUE;
+  long long success=TRUE;
   ptr_psi_term arg1,arg2,arg3,funct,result,t;
-  long smaller;
+  long long smaller;
   ptr_module mod=NULL; /*  RM: Mar 11 1993  */
   ptr_module save_current; /*  RM: Mar 12 1993  */
   
@@ -4678,9 +4678,9 @@ static long c_string2psi()
 /******** C_PSI2STRING(P)
   Convert a psi-term's name into a string with the name as value.
 */
-static long c_psi2string()
+static long long c_psi2string()
 {
-  long success=TRUE;
+  long long success=TRUE;
   ptr_psi_term arg1,arg3,funct,result,t;
   char buf[100]; /*  RM: Mar 10 1993  */
   
@@ -4721,10 +4721,10 @@ static long c_psi2string()
 /******** C_INT2STRING(P)
   Convert an integer psi-term into a string representing its value.
 */
-static long c_int2string()
+static long long c_int2string()
 {
-  char val[STRLEN]; /* Big enough for a _long_ number */
-  long success=TRUE,i;
+  char val[STRLEN]; /* Big enough for a _long long_ number */
+  long long success=TRUE,i;
   ptr_psi_term arg1,arg3,funct,result,t;
   REAL the_int,next,neg;
 
@@ -4755,7 +4755,7 @@ static long c_int2string()
             return FALSE;
           }
           next = floor(the_int/10);
-          val[i]= '0' + (unsigned long) (the_int-next*10);
+          val[i]= '0' + (unsigned long long) (the_int-next*10);
           the_int = next;
         } while (the_int);
 
@@ -4787,9 +4787,9 @@ static long c_int2string()
   which would have been: "V|G => cond(G,V,{})" because
   V is evaluated and unified before G is proved.
 */
-static long c_such_that()
+static long long c_such_that()
 {
-  long success=TRUE;
+  long long success=TRUE;
   ptr_psi_term arg1,arg2,funct,result;
   
   funct=aim->aaaa_1;
@@ -4829,9 +4829,9 @@ ptr_node one_attr()
 
 
 /* Return a psi term with one or two args, and the addresses of the args */
-ptr_psi_term new_psi_term(long numargs, ptr_definition typ,
+ptr_psi_term new_psi_term(long long numargs, ptr_definition typ,
 			  ptr_psi_term **a1, ptr_psi_term **a2)
-// long numargs;
+// long long numargs;
 // ptr_definition typ;
 // ptr_psi_term **a1, **a2;
 {
@@ -4865,7 +4865,7 @@ ptr_psi_term new_psi_term(long numargs, ptr_definition typ,
 /* Return TRUE iff there are some rules r */
 /* This is true for a user-defined function or predicate with a definition, */
 /* and for a type with constraints. */
-long has_rules(ptr_pair_list r)
+long long has_rules(ptr_pair_list r)
 // ptr_pair_list r;
 {
   if (r==NULL) return FALSE;
@@ -4877,10 +4877,10 @@ long has_rules(ptr_pair_list r)
 }
 
 /* Return TRUE if rules r are for a built-in */
-long is_built_in(ptr_pair_list r)
+long long is_built_in(ptr_pair_list r)
 // ptr_pair_list r;
 {
-  return ((unsigned long)r>0 && (unsigned long)r<MAX_BUILT_INS);
+  return ((unsigned long long)r>0 && (unsigned long long)r<MAX_BUILT_INS);
 }
 
 
@@ -4891,7 +4891,7 @@ void list_special(ptr_psi_term t) // REV401PLUS add void
 {
   ptr_definition d = t->type;
   ptr_pair_list r = t->type->rule;
-  long prflag=FALSE;
+  long long prflag=FALSE;
 
   if (t->type->wl_type==type_it) {
   // if (t->type->type_def==(def_type)type_it) {
@@ -4926,9 +4926,9 @@ void list_special(ptr_psi_term t) // REV401PLUS add void
   List the definition of a predicate or a function, and the own constraints
   of a type (i.e. the non-inherited constraints).
 */
-static long c_listing()
+static long long c_listing()
 {
-  long success=TRUE;
+  long long success=TRUE;
   ptr_psi_term arg1,arg2,g;
   char fp;
 //  def_type fp;
@@ -4956,7 +4956,7 @@ static long c_listing()
         s1="user-defined ";
         s2=" with an empty definition";
       }
-      switch ((long)fp) {
+      switch ((long long)fp) {
       case function_it:
         fprintf(output_stream,"%% '%s' is a %sfunction%s.\n",
                 arg1->type->keyword->symbol,s1,s2);
@@ -5044,7 +5044,7 @@ static long c_listing()
 /******** C_print_codes
   Print the codes of all the sorts.
 */
-static long c_print_codes()
+static long long c_print_codes()
 {
   ptr_psi_term t;
 
@@ -5064,9 +5064,9 @@ static long c_print_codes()
 /******** C_PRED
   Template for C built-in predicates.
 */
-static long c_pred()
+static long long c_pred()
 {
-  long success=TRUE;
+  long long success=TRUE;
   ptr_psi_term arg1,arg2,g;
   
   g=aim->aaaa_1;
@@ -5088,9 +5088,9 @@ static long c_pred()
 /******** C_FUNCT
   Template for C built-in functions.
 */
-static long c_funct()
+static long long c_funct()
 {
-  long success=TRUE;
+  long long success=TRUE;
   ptr_psi_term arg1,arg2,funct;
 
   
@@ -5128,11 +5128,11 @@ static long c_funct()
   T=type (function or predicate).
   R=address of C routine to call.
 */
-void new_built_in(ptr_module m,char *s,char t,long (*r)())
+void new_built_in(ptr_module m,char *s,char t,long long (*r)())
 //     ptr_module m;
 //     char *s;
 //     def_type t;
-//     long (*r)();
+//     long long (*r)();
 {
   ptr_definition d;
 
@@ -5158,8 +5158,8 @@ void new_built_in(ptr_module m,char *s,char t,long (*r)())
   Declare that string S is an operator of precedence P and of type T where
   T=xf, fx, yf, fy, xfx etc...
 */
-static void op_declare(long p,wl_operator t,char *s)
-// long p;
+static void op_declare(long long p,wl_operator t,char *s)
+// long long p;
 // operator t;
 // char *s;
 {
@@ -5190,15 +5190,15 @@ static void op_declare(long p,wl_operator t,char *s)
   For example: '*op*'(3,xfx,+)?
   T is the OP declaration.
 */
-long declare_operator(ptr_psi_term t)
+long long declare_operator(ptr_psi_term t)
 // ptr_psi_term t;
 {
   ptr_psi_term prec,type,atom;
   ptr_node n;
   char *s;
-  long p;
+  long long p;
   wl_operator kind=nop;
-  long success=FALSE;
+  long long success=FALSE;
 
   deref_ptr(t);
   n=t->attr_list;
@@ -5260,14 +5260,14 @@ char *str_conc(char *s1,char *s2)
 
 
 
-char *sub_str(char *s,long p,long n)
+char *sub_str(char *s,long long p,long long n)
 // char *s;
-// long p;
-// long n;
+// long long p;
+// long long n;
 {
   char *result;
-  long i;
-  long l;
+  long long i;
+  long long l;
 
   l=strlen(s);
   if(p>l || p<0 || n<0)
@@ -5287,12 +5287,12 @@ char *sub_str(char *s,long p,long n)
 
 
 
-long append_files(char *s1,char *s2)
+long long append_files(char *s1,char *s2)
 // char *s1, *s2;
 {
   FILE *f1;
   FILE *f2;
-  long result=FALSE;
+  long long result=FALSE;
   
   f1=fopen(s1,"a");
   if(f1) {
@@ -5321,12 +5321,12 @@ long append_files(char *s1,char *s2)
 /******** C_CONCATENATE
   Concatenate the strings in arguments 1 and 2.
 */
-long c_concatenate()
+long long c_concatenate()
 {
   ptr_psi_term result,funct,temp_result;
   ptr_node n1, n2;
-  long success=TRUE;
-  long all_args=TRUE;
+  long long success=TRUE;
+  long long all_args=TRUE;
   char * c_result;
   ptr_psi_term arg1; 
   char * c_arg1; 
@@ -5402,9 +5402,9 @@ long c_concatenate()
 /******** C_MODULE_NAME
   Return the module in which a term resides.
   */
-static long c_module_name()
+static long long c_module_name()
 {
-  long success=TRUE;
+  long long success=TRUE;
   ptr_psi_term arg1,arg2,funct,result;
   
   
@@ -5433,9 +5433,9 @@ static long c_module_name()
 /******** C_COMBINED_NAME
   Return the string module#name for a term.
   */
-static long c_combined_name()
+static long long c_combined_name()
 {
-  long success=TRUE;
+  long long success=TRUE;
   ptr_psi_term arg1,arg2,funct,result;
   
   
@@ -5465,13 +5465,13 @@ static long c_combined_name()
 /******** C_STRING_LENGTH
   Return the length of the string in argument 1.
   */
-long c_string_length()
+long long c_string_length()
 {
   ptr_psi_term result,funct;
   ptr_node n1;
-  long success=TRUE;
-  long all_args=TRUE;
-  long c_result;
+  long long success=TRUE;
+  long long all_args=TRUE;
+  long long c_result;
   ptr_psi_term arg1; 
   char * c_arg1; 
 
@@ -5520,19 +5520,19 @@ return success;
   Return the substring of argument 1 from position argument 2 for a
   length of argument 3 characters.
 */
-long c_sub_string()
+long long c_sub_string()
 {
   ptr_psi_term result,funct,temp_result;
   ptr_node n1,n2,n3;
-  long success=TRUE;
-  long all_args=TRUE;
+  long long success=TRUE;
+  long long all_args=TRUE;
   char * c_result;
   ptr_psi_term arg1; 
   char * c_arg1; 
   ptr_psi_term arg2; 
-  long c_arg2; 
+  long long c_arg2; 
   ptr_psi_term arg3; 
-  long c_arg3; 
+  long long c_arg3; 
 
   funct=aim->aaaa_1;
   deref_ptr(funct);
@@ -5578,7 +5578,7 @@ long c_sub_string()
     if (n2) {
        if (overlap_type(arg2->type,integer)) /* 10.8 */
           if (arg2->value_3)
-              c_arg2= (long)(* (double *)(arg2->value_3));
+              c_arg2= (long long)(* (double *)(arg2->value_3));
           else {
             residuate(arg2);
             all_args=FALSE;
@@ -5596,7 +5596,7 @@ long c_sub_string()
     if (n3) {
        if (overlap_type(arg3->type,integer)) /* 10.8 */
           if (arg3->value_3)
-              c_arg3= (long)(* (double *)(arg3->value_3));
+              c_arg3= (long long)(* (double *)(arg3->value_3));
           else {
             residuate(arg3);
             all_args=FALSE;
@@ -5628,11 +5628,11 @@ return success;
   Append the file named by argument 2 to the file named by argument 1.
   This predicate will not residuate; it requires string arguments.
 */
-long c_append_file()
+long long c_append_file()
 {
   ptr_psi_term g;
   ptr_node n1,n2;
-  long success=TRUE;
+  long long success=TRUE;
   ptr_psi_term arg1; 
   char * c_arg1; 
   ptr_psi_term arg2; 
@@ -5702,15 +5702,15 @@ return success;
   Return an integer random number between 0 and abs(argument1).
   Uses the Unix random() function (rand_r(&seed) for Solaris).
 */
-long c_random()
+long long c_random()
 {
   ptr_psi_term result,funct;
   ptr_node n1;
-  long success=TRUE;
-  long all_args=TRUE;
-  long c_result;
+  long long success=TRUE;
+  long long all_args=TRUE;
+  long long c_result;
   ptr_psi_term arg1; 
-  long c_arg1; 
+  long long c_arg1; 
 
   funct=aim->aaaa_1;
   deref_ptr(funct);
@@ -5728,7 +5728,7 @@ long c_random()
     if (n1) {
        if (overlap_type(arg1->type,integer))
           if (arg1->value_3)
-              c_arg1= (long)(* (double *)(arg1->value_3));
+              c_arg1= (long long)(* (double *)(arg1->value_3));
           else {
             residuate(arg1);
             all_args=FALSE;
@@ -5771,15 +5771,15 @@ long c_random()
 */
 
 
-long c_initrandom()
+long long c_initrandom()
 {
   ptr_psi_term t;
   ptr_node n1;
-  long success=TRUE;
-  long all_args=TRUE;
-  long c_result;
+  long long success=TRUE;
+  long long all_args=TRUE;
+  long long c_result;
   ptr_psi_term arg1; 
-  long c_arg1; 
+  long long c_arg1; 
 
   t=aim->aaaa_1;
   deref_ptr(t);
@@ -5796,7 +5796,7 @@ long c_initrandom()
     if (n1) {
        if (overlap_type(arg1->type,integer))
           if (arg1->value_3)
-              c_arg1= (long)(* (double *)(arg1->value_3));
+              c_arg1= (long long)(* (double *)(arg1->value_3));
           else {
             residuate(arg1);
             all_args=FALSE;
@@ -5828,10 +5828,10 @@ long c_initrandom()
   Return the length of the dereference chain for argument 1.
   */
 /*  RM: Jul 15 1993  */
-long c_deref_length()
+long long c_deref_length()
 {
   ptr_psi_term result,funct;
-  long success=TRUE;
+  long long success=TRUE;
   int count;
   ptr_psi_term arg1,arg2;
   ptr_node n1;
@@ -5862,10 +5862,10 @@ long c_deref_length()
   Return the Unix "ARGV" array as a list of strings.
   */
 /*  RM: Sep 20 1993  */
-long c_args()
+long long c_args()
 {
   ptr_psi_term result,list,str;
-  long success=TRUE;
+  long long success=TRUE;
   int i;
 
   result=aim->bbbb_1;
@@ -6196,8 +6196,8 @@ void init_built_in_types()
   
   /* Hack so '.set_up' doesn't issue a Warning message */
   /*  RM: Feb  3 1993  */  // Commented DJD - causes crash - modified moules.cpp
-  // hash_lookup(bi_module->symbol_table,"set_module")->wl_public=TRUE;
-  // hash_lookup(bi_module->symbol_table,"built_in")->wl_public=TRUE;
+  hash_lookup(bi_module->symbol_table,"set_module")->wl_public=TRUE;
+  hash_lookup(bi_module->symbol_table,"built_in")->wl_public=TRUE;
 
   /*  RM: Jan 29 1993  */
   abortsym=update_symbol(bi_module,"abort"); /* 26.1 */

@@ -11,7 +11,7 @@ static char vcid[] = "$Id: list.c,v 1.2 1994/12/08 23:28:16 duchier Exp $";
 /*
 ** list.c contains the functions to manage double link list
 ** with 2 entries (first and last element)
-** Links belongs to each atom
+** Links belong longs to each atom
 */
 #define EXTERN extern
 #define REV401PLUS
@@ -196,7 +196,7 @@ void List_Swap (RefListHeader header, Ref first, Ref second)
 
 /*==============================================================================*/
 
-static long List_SwapLinks (RefListHeader header, Ref atom)
+static long long List_SwapLinks (RefListHeader header, Ref atom)
 // RefListHeader header;
 // Ref atom;
 {
@@ -314,7 +314,7 @@ void List_Concat (RefListHeader header1, RefListHeader header2)
 
 /*==============================================================================*/
 
-long List_EnumFrom (RefListHeader header, Ref atom,
+long long List_EnumFrom (RefListHeader header, Ref atom,
 		    RefListEnumProc proc, Ref closure)
 // RefListHeader	header;
 // Ref atom;
@@ -345,7 +345,7 @@ long List_EnumFrom (RefListHeader header, Ref atom,
 
 /*==============================================================================*/
 
-long List_Enum (RefListHeader header, RefListEnumProc proc, Ref closure)
+long long List_Enum (RefListHeader header, RefListEnumProc proc, Ref closure)
 // RefListHeader	header;
 // RefListEnumProc	proc;
 // Ref closure;
@@ -363,7 +363,7 @@ long List_Enum (RefListHeader header, RefListEnumProc proc, Ref closure)
 
 /*==============================================================================*/
 
-long List_EnumBackFrom (RefListHeader header, Ref atom,
+long long List_EnumBackFrom (RefListHeader header, Ref atom,
 			RefListEnumProc proc, Ref closure)
 // RefListHeader	header;
 // Ref		atom;
@@ -394,7 +394,7 @@ long List_EnumBackFrom (RefListHeader header, Ref atom,
 
 /*==============================================================================*/
 
-long List_EnumBack (RefListHeader header, RefListEnumProc proc, Ref closure)
+long long List_EnumBack (RefListHeader header, RefListEnumProc proc, Ref closure)
 // RefListHeader	header;
 // RefListEnumProc	proc;
 // Ref			closure;
@@ -405,20 +405,20 @@ long List_EnumBack (RefListHeader header, RefListEnumProc proc, Ref closure)
 /*==============================================================================*/
 
 /*ARGSUSED*/
-static long List_CountAtom (Ref p, Ref nbR)
+static long long List_CountAtom (Ref p, Ref nbR)
 // Ref p; 
 // Ref nbR;
 {
-    long *nb = (long *)nbR;
+    long long *nb = (long long *)nbR;
     
     ++*nb;
     return TRUE;
 }
 
-long List_Card (RefListHeader header)
+long long List_Card (RefListHeader header)
 // RefListHeader header;
 {
-    long n = 0;
+    long long n = 0;
     
     List_Enum (header,(RefListEnumProc) List_CountAtom, &n); // REV401PLUS cast
     return n;
@@ -426,7 +426,7 @@ long List_Card (RefListHeader header)
 
 /*==============================================================================*/
 
-long List_IsUnlink (RefListLinks links)
+long long List_IsUnlink (RefListLinks links)
 // RefListLinks links;
 {
     return (links->Next == NULL && links->Prev == NULL);
