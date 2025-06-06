@@ -1,34 +1,10 @@
-/* Copyright 1991 Digital Equipment Corporation.
-** All Rights Reserved.
-*****************************************************************/
-/* 	$Id: built_ins.c,v 1.14 1995/07/27 21:26:28 duchier Exp $	 */
-
-#ifndef lint
-static char vcid[] = "$Id: built_ins.c,v 1.14 1995/07/27 21:26:28 duchier Exp $";
-#endif /* lint */
-
-#define EXTERN extern
-#define REV401PLUS
-
-
-#ifdef REV401PLUS
-#include "defs.h"
-#endif
-
-#ifdef X11
-#include "xpred.h"
-#endif
-
-#ifdef SOLARIS
-#include <stdlib.h>
-static unsigned int randomseed;
-#endif
-
 /********* STACK_NIL
   Create the NIL object on the stack.
   */
 
-static long long built_in_index=0;
+// static long long built_in_index=0;
+
+#ifdef DUPL
 
 ptr_psi_term stack_nil()
 
@@ -42,7 +18,7 @@ ptr_psi_term stack_nil()
   return empty;
 }
 
-
+#endif
 
 /******** STACK_CONS(head,tail)
   Create a CONS object.
@@ -6197,17 +6173,3 @@ void init_built_in_types()
 
   insert_sys_builtins();
 }
-
-#ifdef REV401PLUS
-#include "defs.h"
-#endif
-
-#ifdef X11
-#include "xpred.h"
-#endif
-
-#ifdef SOLARIS
-#include <stdlib.h>
-static unsigned int randomseed;
-#endif
-

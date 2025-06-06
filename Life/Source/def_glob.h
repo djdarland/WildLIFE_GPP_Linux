@@ -1,3 +1,4 @@
+#pragma once
 /*! \file def_glob.h
   \brief globals
   
@@ -921,6 +922,7 @@ EXTERN long long psi_term_line_number;
 
 EXTERN long long warningflag;
 EXTERN long long quietflag;  // 21.1 
+EXTERN long long cygwin_flag;  // 21.1 
 EXTERN long long trace;
 EXTERN long long verbose; // 21.1 
 

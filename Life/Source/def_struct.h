@@ -1,3 +1,4 @@
+#pragma once
 /*! \file def_struct.h
   \brief typedefs and structures
 

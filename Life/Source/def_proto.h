@@ -1,3 +1,4 @@
+#pragma once
 /*! \file def_proto.h
   \brief prototypes
 

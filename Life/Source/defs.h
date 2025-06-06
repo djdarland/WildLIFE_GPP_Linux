@@ -1,3 +1,4 @@
+#pragma once
 /*! \file defs.h
   \brief includes
 
@@ -40,12 +41,12 @@
 
 #endif
 
+
 #ifdef _WIN64
 #define _CRT_SECURE_NO_WARNINGS
 #include <direct.h>
 #include <cstdlib>
 #include <stdio.h>
-
 #include <stdarg.h>
 #include <cstring>
 #include <time.h>
@@ -63,11 +64,8 @@
 #include <sys/types.h>
 #endif
 
-#define _CRT_SECURE_NO_WARNINGS
+
 #include "def_config.h"
-
-// #include "str_const.h"  // not yet
-
 #include "def_const.h"
 #include "def_macro.h"
 #include "def_struct.h"

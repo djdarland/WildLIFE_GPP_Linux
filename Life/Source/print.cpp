@@ -9,6 +9,8 @@ static char vcid[] = "$Id: print.c,v 1.4 1995/01/14 00:27:20 duchier Exp $";
 
 #define DOTDOT ": "   /*  RM: Dec 14 1992, should be " : "  */
 
+#define EXTERN extern
+#define REV401PLUS
 #ifdef REV401PLUS
 #include "defs.h"
 #endif

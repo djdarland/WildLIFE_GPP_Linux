@@ -6,6 +6,8 @@
 #ifndef lint
 static char vcid[] = "$Id: copy.c,v 1.2 1994/12/08 23:21:30 duchier Exp $";
 #endif /* lint */
+#define EXTERN extern
+#define REV401PLUS
 
 #ifdef REV401PLUS
 #include "defs.h"
@@ -690,4 +692,3 @@ void bk_mark_quote_tree(ptr_node t)
 }
 
 
-/****************************************************************************/

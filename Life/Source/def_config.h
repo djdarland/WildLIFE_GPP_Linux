@@ -1,3 +1,4 @@
+#pragma once
 /*! \file def_config.h
   \brief defines formerly set in Makefile
 

@@ -7,6 +7,7 @@
 static char vcid[] = "$Id: life.c,v 1.2 1994/12/08 23:27:02 duchier Exp $";
 #endif /* lint */
 
+#define REV401PLUS
 #ifdef REV401PLUS
 #include "defs.h"
 #endif
@@ -57,6 +58,7 @@ int main(int argc, char *argv[])  // REV401PLUS correct main proto
     Errorline("Too many command line arguments\n");
   
   quietflag = GetBoolOption("q");
+  cygwin_flag = GetBoolOption("cyg");
 
   init_io();
   init_memory();

@@ -10,6 +10,8 @@
 *****************************************************************/
 /* 	$Id: error.c,v 1.3 1995/07/11 01:53:03 duchier Exp $	 */
 
+#define EXTERN extern
+#define REV401PLUS
 #ifndef lint
 static char vcid[] = "$Id: error.c,v 1.3 1995/07/11 01:53:03 duchier Exp $";
 #endif /* lint */
@@ -1047,7 +1049,7 @@ long long int_div_warning(ptr_psi_term arg, REAL val)
 
 long long mod_warning(ptr_psi_term arg, REAL val,int zero)
 {
-  int err;
+  long long  err;
 
   err=nonint_warning(arg,val,"of modulo operation is not an integer");
   if(!err && zero && val==0) {

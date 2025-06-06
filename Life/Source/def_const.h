@@ -1,3 +1,4 @@
+#pragma once
 /*! \file def_const.h
   \brief constants
 
@@ -5,6 +6,13 @@
 
 #ifndef  EXTERN
 #define EXTERN
+#endif
+
+#ifndef TRUE
+#define TRUE 1L
+#endif
+#ifndef FALSE
+#define FALSE 0L
 #endif
 
 

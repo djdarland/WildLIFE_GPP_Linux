@@ -7,6 +7,8 @@
 static char vcid[] = "$Id: interrupt.c,v 1.2 1994/12/08 23:25:19 duchier Exp $";
 #endif /* lint */
 
+#define EXTERN extern
+#define REV401PLUS
 #ifdef REV401PLUS
 #include "defs.h"
 #endif
@@ -47,6 +49,9 @@ void init_interrupt()
   Return TRUE if execution continues normally, otherwise abort query, toggle
   trace on or off, or quit Wild_Life (suicide).
 */
+
+
+
 void handle_interrupt()
 {
   ptr_psi_term old_state;

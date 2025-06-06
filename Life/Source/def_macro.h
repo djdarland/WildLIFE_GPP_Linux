@@ -1,3 +1,4 @@
+#pragma once
 /*! \file def_macro.h
   \brief macros
 
@@ -7,6 +8,8 @@
 
 #ifdef _WIN64
 #define bzero(a,l) memset(a,0,l)
+#define bcmp(a,b,l) memcmp(a,b,l)
+#define bcopy(a,b,l) memcpy(a,b,l)
 #endif
 
 
