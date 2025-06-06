@@ -282,7 +282,9 @@ static long long c_bitvector_xor()
 #define BV_NOT   0
 #define BV_COUNT 1
 
-static long long bitvector_unop_code(unsigned long long *bv1,ptr_psi_term result,int op) // 
+static long long bitvector_unop_code(unsigned long long *bv1,
+				     ptr_psi_term result,
+				     long long  op) // 
 //     unsigned long long *bv1;
 //     ptr_psi_term result;
 //     int op;
@@ -327,12 +329,13 @@ static long long bitvector_unop_code(unsigned long long *bv1,ptr_psi_term result
 static long long bitvector_unop_internal(ptr_psi_term args[],
 				    ptr_psi_term result,
 				    ptr_psi_term funct,
-				    long long *op)
+				    long long op)
 //     ptr_psi_term args[],result,funct;
 // long long* op;   // REV401PLUS
 {
   return bitvector_unop_code((unsigned long long *)args[0]->value_3,
-			     result,(int)op); // REV401PLUS
+			     result,
+			     op); // REV401PLUS
 }
 
 static long long bitvector_unop(long long op)
@@ -361,7 +364,7 @@ static long long c_bitvector_count()
 static long long bitvector_bit_code(unsigned long long *bv1,
 			       long long idx,
 			       ptr_psi_term result,
-			       long long op,
+			       long long *op,
 			       ptr_psi_term funct)
 //      unsigned long long * bv1;
 //     long long idx;
@@ -377,7 +380,7 @@ static long long bitvector_bit_code(unsigned long long *bv1,
   if (idx<0 || idx>=size1) {
     Errorline("Index out of bound in %P.\n",funct);
     return FALSE; }
-  switch (op) {
+  switch (*op) {
   case BV_GET:
     return unify_real_result(result,(REAL)((s1[i] & (1<<j))?1:0));
     break;
@@ -407,7 +410,7 @@ static long long bitvector_bit_internal(ptr_psi_term args[],
 {
   return bitvector_bit_code((unsigned long long *)args[0]->value_3,
 			    (long long)*((REAL*)args[1]->value_3),
-			    result,(GENERIC)op,funct); // REV401PLUS
+			    result,op,funct); // REV401PLUS
 }
 
 static long long bitvector_bit(long long op)
