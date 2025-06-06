@@ -22,8 +22,13 @@ static long long pass;
 #endif /* CLIFE */
 
 #define LONELY 1
-
+#ifdef _WIN64
+static clock_t last_garbage_time;
+#endif
+#ifdef __unix__
 static struct tms last_garbage_time;
+#endif
+
 static float gc_time, life_time;
 
 #define ALIGNUP(X) { (X) = (GENERIC)( ((long long) (X) + (ALIGN-1)) & ~(ALIGN-1) ); }
@@ -1453,16 +1458,25 @@ void print_gc_info(long long timeflag)
 void garbage()
 {
   GENERIC addr;
+    #ifdef __unix__
   struct tms garbage_start_time,garbage_end_time;
+#endif
+#ifdef _WIN64
+  time_t garbage_start_time, garbage_end_time; 
+#endif
+
   long long start_number_cells, end_number_cells;
 
   start_number_cells = (stack_pointer-mem_base) + (mem_limit-heap_pointer);
-
+#ifdef _WIN64
+  garbage_start_time = clock();
+  //  printf("gstart = %d\n",garbage_start_time);
+  life_time=(garbage_start_time - last_garbage_time)/CLOCKS_PER_SEC;
+#endif
+#ifdef __unix__
   times(&garbage_start_time);
-
-  /* Time elapsed since last garbage collection */
   life_time=(garbage_start_time.tms_utime - last_garbage_time.tms_utime)/60.0;
-
+#endif
 
   if (verbose) {
     fprintf(stderr,"*** Garbage Collect "); /*  RM: Jan 26 1993  */
@@ -1501,9 +1515,17 @@ void garbage()
 
   printed_pointers=NULL;
   pointer_names=NULL;
-  
+#ifdef __unix__
   times(&garbage_end_time);
   gc_time=(garbage_end_time.tms_utime - garbage_start_time.tms_utime)/60.0;
+#endif
+#ifdef _WIN64
+  garbage_end_time = clock();
+  //  printf("gend %d\n", garbage_end_time);
+  gc_time=(garbage_end_time - garbage_start_time)/CLOCKS_PER_SEC;
+  // printf("gc end %f\n", gc_time);
+#endif
+  
   garbage_time+=gc_time;
 
   if (verbose) {

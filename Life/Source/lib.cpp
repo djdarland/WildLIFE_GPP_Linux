@@ -69,8 +69,13 @@ void exit_if_true(long long exitflag)
 void init_io()
 {
   struct stat buffer;
-  
+#ifdef __unix__
   fstat(fileno(stdin), &buffer);
+#endif
+#ifdef _WIN64
+  fstat(_fileno(stdin), &buffer);
+#endif
+  
   /* True iff stdin is from a terminal */
   stdin_terminal=(S_IFCHR & buffer.st_mode)!=0;
   input_state=NULL;
@@ -118,13 +123,15 @@ void WFInit(long long argc, char *argv[])
   ptr_stack save_undo_stack;
   
   int i;
-#ifdef SOLARIS
-  for(i=0;i<256;i++)
-    rand_array[i]=rand_r(&libseed);
-#else
+#ifdef __unix__
   for(i=0;i<256;i++)
     rand_array[i]=random();
 #endif
+#ifdef _Win64
+  for (i = 0;i < 256;i++)
+      rand_array[i] = rand();
+#endif
+
   
   if (argc < 10)
     {
@@ -150,8 +157,14 @@ void WFInit(long long argc, char *argv[])
   assert(stack_pointer==mem_base); /* 8.10 */
   
   /* Timekeeping initialization */
+#ifdef __unix__
   tzset();
   times(&life_start);
+#endif
+#ifdef _WIN64
+  _tzset();
+  life_start = clock();
+#endif
   assert(stack_pointer==mem_base); /* 8.10 */
   
   init_modules(); /*  RM: Jan  8 1993  */
@@ -162,7 +175,9 @@ void WFInit(long long argc, char *argv[])
   x_setup_builtins();
   assert(stack_pointer==mem_base); /* 8.10 */
 #endif
+#ifdef __unix__
   init_interrupt();
+#endif
   assert(stack_pointer==mem_base); /* 8.10 */
   title();
   assert(stack_pointer==mem_base); /* 8.10 */

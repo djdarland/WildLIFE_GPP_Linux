@@ -1,0 +1,45 @@
+echo "WildLife Edit Utility"
+echo "Edit any .cpp file m-z"
+echo "enter 0 to proceed 999 to quit"
+read select
+while [ $select -ne 999 ]
+do 
+echo "-----------"
+echo ".cpp files for wild life m-z"
+echo "-----------"
+echo "17 memory.cpp"
+echo "18 modules.cpp"
+echo "19 parser.cpp"
+echo "20 print.cpp"
+echo "22 sys.cpp"
+echo "23 sys_dbm.cpp"
+echo "24 templates.cpp"
+echo "25 token.cpp"
+echo "26 trees.cpp"
+echo "27 types.cpp"
+echo "28 xdisplaylist.cpp"
+echo "29 xpred.cpp"
+echo "777 NOTES_DJD.txt"
+
+echo "999 quit"
+echo "select"
+read select
+case $select in
+17) ./eedd  memory.cpp   ;;
+18) ./eedd  modules.cpp   ;;
+19) ./eedd parser.cpp   ;;
+20) ./eedd print.cpp   ;;
+22) ./eedd sys.cpp   ;;
+23) ./eedd sys_dbm.cpp   ;;
+24) ./eedd templates.cpp   ;;
+25) ./eedd token.cpp   ;;
+26) ./eedd trees.cpp   ;;
+27) ./eedd types.cpp   ;;
+28) ./eedd xdisplaylist.cpp   ;;
+29) ./eedd xpred.cpp   ;;
+
+777) $EDITOR NOTES_DJD.txt ;;
+
+esac
+done
+

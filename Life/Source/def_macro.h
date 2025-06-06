@@ -5,6 +5,11 @@
 
 // from c_life.h
 
+#ifdef _WIN64
+#define bzero(a,l) memset(a,0,l)
+#endif
+
+
 /* A useful macro for goals which should succeed */
 
 #define WFProve(A) { char *c=(A);if(!WFInput(c)) \

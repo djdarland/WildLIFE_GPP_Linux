@@ -5,6 +5,10 @@ echo "8 ee8 - edit any .h for c++"
 echo "9 ee9 - edit any .cpp file a-l"
 echo "10 ee10 - edit any .cpp file m-z"
 echo "----------------------------------------------"
+echo "11 ee11 - edit any .h for c++ vs Windows"
+echo "12 ee12 - edit any .cpp file a-l vs Windows"
+echo "13 ee13 - edit any .cpp file m-z vs Windows"
+echo "----------------------------------------------"
 echo "110 run splint and view"
 echo "111 make and view"
 echo "112 test ./wildlife on djd_pitch.lf"
@@ -29,6 +33,9 @@ case $select in
 8) ./ee8 ;;
 9) ./ee9 ;;
 10) ./ee10 ;;
+11) ./ee11 ;;
+12) ./ee12 ;;
+13) ./ee13 ;;
 110) splint -warnposix -compdef -usedef -predboolint -boolops -realcompare -nullpass -predboolothers +boolint -shiftnegative -shiftimplementation -formatconst -mustfreeonly -unqualifiedtrans -mustfreefresh -globstate -type -branchstate -nullret -usereleased -nullderef -compmempass -nullstate -onlytrans -observertrans +relaxtypes -abstract -statictrans -fcnuse -redef -nullassign -compdestroy +charindex -kepttrans -immediatetrans -warnlintcomments +matchanyintegral -mayaliasunique -dependenttrans -ptrcompare -unsignedcompare  -exportlocal -paramuse *.c >djd1 2>djd2;
 $EDITOR djd1 djd2 ;;
 
@@ -55,6 +62,10 @@ echo "----------------------------------------------"
 echo "8 ee8 - edit any .h for c++"
 echo "9 ee9 - edit any .cpp file a-l"
 echo "10 ee10 - edit any .cpp file m-z"
+echo "----------------------------------------------"
+echo "11 ee11 - edit any .h for c++ vs Windows"
+echo "12 ee12 - edit any .cpp file a-l vs Windows"
+echo "13 ee13 - edit any .cpp file m-z vs Windows"
 echo "----------------------------------------------"
 echo "110 run splint and view"
 echo "111 make and view"

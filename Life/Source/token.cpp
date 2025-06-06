@@ -455,52 +455,112 @@ void end_terminal_io()
   For the time being all this does is replace '~' by the HOME directory
   if no user is given, or tries to find the user.
 */
-char *expand_file_name(char *s)
+
+
+
+#ifdef __unix__
+char* expand_file_name(char* s)
 // char *s;
 {
-  char *r;
-  char *home; //, *getenv();
-  struct passwd *pw;
-  /* char *user="eight character name"; 18.5 */
-  char userbuf[STRLEN];
-  char *user=userbuf;
-  char *t1,*t2;
+	char* r;
+	char* home; //, *getenv();
+	struct passwd* pw;
+	/* char *user="eight character name"; 18.5 */
+	char userbuf[STRLEN];
+	char* user = userbuf;
+	char* t1, * t2;
 
-  r=s;
-  if (s[0]=='~') {
-    t1=s+1;
-    t2=user;
-    while (*t1!=0 && *t1!='/') {
-      *t2= *t1;
-      *t2++;
-      *t1++;
-    }
-    *t2=0;
-    if ((int)strlen(user)>0) {
-      pw = getpwnam(user);
-      if (pw) {
-	user=pw->pw_dir;
-	r=(char *)malloc(strlen(user)+strlen(t1)+1);
-	sprintf(r,"%s%s",user,t1);
-      }
-      else
-	/* if (warning()) printf("couldn't find user '%s'.\n",user) */;
-    }
-    else {
-      home=getenv("HOME");
-      if (home) {
-	r=(char *)malloc(strlen(home)+strlen(s)+1);
-	sprintf(r,"%s%s",home,s+1);
-      }
-      else
-	/* if (warning()) printf("no HOME directory.\n") */;
-    }
-  }
+	r = s;
+	if (s[0] == '~') {
+		t1 = s + 1;
+		t2 = user;
+		while (*t1 != 0 && *t1 != '/') {
+			*t2 = *t1;
+			*t2++;
+			*t1++;
+		}
+		*t2 = 0;
+		if ((int)strlen(user) > 0) {
+			pw = getpwnam(user);
+			if (pw) {
+				user = pw->pw_dir;
+				r = (char*)malloc(strlen(user) + strlen(t1) + 1);
+				sprintf(r, "%s%s", user, t1);
+			}
+			else
+				/* if (warning()) printf("couldn't find user '%s'.\n",user) */;
+		}
+		else {
+			home = getenv("HOME");
+			if (home) {
+				r = (char*)malloc(strlen(home) + strlen(s) + 1);
+				sprintf(r, "%s%s", home, s + 1);
+			}
+			else
+				/* if (warning()) printf("no HOME directory.\n") */;
+		}
+	}
 
-  /* printf("*** Using file name: '%s'\n",r); */
-  
-  return r;
+	/* printf("*** Using file name: '%s'\n",r); */
+
+	return r;
 }
+
+
+#endif
+
+#ifdef _WIN64
+
+char* expand_file_name(char* s)
+// char *s;
+{
+	char* r, * r2, * r3, * s2;
+	char* home;
+	int slash_count, i;
+	if (strcmp(s, "stdin") == 0) return s;
+	if (strcmp(s, "stdout") == 0) return s;
+	if (strcmp(s, "stderr") == 0) return s;
+	if (s[0] == '~')
+	{
+		r2 = s + 2;
+		if (cygwin_flag)
+		{
+			home = getenv("CYG_HOME");
+		}
+		else
+		{
+			home = getenv("HOME");
+		}
+		// printf("HOME = %s\n", home);
+		if (home) {
+			r = (char*)malloc(strlen(home) + strlen(r2) + 1);
+			sprintf(r, "%s/%s", home, r2);
+			//                printf("r = %s", r);
+		}
+		else
+			if (warning()) printf("no HOME directory.\n");
+
+
+		for (slash_count = 0, i = 0; r[i] != 0; i++)
+			if (r[i] == '/') slash_count++;
+		// printf("slash_count = %d\n", slash_count);
+
+		r3 = (char*)malloc(strlen(r) + slash_count + 1);
+
+		for (i = 0;i < strlen(r); i++) {
+			if (r[i] == '/')
+				r3[i] = '\\';
+			else
+				r3[i] = r[i];
+		}
+		r3[i] = 0;
+		// printf("*** Using file name: '%s'\n", r3);
+		// exit(0);
+		return r3;
+	}
+	else return s;
+}
+#endif
 
 
   

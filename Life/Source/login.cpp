@@ -333,7 +333,12 @@ void assert_clause(ptr_psi_term t)
 
 void start_chrono()
 {
+ #ifdef __unix__
   times(&start_time);
+#endif
+#ifdef _WIN64
+  start_time = clock();
+#endif
 }
 
 
@@ -1092,10 +1097,15 @@ void show_count()
   
   if (verbose) {
     printf("  [");
-    
+#ifdef __unix__
     times(&end_time);
     t = (end_time.tms_utime - start_time.tms_utime)/60.0;
-    
+#endif
+
+#ifdef _WIN64
+    end_time = clock();
+    t = (float)(end_time - start_time) / (float)CLOCKS_PER_SEC;
+#endif
     printf("%1.3fs cpu, %lld goal%s",t,goal_count,(goal_count!=1?"s":""));
     
     if (t!=0.0) printf(" (%0.0f/s)",goal_count/t);
@@ -2208,7 +2218,9 @@ void main_prove()
     
   xcount=0;
   xeventdelay=XEVENTDELAY;
+#ifdef __unix__
   interrupted=FALSE;
+#endif
   main_loop_ok=TRUE;
   
   while (main_loop_ok && goal_stack) {
@@ -2475,17 +2487,28 @@ void main_prove()
       
       if (heap_pointer-stack_pointer < GC_THRESHOLD)
         memory_check();
-      
-      if (interrupted || (stepflag && steptrace))
-        handle_interrupt();
-      else if (stepcount>0) {
-        stepcount--;
-        if (stepcount==0 && !stepflag) {
-          stepflag=TRUE;
-          handle_interrupt();
-        }
-      }
+#ifdef __unix__
+        if (interrupted || (stepflag && steptrace))
+            handle_interrupt();
+        else if (stepcount > 0) {
+            stepcount--;
+            if (stepcount == 0 && !stepflag) {
+                stepflag = TRUE;
+                handle_interrupt();
+            }
     }
+#endif
+#ifdef _WIN64
+
+        if (stepcount > 0) {
+            stepcount--;
+            if (stepcount == 0 && !stepflag) {
+                stepflag = TRUE;
+            }
+        }
+#endif
+
+      }
   }
 }
 
