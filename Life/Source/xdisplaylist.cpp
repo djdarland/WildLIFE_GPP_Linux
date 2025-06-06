@@ -37,9 +37,9 @@ typedef struct wl_Line
     Action action;
     ListLinks links;
     int	x0, y0, x1, y1;
-    long function;
-    long color;
-    long linewidth;
+    long long long long function;
+    long long long long color;
+    long long long long linewidth;
 } Line;
 
     
@@ -48,9 +48,9 @@ typedef struct wl_Rectangle
     Action action;
     ListLinks links;
     int	x, y, width, height;
-    long function;
-    long color;
-    long linewidth;
+    long long long long function;
+    long long long long color;
+    long long long long linewidth;
 } Rectangle;
 
 
@@ -59,9 +59,9 @@ typedef struct wl_Arc
     Action action;
     ListLinks links;
     int	x, y, width, height, startangle, arcangle;
-    long function;
-    long color;
-    long linewidth;
+    long long long long function;
+    long long long long color;
+    long long long long linewidth;
 } Arc;
 
 
@@ -71,9 +71,9 @@ typedef struct wl_String
     ListLinks links;
     int	x, y;
     char *str;
-    long function;
-    long color;
-    long font;
+    long long long long function;
+    long long long long color;
+    long long long long font;
 } String;
 
     
@@ -86,10 +86,10 @@ typedef struct wl_GraphicClosure
 
 typedef struct wl_PostScriptClosure
 {
-    long display;
+    long long long long display;
     Drawable window;
-    long f;
-    long height;
+    long long long long f;
+    long long long long height;
 } PostScriptClosure;
 
 typedef struct wl_Polygon
@@ -97,10 +97,10 @@ typedef struct wl_Polygon
     Action action;
     ListLinks links;
     XPoint *points;
-    long npoints;
-    long function;
-    long color;
-    long linewidth;
+    long long long long npoints;
+    long long long long function;
+    long long long long color;
+    long long long long linewidth;
 } Polygon;
 
 typedef union wl_DisplayElt
@@ -144,14 +144,14 @@ void x_set_gc (display, gc, function, color, linewidth, font)
 
 Display *display;
 GC gc;
-long function;
-unsigned long color;
-long linewidth;
+long long long long function;
+unsigned long long long long color;
+long long long long linewidth;
 Font font;
 
 {
     XGCValues gcvalues;
-    unsigned long valuemask;
+    unsigned long long long long valuemask;
 
 
     gcvalues.function = function;
@@ -185,8 +185,8 @@ void x_record_line (displaylist, action, x0, y0, x1, y1,
 
 ListHeader *displaylist;
 Action action;
-long x0, y0, x1, y1;
-unsigned long function, color, linewidth;
+long long long long x0, y0, x1, y1;
+unsigned long long long long function, color, linewidth;
 
 {
     Line * elt;
@@ -213,8 +213,8 @@ void x_record_arc (displaylist, action, x, y, width, height,
 
 ListHeader *displaylist;
 Action action;
-long x, y, width, height, startangle, arcangle;
-unsigned long function, color, linewidth;
+long long long long x, y, width, height, startangle, arcangle;
+unsigned long long long long function, color, linewidth;
 
 {
     Arc * elt;
@@ -241,8 +241,8 @@ void x_record_rectangle (displaylist, action, x, y, width, height,
 
 ListHeader *displaylist;
 Action action;
-long x, y, width, height;
-unsigned long function, color, linewidth;
+long long long long x, y, width, height;
+unsigned long long long long function, color, linewidth;
 
 {
     Rectangle * elt;
@@ -268,8 +268,8 @@ void x_record_polygon (displaylist, action, points, npoints,
 ListHeader *displaylist;
 Action action;
 XPoint *points;
-long npoints;
-unsigned long function, color, linewidth;
+long long long long npoints;
+unsigned long long long long function, color, linewidth;
 
 {
     Polygon * elt;
@@ -296,10 +296,10 @@ void x_record_string (displaylist, action, x, y, str, font,
 
 ListHeader *displaylist;
 Action action;
-long x, y;
-Font font;  // REV401PLUS changed from long
+long long long long x, y;
+Font font;  // REV401PLUS changed from long long long long
 char *str;
-unsigned long function, color;
+unsigned long long long long function, color;
 
 {
     String * elt;
@@ -320,7 +320,7 @@ unsigned long function, color;
 /*****************************************/
 
 
-static long x_draw_elt (elt, g)
+static long long long long x_draw_elt (elt, g)
 
 DisplayElt *elt;
 GraphicClosure *g;
@@ -464,10 +464,10 @@ ListHeader *displaylist;
 
 /*****************************************/
 
-static long x_free_elt (elt, closure)
+static long long long long x_free_elt (elt, closure)
 
 DisplayElt *elt;
-long *closure;
+long long long long *closure;
 
 {
     Line *line;
@@ -567,10 +567,10 @@ static char *prolog[] = {
 
 static void x_postscript_prolog (f)
 
-long f;
+long long long long f;
 
 {
-    long i;
+    long long long long i;
 
     for (i = 0; prolog[i] != 0; i++)
         write (f, prolog[i], strlen (prolog[i]));
@@ -585,10 +585,10 @@ static char nstr[BUF_SIZE];
 static char *add_number (buf, n)
 
 char *buf;
-long n;
+long long long long n;
 
 {
-    long m, i;
+    long long long long m, i;
     char *s;
 
     for (m=n, i=1; m>=10; i++)
@@ -620,7 +620,7 @@ static void x_get_rgb_values (display, window, color, rgb)
 
      Display *display;
      Window window;
-     unsigned long color;
+     unsigned long long long long color;
      XColor *rgb;
 
 {
@@ -632,7 +632,7 @@ static void x_get_rgb_values (display, window, color, rgb)
 }
 
 
-static long x_postscript_elt (elt, psc)
+static long long long long x_postscript_elt (elt, psc)
 
 DisplayElt *elt;
 PostScriptClosure *psc;
@@ -647,7 +647,7 @@ PostScriptClosure *psc;
     char *pbuf;
     XPoint *p;
     XColor color;
-    long i;
+    long long long long i;
 
 
     buf[0] = 0;
@@ -788,7 +788,7 @@ PostScriptClosure *psc;
 /*****************************************/
 
 
-long x_postscript_window (display, window, displaylist, filename)
+long long long long x_postscript_window (display, window, displaylist, filename)
 
      Display *display;
      Window window;
@@ -800,7 +800,7 @@ long x_postscript_window (display, window, displaylist, filename)
     PostScriptClosure psc;
 
 
-    psc.display =(long)display;
+    psc.display =(long long long long)display;
     psc.window = window;
     if ((psc.f = open (filename, O_CREAT|O_WRONLY|O_TRUNC, 
 		   S_IRUSR|S_IWUSR|S_IRWXG)) == -1)

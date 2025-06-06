@@ -1,0 +1,51 @@
+.echo "WildLife Edit Utility"
+echo "Edit any .cpp  file a-l"
+echo "enter 0 to proceed 999 to quit"
+read select
+while [ $select -ne 999 ]
+do 
+echo "-----------"
+echo ".cpp files a-l"
+echo "-----------"
+echo "2 bi_math.cpp"
+echo "3 bi_sys.cpp"
+echo "4 bi_type.cpp"
+echo "5 built_ins.cpp"
+echo "6 copy.cpp"
+echo "7 error.cpp"
+echo "8 hash_table.cpp"
+echo "9 info.cpp"
+echo "10 interrupt.cpp"
+echo "11 lefun.cpp"
+echo "12 lib.cpp"
+echo "13 life.cpp"
+echo "14 list.cpp"
+echo "15 login.cpp"
+echo "16 lub.cpp"
+echo "777 NOTES_DJD.txt"
+
+echo "999 quit"
+echo "select"
+read select
+case $select in
+2) $EDITOR bi_math.cpp   ;;
+3) $EDITOR bi_sys.cpp   ;;
+4) $EDITOR bi_type.cpp   ;;
+5) $EDITOR built_ins.cpp   ;;
+6) $EDITOR copy.cpp   ;;
+7) $EDITOR error.cpp   ;;
+8) $EDITOR hash_table.cpp   ;;
+9) $EDITOR info.cpp   ;;
+10) $EDITOR interrupt.cpp   ;;
+11) $EDITOR lefun.cpp   ;;
+12) $EDITOR lib.cpp   ;;
+13) $EDITOR life.cpp   ;;
+14) $EDITOR list.cpp   ;;
+15) $EDITOR login.cpp   ;;
+16) $EDITOR lub.cpp   ;;
+
+777) $EDITOR NOTES_DJD.txt ;;
+
+esac
+done
+

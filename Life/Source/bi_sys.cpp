@@ -23,9 +23,9 @@ static char vcid[] = "$Id: bi_sys.c,v 1.2 1994/12/08 23:08:17 duchier Exp $";
   If it is true or false, set the stepflag to that value.  Otherwise, give
   an error.
 */
-long c_trace()
+long long c_trace()
 {
-  long success=TRUE;
+  long long success=TRUE;
   ptr_psi_term t,arg1,arg2;
 
   t=aim->aaaa_1;
@@ -68,7 +68,7 @@ long c_trace()
   return success;
 }
 
-long c_tprove()
+long long c_tprove()
 {
   ptr_psi_term t;
 
@@ -82,7 +82,7 @@ long c_tprove()
   Toggle the single step flag & print a message saying whether
   single stepping mode is on or off.
 */
-static long c_step()
+static long long c_step()
 {
   ptr_psi_term t;
 
@@ -96,7 +96,7 @@ static long c_step()
   Toggle the verbose flag & print a message saying whether
   verbose mode is on or off.
 */
-static long c_verbose()
+static long long c_verbose()
 {
   ptr_psi_term t;
 
@@ -114,7 +114,7 @@ static long c_verbose()
   Default: print warnings.
   (Errors cannot be turned off.)
 */
-static long c_warning()
+static long long c_warning()
 {
   ptr_psi_term t;
 
@@ -132,11 +132,11 @@ static long c_warning()
   Return the integer of greatest magnitude that guarantees exact
   integer arithmetic.
 */
-static long c_maxint()
+static long long c_maxint()
 {
   ptr_psi_term t,result;
   REAL val;
-  long num,success;
+  long long num,success;
   
   t=aim->aaaa_1;
   deref_args(t,set_empty);
@@ -158,7 +158,7 @@ static long c_maxint()
 /******** C_QUIET
   Return the value of not(NOTQUIET).
   */
-long c_quiet()
+long long c_quiet()
 {
   ptr_psi_term t,result,ans;
   int success=TRUE;
@@ -178,11 +178,11 @@ long c_quiet()
 /******** C_CPUTIME
   Return the cpu-time in seconds used by the Wild_Life interpreter.
 */
-static long c_cputime()
+static long long c_cputime()
 {
   ptr_psi_term result, t;
   REAL thetime,val;
-  long num,success;
+  long long num,success;
   
   t=aim->aaaa_1;
   deref_args(t,set_empty);
@@ -209,11 +209,11 @@ static long c_cputime()
 
 // REV401PLUS I had revised c_realtime as below in prior work on X
 
-static long c_realtime()
+static long long c_realtime()
 {
   ptr_psi_term result, t;
   REAL thetime,val;
-  long num,success;
+  long long num,success;
   struct timeval tp;
   struct timezone tzp;
  
@@ -237,11 +237,11 @@ static long c_realtime()
 
 // origin below
 
-static long c_realtime()
+static long long c_realtime()
 {
   ptr_psi_term result, t;
   REAL thetime,val;
-  long num,success;
+  long long num,success;
   struct timeval tp;
   struct timezone tzp;
   
@@ -269,10 +269,10 @@ static long c_realtime()
   hour, minute, second, and weekday.
   This is useful for building real-time applications such as clocks.
 */
-static long c_localtime()
+static long long c_localtime()
 {
   ptr_psi_term result, t, psitime;
-  long success=TRUE;
+  long long success=TRUE;
   struct timeval tp;
   struct timezone tzp;
   struct tm *thetime;
@@ -303,11 +303,11 @@ static long c_localtime()
 /******** C_STATISTICS
   Print some information about Wild_Life: stack size, heap size, total memory.
 */
-static long c_statistics()
+static long long c_statistics()
 {
   ptr_psi_term t;
-  long success=TRUE;
-  long t1,t2,t3;
+  long long success=TRUE;
+  long long t1,t2,t3;
 
   t=aim->aaaa_1;
   deref_args(t,set_empty);
@@ -318,9 +318,9 @@ static long c_statistics()
 
   printf("\n");
   /* printf("************** SYSTEM< INFORMATION **************\n"); */
-  printf("Stack size  : %8ld bytes (%5ldK) (%ld%%)\n",t1,t1/1024,100*t1/t3);
-  printf("Heap size   : %8ld bytes (%5ldK) (%ld%%)\n",t2,t2/1024,100*t2/t3);
-  printf("Total memory: %8ld bytes (%5ldK)\n",t3,t3/1024);
+  printf("Stack size  : %8lld bytes (%5lldK) (%lld%%)\n",t1,t1/1024,100*t1/t3);
+  printf("Heap size   : %8lld bytes (%5lldK) (%lld%%)\n",t2,t2/1024,100*t2/t3);
+  printf("Total memory: %8lld bytes (%5lldK)\n",t3,t3/1024);
 
 #ifdef X11
   printf("X predicates are installed.\n");
@@ -337,7 +337,7 @@ static long c_statistics()
 /******** C_GARBAGE
   Force a call to the garbage collector.
 */
-static long c_garbage()
+static long long c_garbage()
 {
   ptr_psi_term t;
 
@@ -351,11 +351,11 @@ static long c_garbage()
 /******** C_GETENV
   Get the value of an environment variable.
 */
-static long c_getenv()
+static long long c_getenv()
 {
-  long success=FALSE;
+  long long success=FALSE;
   ptr_psi_term arg1,arg2,funct,result,t;
-  long smaller;  // REV401PLUS int -> long
+  long long smaller;  // REV401PLUS int -> long long
   
   funct = aim->aaaa_1;
   result=aim->bbbb_1;
@@ -389,12 +389,12 @@ static long c_getenv()
 /******** C_SYSTEM
   Pass a string to shell for execution. Return the value as the result.
 */
-static long c_system()
+static long long c_system()
 {
-  long success=TRUE;
+  long long success=TRUE;
   ptr_psi_term arg1,arg2,funct,result;
   REAL value;
-  long smaller;
+  long long smaller;
   
   funct=aim->aaaa_1;
   deref_ptr(funct);
@@ -435,7 +435,7 @@ static long c_system()
   Force type encoding.
   This need normally never be called by the user.
 */
-static long c_encode()
+static long long c_encode()
 {
   ptr_psi_term t;
 
@@ -545,7 +545,7 @@ ptr_psi_term makePsiList(GENERIC head, ptr_psi_term (*valueFunc)(GENERIC), GENER
 /******** C_ResidList
   rlist(A) ->  list all eval/prove goals residuated on variable 'A'.
 */
-static long c_residList()
+static long long c_residList()
 {
 	ptr_psi_term func;
 	ptr_psi_term result,arg1, other;
@@ -592,7 +592,7 @@ ptr_goal makeGoal(ptr_psi_term p)
 /******** C_residuate
   residuate(A,B) ->  residuate goal B on variable A, non_strict in both args
 */
-static long c_residuate()
+static long long c_residuate()
 {
 	ptr_psi_term pred;
 	ptr_psi_term arg1, arg2;
@@ -623,10 +623,10 @@ static long c_residuate()
   both args.  If any of the variables is bound the predicate is executed.
   The list must have finite length.
 */
-static long c_mresiduate()
+static long long c_mresiduate()
      
 {
-  long success=TRUE;
+  long long success=TRUE;
   ptr_psi_term pred;
   ptr_psi_term arg1, arg2, tmp, var;
   ptr_goal g;

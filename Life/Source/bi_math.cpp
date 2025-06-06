@@ -37,8 +37,8 @@ static char vcid[] = "$Id: bi_math.c,v 1.2 1994/12/08 23:07:37 duchier Exp $";
 #include "defs.h"
 #endif
 
-/* Incorrect when long conversion causes overflow: */
-/* #define trunc(x) ((double)((long)(x))) */
+/* Incorrect when long long conversion causes overflow: */
+/* #define trunc(x) ((double)((long long)(x))) */
 
 /* For machines that do not have a 'trunc(x)' function: */
 #ifdef NEED_TRUNC
@@ -58,11 +58,11 @@ double x;
   
   Only it may residuate or curry.
 */
-static long c_mult()
+static long long c_mult()
 {
-  long success=TRUE;
+  long long success=TRUE;
   ptr_psi_term arg1,arg2,arg3,t;
-  long num1,num2,num3;
+  long long num1,num2,num3;
   REAL val1,val2,val3;
   
   t=aim->aaaa_1;
@@ -165,11 +165,11 @@ static long c_mult()
 /******** C_DIV
   Similar to multiply.
 */
-static long c_div()
+static long long c_div()
 {
-  long success=TRUE;
+  long long success=TRUE;
   ptr_psi_term arg1,arg2,arg3,t;
-  long num1,num2,num3;
+  long long num1,num2,num3;
   REAL val1,val2,val3;
   
   t=aim->aaaa_1;
@@ -291,11 +291,11 @@ static long c_div()
   Does all deterministic local inversions that can be determined in
   constant-time independent of argument values.
 */
-static long c_intdiv()
+static long long c_intdiv()
 {
-  long success=TRUE;
+  long long success=TRUE;
   ptr_psi_term arg1,arg2,arg3,t;
-  long num1,num2,num3;
+  long long num1,num2,num3;
   REAL val1,val2,val3;
   
   t=aim->aaaa_1;
@@ -454,12 +454,12 @@ static long c_intdiv()
 
 
 /* Main routine for floor & ceiling functions */
-static long c_floor_ceiling(long floorflag)
-// long floorflag;
+static long long c_floor_ceiling(long long floorflag)
+// long long floorflag;
 {
-  long success=TRUE;
+  long long success=TRUE;
   ptr_psi_term arg1,arg2,arg3,t;
-  long num1,num3;
+  long long num1,num3;
   REAL val1,val3;
   
   t=aim->aaaa_1;
@@ -502,7 +502,7 @@ static long c_floor_ceiling(long floorflag)
 /******** C_FLOOR
   Return the largest integer inferior or equal to the argument
 */
-static long c_floor()
+static long long c_floor()
 {
   return c_floor_ceiling(TRUE);
 }
@@ -513,7 +513,7 @@ static long c_floor()
 /******** C_CEILING
   Return the smallest integer larger or equal to the argument
 */
-static long c_ceiling()
+static long long c_ceiling()
 {
   return c_floor_ceiling(FALSE);
 }
@@ -523,11 +523,11 @@ static long c_ceiling()
 /******** C_SQRT
   Return the square root of the argument
 */
-static long c_sqrt()
+static long long c_sqrt()
 {
-  long success=TRUE;
+  long long success=TRUE;
   ptr_psi_term arg1,arg3,t;
-  long num1,num3;
+  long long num1,num3;
   REAL val1,val3;
   
   t=aim->aaaa_1;
@@ -578,12 +578,12 @@ static long c_sqrt()
 
 
 /* Main routine for sine and cosine */
-static long c_trig(long trigflag)
-// long trigflag;
+static long long c_trig(long long trigflag)
+// long long trigflag;
 {
-  long success=TRUE;
+  long long success=TRUE;
   ptr_psi_term arg1,arg3,t; /* arg3 is result */
-  long num1,num3;
+  long long num1,num3;
   REAL val1,val3,ans;
 
   t=aim->aaaa_1;
@@ -638,7 +638,7 @@ static long c_trig(long trigflag)
 /******** C_COSINE
   Return the cosine of the argument (in radians).
 */
-static long c_cos()
+static long long c_cos()
 {
   return (c_trig(COSFLAG));
 }
@@ -649,7 +649,7 @@ static long c_cos()
 /******** C_SINE
   Return the sine of the argument
 */
-static long c_sin()
+static long long c_sin()
 {
   return (c_trig(SINFLAG));
 }
@@ -659,18 +659,18 @@ static long c_sin()
 /******** C_TAN
   Return the tangent of the argument
 */
-static long c_tan()
+static long long c_tan()
 {
   return (c_trig(TANFLAG));
 }
 
 
 
-static long c_bit_not()
+static long long c_bit_not()
 {
-  long success=TRUE;
+  long long success=TRUE;
   ptr_psi_term arg1,arg3,t; /* arg3 is result */
-  long num1,num3;
+  long long num1,num3;
   REAL val1,val3;
 
   t=aim->aaaa_1;
@@ -693,11 +693,11 @@ static long c_bit_not()
           break;
         case 1:
 	  if (bit_not_warning(arg1,val1)) return FALSE;
-          success=unify_real_result(arg3,(REAL)~(long)val1);
+          success=unify_real_result(arg3,(REAL)~(long long)val1);
           break;
         case 4:
 	  if (bit_not_warning(arg3,val3)) return FALSE;
-          success=unify_real_result(arg1,(REAL)~(long)val3);
+          success=unify_real_result(arg1,(REAL)~(long long)val3);
           break;
         case 5:
 	  if (bit_not_warning(arg1,val1)) return FALSE;
@@ -720,11 +720,11 @@ static long c_bit_not()
 /******** C_BIT_AND
   Return the bitwise operation: ARG1 and ARG2.
 */
-static long c_bit_and()
+static long long c_bit_and()
 {
-  long success=TRUE;
+  long long success=TRUE;
   ptr_psi_term arg1,arg2,arg3,t;
-  long num1,num2,num3;
+  long long num1,num2,num3;
   REAL val1,val2,val3;
   
   t=aim->aaaa_1;
@@ -768,7 +768,7 @@ static long c_bit_and()
 	case 3:
           if (bit_and_warning(arg1,val1)||bit_and_warning(arg2,val2))
             return FALSE;
-	  success=unify_real_result(arg3,(REAL)(((unsigned long)val1) & ((unsigned long)val2)));
+	  success=unify_real_result(arg3,(REAL)(((unsigned long long)val1) & ((unsigned long long)val2)));
 	  break;
 	case 4:
 	  residuate2(arg1,arg2);
@@ -784,7 +784,7 @@ static long c_bit_and()
 	case 7:
           if (bit_and_warning(arg1,val1)||bit_and_warning(arg2,val2))
             return FALSE;
-	  success=(val3==(REAL)(((unsigned long)val1) & ((unsigned long)val2)));
+	  success=(val3==(REAL)(((unsigned long long)val1) & ((unsigned long long)val2)));
 	  break;
 	}
       
@@ -801,11 +801,11 @@ static long c_bit_and()
 /******** C_BIT_OR
   Return the bitwise operation: ARG1 or ARG2.
 */
-static long c_bit_or()
+static long long c_bit_or()
 {
-  long success=TRUE;
+  long long success=TRUE;
   ptr_psi_term arg1,arg2,arg3,t;
-  long num1,num2,num3;
+  long long num1,num2,num3;
   REAL val1,val2,val3;
   
   t=aim->aaaa_1;
@@ -846,12 +846,12 @@ static long c_bit_or()
 	case 3:
           if (bit_or_warning(arg1,val1)||bit_or_warning(arg2,val2))
             return FALSE;
-	  success=unify_real_result(arg3,(REAL)(((unsigned long)val1) | ((unsigned long)val2)));
+	  success=unify_real_result(arg3,(REAL)(((unsigned long long)val1) | ((unsigned long long)val2)));
 	  break;
 	case 7:
           if (bit_or_warning(arg1,val1)||bit_or_warning(arg2,val2))
             return FALSE;
-	  success=(val3==(REAL)(((unsigned long)val1) | ((unsigned long)val2)));
+	  success=(val3==(REAL)(((unsigned long long)val1) | ((unsigned long long)val2)));
 	  break;
 	}      
     }
@@ -867,25 +867,25 @@ static long c_bit_or()
   Return the bitwise shift left or shift right.
 */
 
-static long c_shift(long);
+static long long c_shift(long long);
 
 
-static long c_shift_left()
+static long long c_shift_left()
 {
   return (c_shift(FALSE));
 }
 
-static long c_shift_right()
+static long long c_shift_right()
 {
   return (c_shift(TRUE));
 }
 
-static long c_shift(long dir)
-// long dir;
+static long long c_shift(long long dir)
+// long long dir;
 {
-  long success=TRUE;
+  long long success=TRUE;
   ptr_psi_term arg1,arg2,arg3,t;
-  long num1,num2,num3;
+  long long num1,num2,num3;
   REAL val1,val2,val3,ans;
   
   t=aim->aaaa_1;
@@ -926,13 +926,13 @@ static long c_shift(long dir)
 	case 3:
           if (shift_warning(dir,arg1,val1)||shift_warning(dir,arg2,val2))
             return FALSE;
-          ans=(REAL)(dir?(long)val1>>(long)val2:(long)val1<<(long)val2);
+          ans=(REAL)(dir?(long long)val1>>(long long)val2:(long long)val1<<(long long)val2);
 	  success=unify_real_result(arg3,ans);
 	  break;
         case 7:
           if (shift_warning(dir,arg1,val1)||shift_warning(dir,arg2,val2))
             return FALSE;
-          ans=(REAL)(dir?(long)val1>>(long)val2:(long)val1<<(long)val2);
+          ans=(REAL)(dir?(long long)val1>>(long long)val2:(long long)val1<<(long long)val2);
 	  success=(val3==ans);
 	  break;
 	}      
@@ -948,11 +948,11 @@ static long c_shift(long dir)
 /******** C_MOD
   The modulo operation.
 */
-static long c_mod()
+static long long c_mod()
 {
-  long success=TRUE;
+  long long success=TRUE;
   ptr_psi_term arg1,arg2,arg3,t;
-  long num1,num2,num3;
+  long long num1,num2,num3;
   REAL val1,val2,val3;
   
   t=aim->aaaa_1;
@@ -993,12 +993,12 @@ static long c_mod()
 	case 3:
           if (mod_warning(arg1,val1,0)||mod_warning(arg2,val2,1))
             return FALSE;
-	  success=unify_real_result(arg3,(REAL)((unsigned long)val1 % (unsigned long)val2));
+	  success=unify_real_result(arg3,(REAL)((unsigned long long)val1 % (unsigned long long)val2));
 	  break;
 	case 7:
           if (mod_warning(arg1,val1,0)||mod_warning(arg2,val2,1))
             return FALSE;
-	  success=(val3==(REAL)((unsigned long)val1 % (unsigned long)val2));
+	  success=(val3==(REAL)((unsigned long long)val1 % (unsigned long long)val2));
 	  break;
 	}      
     }
@@ -1019,11 +1019,11 @@ static long c_mod()
   Addition is further complicated by the fact that it is both a unary and
   binary function.
 */
-static long c_add()
+static long long c_add()
 {
-  long success=TRUE;
+  long long success=TRUE;
   ptr_psi_term arg1,arg2,arg3,t;
-  long num1,num2,num3;
+  long long num1,num2,num3;
   REAL val1,val2,val3;
   
   t=aim->aaaa_1;
@@ -1098,7 +1098,7 @@ static long c_add()
     else
       curry(); 
 /*
-'+' is no longer a function of a single argument:
+'+' is no long longer a function of a single argument:
       if(arg1) {
 	deref(arg3);
 	success=get_real_value(arg3,&val3,&num3);
@@ -1131,11 +1131,11 @@ static long c_add()
 /******** C_SUB
   Identical (nearly) to C_ADD
 */
-static long c_sub()
+static long long c_sub()
 {
-  long success=TRUE;
+  long long success=TRUE;
   ptr_psi_term arg1,arg2,arg3,t;
-  long num1,num2,num3;
+  long long num1,num2,num3;
   REAL val1,val2,val3;
   
   t=aim->aaaa_1;
@@ -1234,11 +1234,11 @@ static long c_sub()
 /******** C_LOG
   Natural logarithm.
 */
-static long c_log()
+static long long c_log()
 {
-  long success=TRUE;
+  long long success=TRUE;
   ptr_psi_term arg1,arg3,t;
-  long num1,num3;
+  long long num1,num3;
   REAL val1,val3;
   
   t=aim->aaaa_1;
@@ -1291,11 +1291,11 @@ static long c_log()
 /******** C_EXP
   Exponential.
 */
-static long c_exp()
+static long long c_exp()
 {
-  long success=TRUE;
+  long long success=TRUE;
   ptr_psi_term arg1,arg2,arg3,t;
-  long num1,num3;
+  long long num1,num3;
   REAL val1,val3;
   
   t=aim->aaaa_1;

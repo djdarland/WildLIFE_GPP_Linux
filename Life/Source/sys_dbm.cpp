@@ -11,7 +11,7 @@
 #include "sys.h"
 #include <dbm.h>
 
-static long
+static long long
 dbminit_internal(args,result,funct)
      ptr_psi_term args[],result,funct;
 {
@@ -22,7 +22,7 @@ dbminit_internal(args,result,funct)
   }
 }
 
-static long
+static long long
 c_dbminit()
 {
   psi_arg args[1];
@@ -30,7 +30,7 @@ c_dbminit()
   return call_primitive(dbminit_internal,NARGS(args),args,0);
 }
 
-static long
+static long long
 dbmfetch_internal(args,result,funct)
      ptr_psi_term args[],result,funct;
 {
@@ -46,7 +46,7 @@ dbmfetch_internal(args,result,funct)
   }
 }
 
-static long
+static long long
 c_dbmfetch()
 {
   psi_arg args[1];
@@ -54,7 +54,7 @@ c_dbmfetch()
   return call_primitive(dbmfetch_internal,NARGS(args),args,0);
 }
 
-static long
+static long long
 dbmstore_internal(args,result,funct)
      ptr_psi_term args[],result,funct;
 {
@@ -67,7 +67,7 @@ dbmstore_internal(args,result,funct)
   else return TRUE;
 }
 
-static long
+static long long
 c_dbmstore()
 {
   psi_arg args[2];
@@ -76,7 +76,7 @@ c_dbmstore()
   return call_primitive(dbmstore_internal,NARGS(args),args,0);
 }
 
-static long
+static long long
 dbmdelete_internal(args,result,funct)
      ptr_psi_term args[],result,funct;
 {
@@ -87,7 +87,7 @@ dbmdelete_internal(args,result,funct)
   else return TRUE;
 }
 
-static long
+static long long
 c_dbmdelete()
 {
   psi_arg args[1];
@@ -95,7 +95,7 @@ c_dbmdelete()
   return call_primitive(dbmdelete_internal,NARGS(args),args,0);
 }
 
-static long
+static long long
 dbmfirstkey_internal(args,result,funct)
      ptr_psi_term args[],result,funct;
 {
@@ -109,13 +109,13 @@ dbmfirstkey_internal(args,result,funct)
   }
 }
 
-static long
+static long long
 c_dbmfirstkey()
 {
   return call_primitive(dbmfirstkey_internal,0,NULL,0);
 }
 
-static long
+static long long
 dbmnextkey_internal(args,result,funct)
      ptr_psi_term args[],result,funct;
 {
@@ -131,7 +131,7 @@ dbmnextkey_internal(args,result,funct)
   }
 }
 
-static long
+static long long
 c_dbmnextkey()
 {
   psi_arg args[1];

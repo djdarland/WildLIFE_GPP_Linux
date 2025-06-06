@@ -15,14 +15,14 @@ static char vcid[] = "$Id: print.c,v 1.4 1995/01/14 00:27:20 duchier Exp $";
 
 // REV401PLUS moved initializations down
 /* Used to distinguish listings from other writes */
-static long listing_flag;
+static long long listing_flag;
 /* Precedence of the comma and colon operators (or 0 if none exists) */
 #define COMMA_PREC ((commasym->op_data)?(commasym->op_data->precedence):0)
 #define COLON_PREC ((colonsym->op_data)?(colonsym->op_data->precedence):0)
 
 /* Used to list function bodies in a nice way */
 /* Only valid if listing_flag==TRUE */
-static long func_flag;
+static long long func_flag;
 
 
 /* Initialize size of single segment of split printing.  Wild_Life         */
@@ -38,7 +38,7 @@ void init_print()
 char *heap_nice_name()
 {
   string tmp1,tmp2;
-  long g,len,leading_a;
+  long long g,len,leading_a;
 
   g= ++gen_sym_counter;
   len=2;
@@ -53,7 +53,7 @@ char *heap_nice_name()
     len++;
   } while (g>0 && len<STRLEN);
   if (len>=STRLEN)
-    perr("Variable name too long -- the universe has ceased to exist.");
+    perr("Variable name too long long -- the universe has ceased to exist.");
 
   strcpy(tmp1,"_");
   strcat(tmp1,tmp2);
@@ -82,10 +82,10 @@ GENERIC unique_name()
   Converts the string S into a positive integer.
   Returns -1 if s is not an integer.
 */
-long str_to_int(char *s)
+long long str_to_int(char *s)
 // char *s;
 {
-  long v=0;
+  long long v=0;
   char c;
 
   c=(*s);
@@ -109,10 +109,10 @@ long str_to_int(char *s)
   Print the integer B under binary format (currently 26 is printed **-*-).
   This is used to print the binary codes used in type encryption.
 */
-void print_bin(long b)
-// long b;
+void print_bin(long long b)
+// long long b;
 {
-  long p;
+  long long p;
 
   for (p=INT_SIZE;p--;p>0) 
   {
@@ -137,7 +137,7 @@ void print_code(FILE *s,ptr_int_list c)
   else {
     fprintf(outfile,"  [");
     while (c) {
-      print_bin((long)c->value_1);  // REV401PLUS cast
+      print_bin((long long)c->value_1);  // REV401PLUS cast
       c=c->next;
     }
     fprintf(outfile,"]");
@@ -257,9 +257,9 @@ void go_through(ptr_psi_term t)
   If FORCE is TRUE then variables will be printed as TAGS, even if not
   referred to elsewhere.
 */
-void insert_variables(ptr_node vars,long force)
+void insert_variables(ptr_node vars,long long force)
 // ptr_node vars;
-// long force;
+// long long force;
 {
   ptr_psi_term p;
   ptr_node n;
@@ -324,9 +324,9 @@ PAGE_WIDTH columns by inserting line feeds whereever possible */
 
 /* Does the work of prettyf and prettyf_quote */
 /* The q argument is a flag telling whether to quote or not. */
-void prettyf_inner(char *s,long q,char c)
+void prettyf_inner(char *s,long long q,char c)
 // char *s;
-// long q;
+// long long q;
 // char c; /* the quote character */
 {
   char *sb=buffer;
@@ -354,14 +354,14 @@ void prettyf_inner(char *s,long q,char c)
 
 
 /* Return TRUE iff s starts with a non-lowercase character. */
-long starts_nonlower(char *s)
+long long starts_nonlower(char *s)
 // char *s;
 {
   return (*s && !LOWER(s[0]));
 }
 
 /* Return TRUE iff s contains a character that is not alphanumeric. */
-long has_non_alpha(char *s)
+long long has_non_alpha(char *s)
 // char *s;
 {
   while (*s) {
@@ -372,7 +372,7 @@ long has_non_alpha(char *s)
 }
 
 /* Return TRUE iff s contains only SYMBOL characters. */
-long all_symbol(char *s)
+long long all_symbol(char *s)
 // char *s;
 {
   while (*s) {
@@ -383,7 +383,7 @@ long all_symbol(char *s)
 }
 
 /* Return TRUE if s represents an integer. */
-long is_integer(char *s)
+long long is_integer(char *s)
 // char *s;
 {
   if (!*s) return FALSE;
@@ -398,7 +398,7 @@ long is_integer(char *s)
 /* Return TRUE if s does not have to be quoted, i.e., */
 /* s starts with '_' or a lowercase symbol and contains */
 /* all digits, letters, and '_'. */
-long no_quote(char *s)
+long long no_quote(char *s)
 // char *s;
 {
   if (!s[0]) return FALSE;
@@ -444,7 +444,7 @@ void prettyf_quoted_string(char *s)
     (2) S does not represent an integer, and
     (2) S contains a non-alphanumeric character
         or starts with a non-lowercase character, and
-    (3) if S is longer than one character, it is not true that S has only
+    (3) if S is long longer than one character, it is not true that S has only
         non-SINGLE SYMBOL characters (in that case, S does not need quotes),and
     (4) if S has only one character, it is a single space or underscore.
   When S is surrounded by quotes, a quote inside S is printed as two quotes.
@@ -515,8 +515,8 @@ void new_tab(ptr_tab_brk *t)
 /* is pos? */
 /* Same as strlen, except that the length count starts with pos and */
 /* \n resets it. */
-long strpos(long pos, char *str)
-// long pos;
+long long strpos(long long pos, char *str)
+// long long pos;
 // char *str;
 {
   while (*str) {
@@ -535,10 +535,10 @@ long strpos(long pos, char *str)
 void work_out_length()
 {
   ptr_item i;
-  long done=FALSE;
-  long pos;
+  long long done=FALSE;
+  long long pos;
   ptr_tab_brk worst,root;
-  long w;
+  long long w;
   
   while(!done) {
     
@@ -549,7 +549,7 @@ void work_out_length()
     worst=NULL;
     root=NULL;
     
-    for(i=pretty_things+1;(unsigned long)i<(unsigned long)indx;i++) {
+    for(i=pretty_things+1;(unsigned long long)i<(unsigned long long)indx;i++) {
       
       if(i->tab->broken && i->tab->printed) {
 	pos=i->tab->column;
@@ -575,7 +575,7 @@ void work_out_length()
       }
     }
 
-    for(i=pretty_things+1;(unsigned long)i<(unsigned long)indx;i++)
+    for(i=pretty_things+1;(unsigned long long)i<(unsigned long long)indx;i++)
       i->tab->printed=FALSE;
     
     if(!done)      
@@ -594,11 +594,11 @@ void work_out_length()
   Return the number of features of a tree.
   */
 
-long count_features(ptr_node t)
+long long count_features(ptr_node t)
 
 //     ptr_node t;
 {
-  long c=0;
+  long long c=0;
   if(t) {
     if(t->left)
       c+=count_features(t->left);
@@ -614,10 +614,10 @@ long count_features(ptr_node t)
 /******** CHECK_LEGAL_CONS(t,t_type)
 
   Check that T is of type T_TYPE, that it has exactly the attributes '1' and
-  '2' and that the 2nd is either nil or also long check_legal_cons(t,t_type)
+  '2' and that the 2nd is either nil or also long long check_legal_cons(t,t_type)
 */
 
-long check_legal_cons(ptr_psi_term t,ptr_definition t_type)
+long long check_legal_cons(ptr_psi_term t,ptr_definition t_type)
 //      ptr_psi_term t;
 //     ptr_definition t_type;
      
@@ -637,9 +637,9 @@ long check_legal_cons(ptr_psi_term t,ptr_definition t_type)
   On entry we know that T is a legal CONS pair, so we can immediately print
   the opening bracket etc...
 */
-void pretty_list(ptr_psi_term t,long depth)
+void pretty_list(ptr_psi_term t,long long depth)
 // ptr_psi_term t;
-// long depth;
+// long long depth;
 {
   ptr_tab_brk wl_new;
   ptr_list l;
@@ -648,8 +648,8 @@ void pretty_list(ptr_psi_term t,long depth)
   ptr_node n,n2;
   char *tag=NULL;
   char colon[2],sep[4],end[3];
-  long list_depth; /* 20.8 */
-  long done=FALSE; /* RM: Dec 11 1992 */
+  long long list_depth; /* 20.8 */
+  long long done=FALSE; /* RM: Dec 11 1992 */
   
   
   strcpy(sep,"ab");
@@ -737,10 +737,10 @@ void pretty_list(ptr_psi_term t,long depth)
   Print a psi-term, but first precede it with the appropriate TAG. Don't
   reprint the same psi-term twice.
 */
-void pretty_tag_or_psi_term(ptr_psi_term p, long sprec, long depth)
+void pretty_tag_or_psi_term(ptr_psi_term p, long long sprec, long long depth)
 // ptr_psi_term p;
-// long sprec;
-// long depth;
+// long long sprec;
+// long long depth;
 {
   ptr_node n,n2;
 
@@ -792,11 +792,11 @@ void pretty_tag_or_psi_term(ptr_psi_term p, long sprec, long depth)
 /* If only argument "1" exists, returns 1. */
 /* If only arguments "1" and "2"  exist, returns 3. */
 /* Existence of any other arguments causes third bit to be set as well. */
-long check_opargs(ptr_node n)
+long long check_opargs(ptr_node n)
 // ptr_node n;
 {
   if (n) {
-    long f=check_opargs(n->left) | check_opargs(n->right);
+    long long f=check_opargs(n->left) | check_opargs(n->right);
     if (!featcmp(n->key,"1")) return 1 | f;
     if (!featcmp(n->key,"2")) return 2 | f;
     return 4 | f;
@@ -816,14 +816,14 @@ long check_opargs(ptr_node n)
 /* {INFIX, PREFIX, POSTFIX} and also its precedence and type.        */
 /* If t is not an operator, or it has wrong arguments, return NOTOP  */
 /* and prec=0.                                                       */
-long opcheck(ptr_psi_term t, long *prec, wl_operator *type)
+long long opcheck(ptr_psi_term t, long long *prec, wl_operator *type)
 // ptr_psi_term t;
-// long *prec;
+// long long *prec;
 // operator *type;
 {
   wl_operator op;
-  long result=NOTOP;
-  long numarg=check_opargs(t->attr_list);
+  long long result=NOTOP;
+  long long numarg=check_opargs(t->attr_list);
   ptr_operator_data opdat=t->type->op_data;
 
   *prec=0;
@@ -848,18 +848,18 @@ long opcheck(ptr_psi_term t, long *prec, wl_operator *type)
 /* Write an expression with its operators. */
 /* Return TRUE iff the arguments of t are written here (i.e. t was indeed */
 /* a valid operator, and is therefore taken care of here).                */
-long pretty_psi_with_ops(ptr_psi_term t,long sprec,long depth)
+long long pretty_psi_with_ops(ptr_psi_term t,long long sprec,long long depth)
 // ptr_psi_term t;
-// long sprec;
-// long depth;
+// long long sprec;
+// long long depth;
 {
   ptr_tab_brk wl_new;
   ptr_psi_term arg1, arg2;
   wl_operator ttype, a1type, a2type;
-  long tprec, a1prec, a2prec;
-  long tkind, a1kind, a2kind;
-  long p1, p2, argswritten;
-  long sp; /* surrounding parentheses */
+  long long tprec, a1prec, a2prec;
+  long long tkind, a1kind, a2kind;
+  long long p1, p2, argswritten;
+  long long sp; /* surrounding parentheses */
 
   if (write_canon) return FALSE; /* PVR 24.2.94 */
 
@@ -954,14 +954,14 @@ long pretty_psi_with_ops(ptr_psi_term t,long sprec,long depth)
 /******** PRETTY_PSI_TERM(t,sprec,depth)  
   Pretty print a psi_term T with sugar for lists.
 */
-void pretty_psi_term(ptr_psi_term t,long sprec,long depth)
+void pretty_psi_term(ptr_psi_term t,long long sprec,long long depth)
 //      ptr_psi_term t;
-//     long sprec;
-//     long depth;
+//     long long sprec;
+//     long long depth;
 {
-  char buf[STRLEN]; /* Big enough for a long number */
+  char buf[STRLEN]; /* Big enough for a long long number */
   ptr_residuation r;
-  long argswritten;
+  long long argswritten;
   //  double fmod();
   
   if (t) {
@@ -993,7 +993,7 @@ void pretty_psi_term(ptr_psi_term t,long sprec,long depth)
 #endif /* CLIFE */
 	  if (sub_type(t->type,integer)) {
 	    /* Print integers in chunks up to the full precision of the REAL */
-	    long seg,neg,i;
+	    long long seg,neg,i;
 	    REAL val;
 	    char segbuf[100][PRINT_POWER+3];
 	    
@@ -1005,11 +1005,11 @@ void pretty_psi_term(ptr_psi_term t,long sprec,long depth)
 	    while (val>=(double)PRINT_SPLIT) {
 	      double tmp;
 	      tmp=(REAL)fmod((double)val,(double)PRINT_SPLIT);
-	      sprintf(segbuf[seg],seg_format,(unsigned long)tmp);
+	      sprintf(segbuf[seg],seg_format,(unsigned long long)tmp);
 	      val=floor(val/(double)PRINT_SPLIT);
 	      seg++;
 	    }
-	    sprintf(segbuf[seg],"%s%ld",(neg?"-":""),(unsigned long)val);
+	    sprintf(segbuf[seg],"%s%lld",(neg?"-":""),(unsigned long long)val);
 	    for (i=seg; i>=0; i--) prettyf(segbuf[i]);
 	    if (!equal_types(t->type,integer)) {
 	      prettyf(DOTDOT);
@@ -1038,7 +1038,7 @@ void pretty_psi_term(ptr_psi_term t,long sprec,long depth)
 	    pretty_quote_symbol(t->type->keyword);
 	  }
 	  else if (equal_types(t->type,stream)) {
-	    sprintf(buf,"stream(%ld)",(long)t->value_3);  // REV401PLUS cast
+	    sprintf(buf,"stream(%lld)",(long long)t->value_3);  // REV401PLUS cast
 	    prettyf(buf);
 	  }
 	  else if (equal_types(t->type,eof))
@@ -1089,14 +1089,14 @@ void pretty_psi_term(ptr_psi_term t,long sprec,long depth)
   but
   "p(2=>a,3=>b)" is printed as "p(2 => a,3 => b)".
 */
-void do_pretty_attr(ptr_node t,ptr_tab_brk tab,long *cnt,long two,long depth)
+void do_pretty_attr(ptr_node t,ptr_tab_brk tab,long long *cnt,long long two,long long depth)
 //ptr_node t;
 // ptr_tab_brk tab;
-// long *cnt;
-// long two;
-// long depth;
+// long long *cnt;
+// long long two;
+// long long depth;
 {
-  long v;
+  long long v;
   /* char *s="nnn"; 18.5 */
   char s[22];  // modified 3/8/2021 to prevent overflow - compiler warning
   ptr_module module;
@@ -1128,7 +1128,7 @@ void do_pretty_attr(ptr_node t,ptr_tab_brk tab,long *cnt,long two,long depth)
     else if (v== *cnt)
       (*cnt)++ ;
     else {
-      sprintf(s,"%ld",v);
+      sprintf(s,"%lld",v);
       prettyf(s); /* 6.10 */
       prettyf(" => ");
     }
@@ -1145,7 +1145,7 @@ void do_pretty_attr(ptr_node t,ptr_tab_brk tab,long *cnt,long two,long depth)
 
 
 /* Return true if number of attributes is greater than 1 */
-long two_or_more(ptr_node t)
+long long two_or_more(ptr_node t)
 // ptr_node t;
 {
   if (t) {
@@ -1160,12 +1160,12 @@ long two_or_more(ptr_node t)
   Pretty print the attributes. This calls DO_PRETTY_ATTR which does the real
   work.
 */
-void pretty_attr(ptr_node t,long depth)
+void pretty_attr(ptr_node t,long long depth)
 // ptr_node t;
-// long depth;
+// long long depth;
 {
   ptr_tab_brk wl_new;
-  long cnt=1;
+  long long cnt=1;
 
   prettyf("(");
   new_tab(&wl_new);
@@ -1183,9 +1183,9 @@ void pretty_attr(ptr_node t,long depth)
 void pretty_output()
 {
   ptr_item i;
-  long j;
+  long long j;
   
-  for(i=pretty_things+1;(unsigned long)i<(unsigned long)indx;i++) {
+  for(i=pretty_things+1;(unsigned long long)i<(unsigned long long)indx;i++) {
     if(i->tab->broken && i->tab->printed) {
       fprintf(outfile,"\n");
       for(j=0;j<i->tab->column;j++)
@@ -1223,7 +1223,7 @@ void pretty_variables(ptr_node n,ptr_tab_brk tab)
     prettyf((char *)n2->data); // EV401PLUS cast
   else {
     if (eqsym->op_data) {
-      long tkind, tprec, ttype, eqprec;
+      long long tkind, tprec, ttype, eqprec;
       eqprec=eqsym->op_data->precedence;
       tkind=opcheck(tok, &tprec, &ttype);
       if (tprec>=eqprec) prettyf("(");
@@ -1250,9 +1250,9 @@ void pretty_variables(ptr_node n,ptr_tab_brk tab)
   Returns TRUE iff the set of query variables is nonempty.
 */
 
-long print_variables(long printflag)
+long long print_variables(long long printflag)
      
-//     long printflag;
+//     long long printflag;
 {
   ptr_tab_brk wl_new;
   GENERIC old_heap_pointer;
@@ -1320,11 +1320,11 @@ void write_attributes(ptr_node n,ptr_tab_brk tab)
 void main_pred_write();
 
 /* For the listing built-in */
-void listing_pred_write(ptr_node n,long fflag)
+void listing_pred_write(ptr_node n,long long fflag)
 // ptr_node n;
-// long fflag;
+// long long fflag;
 {
-  long old_print_depth;
+  long long old_print_depth;
 
   listing_flag=TRUE;
   func_flag=fflag;
@@ -1538,7 +1538,7 @@ void display_couple(ptr_psi_term u,char *s,ptr_psi_term v)
 
 
 /******** PRINT_RESID_MESSAGE
-  This is called in trace mode to print the residuated goal along with the
+  This is called in trace mode to print the residuated goal along long with the
   RV set.
 */
 void print_resid_message(ptr_psi_term t,ptr_resid_list r)

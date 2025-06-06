@@ -16,16 +16,16 @@ static char vcid[] = "$Id: info.c,v 1.4 1995/01/30 21:03:55 duchier Exp $";
   This prints one line of info cleanly. The string S is the name of the
   structure, N the number of bytes it uses
 */
-static void pnf(char *s,long n)
+static void pnf(char *s,long long n)
 // char *s;
-// long n;
+// long long n;
 {
-  long i;
+  long long i;
   
   printf("        %s ",s);
   i=strlen(s);
   while(++i<40) printf(".");
-  printf(" %3ld bytes.\n",n);  // REV401 -> %3ld
+  printf(" %3lld bytes.\n",n);  // REV401 -> %3ld
 }
 
 
@@ -40,7 +40,7 @@ void title()
   if(quietflag)
     return; /*  RM: Feb 17 1993  */
   
-  printf("Wild_Life Interpreter Version 4.20 Sun May 18 07:11:18 PM CDT 2025\n");
+  printf("Wild_Life Interpreter Version 4.20 Thu Jun  5 11:55:41 PM CDT 2025\n");
   printf("Copyright (C) 1991-93 DEC Paris Research Laboratory\n");
   printf("Extensions, Copyright (C) 1994-1995 Intelligent Software Group, SFU\n"); 
   printf("Ported to Linux and Cygwin December 2022 after many efforts since 1995\n");
@@ -66,8 +66,8 @@ void title()
     
     printf("\n- Size of C built-in types:\n");
     pnf("REAL",sizeof(REAL));
-    pnf("long",sizeof(long));
-    pnf("int",sizeof(unsigned long));
+    pnf("long long",sizeof(long long));
+    pnf("int",sizeof(unsigned long long));
     pnf("pointer",sizeof(char *));
     
     printf("\n- System constants:\n");

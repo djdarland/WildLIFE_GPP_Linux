@@ -13,13 +13,13 @@ static char vcid[] = "$Id: login.c,v 1.4 1995/01/14 00:25:33 duchier Exp $";
 
 
 /* Statistics on trail cleaning */
-/* long clean_iter=0;
-   long clean_succ=0; */ // removed for MINT
+/* long long clean_iter=0;
+   long long clean_succ=0; */ // removed for MINT
 
 #ifdef TS
 /* Should never wrap (32 bit is enough) 9.6 */
 /* Rate of incrementing: One per choice point */
-// unsigned long global_time_stamp=INIT_TIME_STAMP; /* 9.6 */ // removed for MINT
+// unsigned long long global_time_stamp=INIT_TIME_STAMP; /* 9.6 */ // removed for MINT
 #endif
 
 
@@ -186,7 +186,7 @@ void add_rule(ptr_psi_term head,ptr_psi_term body,def_type typ)
 	    def->keyword->module==current_module */
 	 /*  RM: Feb  2 1993  Commented out */
 	 ) {
-	if (def->rule && (unsigned long)def->rule<=MAX_BUILT_INS) {
+	if (def->rule && (unsigned long long)def->rule<=MAX_BUILT_INS) {
 	  Errorline("the built-in %T '%s' may not be redefined.\n",
 		    def->type_def, def->keyword->symbol);
 	}
@@ -511,8 +511,8 @@ void push_ptr_value_global(type_ptr t,GENERIC *p)
   the undo_stack (trail) so that the window can be destroyed, redrawn, or
   hidden on backtracking.
   */
-void push_window(long type,long disp,long wind)
-//     long type,disp,wind;
+void push_window(long long type,long long disp,long long wind)
+//     long long type,disp,wind;
 {
   ptr_stack n;
   
@@ -651,28 +651,28 @@ void undo(ptr_stack limit)
 //     ptr_stack limit;
 {
   /*
-    while((unsigned long)undo_stack>(unsigned long)goal_stack)
+    while((unsigned long long)undo_stack>(unsigned long long)goal_stack)
     */
   
-  while ((unsigned long)undo_stack>(unsigned long)limit) { 
+  while ((unsigned long long)undo_stack>(unsigned long long)limit) { 
 #ifdef X11
     if (undo_stack->type & undo_action) {
       /* Window operation on backtracking */
       switch(undo_stack->type) { /*** RM 8/12/92 ***/
       case destroy_window:
-        x_destroy_window((Display *)undo_stack->aaaa_3,(unsigned long)undo_stack->bbbb_3); // REV401PLUS chg 1st cast
+        x_destroy_window((Display *)undo_stack->aaaa_3,(unsigned long long)undo_stack->bbbb_3); // REV401PLUS chg 1st cast
 	break;
       case show_window:
-        x_show_window((Display *)undo_stack->aaaa_3,(unsigned long)undo_stack->bbbb_3);  // REV401PLUS chg 1st cast
+        x_show_window((Display *)undo_stack->aaaa_3,(unsigned long long)undo_stack->bbbb_3);  // REV401PLUS chg 1st cast
 	break;
       case hide_window:
-        x_hide_window((Display *)undo_stack->aaaa_3,(unsigned long)undo_stack->bbbb_3);  // REV401PLUS chg 1st cast
+        x_hide_window((Display *)undo_stack->aaaa_3,(unsigned long long)undo_stack->bbbb_3);  // REV401PLUS chg 1st cast
 	break;
       case show_subwindow:
-        x_show_subwindow((Display *)undo_stack->aaaa_3,(unsigned long)undo_stack->bbbb_3);  // REV401PLUS chg 1st cast
+        x_show_subwindow((Display *)undo_stack->aaaa_3,(unsigned long long)undo_stack->bbbb_3);  // REV401PLUS chg 1st cast
 	break;
       case hide_subwindow:
-        x_hide_subwindow((Display *)undo_stack->aaaa_3,(unsigned long)undo_stack->bbbb_3);  // REV401PLUS chg 1st cast
+        x_hide_subwindow((Display *)undo_stack->aaaa_3,(unsigned long long)undo_stack->bbbb_3);  // REV401PLUS chg 1st cast
 	break;
       }
     }
@@ -700,16 +700,16 @@ void undo_actions()
   return;
   /*
     #ifdef X11
-    while ((unsigned long)u) {
+    while ((unsigned long long)u) {
     if (u->type & undo_action) {
     if (u->type==destroy_window) {
-    x_destroy_window((unsigned long)u->a,(unsigned long)u->b);
+    x_destroy_window((unsigned long long)u->a,(unsigned long long)u->b);
     }
     else if (u->type==show_window) {
-    x_show_window((unsigned long)u->a,(unsigned long)u->b);
+    x_show_window((unsigned long long)u->a,(unsigned long long)u->b);
     }
     else if (u->type==hide_window) {
-    x_hide_window((unsigned long)u->a,(unsigned long)u->b);
+    x_hide_window((unsigned long long)u->a,(unsigned long long)u->b);
     }
     }
     u=u->next;
@@ -722,12 +722,12 @@ void undo_actions()
 
 /******** BACKTRACK()
   Undo everything back to the previous choice-point and take the alternative
-  decision. This routine would have to be modified, along with UNDO to cope
+  decision. This routine would have to be modified, along long with UNDO to cope
   with goals to be proved on backtracking.
   */
 void backtrack()
 {
-  long gts;
+  long long gts;
   
   goal_stack=choice_stack->goal_stack;
   undo(choice_stack->undo_point);
@@ -739,12 +739,12 @@ void backtrack()
   resid_aim=NULL;
   
   
-  /* assert((unsigned long)stack_pointer>=(unsigned long)cut_point); 13.6 */
+  /* assert((unsigned long long)stack_pointer>=(unsigned long long)cut_point); 13.6 */
   /* This situation occurs frequently in some benchmarks (e.g comb) */
   /* printf("*** Possible GC error: cut_point is dangling\n"); */
   /* fflush(stdout); */
   
-  /* assert((unsigned long)stack_pointer>=(unsigned long)match_date); 13.6 */
+  /* assert((unsigned long long)stack_pointer>=(unsigned long long)match_date); 13.6 */
 }
 
 
@@ -775,10 +775,10 @@ static void clean_trail(ptr_choice_point cutpt)
     cut_limit = NULL;  /* Empty undo_stack */
   }
   
-  while ((unsigned long)u > (unsigned long)cut_limit) {
+  while ((unsigned long long)u > (unsigned long long)cut_limit) {
     clean_iter++;
     if (!(u->type & undo_action) && VALID_RANGE(u->aaaa_3) &&
-        (unsigned long)u->aaaa_3>(unsigned long)cut_sp && (unsigned long)u->aaaa_3<=(unsigned long)stack_pointer) {
+        (unsigned long long)u->aaaa_3>(unsigned long long)cut_sp && (unsigned long long)u->aaaa_3<=(unsigned long long)stack_pointer) {
       *prev = u->next;
       clean_succ++;
     }
@@ -793,8 +793,8 @@ static void clean_trail(ptr_choice_point cutpt)
   Remove all trail entries that reference a given window.
   This is called when the window is destroyed.
   */
-void clean_undo_window(long disp,long wind)
-//     long disp,wind;
+void clean_undo_window(long long disp,long long wind)
+//     long long disp,wind;
 {
   ptr_stack *prev,u;
   ptr_choice_point c;
@@ -805,7 +805,7 @@ void clean_undo_window(long disp,long wind)
   prev = &undo_stack;
   while (u) {
     if ((u->type & undo_action) &&
-        ((unsigned long)u->aaaa_3==disp) && ((unsigned long)u->bbbb_3==wind)) {
+        ((unsigned long long)u->aaaa_3==disp) && ((unsigned long long)u->bbbb_3==wind)) {
       *prev = u->next;
     }
     prev = &(u->next);
@@ -821,7 +821,7 @@ void clean_undo_window(long disp,long wind)
     u = c->undo_point;
     prev = &(c->undo_point);
     while (u && (u->type & undo_action) &&
-           ((unsigned long)u->aaaa_3==disp) && ((unsigned long)u->bbbb_3==wind)) {
+           ((unsigned long long)u->aaaa_3==disp) && ((unsigned long long)u->bbbb_3==wind)) {
       *prev = u->next;
       prev = &(u->next);
       u = u->next;
@@ -837,7 +837,7 @@ void clean_undo_window(long disp,long wind)
 void merge1(ptr_node *u, ptr_node v)
 //     ptr_node *u,v;
 {
-  long cmp;
+  long long cmp;
   ptr_node temp;
   
   if (v) {
@@ -888,7 +888,7 @@ void merge1(ptr_node *u, ptr_node v)
 void merge2(ptr_node *u,ptr_node v)
 //     ptr_node *u,v;
 {
-  long cmp;
+  long long cmp;
   ptr_node temp;
   
   if (v) {
@@ -938,7 +938,7 @@ void merge2(ptr_node *u,ptr_node v)
 void merge3(ptr_node *u,ptr_node v)
 //     ptr_node *u,v;
 {
-  long cmp;
+  long long cmp;
   ptr_node temp;
   
   if (v) {
@@ -1006,7 +1006,7 @@ void merge3(ptr_node *u,ptr_node v)
 void merge(ptr_node *u,ptr_node v)
 //     ptr_node *u,v;
 {
-  long cmp;
+  long long cmp;
   ptr_node temp;
   
   if (v) {
@@ -1083,7 +1083,7 @@ void merge_unify(ptr_node *u,ptr_node v)
 
 /******** SHOW_COUNT()
   This routine doesn't do anything if not in verbose mode.
-  It prints the number of of sub-goals attempted, along with cpu-time
+  It prints the number of of sub-goals attempted, along long with cpu-time
   spent during the proof etc...
   */
 void show_count()
@@ -1096,7 +1096,7 @@ void show_count()
     times(&end_time);
     t = (end_time.tms_utime - start_time.tms_utime)/60.0;
     
-    printf("%1.3fs cpu, %ld goal%s",t,goal_count,(goal_count!=1?"s":""));
+    printf("%1.3fs cpu, %lld goal%s",t,goal_count,(goal_count!=1?"s":""));
     
     if (t!=0.0) printf(" (%0.0f/s)",goal_count/t);
     
@@ -1129,9 +1129,9 @@ void show_count()
   The above is true if allflag==FALSE.  If allflag==TRUE then all constraints
   are executed, not just those defined in the type itself.
   */
-void fetch_def(ptr_psi_term u, long allflag)
+void fetch_def(ptr_psi_term u, long long allflag)
 //     ptr_psi_term u;
-//     long allflag;
+//     long long allflag;
 {
   ptr_triple_list prop;
   ptr_psi_term v,w;
@@ -1191,16 +1191,16 @@ void fetch_def(ptr_psi_term u, long allflag)
   */
 void fetch_def_lazy(ptr_psi_term u, ptr_definition old1, ptr_definition old2,
 		    ptr_node old1attr, ptr_node old2attr,
-		    long old1stat, long old2stat)
+		    long long old1stat, long long old2stat)
 //     ptr_psi_term u;
 //     ptr_definition old1, old2;
 //     ptr_node old1attr, old2attr;
-//     long old1stat, old2stat;
+//     long long old1stat, old2stat;
 {
   ptr_triple_list prop;
   ptr_psi_term v,w;
-  long checked1, checked2;
-  long m1, m2;
+  long long checked1, checked2;
+  long long m1, m2;
   
   if (!u->type->always_check) if (u->attr_list==NULL) return;
   
@@ -1262,22 +1262,22 @@ void fetch_def_lazy(ptr_psi_term u, ptr_definition old1, ptr_definition old2,
   overall performance of Wild_Life, and the code is not duplicated elsewhere.
   */
 
-long unify_body();
+long long unify_body();
 
-long unify_aim_noeval()
+long long unify_aim_noeval()
 {
   return unify_body(FALSE);
 }
 
-long unify_aim()
+long long unify_aim()
 {
   return unify_body(TRUE);
 }
 
-long unify_body(long eval_flag)
-//     long eval_flag;
+long long unify_body(long long eval_flag)
+//     long long eval_flag;
 {
-  long success=TRUE,compare;
+  long long success=TRUE,compare;
   ptr_psi_term u,v,tmp;
   ptr_list lu,lv;
   REAL r;
@@ -1285,7 +1285,7 @@ long unify_body(long eval_flag)
   ptr_node old1attr, old2attr;
   ptr_int_list new_code;
   ptr_int_list d=NULL;
-  long old1stat,old2stat; /* 18.2.94 */
+  long long old1stat,old2stat; /* 18.2.94 */
   
   u=(ptr_psi_term )aim->aaaa_1;
   v=(ptr_psi_term )aim->bbbb_1;
@@ -1418,8 +1418,8 @@ long unify_body(long eval_flag)
             else if (overlap_type(new_type,quoted_string))
               success=(strcmp((char *)u->value_3,(char *)v->value_3)==0);
 	    else if (overlap_type(new_type,sys_bytedata)) {
-	      unsigned long ulen = *((unsigned long *)u->value_3);
-	      unsigned long vlen = *((unsigned long *)v->value_3);
+	      unsigned long long ulen = *((unsigned long long *)u->value_3);
+	      unsigned long long vlen = *((unsigned long long *)v->value_3);
               success=(ulen==vlen &&
 		       (bcmp((char *)u->value_3,(char *)v->value_3,ulen)==0));
 	    }
@@ -1527,14 +1527,14 @@ long unify_body(long eval_flag)
 /******** DISJUNCT_AIM()
   This is the disjunction enumeration routine.
   If U is the disjunction {H|T} then first bind U to H, then on backtracking
-  enumerate the disjunction T.  U is always passed along so that every choice
+  enumerate the disjunction T.  U is always passed along long so that every choice
   of the disjunction can be bound to U.
   */
-long disjunct_aim()
+long long disjunct_aim()
 {
   ptr_psi_term u,v;
   ptr_list l;
-  long success=TRUE;
+  long long success=TRUE;
   
   printf("Call to disjunct_aim\nThis routine inhibited by RM: Dec  9 1992\n");
   
@@ -1550,9 +1550,9 @@ long disjunct_aim()
   sub-goals onto the goal_stack. Special cases are CUT and AND (","). Built-in
   predicates written in C are called.
   */
-long prove_aim()
+long long prove_aim()
 {
-  long success=TRUE;
+  long long success=TRUE;
   ptr_psi_term thegoal,head,body,arg1,arg2;
   ptr_pair_list rule;
   
@@ -1575,7 +1575,7 @@ long prove_aim()
 	    goal_stack=aim->next;
 	    goal_count++;
 	    
-	    if ((unsigned long)rule==DEFRULES) {
+	    if ((unsigned long long)rule==DEFRULES) {
 	      rule=(ptr_pair_list)thegoal->type->rule;
 	      if (thegoal->type->type_def==(def_type)predicate_it) {
 		if (!rule) /* This can happen when RETRACT is used */
@@ -1634,7 +1634,7 @@ long prove_aim()
 	    
 	    if (success) {
 	      
-	      if ((unsigned long)rule<=MAX_BUILT_INS) {
+	      if ((unsigned long long)rule<=MAX_BUILT_INS) {
 		
 		/* For residuation (RESPRED) */
 		curried=FALSE;
@@ -1647,7 +1647,7 @@ long prove_aim()
 		
 		/* RESPRED */ resid_aim=aim;
 		/* Residuated predicate must return success=TRUE */
-		success=c_rule[(unsigned long)rule]();
+		success=c_rule[(unsigned long long)rule]();
 		
 		/* RESPRED */ if (curried)
 		/* RESPRED */   do_currying();
@@ -1780,10 +1780,10 @@ void type_disj_aim()
   unify the calling argument with the current rule. If this succeeds and
   R=TRUE then delete the rule (RETRACT).
   */
-long clause_aim(long r)
-//     long r;
+long long clause_aim(long long r)
+//     long long r;
 {
-  long success=FALSE;
+  long long success=FALSE;
   ptr_pair_list *p;
   ptr_psi_term head,body,rule_head,rule_body;
   
@@ -1791,7 +1791,7 @@ long clause_aim(long r)
   body=(ptr_psi_term)aim->bbbb_1;
   p=(ptr_pair_list *)aim->cccc_1;
   
-  if ((unsigned long)(*p)>MAX_BUILT_INS) {
+  if ((unsigned long long)(*p)>MAX_BUILT_INS) {
     success=TRUE;
     /* deref(head); 17.9 */
     
@@ -1830,7 +1830,7 @@ long clause_aim(long r)
       Traceline("following clause had been retracted\n");
     }
   }
-  else if ((unsigned long)(*p)>0) {
+  else if ((unsigned long long)(*p)>0) {
     if (r)
       Errorline("the built-in %P cannot be retracted.\n",head);
     else
@@ -1843,16 +1843,16 @@ long clause_aim(long r)
 
 /* Return TRUE iff the top choice point is a what_next choice point */
 /* or if there are no choice points. */
-long no_choices()
+long long no_choices()
 {
   return (choice_stack==NULL) || (choice_stack->goal_stack->type==what_next);
 }
 
 
 /* Return the number of choice points on the choice point stack */
-long num_choices()
+long long num_choices()
 {
-  long num;
+  long long num;
   ptr_choice_point cp;
   
   num=0;
@@ -1866,10 +1866,10 @@ long num_choices()
 
 
 /* Return the number of variables in the variable tree. */
-long num_vars(ptr_node vt)
+long long num_vars(ptr_node vt)
 //     ptr_node vt;
 {
-  long num;
+  long long num;
   
   return (vt?(num_vars(vt->left)+1+num_vars(vt->right)):0);
 }
@@ -1877,10 +1877,10 @@ long num_vars(ptr_node vt)
 
 
 /* Cut away up to and including the first 'what_next' choice point. */
-long what_next_cut()
+long long what_next_cut()
 {
-  long flag=TRUE;
-  long result=FALSE;
+  long long flag=TRUE;
+  long long result=FALSE;
   
   do {
     if (choice_stack) {
@@ -1947,26 +1947,26 @@ void reset_stacks()
   c) add current goal -> 'new goal ?'
   d) return to top level -> '.'
   */
-long what_next_aim()
+long long what_next_aim()
 {
-  long result=FALSE;
+  long long result=FALSE;
   ptr_psi_term s;
-  long c, c2; /* 21.12 (prev. char) */
+  long long c, c2; /* 21.12 (prev. char) */
   char *pr;
-  long sort,cut=FALSE;
-  long level,i;
-  long eventflag;
+  long long sort,cut=FALSE;
+  long long level,i;
+  long long eventflag;
   ptr_stack save_undo_stack;
   
   begin_terminal_io();
   
-  level=((unsigned long)aim->cccc_1);
+  level=((unsigned long long)aim->cccc_1);
   
   if (aim->aaaa_1) {
     /* Must remember var_occurred from the what_next goal and from */
     /* execution of previous query (it may have contained a parse) */
-    var_occurred=var_occurred || ((unsigned long)aim->bbbb_1)&TRUEMASK; /* 18.8 */
-    eventflag=(((unsigned long)aim->bbbb_1)&(TRUEMASK*2))!=0;
+    var_occurred=var_occurred || ((unsigned long long)aim->bbbb_1)&TRUEMASK; /* 18.8 */
+    eventflag=(((unsigned long long)aim->bbbb_1)&(TRUEMASK*2))!=0;
     if (
         !var_occurred && no_choices() && level>0
 #ifdef X11
@@ -1993,7 +1993,7 @@ long what_next_aim()
   if (aim->aaaa_1 || level>0) print_variables(NOTQUIET);
 
   {
-    long lev=(MAX_LEVEL<level?MAX_LEVEL:level);
+    long long lev=(MAX_LEVEL<level?MAX_LEVEL:level);
     pr=prompt_buffer;
     /*  RM: Oct 13 1993  */
     if(current_module==user_module)
@@ -2003,7 +2003,7 @@ long what_next_aim()
     pr += strlen(pr);
     for(i=1;i<=lev;i++) { *pr='-'; pr++; *pr='-'; pr++; }
     if (level>0)
-      sprintf(pr,"%ld",level);
+      sprintf(pr,"%lld",level);
     strcat(pr,PROMPT);
     
     prompt=prompt_buffer;
@@ -2099,16 +2099,16 @@ long what_next_aim()
   all queries in the input file are executed in the order they are encountered
   (which includes load operations).
 */
-long load_aim()
+long long load_aim()
 {
-  long success=TRUE,exitloop;
+  long long success=TRUE,exitloop;
   ptr_psi_term s;
-  long sort;
+  long long sort;
   char *fn;
-  long old_noisy,old_file_date;
+  long long old_noisy,old_file_date;
   ptr_node old_var_tree;
   ptr_choice_point cutpt;
-  long old_var_occurred; /* 18.8 */
+  long long old_var_occurred; /* 18.8 */
   int end_of_file=FALSE; /*  RM: Jan 27 1993  */
 
   
@@ -2116,7 +2116,7 @@ long load_aim()
   input_state=(ptr_psi_term)aim->aaaa_1;
   restore_state(input_state);
   old_file_date=file_date;
-  file_date=(unsigned long)aim->bbbb_1;
+  file_date=(unsigned long long)aim->bbbb_1;
   old_noisy=noisy;
   noisy=FALSE;
   fn=(char*)aim->cccc_1;
@@ -2202,7 +2202,7 @@ long load_aim()
 */
 void main_prove()
 {
-  long success=TRUE;
+  long long success=TRUE;
   ptr_pair_list *p;
   ptr_psi_term unused_match_date; /* 13.6 */
     

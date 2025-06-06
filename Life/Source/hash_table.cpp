@@ -193,7 +193,7 @@ void hash_display(ptr_hash_table table)
   int c=0;
   int t=0;
   
-  printf("*** Hash table %lx:\n",(unsigned long)table); // added ->%lx & cast
+  printf("*** Hash table %llx:\n",(unsigned long long)table); // added ->%lx & cast
   printf("Size: %d\n",table->size);
   printf("Used: %d\n",table->used);
   
