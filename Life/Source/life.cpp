@@ -23,7 +23,7 @@ static unsigned int lifeseed;
 #endif
 
 /******** MAIN(argc,argv)
-This routine contains the Read-Solve-Prlong long loop.
+	  This routine contains the Read-Solve-Prlong long loop.
 */
 
 int main(int argc, char *argv[])  // REV401PLUS correct main proto

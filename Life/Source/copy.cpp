@@ -31,7 +31,7 @@ static long long hashfree; /* Index into array of buckets */
 static long long numbuckets; /* Total number of buckets; initially=NUMBUCKETS */
 
 /******** INIT_COPY()
-  Execute once upon startup of Wild_Life.
+	  Execute once upon startup of Wild_Life.
 */
 void init_copy()
 {
@@ -48,8 +48,8 @@ void init_copy()
 
 
 /******** CLEAR_COPY()
-  Erase the hash table.
-  This must be done as a prelude to any copying operation.
+	  Erase the hash table.
+	  This must be done as a prelude to any copying operation.
 */
 void clear_copy()
 {
@@ -59,8 +59,8 @@ void clear_copy()
 
 
 /******** INSERT_TRANSLATION(a,b,info)
-  Add the translation of address A to address B in the translation table.
-  Also add an info field.
+	  Add the translation of address A to address B in the translation table.
+	  Also add an info field.
 */
 /* static */ void insert_translation(ptr_psi_term a,ptr_psi_term b,long long info)
 	     // ptr_psi_term a;
@@ -97,8 +97,8 @@ void clear_copy()
 
 
 /******** TRANSLATE(a,info)
-  Get the translation of address A and the info field stored with it.
-  Return NULL if none is found.
+	  Get the translation of address A and the info field stored with it.
+	  Return NULL if none is found.
 */
 /* static */ ptr_psi_term translate(ptr_psi_term a,long long **infoptr)   /*  RM: Jan 27 1993  */
 	     //  ptr_psi_term a;
@@ -130,10 +130,10 @@ void clear_copy()
 
 
 /******** COPY_TREE(t)
-  Return a pointer to a copy of the binary tree t.
-  Structure sharing between trees is not preserved by this routine,
-  this is not a problem seeing that coreferences in the nodes will ensure
-  coherence.
+	  Return a pointer to a copy of the binary tree t.
+	  Structure sharing between trees is not preserved by this routine,
+	  this is not a problem seeing that coreferences in the nodes will ensure
+	  coherence.
 */
 
 /* TRUE means: heap_flag==TRUE & only copy to heap those objects not */
@@ -144,16 +144,16 @@ void clear_copy()
 #define ONHEAP(R) ((GENERIC)R>=heap_pointer)
 
 /* Allocate a new record on the heap or stack if necessary: */
-#define NEW(A,TYPE) (heap_flag==HEAP \
-                    ? (to_heap \
-                      ? (ONHEAP(A) \
-                        ? A \
-                        : HEAP_ALLOC(TYPE) \
-                        ) \
-                      : HEAP_ALLOC(TYPE) \
-                      ) \
-                    : STACK_ALLOC(TYPE) \
-                    )
+#define NEW(A,TYPE) (heap_flag==HEAP		\
+		     ? (to_heap			\
+			? (ONHEAP(A)		\
+			   ? A			\
+			   : HEAP_ALLOC(TYPE)	\
+			   )			\
+			: HEAP_ALLOC(TYPE)	\
+			)			\
+		     : STACK_ALLOC(TYPE)	\
+		     )
 
 /* TRUE iff to_heap is TRUE & work is done, i.e. the term is on the heap. */
 #define HEAPDONE(R) (to_heap && ONHEAP(R))
@@ -188,34 +188,34 @@ static ptr_node copy_tree(ptr_node t, long long copy_flag, long long heap_flag)
 
 
 /******** COPY(t)
-  This is the workhorse of the interpreter (alas!).
-  All copy-related routines are non-interruptible by the garbage collector.
+	  This is the workhorse of the interpreter (alas!).
+	  All copy-related routines are non-interruptible by the garbage collector.
   
-  Make a copy in the STACK or in the HEAP of psi_term t, which is located in
-  the HEAP.  A copy is done whenever invoking a rule, so it had better be fast.
-  This routine uses hash tables with buckets and partial inlining for speed.
+	  Make a copy in the STACK or in the HEAP of psi_term t, which is located in
+	  the HEAP.  A copy is done whenever invoking a rule, so it had better be fast.
+	  This routine uses hash tables with buckets and partial inlining for speed.
 
-  The following three versions of copy all rename their variables and return
-  a completely dereferenced object:
+	  The following three versions of copy all rename their variables and return
+	  a completely dereferenced object:
 
-  u=exact_copy(t,hf)  u is an exact copy of t.
-  u=quote_copy(t,hf)  u is a copy of t that is recursively marked evaluated.
-  u=eval_copy(t,hf)   u is a copy of t that is recursively marked unevaluated.
+	  u=exact_copy(t,hf)  u is an exact copy of t.
+	  u=quote_copy(t,hf)  u is a copy of t that is recursively marked evaluated.
+	  u=eval_copy(t,hf)   u is a copy of t that is recursively marked unevaluated.
 
-  This version of copy is an incremental copy to the heap.  It copies only
-  those parts of a psi_term that are on the stack, leaving the others
-  unchanged:
+	  This version of copy is an incremental copy to the heap.  It copies only
+	  those parts of a psi_term that are on the stack, leaving the others
+	  unchanged:
 
-  u=inc_heap_copy(t)  u is an exact copy of t, on the heap.  This is like
-                      hf==HEAP, except that objects already on the heap are
-                      untouched.  Relies on no pointers from heap to stack.
+	  u=inc_heap_copy(t)  u is an exact copy of t, on the heap.  This is like
+	  hf==HEAP, except that objects already on the heap are
+	  untouched.  Relies on no pointers from heap to stack.
 
-  hf = heap_flag.  hf = HEAP or STACK means allocate in the HEAP or STACK.
-  Marking eval/uneval is done by modifying the STATUS field of the copied
-  psi_term.
-  In eval_copy, a term's status is set to 0 if the term or any subterm needs
-  evaluation.
-  Terms are dereferenced when copying them to the heap.
+	  hf = heap_flag.  hf = HEAP or STACK means allocate in the HEAP or STACK.
+	  Marking eval/uneval is done by modifying the STATUS field of the copied
+	  psi_term.
+	  In eval_copy, a term's status is set to 0 if the term or any subterm needs
+	  evaluation.
+	  Terms are dereferenced when copying them to the heap.
 */
 
 #define EXACT_FLAG 0
@@ -359,9 +359,9 @@ ptr_psi_term copy(ptr_psi_term t, long long copy_flag, long long heap_flag)
 
 
 /******** DISTINCT_TREE(t)
-  Return an exact copy of an attribute tree.
-  This is used by APPLY in order to build the calling psi-term which is used
-  for matching.
+	  Return an exact copy of an attribute tree.
+	  This is used by APPLY in order to build the calling psi-term which is used
+	  for matching.
 */
 ptr_node distinct_tree(ptr_node t)
 // ptr_node t;
@@ -382,10 +382,10 @@ ptr_node distinct_tree(ptr_node t)
 
 
 /******** DISTINCT_COPY(t)
-  Make a distinct copy of T and T's attribute tree, which are identical to T,
-  only located elsewhere in memory. This is used by apply to build the calling
-  psi-term which is used for matching.  Note that this routine is not
-  recursive, i.e. it only copies the main functor & the attribute tree.
+	  Make a distinct copy of T and T's attribute tree, which are identical to T,
+	  only located elsewhere in memory. This is used by apply to build the calling
+	  psi-term which is used for matching.  Note that this routine is not
+	  recursive, i.e. it only copies the main functor & the attribute tree.
 */
 ptr_psi_term distinct_copy(ptr_psi_term t)
 // ptr_psi_term t;

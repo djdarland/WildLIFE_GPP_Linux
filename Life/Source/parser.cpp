@@ -20,11 +20,11 @@ static char vcid[] = "$Id: parser.c,v 1.2 1994/12/08 23:32:03 duchier Exp $";
 
 
 /******** BAD_PSI_TERM(t)
-  This returns true if T is a psi_term which is not allowed to be considered
-  as a constant by the parser.
+	  This returns true if T is a psi_term which is not allowed to be considered
+	  as a constant by the parser.
 
-  Example: "A=)+6."  would otherwise be parsed as: "=(A,+(')',6))", this was
-	             going a bit far.
+	  Example: "A=)+6."  would otherwise be parsed as: "=(A,+(')',6))", this was
+	  going a bit far.
 */
 int bad_psi_term(ptr_psi_term t)   // REV401PLUS add int
 // ptr_psi_term t;
@@ -55,8 +55,8 @@ int bad_psi_term(ptr_psi_term t)   // REV401PLUS add int
 
    
 /******** SHOW(limit)
-  This prints the parser's stack, for debugging purposes
-  only, LIMIT marks the bottom of the current stack.
+	  This prints the parser's stack, for debugging purposes
+	  only, LIMIT marks the bottom of the current stack.
 */
 void show(long long limit)
 // long long limit;
@@ -95,7 +95,7 @@ void show(long long limit)
 
 
 /******** PUSH(tok,prec,op)
-  Push psi_term and precedence and operator onto parser stack.
+	  Push psi_term and precedence and operator onto parser stack.
 */
 void push(psi_term tok,long long prec,wl_operator op)
 // psi_term tok;
@@ -118,8 +118,8 @@ void push(psi_term tok,long long prec,wl_operator op)
 
 
 /******** POP(psi_term,op);
-  This function pops PSI_TERM and OP off the parser stack and returns
-  its precedence.
+	  This function pops PSI_TERM and OP off the parser stack and returns
+	  its precedence.
 */
 long long pop(ptr_psi_term tok,wl_operator *op)
 // ptr_psi_term tok;
@@ -150,7 +150,7 @@ long long pop(ptr_psi_term tok,wl_operator *op)
 
 
 /******** LOOK()
-  This function returns the precedence of the stack top.
+	  This function returns the precedence of the stack top.
 */
 long long look()
 {
@@ -160,10 +160,10 @@ long long look()
 
 
 /******** PRECEDENCE(tok,typ)
-  This function returns the precedence of
-  TOK if it is an operator of type TYP where TYP is FX XFX XF etc...
-  Note that this allows both a binary and unary minus.
-  The result is NOP if tok is not an operator.
+	  This function returns the precedence of
+	  TOK if it is an operator of type TYP where TYP is FX XFX XF etc...
+	  Note that this allows both a binary and unary minus.
+	  The result is NOP if tok is not an operator.
 */
 long long precedence(psi_term tok,wl_operator typ)
 // psi_term tok;
@@ -186,8 +186,8 @@ long long precedence(psi_term tok,wl_operator typ)
 
 
 /******** STACK_COPY_PSI_TERM(tok)
-  Return the address of a copy of TOK on the STACK.
-  All psi_terms read in by the parser are read into the stack.
+	  Return the address of a copy of TOK on the STACK.
+	  All psi_terms read in by the parser are read into the stack.
 */
 ptr_psi_term stack_copy_psi_term(psi_term t)
 // psi_term t;
@@ -206,7 +206,7 @@ ptr_psi_term stack_copy_psi_term(psi_term t)
 
 
 /******** HEAP_COPY_PSI_TERM(tok)
-  Return the address of a copy of TOK on the HEAP.
+	  Return the address of a copy of TOK on the HEAP.
 */
 ptr_psi_term heap_copy_psi_term(psi_term t)
 //psi_term t;
@@ -226,9 +226,9 @@ ptr_psi_term heap_copy_psi_term(psi_term t)
 
 
 /******** FEATURE_INSERT(keystr,tree,psi)
-  Insert the psi_term psi into the attribute tree.
-  If the feature already exists, create a call to the unification
-  function.
+	  Insert the psi_term psi into the attribute tree.
+	  If the feature already exists, create a call to the unification
+	  function.
 */
 void feature_insert(char *keystr,ptr_node *tree,ptr_psi_term psi)  // REV401PLUS add void
 // char *keystr;
@@ -256,8 +256,8 @@ void feature_insert(char *keystr,ptr_node *tree,ptr_psi_term psi)  // REV401PLUS
 
 
 /******** LIST_NIL(type)
-  Returns the atom NIL to mark the end of a list.
-  */
+	  Returns the atom NIL to mark the end of a list.
+*/
 
 psi_term list_nil(ptr_definition type) /*  RM: Feb  1 1993  */
 
@@ -284,29 +284,29 @@ psi_term list_nil(ptr_definition type) /*  RM: Feb  1 1993  */
 
 /******** PARSE_LIST(type,end,separator)
 
-  This function provides a replacement for the function 'read_list'. It does
-  not create the old (slightly more compact and a lot more complicated) list
-  structure, but instead creates a generic psi-term with 2 features. The list
-  is terminated by the atom 'nil'.
+	  This function provides a replacement for the function 'read_list'. It does
+	  not create the old (slightly more compact and a lot more complicated) list
+	  structure, but instead creates a generic psi-term with 2 features. The list
+	  is terminated by the atom 'nil'.
 
-  Example:
+	  Example:
 
-	[a,b,c|d] -> cons(a,cons(b,cons(c,d))).
-	[] -> nil
-	{a;b;c} -> disj(a,disj(b,disj(c,{}))).
-	{} -> {} = *bottom*
+	  [a,b,c|d] -> cons(a,cons(b,cons(c,d))).
+	  [] -> nil
+	  {a;b;c} -> disj(a,disj(b,disj(c,{}))).
+	  {} -> {} = *bottom*
 
 	
-  Example:
-  TYP=disjunction,
-  END="}",
-  SEPARATOR=";" will read in disjunctions.
+	  Example:
+	  TYP=disjunction,
+	  END="}",
+	  SEPARATOR=";" will read in disjunctions.
 
-  Example:
-  TYP=list,
-  END="]",
-  SEPARATOR="," will read lists such as [1,2,a,b,c|d]
-  */
+	  Example:
+	  TYP=list,
+	  END="]",
+	  SEPARATOR="," will read lists such as [1,2,a,b,c|d]
+*/
 
 psi_term parse_list(ptr_definition typ,char e,char s)
 //     ptr_definition typ;
@@ -383,26 +383,26 @@ psi_term parse_list(ptr_definition typ,char e,char s)
 
 
 /******** READ_PSI_TERM()
-  This reads in a complex object from the input
-  stream, that is, a whole psi-term.
+	  This reads in a complex object from the input
+	  stream, that is, a whole psi-term.
 
-  Examples:
+	  Examples:
 
-  [A,B,C]
+	  [A,B,C]
 
-  {0;1;2+A}
+	  {0;1;2+A}
 
-  <a,b,c> death(victim => V,murderer => M)
+	  <a,b,c> death(victim => V,murderer => M)
 
-  which(x,y,z)
+	  which(x,y,z)
 
-  A:g(f)
+	  A:g(f)
 
-  I have allowed mixing labelled with unlabelled attributes.
+	  I have allowed mixing labelled with unlabelled attributes.
 
-  Example:
+	  Example:
   
-  f(x=>A,B,y=>K,"hklk",D) is parsed as f(1=>B,2=>"hklk",3=>D,x=>A,y=>K).
+	  f(x=>A,B,y=>K,"hklk",D) is parsed as f(1=>B,2=>"hklk",3=>D,x=>A,y=>K).
 */
 psi_term read_psi_term()
 {
@@ -422,11 +422,11 @@ psi_term read_psi_term()
       if(equ_tokch(t,'{')) 
 	t=parse_list(disjunction,'}',';'); /*** RICHARD Nov_4 ***/
 
-      /* The syntax <a,b,c> for conjunctions has been abandoned.
-	else
-	if(equ_tokch(t,'<'))
-	t=parse_list(conjunction,'>',',');
-	*/
+    /* The syntax <a,b,c> for conjunctions has been abandoned.
+       else
+       if(equ_tokch(t,'<'))
+       t=parse_list(conjunction,'>',',');
+    */
   
     if(parse_ok 
        && t.type!=eof
@@ -496,7 +496,7 @@ psi_term read_psi_term()
 		/*
 		  perr("*** Syntax error ");psi_term_error();
 		  perr(": ',' expected in argument list.\n");
-		  */
+		*/
 
 		/*  RM: Feb  1 1993  */
 		Syntaxerrorline("',' expected in argument list (%E)\n");
@@ -543,12 +543,12 @@ psi_term read_psi_term()
 
 
 /******** MAKE_LIFE_FORM(tok,arg1,arg2)
-  This routine inserts ARG1 and ARG2 as the first and second attributes of
-  psi_term TOK, thus creating the term TOK(1=>arg1,2=>arg2).
+	  This routine inserts ARG1 and ARG2 as the first and second attributes of
+	  psi_term TOK, thus creating the term TOK(1=>arg1,2=>arg2).
 
-  If TOK is ':' then a conjunction is created if necessary.
-  Example:
-  a:V:b:5:long long => V: <a,b,5,int> (= conjunction list).
+	  If TOK is ':' then a conjunction is created if necessary.
+	  Example:
+	  a:V:b:5:long long => V: <a,b,5,int> (= conjunction list).
 */
 psi_term make_life_form(ptr_psi_term tok,ptr_psi_term arg1,ptr_psi_term arg2)
 // ptr_psi_term tok,arg1,arg2;
@@ -564,7 +564,7 @@ psi_term make_life_form(ptr_psi_term tok,ptr_psi_term arg1,ptr_psi_term arg2)
   /* Here beginneth a terrible FIX,
      I will have to rewrite the tokeniser and the parser to handle
      POINTERS to psi-terms instead of PSI_TERMS !!!
-     */
+  */
   
   a1=arg1;
   a2=arg2;
@@ -636,9 +636,9 @@ psi_term make_life_form(ptr_psi_term tok,ptr_psi_term arg1,ptr_psi_term arg2)
 
 
 /******** CRUNCH(prec,limit)
-  Crunch up = work out the arguments of anything on the stack whose precedence
-  is <= PREC, and replace it with the corresponding psi-term. Do not go any
-  further than LIMIT which is the end of the current expression.
+	  Crunch up = work out the arguments of anything on the stack whose precedence
+	  is <= PREC, and replace it with the corresponding psi-term. Do not go any
+	  further than LIMIT which is the end of the current expression.
 */
 void crunch(long long prec,long long limit)
 // long long prec;
@@ -694,15 +694,15 @@ void crunch(long long prec,long long limit)
 
 
 /******** READ_LIFE_FORM(str1,str2)
-  This reads in one life-form from the input stream which finishes with
-  the psi_term whose name is STR1 or STR2, typically if we're reading a list
-  [A,4*5,b-4!] then STR1="," and STR2="|" . It would be incorrect if "," were
-  taken as an operator.
+	  This reads in one life-form from the input stream which finishes with
+	  the psi_term whose name is STR1 or STR2, typically if we're reading a list
+	  [A,4*5,b-4!] then STR1="," and STR2="|" . It would be incorrect if "," were
+	  taken as an operator.
 
-  This routine implements the two state expression parser as described in the
-  implementation guide. It deals with all the various types of operators,
-  precedence is dealt with by the CRUNCH function. Each time an opening
-  parenthesis is encountered a new expression is started.
+	  This routine implements the two state expression parser as described in the
+	  implementation guide. It deals with all the various types of operators,
+	  precedence is dealt with by the CRUNCH function. Each time an opening
+	  parenthesis is encountered a new expression is started.
 */
 psi_term read_life_form(char ch1,char ch2)
 // char ch1,ch2;
@@ -762,10 +762,10 @@ psi_term read_life_form(char ch1,char ch2)
 	      }
 	      
 	      /* if(pr_op==NOP) {
-		pr_op=precedence(t,yfy);
-		pr_1=pr_op;
-		pr_2=pr_op-1;
-	      }
+		 pr_op=precedence(t,yfy);
+		 pr_1=pr_op;
+		 pr_2=pr_op-1;
+		 }
               */
 	      
 	      if(pr_op==NOP) {
@@ -813,7 +813,7 @@ psi_term read_life_form(char ch1,char ch2)
 		    /*
 		      perr("*** Syntax error ");psi_term_error();
 		      perr(": ')' missing.\n");
-		      */
+		    */
 
 		    /*  RM: Feb  1 1993  */
 		    Syntaxerrorline("')' missing (%E)\n");
@@ -853,7 +853,7 @@ psi_term read_life_form(char ch1,char ch2)
       /*
 	perr("*** Syntax error ");psi_term_error();
 	perr(": bad expression.\n");
-	*/
+      */
       
       /*  RM: Feb  1 1993  */
       Syntaxerrorline("bad expression (%E)\n");
@@ -873,14 +873,14 @@ psi_term read_life_form(char ch1,char ch2)
 
 
 /******** PARSE(is_it_a_clause)
-  This returns one clause or query from the input stream.
-  It also indicates the type psi-term read, that is whether it was a clause
-  or a query in the IS_IT_A_CLAUSE variable. This is the top level of the
-  parser.
+	  This returns one clause or query from the input stream.
+	  It also indicates the type psi-term read, that is whether it was a clause
+	  or a query in the IS_IT_A_CLAUSE variable. This is the top level of the
+	  parser.
 
-  The whole parser is, rather like the psi_termiser, not too well written.
-  It handles psi_terms rather than pointers which causes a lot of messy code
-  and is somewhat slower.
+	  The whole parser is, rather like the psi_termiser, not too well written.
+	  It handles psi_terms rather than pointers which causes a lot of messy code
+	  and is somewhat slower.
 */
 psi_term parse(long long *q)
 // long long *q;
@@ -899,9 +899,9 @@ psi_term parse(long long *q)
       read_token(&t);
       
       /*
-      if (equ_tokch(t,'?'))
+	if (equ_tokch(t,'?'))
 	*q=QUERY;
-      else if (equ_tokch(t,'.'))
+	else if (equ_tokch(t,'.'))
 	*q=FACT;
 	*/
 
@@ -914,9 +914,9 @@ psi_term parse(long long *q)
         if (stringparse) parse_ok=FALSE;
         else {
 	  /*
-          perr("*** Syntax error ");psi_term_error();perr(": ");
-	  display_psi_stderr(&t);
-	  perr(".\n");
+	    perr("*** Syntax error ");psi_term_error();perr(": ");
+	    display_psi_stderr(&t);
+	    perr(".\n");
 	  */
 
 	  /*  RM: Feb  1 1993  */

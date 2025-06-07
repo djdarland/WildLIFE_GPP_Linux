@@ -16,14 +16,14 @@ static char vcid[] = "$Id: bi_sys.c,v 1.2 1994/12/08 23:08:17 duchier Exp $";
 #define copyPsiTerm(a,b)        (ptr_psi_term )memcpy(a,b,sizeof(psi_term))
 
 /******** C_TRACE
-  With no arguments: Toggle the trace flag & print a message saying whether
-  tracing is on or off.
-  With argument 1: If it is top, return the trace flag and disable tracing.
-  If it is true or false, set the trace flag to that value.  Otherwise, give
-  an error.
-  With argument 2: If it is top, return the stepflag and disable stepping.
-  If it is true or false, set the stepflag to that value.  Otherwise, give
-  an error.
+	  With no arguments: Toggle the trace flag & print a message saying whether
+	  tracing is on or off.
+	  With argument 1: If it is top, return the trace flag and disable tracing.
+	  If it is true or false, set the trace flag to that value.  Otherwise, give
+	  an error.
+	  With argument 2: If it is top, return the stepflag and disable stepping.
+	  If it is true or false, set the stepflag to that value.  Otherwise, give
+	  an error.
 */
 long long c_trace()
 {
@@ -81,8 +81,8 @@ long long c_tprove()
 }
 
 /******** C_STEP
-  Toggle the single step flag & print a message saying whether
-  single stepping mode is on or off.
+	  Toggle the single step flag & print a message saying whether
+	  single stepping mode is on or off.
 */
 static long long c_step()
 {
@@ -95,8 +95,8 @@ static long long c_step()
 }
 
 /******** C_VERBOSE
-  Toggle the verbose flag & print a message saying whether
-  verbose mode is on or off.
+	  Toggle the verbose flag & print a message saying whether
+	  verbose mode is on or off.
 */
 static long long c_verbose()
 {
@@ -111,10 +111,10 @@ static long long c_verbose()
 }
 
 /******** C_WARNING
-  Toggle the warning flag & print a message saying whether
-  warnings are printed or not.
-  Default: print warnings.
-  (Errors cannot be turned off.)
+	  Toggle the warning flag & print a message saying whether
+	  warnings are printed or not.
+	  Default: print warnings.
+	  (Errors cannot be turned off.)
 */
 static long long c_warning()
 {
@@ -131,8 +131,8 @@ static long long c_warning()
 }
 
 /******** C_MAXINT
-  Return the integer of greatest magnitude that guarantees exact
-  integer arithmetic.
+	  Return the integer of greatest magnitude that guarantees exact
+	  integer arithmetic.
 */
 static long long c_maxint()
 {
@@ -158,8 +158,8 @@ static long long c_maxint()
 
 /* 21.1 */
 /******** C_QUIET
-  Return the value of not(NOTQUIET).
-  */
+	  Return the value of not(NOTQUIET).
+*/
 long long c_quiet()
 {
   ptr_psi_term t,result,ans;
@@ -178,7 +178,7 @@ long long c_quiet()
 
 
 /******** C_CPUTIME
-  Return the cpu-time in seconds used by the Wild_Life interpreter.
+	  Return the cpu-time in seconds used by the Wild_Life interpreter.
 */
 
 #ifdef _WIN64
@@ -236,8 +236,8 @@ static long long c_cputime()
 #endif
 
 /******** C_REALTIME
-  Return the time in seconds since 00:00:00 GMT, January 1, 1970.
-  This is useful for building real-time applications such as clocks.
+	  Return the time in seconds since 00:00:00 GMT, January 1, 1970.
+	  This is useful for building real-time applications such as clocks.
 */
 
 // REV401PLUS I had revised c_realtime as below in prior work on X
@@ -277,9 +277,9 @@ static long long c_realtime()
 
 
 /******** C_LOCALTIME
-  Return a psi-term containing the local time split up into year, month, day,
-  hour, minute, second, and weekday.
-  This is useful for building real-time applications such as clocks.
+	  Return a psi-term containing the local time split up into year, month, day,
+	  hour, minute, second, and weekday.
+	  This is useful for building real-time applications such as clocks.
 */
 
 #ifdef _WIN64
@@ -353,7 +353,7 @@ static long long c_localtime()
 #endif
 
 /******** C_STATISTICS
-  Print some information about Wild_Life: stack size, heap size, total memory.
+	  Print some information about Wild_Life: stack size, heap size, total memory.
 */
 static long long c_statistics()
 {
@@ -387,7 +387,7 @@ static long long c_statistics()
 
 
 /******** C_GARBAGE
-  Force a call to the garbage collector.
+	  Force a call to the garbage collector.
 */
 static long long c_garbage()
 {
@@ -401,7 +401,7 @@ static long long c_garbage()
 
 
 /******** C_GETENV
-  Get the value of an environment variable.
+	  Get the value of an environment variable.
 */
 static long long c_getenv()
 {
@@ -439,7 +439,7 @@ static long long c_getenv()
 
 
 /******** C_SYSTEM
-  Pass a string to shell for execution. Return the value as the result.
+	  Pass a string to shell for execution. Return the value as the result.
 */
 static long long c_system()
 {
@@ -484,8 +484,8 @@ static long long c_system()
 }
 
 /******** C_ENCODE
-  Force type encoding.
-  This need normally never be called by the user.
+	  Force type encoding.
+	  This need normally never be called by the user.
 */
 static long long c_encode()
 {
@@ -502,41 +502,41 @@ static GENERIC unitListElement;
 void setUnitList(GENERIC x)
 // GENERIC x;
 {
-	unitListElement = x;
+  unitListElement = x;
 }
 
 ptr_psi_term unitListValue()
 {
-	return makePsiTerm((ptr_definition)unitListElement);
+  return makePsiTerm((ptr_definition)unitListElement);
 }
 
 GENERIC unitListNext()
 {
-	unitListElement = NULL;
-	return NULL;
+  unitListElement = NULL;
+  return NULL;
 }
 
 ptr_psi_term intListValue(ptr_int_list p)
 // ptr_int_list p;
 {
-	return makePsiTerm((ptr_definition)p->value_1); 
+  return makePsiTerm((ptr_definition)p->value_1); 
 }
 
 GENERIC intListNext(ptr_int_list p)
 // ptr_int_list p;
 {
-	return (GENERIC )(p->next);
+  return (GENERIC )(p->next);
 }
 
 #if FALSE
 ptr_psi_term quotedStackCopy(p)
   ptr_psi_term p;  // REV401PLUS unveverting - def_proto.h
 {
-	ptr_psi_term q;
+  ptr_psi_term q;
 
-	q = stack_copy_psi_term(p); // added * REV401PLUS
-	mark_quote(q);
-	return q;
+  q = stack_copy_psi_term(p); // added * REV401PLUS
+  mark_quote(q);
+  return q;
 }
 #endif
 
@@ -548,28 +548,28 @@ ptr_psi_term quotedStackCopy(p)
 ptr_psi_term residListGoalQuote(ptr_residuation p)
 // ptr_residuation p;
 {
-	ptr_psi_term psi;
+  ptr_psi_term psi;
 
-	psi = stack_psi_term(4);
-	copyPsiTerm(psi, p->goal->aaaa_1);
-	psi->status = 4;
-	return psi;
+  psi = stack_psi_term(4);
+  copyPsiTerm(psi, p->goal->aaaa_1);
+  psi->status = 4;
+  return psi;
 }
 
 GENERIC residListNext(ptr_residuation p)
 // ptr_residuation p;
 {
-	return (GENERIC )(p->next);
+  return (GENERIC )(p->next);
 }
 
 ptr_psi_term makePsiTerm(ptr_definition x)
 // ptr_definition x;
 {
-	ptr_psi_term p;
+  ptr_psi_term p;
 	
-	p = stack_psi_term(4);
-	p->type = x;
-	return p;
+  p = stack_psi_term(4);
+  p->type = x;
+  return p;
 }
 
 
@@ -595,85 +595,85 @@ ptr_psi_term makePsiList(GENERIC head, ptr_psi_term (*valueFunc)(GENERIC), GENER
 
 
 /******** C_ResidList
-  rlist(A) ->  list all eval/prove goals residuated on variable 'A'.
+	  rlist(A) ->  list all eval/prove goals residuated on variable 'A'.
 */
 static long long c_residList()
 {
-	ptr_psi_term func;
-	ptr_psi_term result,arg1, other;
+  ptr_psi_term func;
+  ptr_psi_term result,arg1, other;
 	
-	func = aim->aaaa_1;
-	deref_ptr(func);
+  func = aim->aaaa_1;
+  deref_ptr(func);
 
-	get_one_arg(func->attr_list, &arg1);
-	if (!arg1)
-	{
-		curry();
-		return TRUE;
-	}
+  get_one_arg(func->attr_list, &arg1);
+  if (!arg1)
+    {
+      curry();
+      return TRUE;
+    }
 	
-	result = aim->bbbb_1;
-	deref(result);
-	deref_ptr(arg1);
-	deref_args(func, set_1);
+  result = aim->bbbb_1;
+  deref(result);
+  deref_ptr(arg1);
+  deref_args(func, set_1);
 
-	//ptr_psi_term makePsiList(GENERIC head, ptr_psi_term (*valueFunc)(GENERIC), GENERIC (*nextFunc)(GENERIC))
-	other = makePsiList((GENERIC)arg1->resid,
-			    (ptr_psi_term (*)(GENERIC))residListGoalQuote,
-			    (GENERIC (*)(GENERIC))residListNext);
-	resid_aim = NULL;
-	push_goal(unify,result,other,NULL);
-	return TRUE;
+  //ptr_psi_term makePsiList(GENERIC head, ptr_psi_term (*valueFunc)(GENERIC), GENERIC (*nextFunc)(GENERIC))
+  other = makePsiList((GENERIC)arg1->resid,
+		      (ptr_psi_term (*)(GENERIC))residListGoalQuote,
+		      (GENERIC (*)(GENERIC))residListNext);
+  resid_aim = NULL;
+  push_goal(unify,result,other,NULL);
+  return TRUE;
 }
 
 
 ptr_goal makeGoal(ptr_psi_term p)
 // ptr_psi_term p;
 {
-	ptr_goal old = goal_stack;
-	ptr_goal g;
+  ptr_goal old = goal_stack;
+  ptr_goal g;
 	
-	push_goal(prove, p, (ptr_psi_term)DEFRULES, NULL);
-	g = goal_stack;
-	g->next=NULL;
-	goal_stack = old;
-	return g;
+  push_goal(prove, p, (ptr_psi_term)DEFRULES, NULL);
+  g = goal_stack;
+  g->next=NULL;
+  goal_stack = old;
+  return g;
 }
 
 
 /******** C_residuate
-  residuate(A,B) ->  residuate goal B on variable A, non_strict in both args
+	  residuate(A,B) ->  residuate goal B on variable A, non_strict in both args
 */
 static long long c_residuate()
 {
-	ptr_psi_term pred;
-	ptr_psi_term arg1, arg2;
-	ptr_goal g;
+  ptr_psi_term pred;
+  ptr_psi_term arg1, arg2;
+  ptr_goal g;
 	
-	pred = aim->aaaa_1;
-	deref_ptr(pred);
+  pred = aim->aaaa_1;
+  deref_ptr(pred);
 
-	get_two_args(pred->attr_list, &arg1, &arg2);
-	if ((!arg1)||(!arg2)) {
-	  Errorline("%P requires two arguments.\n",pred);
-	  return FALSE;
-        }
+  get_two_args(pred->attr_list, &arg1, &arg2);
+  if ((!arg1)||(!arg2)) {
+    Errorline("%P requires two arguments.\n",pred);
+    return FALSE;
+  }
 	
-	deref_ptr(arg1);
-	deref_ptr(arg2);
-	deref_args(pred, set_1_2);
+  deref_ptr(arg1);
+  deref_ptr(arg2);
+  deref_args(pred, set_1_2);
 
-	g = makeGoal(arg2);
-	residuateGoalOnVar(g, arg1, NULL);
+  g = makeGoal(arg2);
+  residuateGoalOnVar(g, arg1, NULL);
 	
-	return TRUE;
+  return TRUE;
 }
 
 /******** C_mresiduate
-  Multiple-variable residuation of a predicate.
-  mresiduate(A,B) ->  residuate goal B on a list of variables A, non_strict in
-  both args.  If any of the variables is bound the predicate is executed.
-  The list must have finite length.
+	  Multiple-variable residuation of a predicate.
+	  mresiduate(A,B) ->  residuate goal B on a list of variables A, non_strict in
+	  both args.  If any of the variables is bound the predicate is executed.
+	  The list must have finite length.
 */
 static long long c_mresiduate()
      

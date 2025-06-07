@@ -35,7 +35,7 @@ static char vcid[] = "$Id: bi_type.c,v 1.2 1994/12/08 23:08:52 duchier Exp $";
 #endif
 
 /******** C_CHILDREN
-  Return a list of roots of the children types of T (except bottom).
+	  Return a list of roots of the children types of T (except bottom).
 */
 static long long c_children()   /*  RM: Dec 14 1992  Re-wrote most of the routine */
 {
@@ -75,7 +75,7 @@ static long long c_children()   /*  RM: Dec 14 1992  Re-wrote most of the routin
       garbage();
       return success;
       }
-      */
+    */
     
     t=stack_nil();
     if (!(arg1->type==real && arg1->value_3)) /* PVR 15.2.94 */
@@ -98,7 +98,7 @@ static long long c_children()   /*  RM: Dec 14 1992  Re-wrote most of the routin
 
 
 /******** C_PARENTS
-  Return a list of roots of the parent types of T.
+	  Return a list of roots of the parent types of T.
 */
 static long long c_parents()
 {
@@ -124,7 +124,7 @@ static long long c_parents()
     }
     else {
       if ((arg1->type==quoted_string || arg1->type==integer ||
-          arg1->type==real) && arg1->value_3!=NULL) {
+	   arg1->type==real) && arg1->value_3!=NULL) {
         /* arg1 is a string, long long or real: return a list with arg1 as
            argument, where arg1->value = NULL, MH */
         p1 = stack_psi_term(4);
@@ -157,8 +157,8 @@ static long long c_parents()
 
 
 /******** C_SMALLEST
-  Return the parents of bottom.
-  This function has no arguments.
+	  Return the parents of bottom.
+	  This function has no arguments.
 */
 static long long c_smallest()
 {
@@ -213,11 +213,11 @@ static long long isa(ptr_psi_term arg1, ptr_psi_term arg2)
   long long ans;
 
   if (  arg1->type==arg2->type
-     || (  (arg1->type==real || arg1->type==integer)
-        && (arg2->type==real || arg2->type==integer)
-        && (arg1->value_3 || arg2->value_3)
-        )
-     ) {
+	|| (  (arg1->type==real || arg1->type==integer)
+	      && (arg2->type==real || arg2->type==integer)
+	      && (arg1->value_3 || arg2->value_3)
+	      )
+	) {
 
     if(arg1->type==cut) /*  RM: Jan 21 1993  */
       ans=TRUE;
@@ -286,7 +286,7 @@ static long long isa_select(ptr_psi_term arg1, ptr_psi_term arg2, long long sel)
 }
 
 /******** C_ISA_MAIN
-  Main routine to handle all the isa built-in functions.
+	  Main routine to handle all the isa built-in functions.
 */
 static long long c_isa_main(long long sel)
 // long long sel;
@@ -311,12 +311,12 @@ static long long c_isa_main(long long sel)
 }
 
 /******** C_ISA_LE
-  Type t1 isa t2 in the hierarchy, i.e. t1 is less than or equal to t2.
-  This boolean function requires two arguments and never residuates.
-  It will curry if insufficient arguments are given.
-  It works correctly on the 'value' types, i.e. on integers, reals, strings,
-  and lists.  For lists, it looks only at the top level, i.e. whether the
-  object is nil or a cons cell.
+	  Type t1 isa t2 in the hierarchy, i.e. t1 is less than or equal to t2.
+	  This boolean function requires two arguments and never residuates.
+	  It will curry if insufficient arguments are given.
+	  It works correctly on the 'value' types, i.e. on integers, reals, strings,
+	  and lists.  For lists, it looks only at the top level, i.e. whether the
+	  object is nil or a cons cell.
 */
 static long long c_isa_le()
 {
@@ -381,7 +381,7 @@ static long long c_isa_ncmp()
 
 
 /******** C_IS_FUNCTION
-  Succeed iff argument is a function (built-in or user-defined).
+	  Succeed iff argument is a function (built-in or user-defined).
 */
 static long long c_is_function() /*  RM: Jan 29 1993  */ // REV401PLUS long long
 {
@@ -406,7 +406,7 @@ static long long c_is_function() /*  RM: Jan 29 1993  */ // REV401PLUS long long
 
 
 /******** C_IS_PERSISTENT
-  Succeed iff argument is a quoted persistent or on the heap.
+	  Succeed iff argument is a quoted persistent or on the heap.
 */
 static long long c_is_persistent() /*  RM: Feb  9 1993  */ // REV401PLUS long long
 {
@@ -424,7 +424,7 @@ static long long c_is_persistent() /*  RM: Feb  9 1993  */ // REV401PLUS long lo
 	 arg1->type->type_def==(def_type)global_it &&
 	 (GENERIC)arg1->type->global_value>=heap_pointer
 	 ) ||
-	   (GENERIC)arg1>=heap_pointer;
+      (GENERIC)arg1>=heap_pointer;
     unify_bool_result(result,ans);
   }
   else curry();
@@ -435,7 +435,7 @@ static long long c_is_persistent() /*  RM: Feb  9 1993  */ // REV401PLUS long lo
 
 
 /******** C_IS_PREDICATE
-  Succeed iff argument is a predicate (built-in or user-defined).
+	  Succeed iff argument is a predicate (built-in or user-defined).
 */
 static long long c_is_predicate() /*  RM: Jan 29 1993  */ // REV401PLUS long long
 {
@@ -460,7 +460,7 @@ static long long c_is_predicate() /*  RM: Jan 29 1993  */ // REV401PLUS long lon
 
 
 /******** C_IS_SORT
-  Succeed iff argument is a sort (built-in or user-defined).
+	  Succeed iff argument is a sort (built-in or user-defined).
 */
 static long long c_is_sort() /*  RM: Jan 29 1993  */ // REV401PLUS long long
 {
@@ -485,9 +485,9 @@ static long long c_is_sort() /*  RM: Jan 29 1993  */ // REV401PLUS long long
 
 
 /******** C_IS_VALUE
-  Return true iff argument has a value, i.e. if it is implemented in
-  a quirky way in Wild_Life.  This is true for integers, reals,
-  strings (which are potentially infinite sets of objects), and list objects.
+	  Return true iff argument has a value, i.e. if it is implemented in
+	  a quirky way in Wild_Life.  This is true for integers, reals,
+	  strings (which are potentially infinite sets of objects), and list objects.
 */
 static long long c_is_value()
 {
@@ -512,7 +512,7 @@ static long long c_is_value()
 
 
 /******** C_IS_NUMBER
-  Return true iff argument is an actual number.
+	  Return true iff argument is an actual number.
 */
 static long long c_is_number()
 {
@@ -536,8 +536,8 @@ static long long c_is_number()
 
 
 /******** C_ISA_SUBSORT(A,B)
-  if A is a subsort of B => succeed and residuate on B
-  else			 => fail
+	  if A is a subsort of B => succeed and residuate on B
+	  else			 => fail
 */
 long long c_isa_subsort() // changed to long long REV401PLUS
 {
@@ -556,10 +556,10 @@ long long c_isa_subsort() // changed to long long REV401PLUS
   deref_args(pred, set_1_2);
 
   if (isa(arg1, arg2))
-  {
-	  residuate(arg2);
-	  return TRUE;
-  }
+    {
+      residuate(arg2);
+      return TRUE;
+    }
   return FALSE;
 }
 
@@ -568,14 +568,14 @@ long long c_isa_subsort() // changed to long long REV401PLUS
 long long isValue(ptr_psi_term p)  // REV401PLUS to long long
 // ptr_psi_term p;
 {
-	return (p->value_3 != NULL);
+  return (p->value_3 != NULL);
 }
 
 
 
 /******** C_GLB(A,B)
-  Return glb(A,B).  Continued calls will return each following type in
-  the disjunction of the glb of A,B.
+	  Return glb(A,B).  Continued calls will return each following type in
+	  the disjunction of the glb of A,B.
 */
 long long c_glb()  // REV401PLUS long long
 {
@@ -635,8 +635,8 @@ long long c_glb()  // REV401PLUS long long
 
 
 /******** C_LUB(A,B)
-  Return lub(A,B).  Continued calls will return each following type in
-  the disjunction of the lub of A,B.
+	  Return lub(A,B).  Continued calls will return each following type in
+	  the disjunction of the lub of A,B.
 */
 long long c_lub()  // REV401PLUS long long
 {
@@ -649,10 +649,10 @@ long long c_lub()  // REV401PLUS long long
   get_two_args(func->attr_list,&arg1,&arg2);
 
   if ((!arg1) || (!arg2))
-  {
-    curry();
-    return TRUE;
-  }
+    {
+      curry();
+      return TRUE;
+    }
   result = aim->bbbb_1;
   deref(result);
   deref(arg1);

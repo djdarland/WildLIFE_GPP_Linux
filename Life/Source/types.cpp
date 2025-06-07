@@ -12,7 +12,7 @@ static char vcid[] = "$Id: types.c,v 1.7 1994/12/15 22:28:56 duchier Exp $";
   These routines implement type encoding using the "Transitive Closure"
   binary encoding algorithm.
 
- ****************************************************************************/
+****************************************************************************/
 #define EXTERN extern
 #define REV401PLUS
 
@@ -21,7 +21,7 @@ static char vcid[] = "$Id: types.c,v 1.7 1994/12/15 22:28:56 duchier Exp $";
 #endif
 
 /******** PRINT_DEF_TYPE(t)
-  This prints type T to stderr, where T=predicate, function or type.
+	  This prints type T to stderr, where T=predicate, function or type.
 */
 void print_def_type(def_type t)
 // def_type t;
@@ -90,8 +90,8 @@ void remove_cycles(ptr_definition d, ptr_int_list *dl) // REV401PLUS void
 
 
 /******** REDEFINE(t)
-  This decides whether a definition (a sort, function, or predicate)
-  may be extended or not.
+	  This decides whether a definition (a sort, function, or predicate)
+	  may be extended or not.
 */
 long long redefine(ptr_psi_term t)
 // ptr_psi_term t;
@@ -110,9 +110,9 @@ long long redefine(ptr_psi_term t)
         success=FALSE;
       }
       /*  RM: Mar 25 1993
-	else if (d!=top)
-        Warningline("extending definition of sort '%s'.\n",d->keyword->symbol);
-	*/
+	  else if (d!=top)
+	  Warningline("extending definition of sort '%s'.\n",d->keyword->symbol);
+      */
     }
     else if (d->wl_protected && d->type_def!=(def_type)undef_it) {
       if (d->date>0) {
@@ -163,7 +163,7 @@ long long redefine(ptr_psi_term t)
 
 
 /******** CONS(value,list)
-  Returns the list [VALUE|LIST]
+	  Returns the list [VALUE|LIST]
 */
 ptr_int_list cons(GENERIC v,ptr_int_list l)
 // GENERIC v;
@@ -181,8 +181,8 @@ ptr_int_list cons(GENERIC v,ptr_int_list l)
 
 
 /******** ASSERT_LESS(t1,t2)
-  Assert that T1 <| T2.
-  Return false if some sort of error occurred.
+	  Assert that T1 <| T2.
+	  Return false if some sort of error occurred.
 */
 long long assert_less(ptr_psi_term t1,ptr_psi_term t2)
 // ptr_psi_term t1,t2;
@@ -234,7 +234,7 @@ long long assert_less(ptr_psi_term t1,ptr_psi_term t2)
 
 
 /******** ASSERT_PROTECTED(n,prot)
-  Mark all the nodes in the attribute tree N with protect flag prot.
+	  Mark all the nodes in the attribute tree N with protect flag prot.
 */
 void assert_protected(ptr_node n,long long prot)
 // ptr_node n;
@@ -271,8 +271,8 @@ void assert_protected(ptr_node n,long long prot)
 
 
 /******** ASSERT_ARGS_NOT_EVAL(n)
-  Mark all the nodes in the attribute tree N as having unevaluated arguments,
-  if they are functions or predicates.
+	  Mark all the nodes in the attribute tree N as having unevaluated arguments,
+	  if they are functions or predicates.
 */
 void assert_args_not_eval(ptr_node n)
 // ptr_node n;
@@ -300,9 +300,9 @@ void assert_args_not_eval(ptr_node n)
 
 
 /******** ASSERT_DELAY_CHECK(n)
-  Assert that the types in the attribute tree N will have their
-  properties checked only when they have attributes.  If they
-  have no attributes, then no properties are checked.
+	  Assert that the types in the attribute tree N will have their
+	  properties checked only when they have attributes.  If they
+	  have no attributes, then no properties are checked.
 */
 void assert_delay_check(ptr_node n)
 // ptr_node n;
@@ -324,8 +324,8 @@ void assert_delay_check(ptr_node n)
 
 
 /******** CLEAR_ALREADY_LOADED()
-  Clear the 'already_loaded' flags in all symbol table entries.
-  Done at each top level prompt.
+	  Clear the 'already_loaded' flags in all symbol table entries.
+	  Done at each top level prompt.
 */
 void clear_already_loaded(ptr_node n)
 // ptr_node n;
@@ -343,8 +343,8 @@ void clear_already_loaded(ptr_node n)
 
 
 /******** ASSERT_TYPE(t)
-  T is the psi_term <|(type1,type2).
-  Add that to the type-definitions.
+	  T is the psi_term <|(type1,type2).
+	  Add that to the type-definitions.
 */
 void assert_type(ptr_psi_term t)
 // ptr_psi_term t;
@@ -362,19 +362,19 @@ void assert_type(ptr_psi_term t)
 
 
 /******** ASSERT_COMPLICATED_TYPE
-  This deals with all the type declarations of the form:
+	  This deals with all the type declarations of the form:
   
-  a(attr) <| b.				% (a<|b)
-  a(attr) <| b | pred.
+	  a(attr) <| b.				% (a<|b)
+	  a(attr) <| b | pred.
   
-  a(attr) <| {b;c;d}.			% (a<|b, a<|c, a<|d)
-  a(attr) <| {b;c;d} | pred.
+	  a(attr) <| {b;c;d}.			% (a<|b, a<|c, a<|d)
+	  a(attr) <| {b;c;d} | pred.
   
-  a := b(attr).				% (a<|b)
-  a := b(attr) | pred.
+	  a := b(attr).				% (a<|b)
+	  a := b(attr) | pred.
   
-  a := {b(attr1);c(attr2);d(attr3)}.	% (b<|a,c<|a,d<|a)
-  a := {b(attr1);c(attr2);d(attr3)} | pred.
+	  a := {b(attr1);c(attr2);d(attr3)}.	% (b<|a,c<|a,d<|a)
+	  a := {b(attr1);c(attr2);d(attr3)} | pred.
 */
 void assert_complicated_type(ptr_psi_term t)
 // ptr_psi_term t;
@@ -465,9 +465,9 @@ void assert_complicated_type(ptr_psi_term t)
 
 
 /******** ASSERT_ATTRIBUTES(t)
-  T is of the form ':: type(attributes) | pred', the attributes must be 
-  appended to T's definition, and will be propagated after ENCODING to T's
-  subtypes.
+	  T is of the form ':: type(attributes) | pred', the attributes must be 
+	  appended to T's definition, and will be propagated after ENCODING to T's
+	  subtypes.
 */
 void assert_attributes(ptr_psi_term t)
 // ptr_psi_term t;
@@ -513,9 +513,9 @@ void assert_attributes(ptr_psi_term t)
 
 
 /******** FIND_ADULTS()
-  Returns the list of all the maximal types (apart from top) in the symbol 
-  table. That is, types which have no parents.
-  This routine modifies the global variable 'adults'.
+	  Returns the list of all the maximal types (apart from top) in the symbol 
+	  table. That is, types which have no parents.
+	  This routine modifies the global variable 'adults'.
 */
 void find_adults()       /*  RM: Feb  3 1993  */
 
@@ -535,10 +535,10 @@ void find_adults()       /*  RM: Feb  3 1993  */
 
 
 /******** INSERT_OWN_PROP(definition)
-  Append a type's "rules" (i.e. its own attr. & constr.) to its property list.
-  The property list also contains the type's code.
-  A type's attributes and constraints are stored in the 'rule' field of the
-  definition.
+	  Append a type's "rules" (i.e. its own attr. & constr.) to its property list.
+	  The property list also contains the type's code.
+	  A type's attributes and constraints are stored in the 'rule' field of the
+	  definition.
 */
 void insert_own_prop(ptr_definition d)
 // ptr_definition d;
@@ -579,7 +579,7 @@ void insert_own_prop(ptr_definition d)
 
 
 /******** INSERT_PROP(definition,prop)
-  Append the properties to the definition if they aren't already present.
+	  Append the properties to the definition if they aren't already present.
 */
 void insert_prop(ptr_definition d, ptr_triple_list prop)
 // ptr_definition d;
@@ -620,8 +620,8 @@ void insert_prop(ptr_definition d, ptr_triple_list prop)
 
 
 /******** PROPAGATE_DEFINITIONS()
-  This routine propagates the definition (attributes,predicates) of a type to 
-  all its sons.
+	  This routine propagates the definition (attributes,predicates) of a type to 
+	  all its sons.
 */
 void propagate_definitions()
 {
@@ -646,7 +646,7 @@ void propagate_definitions()
       while(kids) {
         insert_prop((ptr_definition)kids->value_1,d->properties); // REV401PLUS cast
         /* if (d->always_check && kids->value_1)
-          ((ptr_definition)kids->value_1)->always_check=TRUE; */
+	   ((ptr_definition)kids->value_1)->always_check=TRUE; */
         kids=kids->next;
       }
       adults=adults->next;
@@ -666,10 +666,10 @@ void propagate_definitions()
 
 
 /******** COUNT_SORTS(c)
-  Count the number of sorts in the symbol table T.
-  Overestimates in the module version.  RM: Jan 21 1993 
-  No long longer !!   RM: Feb  3 1993 
-  */
+	  Count the number of sorts in the symbol table T.
+	  Overestimates in the module version.  RM: Jan 21 1993 
+	  No long longer !!   RM: Feb  3 1993 
+*/
 long long count_sorts(long long c0)  /*  RM: Feb  3 1993  */
 //     long long c0;
 {
@@ -684,7 +684,7 @@ long long count_sorts(long long c0)  /*  RM: Feb  3 1993  */
 
 
 /******** CLEAR_CODING()
-  Clear the bit-vector coding of the sorts.
+	  Clear the bit-vector coding of the sorts.
 */
 void clear_coding()   /*  RM: Feb  3 1993  */
 
@@ -698,8 +698,8 @@ void clear_coding()   /*  RM: Feb  3 1993  */
 
 
 /******** LEAST_SORTS()
-  Build the list of terminals (i.e. sorts with no children) in
-  nothing->parents.
+	  Build the list of terminals (i.e. sorts with no children) in
+	  nothing->parents.
 */
 void least_sorts()  /*  RM: Feb  3 1993  */
 
@@ -714,8 +714,8 @@ void least_sorts()  /*  RM: Feb  3 1993  */
 
 
 /******** ALL_SORTS()
-  Build a list of all sorts (except nothing) in nothing->parents.
-  */
+	  Build a list of all sorts (except nothing) in nothing->parents.
+*/
 
 void all_sorts()   /*  RM: Feb  3 1993  */
      
@@ -730,7 +730,7 @@ void all_sorts()   /*  RM: Feb  3 1993  */
 
 
 /******** TWO_TO_THE(p)
-  Return the code worth 2^p.
+	  Return the code worth 2^p.
 */
 ptr_int_list two_to_the(long long p)
 //long long p;
@@ -759,7 +759,7 @@ ptr_int_list two_to_the(long long p)
 
 
 /******** copyTypeCode(code)
-  returns copy of code on the heap
+	  returns copy of code on the heap
 */
 ptr_int_list copyTypeCode(ptr_int_list u)
 // ptr_int_list u;
@@ -778,8 +778,8 @@ ptr_int_list copyTypeCode(ptr_int_list u)
 
 
 /******** OR_CODES(code1,code2)
-  Performs CODE1 := CODE1 or CODE2,
-  'or' being the binary logical operator on bits.
+	  Performs CODE1 := CODE1 or CODE2,
+	  'or' being the binary logical operator on bits.
 */
 void or_codes(ptr_int_list u, ptr_int_list v)
 // ptr_int_list u,v;
@@ -801,11 +801,11 @@ void or_codes(ptr_int_list u, ptr_int_list v)
 
 
 /******** EQUALIZE_CODES(w)
-  Make sure all codes are w words long long, by increasing the length of the
-  shorter ones.
-  This simplifies greatly the bitvector manipulation routines.
-  This operation should be done after encoding.
-  For correct operation, w>=maximum number of words used for a code.
+	  Make sure all codes are w words long long, by increasing the length of the
+	  shorter ones.
+	  This simplifies greatly the bitvector manipulation routines.
+	  This operation should be done after encoding.
+	  For correct operation, w>=maximum number of words used for a code.
 */
 void equalize_codes(int len) /*  RM: Feb  3 1993  */ // REV401PLUS void
 //     int len;
@@ -844,10 +844,10 @@ long long type_member();
 
 
 /******** MAKE_TYPE_LINK(t1,t2)
-  Assert that T1 <| T2, this is used to initialise the built_in type relations
-  so that nothing really horrible happens if the user modifies built-in types
-  such as INT or LIST.
-  This routine also makes sure that top has no links.
+	  Assert that T1 <| T2, this is used to initialise the built_in type relations
+	  so that nothing really horrible happens if the user modifies built-in types
+	  such as INT or LIST.
+	  This routine also makes sure that top has no links.
 */
 void make_type_link(ptr_definition t1,ptr_definition t2)
 // ptr_definition t1, t2;
@@ -862,7 +862,7 @@ void make_type_link(ptr_definition t1,ptr_definition t2)
 
 
 /******** TYPE_MEMBER(t,tlst)
-  Return TRUE iff type t is in the list tlst.
+	  Return TRUE iff type t is in the list tlst.
 */
 
 long long type_member(ptr_definition t,ptr_int_list tlst)
@@ -870,8 +870,8 @@ long long type_member(ptr_definition t,ptr_int_list tlst)
 // ptr_int_list tlst;
 {
   while (tlst) {
-   if (t==(ptr_definition)tlst->value_1) return TRUE;
-   tlst=tlst->next;
+    if (t==(ptr_definition)tlst->value_1) return TRUE;
+    tlst=tlst->next;
   }
   return FALSE;
 }
@@ -904,9 +904,9 @@ void perr_sort_cycle(ptr_int_list anc)
 
 
 /******** TYPE_CYCLICITY(d,anc)
-  Check cyclicity of type hierarchy.
-  If cyclic, return a TRUE error condition and print an error message
-  with a cycle.
+	  Check cyclicity of type hierarchy.
+	  If cyclic, return a TRUE error condition and print an error message
+	  with a cycle.
 */
 long long type_cyclicity(ptr_definition d,ptr_int_list anc)
 // ptr_definition d;
@@ -946,10 +946,10 @@ long long type_cyclicity(ptr_definition d,ptr_int_list anc)
 
 
 /******** PROPAGATE_ALWAYS_CHECK(d,ch)
-  Recursively set the always_check flag to 'FALSE' for all d's
-  children.  Continue until encountering only 'FALSE' values. 
-  Return a TRUE flag if a change was made somewhere (for the
-  closure calculation).
+	  Recursively set the always_check flag to 'FALSE' for all d's
+	  children.  Continue until encountering only 'FALSE' values. 
+	  Return a TRUE flag if a change was made somewhere (for the
+	  closure calculation).
 */
 void propagate_always_check(ptr_definition d,long long *ch)
 //ptr_definition d;
@@ -973,9 +973,9 @@ void propagate_always_check(ptr_definition d,long long *ch)
 
 
 /******** ONE_PASS_ALWAYS_CHECK(ch)
-  Go through the symbol table & propagate all FALSE always_check
-  flags of all sorts to their children.  Return a TRUE flag
-  if a change was made somewhere (for the closure calculation).
+	  Go through the symbol table & propagate all FALSE always_check
+	  flags of all sorts to their children.  Return a TRUE flag
+	  if a change was made somewhere (for the closure calculation).
 */
 void one_pass_always_check(long long *ch)
 //     long long *ch;
@@ -991,9 +991,9 @@ void one_pass_always_check(long long *ch)
 
 
 /******** INHERIT_ALWAYS_CHECK()
-  The 'always_check' flag, if false, should be propagated to a sort's
-  children.  This routine does a closure on this propagation operation
-  for all declared sorts.
+	  The 'always_check' flag, if false, should be propagated to a sort's
+	  children.  This routine does a closure on this propagation operation
+	  for all declared sorts.
 */
 void inherit_always_check()
 {
@@ -1008,13 +1008,13 @@ void inherit_always_check()
 
 
 /******** ENCODE_TYPES()
-  This routine performs type-coding using transitive closure.
-  First any previous coding is undone.
-  Then a new encryption is performed.
+	  This routine performs type-coding using transitive closure.
+	  First any previous coding is undone.
+	  Then a new encryption is performed.
 
-  Some of these routines loop indefinitely if there is a circular type
-  definition (an error should be reported but it isn't implemented (but it's
-  quite easy to do)).
+	  Some of these routines loop indefinitely if there is a circular type
+	  definition (an error should be reported but it isn't implemented (but it's
+	  quite easy to do)).
 */
 void encode_types()
 {
@@ -1122,13 +1122,13 @@ void encode_types()
     for (i=0;i<p;i++)
       or_codes(top->code,two_to_the(i));
 
- gamma_table[p]=top; // err in debugging?? DJD
+    gamma_table[p]=top; // err in debugging?? DJD
 
     /*  RM: Jan 13 1993  */
     /* Added the following line because type_count is now over generous
        because the same definition can be referenced several times in
        the symbol table because of modules
-       */
+    */
     type_count=p+1;
     for(i=type_count;i<type_count;i++)
       gamma_table[i]=NULL;
@@ -1153,16 +1153,16 @@ void encode_types()
 	Errorline("the sorts 'real' and 'list' are not disjoint.\n");
 	ok=FALSE;
 	}
-	*/
+    */
     
     /*  RM: Dec 15 1992  I don't think this really matters any more
 	if (overlap_type(alist,quoted_string)) {
 	Errorline("the sorts 'list' and 'string' are not disjoint.\n");
 	ok=FALSE;
 	}
-	*/
+    */
     
-   if (!ok) {
+    if (!ok) {
       perr("*** Internal problem:\n");
       perr("*** Wild_Life may behave abnormally because some basic types\n");
       perr("*** have been defined incorrectly.\n\n");
@@ -1175,7 +1175,7 @@ void encode_types()
 
 
 /******** PRINT_CODES()
-  Print all the codes.
+	  Print all the codes.
 */
 void print_codes()
 {
@@ -1193,22 +1193,22 @@ long long sub_CodeType();
 
 
 /******** GLB_VALUE(result,f,c,value1,value2,value)
-  Do the comparison of the value fields of two psi-terms.
-  This is used in conjunction with glb_code to correctly implement
-  completeness for disequality for psi-terms with non-NULL value fields.
-  This must be preceded by a call to glb_code, since it uses the outputs
-  of that call.
+	  Do the comparison of the value fields of two psi-terms.
+	  This is used in conjunction with glb_code to correctly implement
+	  completeness for disequality for psi-terms with non-NULL value fields.
+	  This must be preceded by a call to glb_code, since it uses the outputs
+	  of that call.
 
-  result   result of preceding glb_code call (non-NULL iff non-empty intersec.)
-  f,c      sort intersection (sortflag & code) of preceding glb_code call.
-  value1   value field of first psi-term.
-  value2   value field of second psi-term.
-  value    output value field (if any).
+	  result   result of preceding glb_code call (non-NULL iff non-empty intersec.)
+	  f,c      sort intersection (sortflag & code) of preceding glb_code call.
+	  value1   value field of first psi-term.
+	  value2   value field of second psi-term.
+	  value    output value field (if any).
 */
 long long glb_value(long long result,long long f,GENERIC c,
-	       GENERIC value1,
-	       GENERIC value2,
-	       GENERIC *value)
+		    GENERIC value1,
+		    GENERIC value2,
+		    GENERIC *value)
 // long long result;
 // long long f;
 // GENERIC c;
@@ -1253,21 +1253,21 @@ long long glb_value(long long result,long long f,GENERIC c,
 
 
 /******** GLB_CODE(f1,c1,f2,c2,f3,c3) (21.9)
-  Calculate glb of two type codes C1 and C2, put result in C3.
-  Return a result value (see comments of glb(..)).
+	  Calculate glb of two type codes C1 and C2, put result in C3.
+	  Return a result value (see comments of glb(..)).
 
-  Sorts are stored as a 'Variant Record':
-    f1==TRUE:  c1 is a ptr_definition (an interned symbol).
-    f1==FALSE: c1 is a ptr_int_list (a sort code).
-  The result (f3,c3) is also in this format.
-  This is needed to correctly handle psi-terms that don't have a sort code
-  (for example, functions, predicates, and singleton sorts).
-  The routine handles a bunch of special cases that keep f3==TRUE.
-  Other than that, it is almost a replica of the inner loop of glb(..).
+	  Sorts are stored as a 'Variant Record':
+	  f1==TRUE:  c1 is a ptr_definition (an interned symbol).
+	  f1==FALSE: c1 is a ptr_int_list (a sort code).
+	  The result (f3,c3) is also in this format.
+	  This is needed to correctly handle psi-terms that don't have a sort code
+	  (for example, functions, predicates, and singleton sorts).
+	  The routine handles a bunch of special cases that keep f3==TRUE.
+	  Other than that, it is almost a replica of the inner loop of glb(..).
 */
 long long glb_code(long long f1,GENERIC c1,
-	      long long f2,GENERIC c2,
-	      long long *f3, GENERIC *c3)
+		   long long f2,GENERIC c2,
+		   long long *f3, GENERIC *c3)
 // long long f1,f2,*f3;
 // GENERIC c1,c2,*c3;
 {
@@ -1337,34 +1337,34 @@ long long glb_code(long long f1,GENERIC c1,
     result=2;
   }
   else while (cd1 && cd2) {
-    /* Bit operations needed only if c1 & c2 coded & different from top */
-    *cd3 = STACK_ALLOC(int_list);
-    (*cd3)->next=NULL;
+      /* Bit operations needed only if c1 & c2 coded & different from top */
+      *cd3 = STACK_ALLOC(int_list);
+      (*cd3)->next=NULL;
     
-    v1=(unsigned long long)(cd1->value_1);
-    v2=(unsigned long long)(cd2->value_1);
-    v3=v1 & v2;
-    (*cd3)->value_1=(GENERIC)v3;
+      v1=(unsigned long long)(cd1->value_1);
+      v2=(unsigned long long)(cd2->value_1);
+      v3=v1 & v2;
+      (*cd3)->value_1=(GENERIC)v3;
     
-    if (v3) {
-      if (v3<v1 && v3<v2)
-        result=4;
-      else if (result!=4)
-        if (v1<v2)
-          result=2;
-        else if (v1>v2)
-          result=3;
-        else
-          result=1;
-    }
-    else if (result)
-      if (v1 || v2)
-        result=4;
+      if (v3) {
+	if (v3<v1 && v3<v2)
+	  result=4;
+	else if (result!=4)
+	  if (v1<v2)
+	    result=2;
+	  else if (v1>v2)
+	    result=3;
+	  else
+	    result=1;
+      }
+      else if (result)
+	if (v1 || v2)
+	  result=4;
         
-    cd1=cd1->next;
-    cd2=cd2->next;
-    cd3= &((*cd3)->next);
-  }
+      cd1=cd1->next;
+      cd2=cd2->next;
+      cd3= &((*cd3)->next);
+    }
 
   return result;
 }
@@ -1372,30 +1372,30 @@ long long glb_code(long long f1,GENERIC c1,
 
 
 /******** GLB(t1,t2,t3)
-  This function returns the Greatest Lower Bound of two types T1 and T2 in T3.
+	  This function returns the Greatest Lower Bound of two types T1 and T2 in T3.
   
-  T3 = T1 /\ T2
+	  T3 = T1 /\ T2
 
-  If T3 is not a simple type then C3 is its code, and T3=NULL.
+	  If T3 is not a simple type then C3 is its code, and T3=NULL.
   
-  It also does some type comparing, and returns
+	  It also does some type comparing, and returns
   
-  0 if T3 = bottom
-  1 if T1 = T2
-  2 if T1 <| T2 ( T3 = T1 )
-  3 if T1 |> T2 ( T3 = T2 )
-  4 otherwise   ( T3 strictly <| T1 and T3 strictly <| T2 )
+	  0 if T3 = bottom
+	  1 if T1 = T2
+	  2 if T1 <| T2 ( T3 = T1 )
+	  3 if T1 |> T2 ( T3 = T2 )
+	  4 otherwise   ( T3 strictly <| T1 and T3 strictly <| T2 )
   
-  These results are used for knowing when to inherit properties or release
-  residuations.
-  The t3 field is NULL iff a new type is needed to represent the
-  result.
+	  These results are used for knowing when to inherit properties or release
+	  residuations.
+	  The t3 field is NULL iff a new type is needed to represent the
+	  result.
 */
 /*  RM: May  7 1993  Fixed bug in when multiple word code */
 long long glb(ptr_definition t1,
-	 ptr_definition t2,
-	 ptr_definition *t3,
-	 ptr_int_list *c3)
+	      ptr_definition t2,
+	      ptr_definition *t3,
+	      ptr_int_list *c3)
 // ptr_definition t1;
 // ptr_definition t2;
 // ptr_definition  *t3;
@@ -1489,9 +1489,9 @@ long long glb(ptr_definition t1,
 
 
 /******** OVERLAP_TYPE(t1,t2)
-  This function returns TRUE if GLB(t1,t2)!=bottom.
-  This is essentially the same thing as GLB, only it's faster 'cause we don't
-  care about the resulting code.
+	  This function returns TRUE if GLB(t1,t2)!=bottom.
+	  This is essentially the same thing as GLB, only it's faster 'cause we don't
+	  care about the resulting code.
 */
 long long overlap_type(ptr_definition t1,ptr_definition t2)
 // ptr_definition t1;
@@ -1516,7 +1516,7 @@ long long overlap_type(ptr_definition t1,ptr_definition t2)
   }
   
   /*
-  printf("overlap_type(%s,%s) => %ld\n",t1->def->keyword->symbol,t2->def->keyword->symbol,result);
+    printf("overlap_type(%s,%s) => %ld\n",t1->def->keyword->symbol,t2->def->keyword->symbol,result);
   */
   
   return result;
@@ -1524,10 +1524,10 @@ long long overlap_type(ptr_definition t1,ptr_definition t2)
 
 
 /******** SUB_CodeType(c1,c2)
-  Return TRUE if code C1 is <| than type C2, that is if type represented
-  by code C1 matches type represented by C2.
+	  Return TRUE if code C1 is <| than type C2, that is if type represented
+	  by code C1 matches type represented by C2.
 
-  We already know that t1 and t2 are not top.
+	  We already know that t1 and t2 are not top.
 */
 long long sub_CodeType(ptr_int_list c1,ptr_int_list c2)
 // ptr_int_list c1;
@@ -1549,7 +1549,7 @@ long long sub_CodeType(ptr_int_list c1,ptr_int_list c2)
 
 
 /******** SUB_TYPE(t1,t2)
-  Return TRUE if type T1 is <| than type T2, that is if T1 matches T2.
+	  Return TRUE if type T1 is <| than type T2, that is if T1 matches T2.
 */
 long long sub_type(ptr_definition t1,ptr_definition t2)
 // ptr_definition t1;
@@ -1557,20 +1557,20 @@ long long sub_type(ptr_definition t1,ptr_definition t2)
 {
   if (t1!=t2)
     if (t2!=top)
-    {
-      if (t1==top)
-        return FALSE;
-      else
-        return sub_CodeType(t1->code, t2->code);
-    }
+      {
+	if (t1==top)
+	  return FALSE;
+	else
+	  return sub_CodeType(t1->code, t2->code);
+      }
   return TRUE;
 }
 
 
 
 /******** MATCHES(t1,t2,s)
-  Returns TRUE if GLB(t1,t2)!=bottom.
-  Sets S to TRUE if type T1 is <| than type T2, that is if T1 matches T2.
+	  Returns TRUE if GLB(t1,t2)!=bottom.
+	  Sets S to TRUE if type T1 is <| than type T2, that is if T1 matches T2.
 */
 long long matches(ptr_definition t1,ptr_definition t2,long long *smaller)
 // ptr_definition t1;
@@ -1609,11 +1609,11 @@ long long matches(ptr_definition t1,ptr_definition t2,long long *smaller)
 
 
 /******** STRICT_MATCHES(t1,t2,s)
-  Almost the same as matches, except that S is set to TRUE only
-  if the type of t1 is strictly less than the type of t2.
-  Because of the implementation of ints, reals, strings, and lists,
-  this has to take the value field into account, and thus must
-  be passed the whole psi-term.
+	  Almost the same as matches, except that S is set to TRUE only
+	  if the type of t1 is strictly less than the type of t2.
+	  Because of the implementation of ints, reals, strings, and lists,
+	  this has to take the value field into account, and thus must
+	  be passed the whole psi-term.
 */
 long long strict_matches(ptr_psi_term t1,ptr_psi_term t2,long long *smaller)
 // ptr_psi_term t1;
@@ -1646,13 +1646,13 @@ long long strict_matches(ptr_psi_term t1,ptr_psi_term t2,long long *smaller)
 
 
 /******** BIT_LENGTH(c)
-  Returns the number of bits needed to code C. That is the rank of the first
-  non NULL bit of C.
+	  Returns the number of bits needed to code C. That is the rank of the first
+	  non NULL bit of C.
   
-  Examples:
-  C= 1001001000   result=7
-  C= 10000        result=1
-  C= 0000000      result=0
+	  Examples:
+	  C= 1001001000   result=7
+	  C= 10000        result=1
+	  C= 0000000      result=0
   
 */
 long long bit_length(ptr_int_list c)
@@ -1681,8 +1681,8 @@ long long bit_length(ptr_int_list c)
 
 
 /******** DECODE(c)
-  Returns a list of the symbol names which make up the disjunction whose
-  code is C.
+	  Returns a list of the symbol names which make up the disjunction whose
+	  code is C.
 */
 
 ptr_int_list decode(ptr_int_list c)

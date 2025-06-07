@@ -4,7 +4,7 @@
     This file implements a variation of the LIFE module system as specified by
     Dinesh Katiyar.
 
-    */
+*/
 /* 	$Id: modules.c,v 1.3 1994/12/15 22:05:39 duchier Exp $	 */
 
 #ifndef lint
@@ -22,8 +22,8 @@ static char vcid[] = "$Id: modules.c,v 1.3 1994/12/15 22:05:39 duchier Exp $";
 
 
 /******** INIT_MODULES()
-  Initialize the module system.
-  */
+	  Initialize the module system.
+*/
 
 void init_modules()
 {
@@ -40,8 +40,8 @@ void init_modules()
 
 
 /******** FIND_MODULE(module)
-  Return a module if it exists.
-  */
+	  Return a module if it exists.
+*/
 
 ptr_module find_module(char *module)
 
@@ -59,8 +59,8 @@ ptr_module find_module(char *module)
 
 
 /******** CREATE_MODULE(module)
-  Create a new module.
-  */
+	  Create a new module.
+*/
 
 ptr_module create_module(char *module)
 
@@ -88,8 +88,8 @@ ptr_module create_module(char *module)
 
 
 /******** SET_CURRENT_MODULE(module)
-  Set the current module to a given string.
-  */
+	  Set the current module to a given string.
+*/
 
 ptr_module set_current_module(ptr_module module)
 
@@ -103,9 +103,9 @@ ptr_module set_current_module(ptr_module module)
 
 
 /******** EXTRACT_MODULE_FROM_NAME
-  Return the module corresponding to "module#symbol".
-  Return NULL if only "#symbol".
-  */
+	  Return the module corresponding to "module#symbol".
+	  Return NULL if only "#symbol".
+*/
 
 ptr_module extract_module_from_name(char *str)
 
@@ -122,7 +122,7 @@ ptr_module extract_module_from_name(char *str)
     result=create_module(str);
     *s='#';
     /*
-    printf("Extracted module name '%s' from '%s'\n",result->module_name,str);
+      printf("Extracted module name '%s' from '%s'\n",result->module_name,str);
     */
   }
   
@@ -132,8 +132,8 @@ ptr_module extract_module_from_name(char *str)
 
 
 /******** STRIP_MODULE_NAME(symbol)
-  Return the sub-string of symbol without the module prefix.
-  */
+	  Return the sub-string of symbol without the module prefix.
+*/
 
 char *strip_module_name(char *str)
 
@@ -155,10 +155,10 @@ char *strip_module_name(char *str)
 
 
 /******** STRING_VAL(term)
-  Return a string defined by a term, that is:
-  if term is a string, return the value,
-  otherwise return the symbol for that term.
-  */
+	  Return a string defined by a term, that is:
+	  if term is a string, return the value,
+	  otherwise return the symbol for that term.
+*/
 
 char *string_val(ptr_psi_term term)
 
@@ -174,12 +174,12 @@ char *string_val(ptr_psi_term term)
 
 
 /******** MAKE_MODULE_TOKEN(module,string)
-  Write 'module#string' in module_buffer.
-  If string is a qualified reference to a given module, then modify the calling
-  module variable to reflect this.
+	  Write 'module#string' in module_buffer.
+	  If string is a qualified reference to a given module, then modify the calling
+	  module variable to reflect this.
 
-  The result must be immediately stored in a newly allocated string.
-  */
+	  The result must be immediately stored in a newly allocated string.
+*/
 
 char *make_module_token(ptr_module module,char *str)
 
@@ -208,8 +208,8 @@ char *make_module_token(ptr_module module,char *str)
 
 
 /******** NEW_DEFINITION(key)
-  Create a definition for a key.
-  */
+	  Create a definition for a key.
+*/
 
 ptr_definition new_definition(ptr_keyword key)    /*  RM: Feb 22 1993  */
 
@@ -250,15 +250,15 @@ ptr_definition new_definition(ptr_keyword key)    /*  RM: Feb 22 1993  */
   
 
 /******** UPDATE_SYMBOL(m,s)
-  S is a string of characters encountered during parsing, M is the module it
-  belongs too.
+	  S is a string of characters encountered during parsing, M is the module it
+	  belongs too.
 
-  if M is NULL then extract the module name from S. If that fails then use the
-  current module.
+	  if M is NULL then extract the module name from S. If that fails then use the
+	  current module.
   
-  Then, retrieve the keyword for 'module#symbol'. Then find the correct
-  definition by scanning the opened modules.
-  */
+	  Then, retrieve the keyword for 'module#symbol'. Then find the correct
+	  definition by scanning the opened modules.
+*/
 
 ptr_definition update_symbol(ptr_module module,char *symbol)   /*  RM: Jan  8 1993  */
 //     ptr_module module;
@@ -364,7 +364,7 @@ ptr_definition update_symbol(ptr_module module,char *symbol)   /*  RM: Jan  8 19
 	      key->symbol,
 	      openkey->module->module_name,
 	      openkey->symbol);
-	      */
+	    */
 	    
 	  }
 	  else { /* Didn't find it */
@@ -379,51 +379,51 @@ ptr_definition update_symbol(ptr_module module,char *symbol)   /*  RM: Jan  8 19
 
 
 /******** GET_FUNCTION_VALUE(module,symbol)
-  Return the value of a function without arguments. This returns a psi-term on
-  the heap which may not be bound etc...
+	  Return the value of a function without arguments. This returns a psi-term on
+	  the heap which may not be bound etc...
   
-  This routine allows C variables to be stored as LIFE functions.
-  */
+	  This routine allows C variables to be stored as LIFE functions.
+*/
 
 /** OBSOLETE
-  ptr_psi_term get_function_value(module,symbol)
+    ptr_psi_term get_function_value(module,symbol)
   
-  ptr_module module;
-  char *symbol;
+    ptr_module module;
+    char *symbol;
   
-  {
-  ptr_node n;
-  ptr_definition def;
-  ptr_psi_term result=NULL;
-  ptr_pair_list rule;
+    {
+    ptr_node n;
+    ptr_definition def;
+    ptr_psi_term result=NULL;
+    ptr_pair_list rule;
   
   
-  n=find(STRCMP,make_module_token(module,symbol),symbol_table);
-  if(n) {
-  def=(ptr_definition)n->data;
-  if(def && def->type==function) {
-  rule=def->rule;
-  while (rule && (!rule->a || !rule->b))
-  rule=rule->next;
-  if(rule) {
-  result=(ptr_psi_term)rule->b;
-  deref_ptr(result);
-  }
-  }
-  }
+    n=find(STRCMP,make_module_token(module,symbol),symbol_table);
+    if(n) {
+    def=(ptr_definition)n->data;
+    if(def && def->type==function) {
+    rule=def->rule;
+    while (rule && (!rule->a || !rule->b))
+    rule=rule->next;
+    if(rule) {
+    result=(ptr_psi_term)rule->b;
+    deref_ptr(result);
+    }
+    }
+    }
   
-  if(!result)
-  Errorline("error in definition of '%s'\n",module_buffer);
+    if(!result)
+    Errorline("error in definition of '%s'\n",module_buffer);
   
-  return result;
-  }
+    return result;
+    }
 */
 
 
 
 /******** PRINT_SYMBOL(k)
-  Returns the string to be used to display keyword K.
-  */
+	  Returns the string to be used to display keyword K.
+*/
 
 char *print_symbol(ptr_keyword k)
      
@@ -439,8 +439,8 @@ char *print_symbol(ptr_keyword k)
 
 
 /******** PRETTY_SYMBOL(k)
-  Prints the string to be used to display keyword K.
-  */
+	  Prints the string to be used to display keyword K.
+*/
 
 void pretty_symbol(ptr_keyword k)
      
@@ -457,8 +457,8 @@ void pretty_symbol(ptr_keyword k)
 
 
 /******** PRETTY_QUOTE_SYMBOL(k)
-  Prints the string to be used to display keyword K, with quotes if required.
-  */
+	  Prints the string to be used to display keyword K, with quotes if required.
+*/
 
 void pretty_quote_symbol(ptr_keyword k)
      
@@ -475,9 +475,9 @@ void pretty_quote_symbol(ptr_keyword k)
 
 
 /******** C_SET_MODULE()
-  This routine retrieves the necessary psi-term to determine the current
-  state of the module mechanism from the heap.
-  */
+	  This routine retrieves the necessary psi-term to determine the current
+	  state of the module mechanism from the heap.
+*/
 
 long long c_set_module()
      
@@ -502,12 +502,12 @@ long long c_set_module()
 
 
 /******** C_OPEN_MODULE()
-  Open one or more modules, that is, alias all the public words
-  in the current module to the definitions in the argument.
-  An error message is printed for each module that is not successfully
-  opened.
-  If at least one module was not successfully opened, the routine
-  fails.
+	  Open one or more modules, that is, alias all the public words
+	  in the current module to the definitions in the argument.
+	  An error message is printed for each module that is not successfully
+	  opened.
+	  If at least one module was not successfully opened, the routine
+	  fails.
 */
 
 long long c_open_module()
@@ -561,28 +561,28 @@ void open_module_one(ptr_psi_term t, int *onefailed)  // REV401PLUS void
   if (open_module) {
     
     for (opens=current_module->open_modules;opens;opens=opens->next)
-	if (opens->value_1==(GENERIC)open_module) {
-	  /* Warningline("module \"%s\" is already open\n",
-	     open_module->module_name); */ /*  RM: Jan 27 1993  */
-	  found=TRUE;
-	}
+      if (opens->value_1==(GENERIC)open_module) {
+	/* Warningline("module \"%s\" is already open\n",
+	   open_module->module_name); */ /*  RM: Jan 27 1993  */
+	found=TRUE;
+      }
     
     if (!found) {
-	opens=HEAP_ALLOC(struct wl_int_list);
-	opens->value_1=(GENERIC)open_module;
-	opens->next=current_module->open_modules;
-	current_module->open_modules=opens;
+      opens=HEAP_ALLOC(struct wl_int_list);
+      opens->value_1=(GENERIC)open_module;
+      opens->next=current_module->open_modules;
+      current_module->open_modules=opens;
 
-	/* Check for name conflicts */
-	/*  RM: Feb 23 1993  */
-	for (i=0;i<open_module->symbol_table->size;i++)
-	  if ((key1=open_module->symbol_table->data[i]) && key1->wl_public) {
-	    key2=hash_lookup(current_module->symbol_table,key1->symbol);
-	    if (key2 && key1->definition!=key2->definition)
-	      Errorline("symbol clash '%s' and '%s'\n",
-			key1->combined_name,
-			key2->combined_name);
-	  }
+      /* Check for name conflicts */
+      /*  RM: Feb 23 1993  */
+      for (i=0;i<open_module->symbol_table->size;i++)
+	if ((key1=open_module->symbol_table->data[i]) && key1->wl_public) {
+	  key2=hash_lookup(current_module->symbol_table,key1->symbol);
+	  if (key2 && key1->definition!=key2->definition)
+	    Errorline("symbol clash '%s' and '%s'\n",
+		      key1->combined_name,
+		      key2->combined_name);
+	}
     }
   }
   else {
@@ -594,8 +594,8 @@ void open_module_one(ptr_psi_term t, int *onefailed)  // REV401PLUS void
 
 
 /******** MAKE_PUBLIC(term,bool)
-  Make a term public.
-  */
+	  Make a term public.
+*/
 
 long long make_public(ptr_psi_term term,long long wl_bool)   /*  RM: Feb 22 1993  Modified */
      
@@ -613,8 +613,8 @@ long long make_public(ptr_psi_term term,long long wl_bool)   /*  RM: Feb 22 1993
     
     if(key->definition->keyword->module!=current_module && !wl_bool) {
       Warningline("local definition of '%s' overrides '%s'\n",
-	       key->definition->keyword->symbol,
-	       key->definition->keyword->combined_name);
+		  key->definition->keyword->symbol,
+		  key->definition->keyword->combined_name);
       
       new_definition(key);
     }
@@ -664,9 +664,9 @@ void traverse_tree(ptr_node n,int flag)   // REV401PLUS void
 
 
 /******** C_PUBLIC()
-  The argument(s) are symbols.
-  Make them public in the current module if they belong long to it.
-  */
+	  The argument(s) are symbols.
+	  Make them public in the current module if they belong long to it.
+*/
 
 long long c_public()
      
@@ -690,9 +690,9 @@ long long c_public()
 
 
 /******** C_PRIVATE()
-  The argument is a single symbol or a list of symbols.
-  Make them private in the current module if they belong long to it.
-  */
+	  The argument is a single symbol or a list of symbols.
+	  Make them private in the current module if they belong long to it.
+*/
 
 long long c_private()
      
@@ -717,8 +717,8 @@ long long c_private()
 
 
 /******** C_DISPLAY_MODULES();
-  Set the display modules switch.
-  */
+	  Set the display modules switch.
+*/
 
 long long c_display_modules()
      
@@ -753,8 +753,8 @@ long long c_display_modules()
 
 
 /******** C_DISPLAY_PERSISTENT();
-  Set the display persistent switch.
-  */
+	  Set the display persistent switch.
+*/
 
 long long c_display_persistent()       /*  RM: Feb 12 1993  */
      
@@ -789,8 +789,8 @@ long long c_display_persistent()       /*  RM: Feb 12 1993  */
 
 
 /******** C_TRACE_INPUT();
-  Set the trace_input switch.
-  */
+	  Set the trace_input switch.
+*/
 
 long long c_trace_input()
      
@@ -825,8 +825,8 @@ long long c_trace_input()
 
 
 /******** REPLACE(old,wl_new,term)
-  Replace all occurrences of type OLD with NEW in TERM.
-  */
+	  Replace all occurrences of type OLD with NEW in TERM.
+*/
 
 void rec_replace();
 void replace_attr();
@@ -912,8 +912,8 @@ void replace_attr(ptr_node old_attr,ptr_psi_term term,
 
 
 /******** C_REPLACE()
-  Replace all occurrences of type ARG1 with ARG2 in ARG3.
-  */
+	  Replace all occurrences of type ARG1 with ARG2 in ARG3.
+*/
 
 long long c_replace()
      
@@ -951,8 +951,8 @@ long long c_replace()
 
 
 /******** C_CURRENT_MODULE
-  Return the current module.
-  */
+	  Return the current module.
+*/
 
 long long c_current_module()
      
@@ -976,7 +976,7 @@ long long c_current_module()
     current_module->module_name)
     ->keyword->symbol
     );
-*/ /* RM: 2/15/1994 */
+  */ /* RM: 2/15/1994 */
   /* other->type=update_symbol(current_module,current_module->module_name); */
   resid_aim=NULL;
   push_goal(unify,result,other,NULL);
@@ -988,8 +988,8 @@ long long c_current_module()
 
 
 /******** C_MODULE_ACCESS
-  Return the psi-term Module#Symbol
-  */
+	  Return the psi-term Module#Symbol
+*/
 
 long long c_module_access()
      
@@ -1013,7 +1013,7 @@ long long c_module_access()
     push_goal(unify,result,other,NULL);
     
     }
-    */
+  */
   
   Warningline("%P not implemented yet...\n",call);
   
@@ -1023,12 +1023,12 @@ long long c_module_access()
 
 
 /******** GLOBAL_UNIFY(u,v)
-  Unify two psi-terms, where it is known that V is on the heap (a persistent
-  variable).
+	  Unify two psi-terms, where it is known that V is on the heap (a persistent
+	  variable).
   
-  This routine really matches U and V, it will only succeed if V is more
-  general than U. U will then be bound to V.
-  */
+	  This routine really matches U and V, it will only succeed if V is more
+	  general than U. U will then be bound to V.
+*/
 
 int global_unify_attr();   /*  RM: Feb  9 1993  */
 
@@ -1095,7 +1095,7 @@ int global_unify(ptr_psi_term u,ptr_psi_term v)      /*  RM: Feb 11 1993  */
       /*
 	if(!success)
 	Warningline("attributes don't unify in %P and %P\n",u,v);
-	*/
+      */
       
       if(success && u->resid)
 	release_resid(u);
@@ -1110,9 +1110,9 @@ int global_unify(ptr_psi_term u,ptr_psi_term v)      /*  RM: Feb 11 1993  */
 
 
 /******** GLOBAL_UNIFY_ATTR(u,v)
-  Unify the attributes of two terms, one on the heap, one on the stack.
-  This is really matching, so all features of U must appear in V.
-  */
+	  Unify the attributes of two terms, one on the heap, one on the stack.
+	  This is really matching, so all features of U must appear in V.
+*/
 
 int global_unify_attr(ptr_node u,ptr_node v)    /*  RM: Feb  9 1993  */
 
@@ -1145,7 +1145,7 @@ int global_unify_attr(ptr_node u,ptr_node v)    /*  RM: Feb  9 1993  */
 	else {
 	  success=
 	    global_unify_attr(u->left,v->left) &&
-	      global_unify_attr(u->right,v->right) &&
+	    global_unify_attr(u->right,v->right) &&
 	    global_unify((ptr_psi_term)u->data,(ptr_psi_term)v->data); // REV401PLUS cast
 	}
     }
@@ -1158,8 +1158,8 @@ int global_unify_attr(ptr_node u,ptr_node v)    /*  RM: Feb  9 1993  */
 
 
 /******** C_ALIAS
-  Alias one keyword to another.
-  */
+	  Alias one keyword to another.
+*/
 
 long long c_alias()
 {
@@ -1179,8 +1179,8 @@ long long c_alias()
     if(key) {
       if(key->definition!=arg2->type) {
 	Warningline("alias: '%s' has now been overwritten by '%s'\n",
-		 key->combined_name,
-		 arg2->type->keyword->combined_name);
+		    key->combined_name,
+		    arg2->type->keyword->combined_name);
 	
 	key->definition=arg2->type;
       }
@@ -1201,8 +1201,8 @@ long long c_alias()
 
 
 /******** GET_MODULE(psi,module,resid)
-  Convert a psi-term to a module. The psi-term must be a string.
-  */
+	  Convert a psi-term to a module. The psi-term must be a string.
+*/
 
 int get_module(ptr_psi_term psi,ptr_module *module)
 
@@ -1233,8 +1233,8 @@ int get_module(ptr_psi_term psi,ptr_module *module)
 
 
 /******** MAKE_FEATURE_PRIVATE(feature)
-  Make a feature private.
-  */
+	  Make a feature private.
+*/
 
 int make_feature_private(ptr_psi_term term)  /*  RM: Mar 11 1993  */
      
@@ -1281,9 +1281,9 @@ int make_feature_private(ptr_psi_term term)  /*  RM: Mar 11 1993  */
 
 
 /******** C_PRIVATE_FEATURE()
-  The argument is a single symbol or a list of symbols.
-  Make this feature private to the current module.
-  */
+	  The argument is a single symbol or a list of symbols.
+	  Make this feature private to the current module.
+*/
 
 long long c_private_feature()    /*  RM: Mar 11 1993  */
      
@@ -1308,9 +1308,9 @@ long long c_private_feature()    /*  RM: Mar 11 1993  */
 
 
 /********* UPDATE_FEATURE(module,feature)
-  Look up a FEATURE.
-  May return NULL if the FEATURE is not visible from MODULE.
-  */
+	   Look up a FEATURE.
+	   May return NULL if the FEATURE is not visible from MODULE.
+*/
 
 ptr_definition update_feature(ptr_module module,char *feature)
 
@@ -1343,8 +1343,8 @@ ptr_definition update_feature(ptr_module module,char *feature)
 
 
 /******** ALL_PUBLIC_SYMBOLS
-  Returns all public symbols from all modules or a specific module.
-  */
+	  Returns all public symbols from all modules or a specific module.
+*/
 
 long long all_public_symbols()   // REV401PLUS change to long long
 {

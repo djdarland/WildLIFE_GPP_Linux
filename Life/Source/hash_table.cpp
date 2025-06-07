@@ -8,7 +8,7 @@
   Each module has its own hash table of symbols.
 
   All definition are stores in a linked list starting at first_definition.
-  */
+*/
 /* 	$Id: hash_table.c,v 1.2 1994/12/08 23:24:09 duchier Exp $	 */
 
 #ifndef lint
@@ -23,8 +23,8 @@ static char vcid[] = "$Id: hash_table.c,v 1.2 1994/12/08 23:24:09 duchier Exp $"
 #endif
 
 /******** HASH_CREATE(size)
-  Create a hash-table for max size keywords.
-  */
+	  Create a hash-table for max size keywords.
+*/
   
 // ptr_definition first_definition=NULL;  // REV401PLUS moved // removed MINT
 
@@ -47,8 +47,8 @@ ptr_hash_table hash_create(int size)
 
 
 /******** HASH_EXPAND(table,new_size)
-  Allocate a bigger hash table.
-  */
+	  Allocate a bigger hash table.
+*/
 
 void hash_expand(ptr_hash_table table,int new_size)
 
@@ -80,8 +80,8 @@ void hash_expand(ptr_hash_table table,int new_size)
 
 
 /******** HASH_CODE(table,symbol)
-  Return the hash code for a symbol
-  */
+	  Return the hash code for a symbol
+*/
 
 int hash_code(ptr_hash_table table,char *symbol)
      
@@ -132,8 +132,8 @@ int hash_find(ptr_hash_table table,char *symbol)
 
 
 /******** HASH_LOOKUP(table,symbol)
-  Look up a symbol in the symbol table.
-  */
+	  Look up a symbol in the symbol table.
+*/
 
 ptr_keyword hash_lookup(ptr_hash_table table,char *symbol)
      
@@ -154,8 +154,8 @@ ptr_keyword hash_lookup(ptr_hash_table table,char *symbol)
 
 
 /******** HASH_INSERT(table,symbol,keyword)
-  Add a symbol and data to a table. Overwrite previous data.
-  */
+	  Add a symbol and data to a table. Overwrite previous data.
+*/
 
 void hash_insert(ptr_hash_table table,char *symbol,ptr_keyword keyword)
      
@@ -181,8 +181,8 @@ void hash_insert(ptr_hash_table table,char *symbol,ptr_keyword keyword)
 
 
 /******** HASH_DISPLAY(table)
-  Display a symbol table (for debugging).
-  */
+	  Display a symbol table (for debugging).
+*/
 
 void hash_display(ptr_hash_table table)
      

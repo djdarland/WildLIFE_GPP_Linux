@@ -1,6 +1,6 @@
 /* Copyright 1991 Digital Equipment Corporation.
- ** All Rights Reserved.
- *****************************************************************/
+** All Rights Reserved.
+*****************************************************************/
 /* 	$Id: lib.c,v 1.2 1994/12/08 23:26:47 duchier Exp $	 */
 
 #ifndef lint
@@ -31,9 +31,9 @@ static unsigned int libseed;
 
 // REV401PLUS -- moved nex 4 down
 /* long long noisy=TRUE;
-long long file_date=3;
-long long types_done=FALSE;
-float garbage_time=0;
+   long long file_date=3;
+   long long types_done=FALSE;
+   float garbage_time=0;
 */ // REMOVED above for MINT
 
 
@@ -131,7 +131,7 @@ void WFInit(long long argc, char *argv[])
 #endif
 #ifdef _Win64
   for (i = 0;i < 256;i++)
-      rand_array[i] = rand();
+    rand_array[i] = rand();
 #endif
 
   

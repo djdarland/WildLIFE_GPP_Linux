@@ -93,9 +93,9 @@ ptr_psi_term heap_psi_term(long long stat)
 
 
 /******** RESIDUATE_DOUBLE(t,u)
-  Residuate the current expression with T in the Residuation Variable set.
-  Also store the other variable, so that its sort can be used in the
-  'bestsort' calculation needed to implement disequality constraints.
+	  Residuate the current expression with T in the Residuation Variable set.
+	  Also store the other variable, so that its sort can be used in the
+	  'bestsort' calculation needed to implement disequality constraints.
 */
 void residuate_double(ptr_psi_term t,ptr_psi_term u) /* 21.9 */
 // ptr_psi_term t,u;
@@ -113,7 +113,7 @@ void residuate_double(ptr_psi_term t,ptr_psi_term u) /* 21.9 */
 
 
 /******** RESIDUATE(t)
-  Residuate the current expression with T in the Residuation Variable set.
+	  Residuate the current expression with T in the Residuation Variable set.
 */
 void residuate(ptr_psi_term t)
 // ptr_psi_term t;
@@ -130,7 +130,7 @@ void residuate(ptr_psi_term t)
 
 
 /******** RESIDUATE2(u,v)
-  Residuate the current function on the two variables U and V.
+	  Residuate the current function on the two variables U and V.
 */
 void residuate2(ptr_psi_term u,ptr_psi_term v)
 // /ptr_psi_term u,v;
@@ -142,7 +142,7 @@ void residuate2(ptr_psi_term u,ptr_psi_term v)
 
 
 /******** RESIDUATE3(u,v,w)
-  Residuate the current function on the three variables U, V, and W.
+	  Residuate the current function on the three variables U, V, and W.
 */
 void residuate3(ptr_psi_term u,ptr_psi_term v,ptr_psi_term w)
 // ptr_psi_term u,v,w;
@@ -155,9 +155,9 @@ void residuate3(ptr_psi_term u,ptr_psi_term v,ptr_psi_term w)
 
 
 /******** CURRY()
-  Decide that the current function will have to be curried.
-  This has become so simple it could be a MACRO.
-  The real work is done by DO_CURRY.
+	  Decide that the current function will have to be curried.
+	  This has become so simple it could be a MACRO.
+	  The real work is done by DO_CURRY.
 */
 void curry()
 {
@@ -169,10 +169,10 @@ void curry()
 
 
 /******** RESIDUATEGOALONVAR(g,var,othervar)
-  Add the goal to the variable's residuation list.
-  Also update the residuation's 'bestsort' field if it exists (needed to
-  implement complete disequality semantics).  The 'othervar' parameter
-  is needed for this.
+	  Add the goal to the variable's residuation list.
+	  Also update the residuation's 'bestsort' field if it exists (needed to
+	  implement complete disequality semantics).  The 'othervar' parameter
+	  is needed for this.
 */
 long long residuateGoalOnVar(ptr_goal g, ptr_psi_term var, ptr_psi_term othervar)
 // ptr_goal g;
@@ -294,13 +294,13 @@ long long residuateGoalOnVar(ptr_goal g, ptr_psi_term var, ptr_psi_term othervar
 
 
 /******** DO_RESIDUATION()
-  Undo anything that matching may have done, then
-  create a residuated expression. Check that the same constraint does not
-  hang several times on the same variable.
+	  Undo anything that matching may have done, then
+	  create a residuated expression. Check that the same constraint does not
+	  hang several times on the same variable.
 
-  This routine takes time proportional to the square of the number of
-  residuations.  This is too slow; eventually it should be sped up, 
-  especially if equality constraints are often used.
+	  This routine takes time proportional to the square of the number of
+	  residuations.  This is too slow; eventually it should be sped up, 
+	  especially if equality constraints are often used.
 */
 long long do_residuation(); /* forward declaration */
 
@@ -355,9 +355,9 @@ long long do_residuation()
 
 
 /********* DO_CURRYING()
-  This performs CURRYing: all that needs to be done is to yield the calling
-  term as the result after having given up on evaluation. In effect the calling
-  psi-term is left intact.
+	   This performs CURRYing: all that needs to be done is to yield the calling
+	   term as the result after having given up on evaluation. In effect the calling
+	   psi-term is left intact.
 */
 void do_currying()
 {
@@ -378,11 +378,11 @@ void do_currying()
 
 
 /******** RELEASE_RESID(t)
-  Release the residuations pending on the Residuation Variable T.
-  This is done by simply pushing the residuated goals onto the goal-stack.
-  A goal is not added if already present on the stack.
-  Two versions of this routine exist: one which trails t and one which never
-  trails t.
+	  Release the residuations pending on the Residuation Variable T.
+	  This is done by simply pushing the residuated goals onto the goal-stack.
+	  A goal is not added if already present on the stack.
+	  Two versions of this routine exist: one which trails t and one which never
+	  trails t.
 */
 void release_resid_main(ptr_psi_term t,long long trailflag)
 // ptr_psi_term t;
@@ -429,10 +429,10 @@ void release_resid_notrail(ptr_psi_term t)
 
 
 /******** APPEND_RESID(u,v)
-  Append the residuations pending on V to U. This routine does not check that
-  the same constraint is not present twice in the end on U. This doesn't matter
-  since RELEASE_RESID ensures that the same constraint is not released more
-  than once.
+	  Append the residuations pending on V to U. This routine does not check that
+	  the same constraint is not present twice in the end on U. This doesn't matter
+	  since RELEASE_RESID ensures that the same constraint is not released more
+	  than once.
 */
 void append_resid(ptr_psi_term u,ptr_psi_term v)
 // ptr_psi_term u,v;
@@ -450,11 +450,11 @@ void append_resid(ptr_psi_term u,ptr_psi_term v)
 
 
 /******** EVAL_AIM()
-  Evaluate a function.
-  This copies the current definition of the function and
-  stacking the various goals that are necessary to evaluate the function
-  correctly.
-  It creates an extra psi-term (with value top) in which to write the result.
+	  Evaluate a function.
+	  This copies the current definition of the function and
+	  stacking the various goals that are necessary to evaluate the function
+	  correctly.
+	  It creates an extra psi-term (with value top) in which to write the result.
 */
 long long eval_aim()
 {
@@ -687,11 +687,11 @@ long long eval_aim()
 
 
 /******** MATCH_ATTR(u,v)
-  Match the attribute trees of psi_terms U and V.
-  If V has an attribute that U doesn't then curry.
-  U is the calling term, V is the definition.
-  This routine is careful to push nested eval and match goals in
-  descending order of feature names.
+	  Match the attribute trees of psi_terms U and V.
+	  If V has an attribute that U doesn't then curry.
+	  U is the calling term, V is the definition.
+	  This routine is careful to push nested eval and match goals in
+	  descending order of feature names.
 */
 void match_attr(ptr_node *u,ptr_node v,ptr_resid_block rb)
 //ptr_node *u,v;
@@ -707,11 +707,11 @@ void match_attr(ptr_node *u,ptr_node v,ptr_resid_block rb)
 
 
 /******** MATCH_AIM()
-  This is very similar to UNIFY_AIM, only matching cannot modify the calling
-  psi_term.   The first argument is the calling term (which may not be changed)
-  and the second argument is the function definition (which may be changed).
-  Residuate the expression if the calling term is more general than the
-  function definition.
+	  This is very similar to UNIFY_AIM, only matching cannot modify the calling
+	  psi_term.   The first argument is the calling term (which may not be changed)
+	  and the second argument is the function definition (which may be changed).
+	  Residuate the expression if the calling term is more general than the
+	  function definition.
 */
 long long match_aim()
 {
@@ -781,14 +781,14 @@ long long match_aim()
         else {
           v->coref=u;
         } /* 21.9 */
-	  attr_missing=FALSE;
-	  match_attr(&(u->attr_list),v->attr_list,rb);
-	  if (attr_missing) {
-            if (can_curry)
-              curried=TRUE;
-            else
-              residuate_double(u,v);
-          }
+	attr_missing=FALSE;
+	match_attr(&(u->attr_list),v->attr_list,rb);
+	if (attr_missing) {
+	  if (can_curry)
+	    curried=TRUE;
+	  else
+	    residuate_double(u,v);
+	}
         /* } 21.9 */
       }
     }
@@ -819,8 +819,8 @@ long long eval_args();
 
 
 /******** EVAL_ARGS(n)
-  N is an attribute tree, the attributes must be examined, if any reveal
-  themselves to need evaluating then return FALSE.
+	  N is an attribute tree, the attributes must be examined, if any reveal
+	  themselves to need evaluating then return FALSE.
 */
 long long i_eval_args(ptr_node n)
 // ptr_node n;
@@ -848,7 +848,7 @@ long long eval_args(ptr_node n)
 
 
 /******** CHECK_DISJ(t)
-  Deal with disjunctions.
+	  Deal with disjunctions.
 */
 void check_disj(ptr_psi_term t)
 // ptr_psi_term t;
@@ -863,8 +863,8 @@ void check_disj(ptr_psi_term t)
 
 
 /******** CHECK_FUNC(t)
-  Deal with an unevaluated function: push an 'eval' goal for it, which will
-  cause it to be evaluated.
+	  Deal with an unevaluated function: push an 'eval' goal for it, which will
+	  cause it to be evaluated.
 */
 void check_func(ptr_psi_term t)
 //ptr_psi_term t;
@@ -919,12 +919,12 @@ void check_func(ptr_psi_term t)
 
 
 /******** CHECK_TYPE(t)
-  Here we deal with a type which may need checking.
-  This routine will have to be modified to deal with the infinite loops
-  currently caused by definitions such as:
+	  Here we deal with a type which may need checking.
+	  This routine will have to be modified to deal with the infinite loops
+	  currently caused by definitions such as:
 
-  :: H:husband(spouse => wife(spouse => H)).
-  :: W:wife(spouse => husband(spouse => W)).
+	  :: H:husband(spouse => wife(spouse => H)).
+	  :: W:wife(spouse => husband(spouse => W)).
 
 */
 long long check_type(ptr_psi_term t)
@@ -955,7 +955,7 @@ long long check_type(ptr_psi_term t)
     /*  RM: Dec 15 1992  I don't know what this is for
 	if (!ovverlap_type(t->type,alist))
 	t->status= (4 & SMASK) | (t->status & RMASK);
-	*/
+    */
     
     flag=eval_args(t->attr_list);
   }
@@ -966,29 +966,29 @@ long long check_type(ptr_psi_term t)
 
   
 /******** CHECK_OUT(t)
-  This routine checks out psi_term T.
-  It deals with the following cases:
-  - T is a conjunction,
-  - T is a type which has properties to check.
-  - The same for T's arguments.
-  If any of the above holds then proof has to be suspended until the
-  case has been dealt with.  This is done by pushing goals on the goal_stack
-  to handle the case.  If all is dealt with then CHECK_OUT returns TRUE.
-  I.e., CHECK_OUT returns TRUE iff it has not pushed any goals on the stack.
+	  This routine checks out psi_term T.
+	  It deals with the following cases:
+	  - T is a conjunction,
+	  - T is a type which has properties to check.
+	  - The same for T's arguments.
+	  If any of the above holds then proof has to be suspended until the
+	  case has been dealt with.  This is done by pushing goals on the goal_stack
+	  to handle the case.  If all is dealt with then CHECK_OUT returns TRUE.
+	  I.e., CHECK_OUT returns TRUE iff it has not pushed any goals on the stack.
 
-  Evaluation is *not* done here, but as a part of dereferencing when a value
-  is needed.
+	  Evaluation is *not* done here, but as a part of dereferencing when a value
+	  is needed.
 
-  Of all the routines related to check_out, only i_check_out, check_func,
-  i_eval_args, and the dereference routines are called from outside of this
-  file (lefun.c).
-  - i_check_out(t) checks out everything except functions.  When a function
-    is encountered, check_out returns immediately without looking inside it.
-  - f_check_out(t) checks out functions too.
-  - i_eval_args(n) checks out all arguments, except functions.
-  - check_func(t) checks out a function & all its arguments (including all
-    nested functions.  This is done as part of dereferencing, which is part
-    of unification, matching, built-ins, and user-defined routines.
+	  Of all the routines related to check_out, only i_check_out, check_func,
+	  i_eval_args, and the dereference routines are called from outside of this
+	  file (lefun.c).
+	  - i_check_out(t) checks out everything except functions.  When a function
+	  is encountered, check_out returns immediately without looking inside it.
+	  - f_check_out(t) checks out functions too.
+	  - i_eval_args(n) checks out all arguments, except functions.
+	  - check_func(t) checks out a function & all its arguments (including all
+	  nested functions.  This is done as part of dereferencing, which is part
+	  of unification, matching, built-ins, and user-defined routines.
 */
 long long i_check_out(ptr_psi_term t)
 // ptr_psi_term t;
@@ -1012,7 +1012,7 @@ long long check_out(ptr_psi_term t)
   deref_ptr(t);
 
   /* Traceline("PVR: entering check_out with status %d and term %P\n",
-            t->status,t); for brunobug.lf PVR 14.2.94 */
+     t->status,t); for brunobug.lf PVR 14.2.94 */
 
   if (t->status || (GENERIC)t>=heap_pointer) /*  RM: Feb  8 1993  */
     flag=TRUE;
@@ -1158,10 +1158,10 @@ void deref_rec_body(ptr_psi_term t)
       }
       else {
 	/* if (t->status!=2) Tried adding this -- PVR 9.2.94 */
-	  if((GENERIC)t<heap_pointer)
-	    push_ptr_value(int_ptr,(GENERIC *)&(t->status));/*  RM: Jul 15 1993  */ // REV401PLUS cast
-	  t->status=4;
-	  deref_rec_args(t->attr_list);
+	if((GENERIC)t<heap_pointer)
+	  push_ptr_value(int_ptr,(GENERIC *)&(t->status));/*  RM: Jul 15 1993  */ // REV401PLUS cast
+	t->status=4;
+	deref_rec_args(t->attr_list);
       }
   }
 }
@@ -1267,36 +1267,36 @@ void save_resid(ptr_resid_block rb,ptr_psi_term match_date)
 // ptr_resid_block rb;
 // ptr_psi_term match_date;
 {
-   if (rb) {
-      rb->cc_cr = (can_curry<<1) + curried; /* 11.9 */
-      rb->ra = resid_aim;
-      rb->rv = resid_vars;
-      /* rb->cr = curried; 11.9 */
-      /* rb->cc = can_curry; 11.9 */
-      rb->md = match_date;
-   }
+  if (rb) {
+    rb->cc_cr = (can_curry<<1) + curried; /* 11.9 */
+    rb->ra = resid_aim;
+    rb->rv = resid_vars;
+    /* rb->cr = curried; 11.9 */
+    /* rb->cc = can_curry; 11.9 */
+    rb->md = match_date;
+  }
 }
 
 void restore_resid(ptr_resid_block rb,ptr_psi_term *match_date)
 // ptr_resid_block rb;
 // ptr_psi_term *match_date;
 {
-   if (rb) {
-      can_curry = (rb->cc_cr&2)?TRUE:FALSE; /* 11.9 */
-      curried   = (rb->cc_cr&1)?TRUE:FALSE; /* 11.9 */
-      resid_aim = rb->ra;
-      resid_vars = rb->rv;
-      /* curried = rb->cr; 11.9 */
-      /* can_curry = rb->cc; 11.9 */
-      *match_date = rb->md;
-   }
+  if (rb) {
+    can_curry = (rb->cc_cr&2)?TRUE:FALSE; /* 11.9 */
+    curried   = (rb->cc_cr&1)?TRUE:FALSE; /* 11.9 */
+    resid_aim = rb->ra;
+    resid_vars = rb->rv;
+    /* curried = rb->cr; 11.9 */
+    /* can_curry = rb->cc; 11.9 */
+    *match_date = rb->md;
+  }
 }
 
 
 
 /******** EVAL_GLOBAL_VAR(t)
-  Dereference a global variable.
-  */
+	  Dereference a global variable.
+*/
 
 void eval_global_var(ptr_psi_term t)     /*  RM: Feb 10 1993  */
 
@@ -1341,8 +1341,8 @@ void eval_global_var(ptr_psi_term t)     /*  RM: Feb 10 1993  */
 
 
 /******** INIT_GLOBAL_VARS()
-  Initialize all non-persistent global variables.
-  */
+	  Initialize all non-persistent global variables.
+*/
 
 void init_global_vars()  /*  RM: Feb 15 1993  */
 
@@ -1358,7 +1358,7 @@ void init_global_vars()  /*  RM: Feb 15 1993  */
     def->global_value=eval_copy(def->init_value,STACK); 
     }
     }
-    */
+  */
 
   for(def=first_definition;def;def=def->next)
     if((GENERIC)(def->global_value)<(GENERIC)heap_pointer)

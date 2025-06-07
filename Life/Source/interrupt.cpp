@@ -16,8 +16,8 @@ static char vcid[] = "$Id: interrupt.c,v 1.2 1994/12/08 23:25:19 duchier Exp $";
 // long long interrupted=FALSE;  // REV401PLUS moved down removed for MINT
 
 /******** INTERRUPT()
-  This routine is called whenever the user types CONTROL C which generates an
-  interrupt. The interrupt is dealt with later, when convenient, or ignored.
+	  This routine is called whenever the user types CONTROL C which generates an
+	  interrupt. The interrupt is dealt with later, when convenient, or ignored.
 */
 void interrupt(int)
 {
@@ -31,8 +31,8 @@ void interrupt(int)
 
 
 /******** INIT_INTERRUPT
-  This initialises interrupts by trapping the interrupt signal and sending it
-  to INTERRUPT.
+	  This initialises interrupts by trapping the interrupt signal and sending it
+	  to INTERRUPT.
 */
 void init_interrupt()
 {
@@ -45,9 +45,9 @@ void init_interrupt()
 
 
 /******** HANDLE_INTERRUPT()
-  This deals with an eventual interrupt.
-  Return TRUE if execution continues normally, otherwise abort query, toggle
-  trace on or off, or quit Wild_Life (suicide).
+	  This deals with an eventual interrupt.
+	  Return TRUE if execution continues normally, otherwise abort query, toggle
+	  trace on or off, or quit Wild_Life (suicide).
 */
 
 
@@ -71,7 +71,7 @@ void handle_interrupt()
   open_input_file("stdin");
   stdin_cleareof();
 
-  StartAgain:
+ StartAgain:
   do {
     printf("*** Command ");
     prompt="(q,c,a,s,t,h)?";

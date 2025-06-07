@@ -15,8 +15,8 @@ static char vcid[] = "$Id: info.c,v 1.4 1995/01/30 21:03:55 duchier Exp $";
 #include <stdio.h>
 
 /******** PNF(s,n)
-  This prints one line of info cleanly. The string S is the name of the
-  structure, N the number of bytes it uses
+	  This prints one line of info cleanly. The string S is the name of the
+	  structure, N the number of bytes it uses
 */
 static void pnf(char *s,long long n)
 // char *s;
@@ -33,16 +33,16 @@ static void pnf(char *s,long long n)
 
 
 /******** TITLE()
-  This routine marks the start of Life. It prints info about the compile DATE,
-  some blurb about the author etc... Who cares anyway??
-  [I do! -hak]
+	  This routine marks the start of Life. It prints info about the compile DATE,
+	  some blurb about the author etc... Who cares anyway??
+	  [I do! -hak]
 */
 void title()
 {
   if(quietflag)
     return; /*  RM: Feb 17 1993  */
   
-  printf("Wild_Life Interpreter Version 4.20 Fri Jun  6 12:46:13 PM CDT 2025\n");
+  printf("Wild_Life Interpreter Version 4.20 Fri Jun  6 10:23:50 PM CDT 2025\n");
   printf("Copyright (C) 1991-93 DEC Paris Research Laboratory\n");
   printf("Extensions, Copyright (C) 1994-1995 Intelligent Software Group, SFU\n"); 
   printf("Ported to Linux and Cygwin December 2022 after many efforts since 1995\n");
@@ -54,28 +54,28 @@ void title()
 #endif
   
 #if 0
-    printf("\n- Main data-structure sizes:\n");
-    pnf("rule",sizeof(struct pair_list));
-    pnf("psi_term",sizeof(struct psi_term));
-    pnf("binary tree node",sizeof(struct node));
-    pnf("stacked goal",sizeof(struct goal));
-    pnf("stacked choice-point",sizeof(struct choice_point));
-    pnf("backtracking action",sizeof(struct ptr_stack));
-    pnf("symbol definition",sizeof(struct definition));
-    pnf("code node",sizeof(struct int_list));
-    pnf("list node",sizeof(struct list));
-    pnf("real number",sizeof(REAL));
+  printf("\n- Main data-structure sizes:\n");
+  pnf("rule",sizeof(struct pair_list));
+  pnf("psi_term",sizeof(struct psi_term));
+  pnf("binary tree node",sizeof(struct node));
+  pnf("stacked goal",sizeof(struct goal));
+  pnf("stacked choice-point",sizeof(struct choice_point));
+  pnf("backtracking action",sizeof(struct ptr_stack));
+  pnf("symbol definition",sizeof(struct definition));
+  pnf("code node",sizeof(struct int_list));
+  pnf("list node",sizeof(struct list));
+  pnf("real number",sizeof(REAL));
     
-    printf("\n- Size of C built-in types:\n");
-    pnf("REAL",sizeof(REAL));
-    pnf("long long",sizeof(long long));
-    pnf("int",sizeof(unsigned long long));
-    pnf("pointer",sizeof(char *));
+  printf("\n- Size of C built-in types:\n");
+  pnf("REAL",sizeof(REAL));
+  pnf("long long",sizeof(long long));
+  pnf("int",sizeof(unsigned long long));
+  pnf("pointer",sizeof(char *));
     
-    printf("\n- System constants:\n");
-    pnf("Maximum string or line length:",STRLEN);
-    pnf("Parser stack depth:",PARSER_STACK_SIZE);
-    pnf("Size of real numbers:",sizeof(REAL));
-    printf("\n\n");
+  printf("\n- System constants:\n");
+  pnf("Maximum string or line length:",STRLEN);
+  pnf("Parser stack depth:",PARSER_STACK_SIZE);
+  pnf("Size of real numbers:",sizeof(REAL));
+  printf("\n\n");
 #endif
 }

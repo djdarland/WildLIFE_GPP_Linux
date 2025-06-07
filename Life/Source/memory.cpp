@@ -1,4 +1,4 @@
- /* Copyright 1991 Digital Equipment Corporation.
+/* Copyright 1991 Digital Equipment Corporation.
 ** All Rights Reserved.
 *****************************************************************/
 /* 	$Id: memory.c,v 1.10 1995/07/27 19:03:24 duchier Exp $	 */
@@ -150,9 +150,9 @@ long long bounds_undo_stack()
 
   while (u) {
     if (  (GENERIC)u<mem_base
-       || (GENERIC)u>mem_limit
-       || (!VALID_ADDRESS(u->aaaa_3) && !(u->type & undo_action))
-       ) {
+	  || (GENERIC)u>mem_limit
+	  || (!VALID_ADDRESS(u->aaaa_3) && !(u->type & undo_action))
+	  ) {
       if ((GENERIC)u<mem_base || (GENERIC)u>mem_limit) {
         printf("\nUNDO: u=%llx\n",(long long)u);
       }
@@ -182,9 +182,9 @@ static void check_undo_stack();
 
 
 /******** FAIL_ALL()
-  This routines provokes a total failure, in case of a bad error
-  (out of memory, abort, etc...).
-  All goals are abandoned.
+	  This routines provokes a total failure, in case of a bad error
+	  (out of memory, abort, etc...).
+	  All goals are abandoned.
 */
 void fail_all()
 {
@@ -218,103 +218,103 @@ void check_resid_block();
 /*  RM: Jan 29 1993  Replaced with PVR's version of 26.1 */
 
 /******** COMPRESS()
-  This routine compresses the memory contents and
-  calculates the new addresses. First the Stack is compressed, bottom up.
-  Secondly the Heap is compressed, top down.
+	  This routine compresses the memory contents and
+	  calculates the new addresses. First the Stack is compressed, bottom up.
+	  Secondly the Heap is compressed, top down.
 */
 static void compress()
 {
-    GENERIC addr, new_addr;
-    long long len, i;
+  GENERIC addr, new_addr;
+  long long len, i;
   
-    /* Compressing the stack: */
+  /* Compressing the stack: */
   
-    addr=new_addr=mem_base;
-    while (addr<=stack_pointer) {
-      len = *(addr+delta);
-      if (len) {
-        /* There are lots of these: */
-        /* if (len==LONELY) printf("Isolated LONELY at %lx\n",addr); */
-        if (len==LONELY) len=ALIGN;
-        else if (len & (ALIGN-1)) len=len-(len & (ALIGN-1))+ALIGN;
-        /* if (len & (ALIGN-1)) len=len-(len & (ALIGN-1))+ALIGN; 12.6 */
-        assert((len & (ALIGN-1))==0);
-        len /= sizeof(*addr);
-        assert(len>0);
+  addr=new_addr=mem_base;
+  while (addr<=stack_pointer) {
+    len = *(addr+delta);
+    if (len) {
+      /* There are lots of these: */
+      /* if (len==LONELY) printf("Isolated LONELY at %lx\n",addr); */
+      if (len==LONELY) len=ALIGN;
+      else if (len & (ALIGN-1)) len=len-(len & (ALIGN-1))+ALIGN;
+      /* if (len & (ALIGN-1)) len=len-(len & (ALIGN-1))+ALIGN; 12.6 */
+      assert((len & (ALIGN-1))==0);
+      len /= sizeof(*addr);
+      assert(len>0);
   
-        for (i=0; i<len; i++) {
-	  *new_addr = *addr;
-          if (i>0) {
-            if (*(addr+delta)>=len)
-              assert(i>0 ? *(addr+delta)<len : TRUE);
-          }
-          assert(VALID_ADDRESS(new_addr));
-	  *(addr+delta) = (long long)new_addr + 1; /* Set low bit */
+      for (i=0; i<len; i++) {
+	*new_addr = *addr;
+	if (i>0) {
+	  if (*(addr+delta)>=len)
+	    assert(i>0 ? *(addr+delta)<len : TRUE);
+	}
+	assert(VALID_ADDRESS(new_addr));
+	*(addr+delta) = (long long)new_addr + 1; /* Set low bit */
 #ifdef prlDEBUG
-	  if (*(addr+delta) & 1 == 0)
-	    printf ("compress: could be a bug ...\n");
+	if (*(addr+delta) & 1 == 0)
+	  printf ("compress: could be a bug ...\n");
 #endif
-      	  addr++;
-	  new_addr++;
-        }
+	addr++;
+	new_addr++;
       }
-      else
-        addr++;
     }
-    other_pointer=stack_pointer; /* 10.6 this var. is unused */
-    stack_pointer=new_addr;
+    else
+      addr++;
+  }
+  other_pointer=stack_pointer; /* 10.6 this var. is unused */
+  stack_pointer=new_addr;
   
-    /* Compressing the heap: */
+  /* Compressing the heap: */
   
-    addr=new_addr=mem_limit;
-    addr--;  /* PVR fix: adding this statement avoids accessing beyond */
-	     /* the memory's edge, which causes a segmentation fault on*/
-	     /* SPARC. */
-    while (addr>=heap_pointer) {
-    skip_addr:
-      len= *(addr+delta);
-      if (len) {
-        if (len!=LONELY) {
+  addr=new_addr=mem_limit;
+  addr--;  /* PVR fix: adding this statement avoids accessing beyond */
+  /* the memory's edge, which causes a segmentation fault on*/
+  /* SPARC. */
+  while (addr>=heap_pointer) {
+  skip_addr:
+    len= *(addr+delta);
+    if (len) {
+      if (len!=LONELY) {
 
-          if (len & (ALIGN-1)) len=len-(len & (ALIGN-1))+ALIGN;
-          assert((len & (ALIGN-1))==0);
-          len /= sizeof (*addr);
-          assert(len>0);
+	if (len & (ALIGN-1)) len=len-(len & (ALIGN-1))+ALIGN;
+	assert((len & (ALIGN-1))==0);
+	len /= sizeof (*addr);
+	assert(len>0);
 
-        } else { /* len==LONELY */
-          GENERIC a;
+      } else { /* len==LONELY */
+	GENERIC a;
 
-          if (len & (ALIGN-1)) len=len-(len & (ALIGN-1))+ALIGN;
-          assert((len & (ALIGN-1))==0);
-          len /= sizeof (*addr);
-          assert(len==1);
+	if (len & (ALIGN-1)) len=len-(len & (ALIGN-1))+ALIGN;
+	assert((len & (ALIGN-1))==0);
+	len /= sizeof (*addr);
+	assert(len==1);
 
-	  /* Check if the LONELY field is actually part of a block. */
-	  /* If so, skip to the beginning of the block. */
-          a=addr;
-	  do {
-	    a--;
-          } while (a>=heap_pointer &&
-		   (*(a+delta)==0 || *(a+delta)==LONELY));
-	  if (a>=heap_pointer && *(a+delta)/sizeof(*a)+a>addr) {
-	    addr=a;
-	    goto skip_addr;
-	  }
-        }
-
-        /* Move a block or an isolated LONELY field. */
-        addr += len;
-        for (i=0; i<len; i++) {
-	  addr--;
-	  new_addr--;
-	  *new_addr = *addr;
-          assert(VALID_ADDRESS(new_addr));
-	  *(addr+delta) = (long long)new_addr + 1;
-        }
+	/* Check if the LONELY field is actually part of a block. */
+	/* If so, skip to the beginning of the block. */
+	a=addr;
+	do {
+	  a--;
+	} while (a>=heap_pointer &&
+		 (*(a+delta)==0 || *(a+delta)==LONELY));
+	if (a>=heap_pointer && *(a+delta)/sizeof(*a)+a>addr) {
+	  addr=a;
+	  goto skip_addr;
+	}
       }
-      addr--;
+
+      /* Move a block or an isolated LONELY field. */
+      addr += len;
+      for (i=0; i<len; i++) {
+	addr--;
+	new_addr--;
+	*new_addr = *addr;
+	assert(VALID_ADDRESS(new_addr));
+	*(addr+delta) = (long long)new_addr + 1;
+      }
     }
-    heap_pointer=new_addr;
+    addr--;
+  }
+  heap_pointer=new_addr;
 }
 
 
@@ -322,13 +322,13 @@ static void compress()
 #define UNCHECKED(P) (! *((GENERIC)(P)+delta))
 
 /******** UNCHECKED(p,l)
-  P is a pointer to a structure L bytes in length.
-  If L=LONELY then that means that P is a pointer to a sub-field of a
-  structure.
-  The function returns TRUE if the structure has not been yet thoroughly
-  explored, otherwise FALSE.
-  If this is the second pass then it translates P to its new value
-  (as calculated by COMPRESS).
+	  P is a pointer to a structure L bytes in length.
+	  If L=LONELY then that means that P is a pointer to a sub-field of a
+	  structure.
+	  The function returns TRUE if the structure has not been yet thoroughly
+	  explored, otherwise FALSE.
+	  If this is the second pass then it translates P to its new value
+	  (as calculated by COMPRESS).
 */
 
 
@@ -400,7 +400,7 @@ long long unchecked (GENERIC *p, long long len)
 
 
 /******** CHECK_STRING(s)
-  Claim the memory used by the string S.
+	  Claim the memory used by the string S.
 */
 static void check_string (GENERIC *s)
 // GENERIC *s;
@@ -414,9 +414,9 @@ static void check_string (GENERIC *s)
     case 1:
       bytes=strlen((char *)*s)+1;
       /* if (bytes==LONELY) {
-	fprintf(stderr,"Caught an empty string!\n");
-	fflush(stderr);
-      } */
+	 fprintf(stderr,"Caught an empty string!\n");
+	 fflush(stderr);
+	 } */
       /* Make sure there's no conflict with LONELY (this occurs for an */
       /* empty string, which still needs a single byte of storage). */
       /* This does occasionally happen. */
@@ -441,8 +441,8 @@ static void check_string (GENERIC *s)
 
 /* DENYS: BYTEDATA */
 /******** CHECK_BYTEDATA(s)
-  Claim the memory used by a block of bytes
-  */
+	  Claim the memory used by a block of bytes
+*/
 static void check_bytedata(GENERIC *s)
 //     GENERIC *s;
 {
@@ -473,7 +473,7 @@ static void check_bytedata(GENERIC *s)
 }
 
 /******** CHECK_CODE(c)
-  Claim the memory used by a type code (=list of integers).
+	  Claim the memory used by a type code (=list of integers).
 */
 static void check_code(ptr_int_list *c)
 // ptr_int_list *c;
@@ -485,7 +485,7 @@ static void check_code(ptr_int_list *c)
 
 
 /******** CHECK_PAIR_LIST
-  Checks a list of <GOAL,BODY> pairs.
+	  Checks a list of <GOAL,BODY> pairs.
 */
 static void check_pair_list(ptr_pair_list *p)
 // ptr_pair_list *p;
@@ -501,7 +501,7 @@ static void check_pair_list(ptr_pair_list *p)
 
 
 /******** CHECK_TRIPLE_LIST
-  Checks a list of <GOAL,BODY,DEF> triples.
+	  Checks a list of <GOAL,BODY,DEF> triples.
 */
 static void check_triple_list(ptr_triple_list *p)
 // ptr_triple_list *p;
@@ -517,7 +517,7 @@ static void check_triple_list(ptr_triple_list *p)
 
 
 /******** CHECK_KIDS(c)
-  Check a list of parents or children of a given type.
+	  Check a list of parents or children of a given type.
 */
 static void check_kids(ptr_int_list *c)
 // ptr_int_list *c;
@@ -531,7 +531,7 @@ static void check_kids(ptr_int_list *c)
 
 
 /******** CHECK_OPERATOR_DATA(op)
-  Explore a list of operator declarations.
+	  Explore a list of operator declarations.
 */
 static void check_operator_data(ptr_operator_data *op)
 // ptr_operator_data *op;
@@ -549,7 +549,7 @@ static void check_keyword(ptr_keyword*);      /*  RM: Jan 12 1993  */
 
 
 /******** CHECK_MODULE_LIST(c)
-  Check a list of modules.
+	  Check a list of modules.
 */
 
 static void check_module_list(ptr_int_list *c)    /*  RM: Jan 12 1993  */
@@ -564,7 +564,7 @@ static void check_module_list(ptr_int_list *c)    /*  RM: Jan 12 1993  */
 
 
 /******** CHECK_MODULE_TREE
-  This goes through the module table, checking all nodes.
+	  This goes through the module table, checking all nodes.
 */
 static void check_module_tree(ptr_node *n)    /*  RM: Jan 13 1993  */
 //     ptr_node *n;
@@ -580,8 +580,8 @@ static void check_module_tree(ptr_node *n)    /*  RM: Jan 13 1993  */
 
 
 /******** CHECK_MODULE(m) 
-  Checks a module.
-  */
+	  Checks a module.
+*/
 
 static void check_module(ptr_module *m)        /*  RM: Jan 12 1993  */
      
@@ -599,9 +599,9 @@ static void check_module(ptr_module *m)        /*  RM: Jan 12 1993  */
 
 
 /******** CHECK_HASH_TABLE(table)
-  Check a hash table of keywords. The actual table is not stored within LIFE
-  memory.
-  */
+	  Check a hash table of keywords. The actual table is not stored within LIFE
+	  memory.
+*/
 
 void check_hash_table(ptr_hash_table table) /*  RM: Feb  3 1993  */
      
@@ -617,8 +617,8 @@ void check_hash_table(ptr_hash_table table) /*  RM: Feb  3 1993  */
 
 
 /******** CHECK_KEYWORD(k)
-  Checks a keyword.
-  */
+	  Checks a keyword.
+*/
 
 static void check_keyword(ptr_keyword *k)      /*  RM: Jan 12 1993  */
      
@@ -635,9 +635,9 @@ static void check_keyword(ptr_keyword *k)      /*  RM: Jan 12 1993  */
 
 
 /******** CHECK_DEFINITION
-  This goes through the type tree which contains the parents and children lists
-  for all types, and the attributed code. The code field is not checked as
-  this has been done separately by CHECK_GAMMA.
+	  This goes through the type tree which contains the parents and children lists
+	  for all types, and the attributed code. The code field is not checked as
+	  this has been done separately by CHECK_GAMMA.
 */
 void check_definition(ptr_definition *d)
 // ptr_definition *d;
@@ -673,7 +673,7 @@ void check_definition(ptr_definition *d)
 
 
 /******** CHECK_DEFINITION_LIST
-  This checks the entire list of definitions.
+	  This checks the entire list of definitions.
 */
 void check_definition_list()   /*  RM: Feb 15 1993  */
 
@@ -691,8 +691,8 @@ void check_definition_list()   /*  RM: Feb 15 1993  */
 
 
 /******** CHECK_DEF_CODE(d)
-  This routine checks the CODE field in a definition.
-  It may only be invoked by CHECK_GAMMA.
+	  This routine checks the CODE field in a definition.
+	  It may only be invoked by CHECK_GAMMA.
 */
 static void check_def_code(ptr_definition *d)
 // ptr_definition *d;
@@ -706,8 +706,8 @@ static void check_def_code(ptr_definition *d)
 
 
 /******** CHECK_DEF_REST(d)
-  This routine checks the other fields in a definition.
-  It may only be invoked by CHECK_GAMMA_REST.
+	  This routine checks the other fields in a definition.
+	  It may only be invoked by CHECK_GAMMA_REST.
 */
 static void check_def_rest(ptr_definition *d)
 // ptr_definition *d;
@@ -731,8 +731,8 @@ static void check_def_rest(ptr_definition *d)
 
 
 /******** CHECK_SYMBOL
-  This goes through the symbol table, checking all nodes, symbols, strings
-  and definitions not contained in the type table.
+	  This goes through the symbol table, checking all nodes, symbols, strings
+	  and definitions not contained in the type table.
 */
 static void check_symbol(ptr_node *n)
 // ptr_node *n;
@@ -748,7 +748,7 @@ static void check_symbol(ptr_node *n)
 
 
 /******** CHECK_TYPE_DISJ
-  Checks the list of definitions appearing in a type disjunction.
+	  Checks the list of definitions appearing in a type disjunction.
 */
 static void check_type_disj(ptr_int_list *p)
 // ptr_int_list *p;
@@ -762,9 +762,9 @@ static void check_type_disj(ptr_int_list *p)
 
 
 /******** CHECK_GOAL_STACK
-  Check the goal_stack. This is quite complicated as each type of goal (prove,
-  unify, eval, eval_cut etc...) gives its own meanings to the three other
-  fields (A,B and C) present in each goal.
+	  Check the goal_stack. This is quite complicated as each type of goal (prove,
+	  unify, eval, eval_cut etc...) gives its own meanings to the three other
+	  fields (A,B and C) present in each goal.
 */
 static void check_goal_stack(ptr_goal *g)
 // ptr_goal *g;
@@ -876,7 +876,7 @@ static void check_goal_stack(ptr_goal *g)
 
 
 /******** CHECK_RESID(r)
-  Explore a list of residuations.
+	  Explore a list of residuations.
 */
 static void check_resid(ptr_residuation *r)
 // ptr_residuation *r;
@@ -893,7 +893,7 @@ static void check_resid(ptr_residuation *r)
 
     /* Handling of the value field (6.10) */
     code = (*r)->sortflag ? ((ptr_definition)((*r)->bestsort))->code
-			  : (ptr_int_list)(*r)->bestsort;
+      : (ptr_int_list)(*r)->bestsort;
     /* Copied (almost) verbatim from check_psi_term: */
     if ((*r)->value_2) {
       if (code==alist->code) { /*  RM: Dec 15 1992  Will be removed */
@@ -925,7 +925,7 @@ static void check_resid(ptr_residuation *r)
 
 
 /******** CHECK_RESID_BLOCK(rb)
-  Explore a residuation block.
+	  Explore a residuation block.
 */
 void check_resid_block(ptr_resid_block *rb)
 // ptr_resid_block *rb;
@@ -945,7 +945,7 @@ void check_resid_block(ptr_resid_block *rb)
 
 
 /******** CHECK_PSI_TERM(t)
-  Explore a psi_term.
+	  Explore a psi_term.
 */
 void check_psi_term(ptr_psi_term *t)
 // ptr_psi_term *t;
@@ -1007,10 +1007,10 @@ void check_psi_term(ptr_psi_term *t)
 
 
 /******** CHECK_ATTR(attribute-tree)
-  Check an attribute tree.
-  (Could improve this by randomly picking left or right subtree
-  for last call optimization.  This would never overflow, even on
-  very skewed attribute trees.)
+	  Check an attribute tree.
+	  (Could improve this by randomly picking left or right subtree
+	  for last call optimization.  This would never overflow, even on
+	  very skewed attribute trees.)
 */
 void check_attr(ptr_node *n)
 // ptr_node *n;
@@ -1028,12 +1028,12 @@ void check_attr(ptr_node *n)
 
 
 /******** CHECK_GAMMA_CODE()
-  Check and update the code
-  reversing table.  In this part, only the codes are checked in
-  the definitions, this is vital because these codes are used
-  later to distinguish between the various data types and to
-  determine the type of the VALUE field in psi_terms. Misunderstanding this
-  caused a lot of bugs in the GC.
+	  Check and update the code
+	  reversing table.  In this part, only the codes are checked in
+	  the definitions, this is vital because these codes are used
+	  later to distinguish between the various data types and to
+	  determine the type of the VALUE field in psi_terms. Misunderstanding this
+	  caused a lot of bugs in the GC.
 */
 void check_gamma_code()
 {
@@ -1048,7 +1048,7 @@ void check_gamma_code()
 
 
 /******** CHECK_GAMMA_REST()
-  Check and update the code reversing table.
+	  Check and update the code reversing table.
 */
 static void check_gamma_rest()
 {
@@ -1061,9 +1061,9 @@ static void check_gamma_rest()
 
 
 /******** CHECK_UNDO_STACK()
-  This looks after checking the addresses of objects pointed to in the trail.
-  The type of the pointer to be restored on backtracking is known, which
-  allows the structure it is referring to to be accordingly checked.
+	  This looks after checking the addresses of objects pointed to in the trail.
+	  The type of the pointer to be restored on backtracking is known, which
+	  allows the structure it is referring to to be accordingly checked.
 */
 static void check_undo_stack(ptr_stack *s)
 // ptr_stack *s;
@@ -1104,7 +1104,7 @@ static void check_undo_stack(ptr_stack *s)
       break;
 
 #endif /* CLIFE */
-    /* All undo actions here */
+      /* All undo actions here */
     case destroy_window:
     case show_window:
     case hide_window:
@@ -1119,7 +1119,7 @@ static void check_undo_stack(ptr_stack *s)
 
 
 /******** CHECK_CHOICE(c)
-  This routine checks all choice points.
+	  This routine checks all choice points.
 */
 static void check_choice_structs(ptr_choice_point *c)
 //     ptr_choice_point *c;
@@ -1142,9 +1142,9 @@ static void check_choice(ptr_choice_point *c)
 
 
 /******** CHECK_SPECIAL_ADDRESSES
-  Here we check all the addresses which do not point to a whole data structure,
-  but to something within, for example a field such as VALUE which might
-  have been modified in a PSI_TERM structure.  These are the LONELY addresses.
+	  Here we check all the addresses which do not point to a whole data structure,
+	  but to something within, for example a field such as VALUE which might
+	  have been modified in a PSI_TERM structure.  These are the LONELY addresses.
 */
 static void check_special_addresses()
 {
@@ -1173,8 +1173,8 @@ static void check_special_addresses()
 
 
 /******** CHECK_PSI_LIST
-  Update all the values in the list of residuation variables, which is a list
-  of psi_terms.
+	  Update all the values in the list of residuation variables, which is a list
+	  of psi_terms.
 */
 static void check_psi_list(ptr_int_list *l)
 // ptr_int_list *l;
@@ -1188,8 +1188,8 @@ static void check_psi_list(ptr_int_list *l)
 
 
 /******** CHECK_RESID_LIST
-  Update all the values in the list of residuation variables, which is a list
-  of pairs of psi_terms.
+	  Update all the values in the list of residuation variables, which is a list
+	  of pairs of psi_terms.
 */
 static void check_resid_list(ptr_resid_list *l)
 // ptr_resid_list *l;
@@ -1204,8 +1204,8 @@ static void check_resid_list(ptr_resid_list *l)
 
 
 /******** CHECK_VAR(t)
-  Go through the VARiable tree.
-  (This could be made tail recursive.)
+	  Go through the VARiable tree.
+	  (This could be made tail recursive.)
 */
 static void check_var(ptr_node *n)
 // ptr_node *n;
@@ -1221,19 +1221,19 @@ static void check_var(ptr_node *n)
 
 
 /******** CHECK
-  This routine checks all pointers and psi_terms to find out which memory cells
-  must be preserved and which can be discarded.
+	  This routine checks all pointers and psi_terms to find out which memory cells
+	  must be preserved and which can be discarded.
 
-  This routine explores all known structures. It is vital that it should visit
-  them all exactly once. It thus creates a map of what is used in memory, which
-  COMPRESS uses to compact the memory and recalculate the addresses.
-  Exploration of these structures should be done in exactly the same order
-  in both passes. If it is the second pass, pointers are assigned their new
-  values.
+	  This routine explores all known structures. It is vital that it should visit
+	  them all exactly once. It thus creates a map of what is used in memory, which
+	  COMPRESS uses to compact the memory and recalculate the addresses.
+	  Exploration of these structures should be done in exactly the same order
+	  in both passes. If it is the second pass, pointers are assigned their new
+	  values.
 
-  A crucial property of this routine: In pass 2, a global variable (i.e. a
-  root for GC) must be updated before it is accessed.  E.g. don't use the
-  variable goal_stack before updating it.
+	  A crucial property of this routine: In pass 2, a global variable (i.e. a
+	  root for GC) must be updated before it is accessed.  E.g. don't use the
+	  variable goal_stack before updating it.
 */
 static void check()
 {
@@ -1441,26 +1441,26 @@ void print_gc_info(long long timeflag)
 
 
 /******** GARBAGE()
-  The garbage collector.
-  This routine is called whenever memory is getting low.
-  It returns TRUE if insufficient memory was freed to allow
-  the interpreter to carry on working.
+	  The garbage collector.
+	  This routine is called whenever memory is getting low.
+	  It returns TRUE if insufficient memory was freed to allow
+	  the interpreter to carry on working.
 
-  This is a half-space GC, it first explores all known structures, then
-  compresses the heap and the stack, then during the second pass assigns
-  all the new addresses.
+	  This is a half-space GC, it first explores all known structures, then
+	  compresses the heap and the stack, then during the second pass assigns
+	  all the new addresses.
   
-  Bugs will appear if the collector is called during parsing or other
-  such routines which are 'unsafe'. In order to avoid this problem, before
-  one of these routines is invoked the program will check to see whether
-  there is enough memory available to work, and will call the GC if not
-  (this is a fix, because it is not possible to determine in advance
-  what the size of a psi_term read by the parser will be).
+	  Bugs will appear if the collector is called during parsing or other
+	  such routines which are 'unsafe'. In order to avoid this problem, before
+	  one of these routines is invoked the program will check to see whether
+	  there is enough memory available to work, and will call the GC if not
+	  (this is a fix, because it is not possible to determine in advance
+	  what the size of a psi_term read by the parser will be).
 */
 void garbage()
 {
   GENERIC addr;
-    #ifdef __unix__
+#ifdef __unix__
   struct tms garbage_start_time,garbage_end_time;
 #endif
 #ifdef _WIN64
@@ -1557,62 +1557,62 @@ void garbage()
 
 
 /******** HEAP_ALLOC(s)
-  This returns a pointer to S bytes of memory in the heap.
-  Alignment is taken into account in the following manner:
-  the macro ALIGN is supposed to be a power of 2 and the pointer returned
-  is a multiple of ALIGN.
+	  This returns a pointer to S bytes of memory in the heap.
+	  Alignment is taken into account in the following manner:
+	  the macro ALIGN is supposed to be a power of 2 and the pointer returned
+	  is a multiple of ALIGN.
 */
 GENERIC heap_alloc (long long s)
 // long long s;
 {
-    if (s & (ALIGN-1))
-      s = s - (s & (ALIGN-1))+ALIGN;
-    /* assert(s % sizeof(*heap_pointer) == 0); */
-    s /= sizeof (*heap_pointer);
+  if (s & (ALIGN-1))
+    s = s - (s & (ALIGN-1))+ALIGN;
+  /* assert(s % sizeof(*heap_pointer) == 0); */
+  s /= sizeof (*heap_pointer);
   
-    heap_pointer -= s;
+  heap_pointer -= s;
 
-    if (stack_pointer>heap_pointer)
-      Errorline("the heap overflowed into the stack.\n");
+  if (stack_pointer>heap_pointer)
+    Errorline("the heap overflowed into the stack.\n");
 
-    return heap_pointer;
+  return heap_pointer;
 }
 
 
 
 /******** STACK_ALLOC(s)
-  This returns a pointer to S bytes of memory in the stack.
-  Alignment is taken into account in the following manner:
-  the macro ALIGN is supposed to be a power of 2 and the pointer returned
-  is a multiple of ALIGN.
+	  This returns a pointer to S bytes of memory in the stack.
+	  Alignment is taken into account in the following manner:
+	  the macro ALIGN is supposed to be a power of 2 and the pointer returned
+	  is a multiple of ALIGN.
 */
 GENERIC stack_alloc(long long s)
 // long long s;
 {
-    GENERIC r;
+  GENERIC r;
 
-    r = stack_pointer;
+  r = stack_pointer;
 
-    if (s & (ALIGN-1))
-      s = s - (s & (ALIGN-1)) + ALIGN;
-    /* assert(s % sizeof(*stack_pointer) == 0); */
-    s /= sizeof (*stack_pointer);
+  if (s & (ALIGN-1))
+    s = s - (s & (ALIGN-1)) + ALIGN;
+  /* assert(s % sizeof(*stack_pointer) == 0); */
+  s /= sizeof (*stack_pointer);
 
-    stack_pointer += s;
+  stack_pointer += s;
 
-    if (stack_pointer>heap_pointer)
-      Errorline("the stack overflowed into the heap.\n");
+  if (stack_pointer>heap_pointer)
+    Errorline("the stack overflowed into the heap.\n");
   
-    return r;
+  return r;
 }
 
 
 
 /******** INIT_MEMORY()
-  Get two big blocks of memory to work in.
-  The second is only used for the half-space garbage collector.
-  The start and end addresses of the blocks are re-aligned correctly.
-  to allocate.  
+	  Get two big blocks of memory to work in.
+	  The second is only used for the half-space garbage collector.
+	  The start and end addresses of the blocks are re-aligned correctly.
+	  to allocate.  
 */
 
 
@@ -1645,14 +1645,14 @@ void init_memory ()
     /*  RM: Oct 22 1993  */
     /* Fill the memory with rubbish data */
     /*
-    {
+      {
       int i;
       
       for(i=0;i<alloc_words;i++) {
-	mem_base[i]= -1234;
-	other_base[i]= -1234;
+      mem_base[i]= -1234;
+      other_base[i]= -1234;
       }
-    }
+      }
     */
   }
   else
@@ -1662,9 +1662,9 @@ void init_memory ()
 
 
 /******** MEMORY_CHECK()
-  This function tests to see whether enough memory is available to allow
-  execution to continue.  It causes a garbage collection if not, and if that
-  fails to release enough memory it returns FALSE.
+	  This function tests to see whether enough memory is available to allow
+	  execution to continue.  It causes a garbage collection if not, and if that
+	  fails to release enough memory it returns FALSE.
 */
 long long memory_check ()
 {

@@ -1,8 +1,8 @@
 /* Copyright by Denys Duchier, Jul 1995
    Simon Fraser University
 
-  DBM INTERFACE
-  */
+   DBM INTERFACE
+*/
 /*	$Id: sys_dbm.c,v 1.4 1996/01/17 00:34:34 duchier Exp $	*/
 
 #include "extern.h"
@@ -13,7 +13,7 @@
 
 static long long
 dbminit_internal(args,result,funct)
-     ptr_psi_term args[],result,funct;
+  ptr_psi_term args[],result,funct;
 {
   if (dbminit((char*)args[0]->value)<0) return FALSE;
   else {
@@ -32,7 +32,7 @@ c_dbminit()
 
 static long long
 dbmfetch_internal(args,result,funct)
-     ptr_psi_term args[],result,funct;
+  ptr_psi_term args[],result,funct;
 {
   datum d;
   d.dptr  = (char*)args[0]->value;
@@ -56,7 +56,7 @@ c_dbmfetch()
 
 static long long
 dbmstore_internal(args,result,funct)
-     ptr_psi_term args[],result,funct;
+  ptr_psi_term args[],result,funct;
 {
   datum key,content;
   key.dptr  = (char*)args[0]->value;
@@ -78,7 +78,7 @@ c_dbmstore()
 
 static long long
 dbmdelete_internal(args,result,funct)
-     ptr_psi_term args[],result,funct;
+  ptr_psi_term args[],result,funct;
 {
   datum key;
   key.dptr  = (char*)args[0]->value;
@@ -97,7 +97,7 @@ c_dbmdelete()
 
 static long long
 dbmfirstkey_internal(args,result,funct)
-     ptr_psi_term args[],result,funct;
+  ptr_psi_term args[],result,funct;
 {
   datum key;
   key=firstkey();
@@ -117,7 +117,7 @@ c_dbmfirstkey()
 
 static long long
 dbmnextkey_internal(args,result,funct)
-     ptr_psi_term args[],result,funct;
+  ptr_psi_term args[],result,funct;
 {
   datum key;
   key.dptr  = (char*)args[0]->value;

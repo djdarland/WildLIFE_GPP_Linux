@@ -15,7 +15,7 @@ typedef long long type_ptr;
 typedef long long wl_operator; // Added REV401PLUS
 
 /*! \typedef PsiTerm
-\brief Type for psi-terms, hidden from users 
+  \brief Type for psi-terms, hidden from users 
 
 */
 
@@ -183,7 +183,7 @@ typedef struct wl_psi_term {
 #endif
   ptr_definition type;
   long long status; /* Indicates whether the properties of the type have been */
-              /* checked or the function evaluated */
+  /* checked or the function evaluated */
   /* long long curried; Distinguish between quoted and curried object 20.5 */
   long long flags; /* 14.9 */
   GENERIC value_3;
@@ -223,7 +223,7 @@ typedef struct wl_triple_list {
     ptr_psi_term car;
     ptr_psi_term cdr;
     } list;
-    */
+*/
 
 #ifdef CLIFE
 #include "blockstruct.h"
@@ -262,12 +262,12 @@ typedef struct wl_choice_point {
 typedef struct wl_resid_block *ptr_resid_block;
 
 typedef struct wl_resid_block {
-   long long cc_cr; /* 11.9 */
-   ptr_goal ra;
-   /* long long cc; 11.9 */
-   /* long long cr; 11.9 */
-   ptr_resid_list rv; /* 21.9 */
-   ptr_psi_term md;
+  long long cc_cr; /* 11.9 */
+  ptr_goal ra;
+  /* long long cc; 11.9 */
+  /* long long cr; 11.9 */
+  ptr_resid_list rv; /* 21.9 */
+  ptr_psi_term md;
 } resid_block;
 
 // from list.h
@@ -289,20 +289,20 @@ typedef long long			(*RefListEnumProc)	(Ref,Ref ); // REV401PLUS
   
   "Lock" is the number of recursive enum calls on the list. Used only in
   debugging mode.
-  */
+*/
 
 typedef struct wl_ListHeader
 {
   Ref First, Last;
 #ifdef prlDEBUG
-    Int32			Lock;
+  Int32			Lock;
 #endif
-    RefListGetLinksProc		GetLinks;
+  RefListGetLinksProc		GetLinks;
 } ListHeader;
 
 typedef struct wl_ListLinks
 {
-    Ref Next, Prev;
+  Ref Next, Prev;
 } ListLinks;
 
 // from print.h
@@ -360,7 +360,7 @@ typedef struct wl_item {
   primitive, result is the result in case we are implementing a
   function, and info (optional) is extra information, typically a
   pointer to a structure.
-  *******************************************************************/
+*******************************************************************/
 
 
 typedef struct {
@@ -385,15 +385,15 @@ typedef struct wl_parse_block *ptr_parse_block;
 
 // from copy.c
 struct hashbucket {
-   ptr_psi_term old_value;
-   ptr_psi_term new_value;
-   long long info;
-   long long next;
+  ptr_psi_term old_value;
+  ptr_psi_term new_value;
+  long long info;
+  long long next;
 };
 
 struct hashentry {
-   long long timestamp;
-   long long bucketindex;
+  long long timestamp;
+  long long bucketindex;
 };
 
 #define TEXTBUFSIZE 5000

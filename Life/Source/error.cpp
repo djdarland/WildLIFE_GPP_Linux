@@ -7,7 +7,7 @@
  *  SCG  14  Wed May 27 13:37:51 1992
  *    added reportAndAbort() which is like report_error followed by
  *    an c_abort.
-*****************************************************************/
+ *****************************************************************/
 /* 	$Id: error.c,v 1.3 1995/07/11 01:53:03 duchier Exp $	 */
 
 #define EXTERN extern
@@ -25,13 +25,13 @@ static char vcid[] = "$Id: error.c,v 1.3 1995/07/11 01:53:03 duchier Exp $";
 // 
 
 /* REMOVED for MINT
-long long warningflag=TRUE;
-long long quietflag=FALSE;  // 21.1 
-long long trace=FALSE;
-long long verbose=FALSE; // 21.1 
-long long stepflag;
-long long steptrace;
-long long stepcount;
+   long long warningflag=TRUE;
+   long long quietflag=FALSE;  // 21.1 
+   long long trace=FALSE;
+   long long verbose=FALSE; // 21.1 
+   long long stepflag;
+   long long steptrace;
+   long long stepcount;
 */   
 /*! \fn static long long depth_gs()
   \brief depth_gs

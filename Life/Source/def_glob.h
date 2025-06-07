@@ -852,7 +852,7 @@ EXTERN long long var_occurred;
 /* Part of global input file state */
 
 /*! \var start_of_line
-\brief ???
+  \brief ???
 
 */
 EXTERN long long start_of_line;

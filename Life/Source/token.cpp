@@ -74,7 +74,7 @@ REAL cp2R(char *cp_in)
     REAL R;
     char *cp;
   } it;
-    it.cp = cp_in; 
+  it.cp = cp_in; 
   return it.R;
 }
 #endif
@@ -112,18 +112,18 @@ void heap_mod_int_attr(ptr_psi_term t, char *attrname, long long value)
 }
 
 /*
-void stack_mod_int_attr(t, attrname, value)
-ptr_psi_term t;
-char *attrname;
-long long value;
-{
+  void stack_mod_int_attr(t, attrname, value)
+  ptr_psi_term t;
+  char *attrname;
+  long long value;
+  {
   ptr_node n;
   ptr_psi_term t1;
 
   n=find(FEATCMP,attrname,t->attr_list);
   t1=(ptr_psi_term)n->data;
   *(REAL *)t1->value = (REAL) value;
-}
+  }
 */
 
 
@@ -175,19 +175,19 @@ void heap_mod_str_attr(ptr_psi_term t, char *attrname, char *str)
 }
 
 /*
-ATTENTION - This should be made backtrackable if used
-void stack_mod_str_attr(t, attrname, str)
-ptr_psi_term t;
-char *attrname;
-char *str;
-{
+  ATTENTION - This should be made backtrackable if used
+  void stack_mod_str_attr(t, attrname, str)
+  ptr_psi_term t;
+  char *attrname;
+  char *str;
+  {
   ptr_node n;
   ptr_psi_term t1;
 
   n=find(FEATCMP,attrname,t->attr_list);
   t1=(ptr_psi_term)n->data;
   t1->value=(GENERIC)stack_copy_string(str);
-}
+  }
 */
 
 
@@ -249,7 +249,7 @@ void save_state(ptr_psi_term t)
   t1->value_3=(GENERIC)input_stream;
 
   /*  RM: Jan 27 1993
-  heap_mod_str_attr(t,CURRENT_MODULE,current_module->module_name);
+      heap_mod_str_attr(t,CURRENT_MODULE,current_module->module_name);
   */
   
   heap_mod_str_attr(t,INPUT_FILE_NAME,input_file_name);
@@ -304,7 +304,7 @@ void restore_state(ptr_psi_term t)
       set_current_module(
       find_module(((ptr_psi_term)get_attr(input_state,
       CURRENT_MODULE))->value));
-      */
+  */
 }
 
 
@@ -329,7 +329,7 @@ void new_state(ptr_psi_term *t)
     printf("Creating new state for file '%s', module '%s'\n",
     input_file_name,
     current_module->module_name);
-    */
+  */
   
   heap_add_str_attr(*t,INPUT_FILE_NAME,input_file_name);
   heap_add_int_attr(*t,LINE_COUNT,line_count);
@@ -361,30 +361,30 @@ void new_state(ptr_psi_term *t)
 void save_parse_state(ptr_parse_block pb)
 // ptr_parse_block pb;
 {
-   if (pb) {
-     pb->lc   = line_count;
-     pb->sol  = start_of_line;
-     pb->sc   = saved_char;
-     pb->osc  = old_saved_char;
-     pb->spt  = saved_psi_term;
-     pb->ospt = old_saved_psi_term;
-     pb->ef   = eof_flag;
-   }
+  if (pb) {
+    pb->lc   = line_count;
+    pb->sol  = start_of_line;
+    pb->sc   = saved_char;
+    pb->osc  = old_saved_char;
+    pb->spt  = saved_psi_term;
+    pb->ospt = old_saved_psi_term;
+    pb->ef   = eof_flag;
+  }
 }
 
 
 void restore_parse_state(ptr_parse_block pb)
 //ptr_parse_block pb;
 {
-   if (pb) {
-     line_count         = pb->lc;
-     start_of_line      = pb->sol;
-     saved_char         = pb->sc;
-     old_saved_char     = pb->osc;
-     saved_psi_term     = pb->spt;
-     old_saved_psi_term = pb->ospt;
-     eof_flag           = pb->ef;
-   }
+  if (pb) {
+    line_count         = pb->lc;
+    start_of_line      = pb->sol;
+    saved_char         = pb->sc;
+    old_saved_char     = pb->osc;
+    saved_psi_term     = pb->spt;
+    old_saved_psi_term = pb->ospt;
+    eof_flag           = pb->ef;
+  }
 }
 
 
@@ -412,11 +412,11 @@ static FILE *out;
 
 
 /******** BEGIN_TERMINAL_IO()
-   These two routines must bracket any I/O directed to the terminal.
-   This is to avoid mix-ups between terminal and file I/O since the
-   program's input and output streams may be different from stdin stdout.
-   See the routine what_next_aim(), which uses them to isolate the
-   user interface I/O from the program's own I/O.
+	  These two routines must bracket any I/O directed to the terminal.
+	  This is to avoid mix-ups between terminal and file I/O since the
+	  program's input and output streams may be different from stdin stdout.
+	  See the routine what_next_aim(), which uses them to isolate the
+	  user interface I/O from the program's own I/O.
 */
 void begin_terminal_io()
 {
@@ -437,7 +437,7 @@ void begin_terminal_io()
 
 
 /******** END_TERMINAL_IO()
-  End of terminal I/O bracketing.
+	  End of terminal I/O bracketing.
 */
 void end_terminal_io()
 {
@@ -453,9 +453,9 @@ void end_terminal_io()
 
 
 /******** EXPAND_FILE_NAME(str)
-  Return the expansion of file name STR.
-  For the time being all this does is replace '~' by the HOME directory
-  if no user is given, or tries to find the user.
+	  Return the expansion of file name STR.
+	  For the time being all this does is replace '~' by the HOME directory
+	  if no user is given, or tries to find the user.
 */
 
 
@@ -464,48 +464,48 @@ void end_terminal_io()
 char* expand_file_name(char* s)
 // char *s;
 {
-	char* r;
-	char* home; //, *getenv();
-	struct passwd* pw;
-	/* char *user="eight character name"; 18.5 */
-	char userbuf[STRLEN];
-	char* user = userbuf;
-	char* t1, * t2;
+  char* r;
+  char* home; //, *getenv();
+  struct passwd* pw;
+  /* char *user="eight character name"; 18.5 */
+  char userbuf[STRLEN];
+  char* user = userbuf;
+  char* t1, * t2;
 
-	r = s;
-	if (s[0] == '~') {
-		t1 = s + 1;
-		t2 = user;
-		while (*t1 != 0 && *t1 != '/') {
-			*t2 = *t1;
-			*t2++;
-			*t1++;
-		}
-		*t2 = 0;
-		if ((int)strlen(user) > 0) {
-			pw = getpwnam(user);
-			if (pw) {
-				user = pw->pw_dir;
-				r = (char*)malloc(strlen(user) + strlen(t1) + 1);
-				sprintf(r, "%s%s", user, t1);
-			}
-			else
-				/* if (warning()) printf("couldn't find user '%s'.\n",user) */;
-		}
-		else {
-			home = getenv("HOME");
-			if (home) {
-				r = (char*)malloc(strlen(home) + strlen(s) + 1);
-				sprintf(r, "%s%s", home, s + 1);
-			}
-			else
-				/* if (warning()) printf("no HOME directory.\n") */;
-		}
-	}
+  r = s;
+  if (s[0] == '~') {
+    t1 = s + 1;
+    t2 = user;
+    while (*t1 != 0 && *t1 != '/') {
+      *t2 = *t1;
+      *t2++;
+      *t1++;
+    }
+    *t2 = 0;
+    if ((int)strlen(user) > 0) {
+      pw = getpwnam(user);
+      if (pw) {
+	user = pw->pw_dir;
+	r = (char*)malloc(strlen(user) + strlen(t1) + 1);
+	sprintf(r, "%s%s", user, t1);
+      }
+      else
+	/* if (warning()) printf("couldn't find user '%s'.\n",user) */;
+    }
+    else {
+      home = getenv("HOME");
+      if (home) {
+	r = (char*)malloc(strlen(home) + strlen(s) + 1);
+	sprintf(r, "%s%s", home, s + 1);
+      }
+      else
+	/* if (warning()) printf("no HOME directory.\n") */;
+    }
+  }
 
-	/* printf("*** Using file name: '%s'\n",r); */
+  /* printf("*** Using file name: '%s'\n",r); */
 
-	return r;
+  return r;
 }
 
 
@@ -516,61 +516,61 @@ char* expand_file_name(char* s)
 char* expand_file_name(char* s)
 // char *s;
 {
-	char* r, * r2, * r3, * s2;
-	char* home;
-	int slash_count, i;
-	if (strcmp(s, "stdin") == 0) return s;
-	if (strcmp(s, "stdout") == 0) return s;
-	if (strcmp(s, "stderr") == 0) return s;
-	if (s[0] == '~')
+  char* r, * r2, * r3, * s2;
+  char* home;
+  int slash_count, i;
+  if (strcmp(s, "stdin") == 0) return s;
+  if (strcmp(s, "stdout") == 0) return s;
+  if (strcmp(s, "stderr") == 0) return s;
+  if (s[0] == '~')
+    {
+      r2 = s + 2;
+      if (cygwin_flag)
 	{
-		r2 = s + 2;
-		if (cygwin_flag)
-		{
-			home = getenv("CYG_HOME");
-		}
-		else
-		{
-			home = getenv("HOME");
-		}
-		// printf("HOME = %s\n", home);
-		if (home) {
-			r = (char*)malloc(strlen(home) + strlen(r2) + 1);
-			sprintf(r, "%s/%s", home, r2);
-			//                printf("r = %s", r);
-		}
-		else
-			if (warning()) printf("no HOME directory.\n");
-
-
-		for (slash_count = 0, i = 0; r[i] != 0; i++)
-			if (r[i] == '/') slash_count++;
-		// printf("slash_count = %d\n", slash_count);
-
-		r3 = (char*)malloc(strlen(r) + slash_count + 1);
-
-		for (i = 0;i < strlen(r); i++) {
-			if (r[i] == '/')
-				r3[i] = '\\';
-			else
-				r3[i] = r[i];
-		}
-		r3[i] = 0;
-		// printf("*** Using file name: '%s'\n", r3);
-		// exit(0);
-		return r3;
+	  home = getenv("CYG_HOME");
 	}
-	else return s;
+      else
+	{
+	  home = getenv("HOME");
+	}
+      // printf("HOME = %s\n", home);
+      if (home) {
+	r = (char*)malloc(strlen(home) + strlen(r2) + 1);
+	sprintf(r, "%s/%s", home, r2);
+	//                printf("r = %s", r);
+      }
+      else
+	if (warning()) printf("no HOME directory.\n");
+
+
+      for (slash_count = 0, i = 0; r[i] != 0; i++)
+	if (r[i] == '/') slash_count++;
+      // printf("slash_count = %d\n", slash_count);
+
+      r3 = (char*)malloc(strlen(r) + slash_count + 1);
+
+      for (i = 0;i < strlen(r); i++) {
+	if (r[i] == '/')
+	  r3[i] = '\\';
+	else
+	  r3[i] = r[i];
+      }
+      r3[i] = 0;
+      // printf("*** Using file name: '%s'\n", r3);
+      // exit(0);
+      return r3;
+    }
+  else return s;
 }
 #endif
 
 
   
 /******** OPEN_INPUT_FILE(file)
-  Open the input file specified by the string FILE.  If the file is "stdin",
-  restore the stdin state.  Otherwise, open the file and create a new global
-  state for it.
-  If the file can't be opened, print an error and open "stdin" instead.
+	  Open the input file specified by the string FILE.  If the file is "stdin",
+	  restore the stdin state.  Otherwise, open the file and create a new global
+	  state for it.
+	  If the file can't be opened, print an error and open "stdin" instead.
 */   
 long long open_input_file(char *file)
 // char *file;
@@ -619,8 +619,8 @@ long long open_input_file(char *file)
 
 
 /******** OPEN_OUTPUT_FILE(file)
-  Same thing as OPEN_INPUT_FILE, only for output. If FILE="stdout" then
-  output_stream=stdout.
+	  Same thing as OPEN_INPUT_FILE, only for output. If FILE="stdout" then
+	  output_stream=stdout.
 */
 long long open_output_file(string file)
 // string file;
@@ -650,10 +650,10 @@ long long open_output_file(string file)
 
 
 /******** READ_CHAR
-  Return the char read from the input stream, if end of file reached
-  then return EOF.
-  If stringparse==TRUE then read characters from the input string
-  instead of from a file.
+	  Return the char read from the input stream, if end of file reached
+	  then return EOF.
+	  If stringparse==TRUE then read characters from the input string
+	  instead of from a file.
 */
 long long read_char()
 {
@@ -670,7 +670,7 @@ long long read_char()
       c=EOF;
   }
   else if (feof(input_stream))
-      c=EOF;
+    c=EOF;
   else {
     if (start_of_line) {
       start_of_line=FALSE;
@@ -698,8 +698,8 @@ long long read_char()
 
 
 /******** PUT_BACK_CHAR
-  Put back one character, if there already are 2 saved characters then report
-  an error (= bug).
+	  Put back one character, if there already are 2 saved characters then report
+	  an error (= bug).
 */
 void put_back_char(long long c)
 // long long c;
@@ -712,8 +712,8 @@ void put_back_char(long long c)
 
 
 /******** PUT_BACK_TOKEN
-  Put back a psi_term, if there already are two saved then report an
-  error (= bug).
+	  Put back a psi_term, if there already are two saved then report an
+	  error (= bug).
 */
 void put_back_token(psi_term t)
 // psi_term t;
@@ -727,7 +727,7 @@ void put_back_token(psi_term t)
 
 
 /******** PSI_TERM_ERROR
-  Print the line number at which the current psi_term started.
+	  Print the line number at which the current psi_term started.
 */
 void psi_term_error()
 {
@@ -742,7 +742,7 @@ void psi_term_error()
 
 
 /******** READ_COMMENT
-  Read a comment starting with '%' to the end of the line.
+	  Read a comment starting with '%' to the end of the line.
 */
 void read_comment(ptr_psi_term tok)
 // ptr_psi_term tok;
@@ -806,8 +806,8 @@ int base2int(int n)
 #define isoctal(c) (c=='0'||c=='1'||c=='2'||c=='3'||c=='4'||c=='5'||c=='6'||c=='7')
 
 /******** READ_STRING(e)
-  Read a string ending with character E, where E=" or '. Transform a double
-  occurrence into a single one so that 'ab""cd' is the string 'ab"cd'.
+	  Read a string ending with character E, where E=" or '. Transform a double
+	  occurrence into a single one so that 'ab""cd' is the string 'ab"cd'.
 */
 void read_string(ptr_psi_term tok,long long e)
 // ptr_psi_term tok;
@@ -914,7 +914,7 @@ void read_string(ptr_psi_term tok,long long e)
 
 
 /******** SYMBOLIC(character)
-  Tests if character is a symbol (see macro).
+	  Tests if character is a symbol (see macro).
 */
 long long symbolic(long long c)
 // long long c;
@@ -925,15 +925,15 @@ long long symbolic(long long c)
 
 
 /******** LEGAL_IN_NAME(character)
-  Tests if character is legal in a name or a variable (see macros).
+	  Tests if character is legal in a name or a variable (see macros).
 */
 long long legal_in_name(long long c)
 // long long c;
 {
   return
     UPPER(c) ||
-      LOWER(c) ||
-	DIGIT(c);
+    LOWER(c) ||
+    DIGIT(c);
 
   /* || c=='\'' RM: Dec 16 1992  */ ;
 }
@@ -941,8 +941,8 @@ long long legal_in_name(long long c)
 
 
 /******** READ_NAME(C,F,TYP)
-  Read in the name starting with character C followed by character of whose
-  type function is F. The result is a psi_term of symbol type TYP.
+	  Read in the name starting with character C followed by character of whose
+	  type function is F. The result is a psi_term of symbol type TYP.
 */
 void read_name(ptr_psi_term tok,long long ch,long long (*f)(long long),ptr_definition typ)
 // ptr_psi_term tok;
@@ -982,7 +982,7 @@ void read_name(ptr_psi_term tok,long long ch,long long (*f)(long long),ptr_defin
       /* Change the type function if required */
       c=read_char();
       if SYMBOL(c)
-	f=symbolic;
+		 f=symbolic;
       put_back_char(c);
     }
     else
@@ -1048,9 +1048,9 @@ void read_name(ptr_psi_term tok,long long ch,long long (*f)(long long),ptr_defin
 
 
 /******** READ_NUMBER(c)
-  Read in the number whose first character is c.
-  Accepted syntax: digit+ [ . digit+ ] [ {e|E} {+|-|empty} digit* ]
-  Negative numbers are dealt with in the parser.
+	  Read in the number whose first character is c.
+	  Accepted syntax: digit+ [ . digit+ ] [ {e|E} {+|-|empty} digit* ]
+	  Negative numbers are dealt with in the parser.
 */
 void read_number(ptr_psi_term tok,long long c)
 // ptr_psi_term tok;
@@ -1070,11 +1070,11 @@ void read_number(ptr_psi_term tok,long long c)
   if (c=='.') {
     c2=read_char();
     if DIGIT(c2) {
-      /* tok->type=real;     RM: Mar  8 1993  */
-      p=10.0;
-      while (DIGIT(c2)) { f=f+(c2-'0')/p; p=p*10.0; c2=read_char(); }
-      put_back_char(c2);
-    }
+	/* tok->type=real;     RM: Mar  8 1993  */
+	p=10.0;
+	while (DIGIT(c2)) { f=f+(c2-'0')/p; p=p*10.0; c2=read_char(); }
+	put_back_char(c2);
+      }
     else {
       put_back_char(c2);
       put_back_char(c);
@@ -1121,8 +1121,8 @@ void read_number(ptr_psi_term tok,long long c)
 
 
 /******** READ_TOKEN
-  Read in one token from the input stream, represented as a psi_term.
-  Return the psi_term 'end_of_file' if that is the case.
+	  Read in one token from the input stream, represented as a psi_term.
+	  Return the psi_term 'end_of_file' if that is the case.
 */
 
 void read_token_main(); /* Forward declaration */
@@ -1181,10 +1181,10 @@ void read_token_main(ptr_psi_term tok, long long for_parser)
       
       /* Adding this results in problems with terms like (N-1) */
       /* if (c=='-' && (c2=read_char()) && DIGIT(c2)) {
-        put_back_char(c2);
-        read_number(tok,c);
-      }
-      else */
+	 put_back_char(c2);
+	 read_number(tok,c);
+	 }
+	 else */
 
       if(c=='.' || c=='?') { /*  RM: Jul  7 1993  */
 	c2=read_char();
@@ -1203,29 +1203,29 @@ void read_token_main(ptr_psi_term tok, long long for_parser)
       }
       else
 	if DIGIT(c)
-	  read_number(tok,c);
-          else
-            if UPPER(c) {
+		  read_number(tok,c);
+	else
+	  if UPPER(c) {
               read_name(tok,c,legal_in_name,variable);
             }
-            else
-              if LOWER(c) {
+	  else
+	    if LOWER(c) {
                 read_name(tok,c,legal_in_name,constant);
               }
-              else
-                if SYMBOL(c) {
+	    else
+	      if SYMBOL(c) {
                   read_name(tok,c,symbolic,constant);
                 }
-		else /*  RM: Jul  7 1993  Moved this */
-		  if SINGLE(c) {
+	      else /*  RM: Jul  7 1993  Moved this */
+		if SINGLE(c) {
 		    p[0]=c; p[1]=0;
 		    tok->type=update_symbol(current_module,p);
 		    tok->value_3=NULL;
 		    TOKEN_ERROR(tok); /*  RM: Feb  1 1993  */
 		  }
-		  else {
-		    Errorline("illegal character %d in input (%E).\n",c);
-		  }
+		else {
+		  Errorline("illegal character %d in input (%E).\n",c);
+		}
     }
 
     if (tok->type==variable) {

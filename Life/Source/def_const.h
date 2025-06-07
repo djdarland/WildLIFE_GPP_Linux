@@ -118,7 +118,7 @@
    is in bytes and is the product of alloc_words by the size of a machine word.
    This system is thus consistent between 32 and 64-bit architectures: the same
    number of psi-terms can be allocated in either.
-   */
+*/
 
 // from extern.h
 
@@ -225,7 +225,7 @@
 #define PRINT_BUFFER 100000L
 
 /*! \def PROMPT
-\brief Head of prompt 
+  \brief Head of prompt 
 
 */
 
@@ -573,26 +573,26 @@
   
   OPTIONAL	for an optional argument
   REQUIRED	for a required argument (i.e. residuate on it if not
-                present
+  present
   UNEVALED	if the argument should not be evaluated
   JUSTFAIL	to just fail is the argument does not meet its type
-		restriction
+  restriction
   POLYTYPE	sometimes you want to permit several particular sorts
-		in that case the 2nd psi_arg field is interpreted as
-		a pointer to a NULL terminated array of ptr_definitions
+  in that case the 2nd psi_arg field is interpreted as
+  a pointer to a NULL terminated array of ptr_definitions
   MANDATORY	like REQUIRED, but it is an error for it not to be
-  		present; don't residuate.  This is useful for
-		predicates since it doesn't make sense for them to
-		residuate.
+  present; don't residuate.  This is useful for
+  predicates since it doesn't make sense for them to
+  residuate.
   NOVALUE	no value required for this argument.
 
   The primitive must be defined to take the following arguments
-  		f(argl,result,funct[,info])
+  f(argl,result,funct[,info])
   where argl is an array containing the arguments obtained by call_
   primitive, result is the result in case we are implementing a
   function, and info (optional) is extra information, typically a
   pointer to a structure.
- */
+*/
 
 
 #define OPTIONAL  0
@@ -615,32 +615,32 @@
   
   { "1" , quoted_string , REQUIRED }
   
-  describes a required argument on feature 1, that must be a string.
-  The 3rd field is a mask of boolean flags and is constructed by
-  ORing some constants chosen from the set:
+describes a required argument on feature 1, that must be a string.
+The 3rd field is a mask of boolean flags and is constructed by
+ORing some constants chosen from the set:
   
-  OPTIONAL	for an optional argument
-  REQUIRED	for a required argument (i.e. residuate on it if not
-                present
-  UNEVALED	if the argument should not be evaluated
-  JUSTFAIL	to just fail is the argument does not meet its type
-		restriction
-  POLYTYPE	sometimes you want to permit several particular sorts
-		in that case the 2nd psi_arg field is interpreted as
-		a pointer to a NULL terminated array of ptr_definitions
-  MANDATORY	like REQUIRED, but it is an error for it not to be
-  		present; don't residuate.  This is useful for
-		predicates since it doesn't make sense for them to
-		residuate.
-  NOVALUE	no value required for this argument.
+OPTIONAL	for an optional argument
+REQUIRED	for a required argument (i.e. residuate on it if not
+					 present
+					 UNEVALED	if the argument should not be evaluated
+					 JUSTFAIL	to just fail is the argument does not meet its type
+					 restriction
+					 POLYTYPE	sometimes you want to permit several particular sorts
+					 in that case the 2nd psi_arg field is interpreted as
+					 a pointer to a NULL terminated array of ptr_definitions
+					 MANDATORY	like REQUIRED, but it is an error for it not to be
+					 present; don't residuate.  This is useful for
+					 predicates since it doesn't make sense for them to
+					 residuate.
+					 NOVALUE	no value required for this argument.
 
-  The primitive must be defined to take the following arguments
-  		f(argl,result,funct[,info])
-  where argl is an array containing the arguments obtained by call_
-  primitive, result is the result in case we are implementing a
-  function, and info (optional) is extra information, typically a
-  pointer to a structure.
- */
+					 The primitive must be defined to take the following arguments
+					 f(argl,result,funct[,info])
+					 where argl is an array containing the arguments obtained by call_
+					 primitive, result is the result in case we are implementing a
+					 function, and info (optional) is extra information, typically a
+					 pointer to a structure.
+					 */
 
 #define REQUIRED  1
 
@@ -668,26 +668,26 @@
   
   OPTIONAL	for an optional argument
   REQUIRED	for a required argument (i.e. residuate on it if not
-                present
+  present
   UNEVALED	if the argument should not be evaluated
   JUSTFAIL	to just fail is the argument does not meet its type
-		restriction
+  restriction
   POLYTYPE	sometimes you want to permit several particular sorts
-		in that case the 2nd psi_arg field is interpreted as
-		a pointer to a NULL terminated array of ptr_definitions
+  in that case the 2nd psi_arg field is interpreted as
+  a pointer to a NULL terminated array of ptr_definitions
   MANDATORY	like REQUIRED, but it is an error for it not to be
-  		present; don't residuate.  This is useful for
-		predicates since it doesn't make sense for them to
-		residuate.
+  present; don't residuate.  This is useful for
+  predicates since it doesn't make sense for them to
+  residuate.
   NOVALUE	no value required for this argument.
 
   The primitive must be defined to take the following arguments
-  		f(argl,result,funct[,info])
+  f(argl,result,funct[,info])
   where argl is an array containing the arguments obtained by call_
   primitive, result is the result in case we are implementing a
   function, and info (optional) is extra information, typically a
   pointer to a structure.
- */
+*/
 
 #define UNEVALED  (1<<1)
 
@@ -715,26 +715,26 @@
   
   OPTIONAL	for an optional argument
   REQUIRED	for a required argument (i.e. residuate on it if not
-                present
+  present
   UNEVALED	if the argument should not be evaluated
   JUSTFAIL	to just fail is the argument does not meet its type
-		restriction
+  restriction
   POLYTYPE	sometimes you want to permit several particular sorts
-		in that case the 2nd psi_arg field is interpreted as
-		a pointer to a NULL terminated array of ptr_definitions
+  in that case the 2nd psi_arg field is interpreted as
+  a pointer to a NULL terminated array of ptr_definitions
   MANDATORY	like REQUIRED, but it is an error for it not to be
-  		present; don't residuate.  This is useful for
-		predicates since it doesn't make sense for them to
-		residuate.
+  present; don't residuate.  This is useful for
+  predicates since it doesn't make sense for them to
+  residuate.
   NOVALUE	no value required for this argument.
 
   The primitive must be defined to take the following arguments
-  		f(argl,result,funct[,info])
+  f(argl,result,funct[,info])
   where argl is an array containing the arguments obtained by call_
   primitive, result is the result in case we are implementing a
   function, and info (optional) is extra information, typically a
   pointer to a structure.
- */
+*/
 
 #define JUSTFAIL  (1<<2)
 
@@ -762,26 +762,26 @@
   
   OPTIONAL	for an optional argument
   REQUIRED	for a required argument (i.e. residuate on it if not
-                present
+  present
   UNEVALED	if the argument should not be evaluated
   JUSTFAIL	to just fail is the argument does not meet its type
-		restriction
+  restriction
   POLYTYPE	sometimes you want to permit several particular sorts
-		in that case the 2nd psi_arg field is interpreted as
-		a pointer to a NULL terminated array of ptr_definitions
+  in that case the 2nd psi_arg field is interpreted as
+  a pointer to a NULL terminated array of ptr_definitions
   MANDATORY	like REQUIRED, but it is an error for it not to be
-  		present; don't residuate.  This is useful for
-		predicates since it doesn't make sense for them to
-		residuate.
+  present; don't residuate.  This is useful for
+  predicates since it doesn't make sense for them to
+  residuate.
   NOVALUE	no value required for this argument.
 
   The primitive must be defined to take the following arguments
-  		f(argl,result,funct[,info])
+  f(argl,result,funct[,info])
   where argl is an array containing the arguments obtained by call_
   primitive, result is the result in case we are implementing a
   function, and info (optional) is extra information, typically a
   pointer to a structure.
- */
+*/
 
 #define POLYTYPE  (1<<3)
 /*! \def MANDATORY
@@ -808,26 +808,26 @@
   
   OPTIONAL	for an optional argument
   REQUIRED	for a required argument (i.e. residuate on it if not
-                present
+  present
   UNEVALED	if the argument should not be evaluated
   JUSTFAIL	to just fail is the argument does not meet its type
-		restriction
+  restriction
   POLYTYPE	sometimes you want to permit several particular sorts
-		in that case the 2nd psi_arg field is interpreted as
-		a pointer to a NULL terminated array of ptr_definitions
+  in that case the 2nd psi_arg field is interpreted as
+  a pointer to a NULL terminated array of ptr_definitions
   MANDATORY	like REQUIRED, but it is an error for it not to be
-  		present; don't residuate.  This is useful for
-		predicates since it doesn't make sense for them to
-		residuate.
+  present; don't residuate.  This is useful for
+  predicates since it doesn't make sense for them to
+  residuate.
   NOVALUE	no value required for this argument.
 
   The primitive must be defined to take the following arguments
-  		f(argl,result,funct[,info])
+  f(argl,result,funct[,info])
   where argl is an array containing the arguments obtained by call_
   primitive, result is the result in case we are implementing a
   function, and info (optional) is extra information, typically a
   pointer to a structure.
- */
+*/
 
 #define MANDATORY (1<<4)
 
@@ -855,26 +855,26 @@
   
   OPTIONAL	for an optional argument
   REQUIRED	for a required argument (i.e. residuate on it if not
-                present
+  present
   UNEVALED	if the argument should not be evaluated
   JUSTFAIL	to just fail is the argument does not meet its type
-		restriction
+  restriction
   POLYTYPE	sometimes you want to permit several particular sorts
-		in that case the 2nd psi_arg field is interpreted as
-		a pointer to a NULL terminated array of ptr_definitions
+  in that case the 2nd psi_arg field is interpreted as
+  a pointer to a NULL terminated array of ptr_definitions
   MANDATORY	like REQUIRED, but it is an error for it not to be
-  		present; don't residuate.  This is useful for
-		predicates since it doesn't make sense for them to
-		residuate.
+  present; don't residuate.  This is useful for
+  predicates since it doesn't make sense for them to
+  residuate.
   NOVALUE	no value required for this argument.
 
   The primitive must be defined to take the following arguments
-  		f(argl,result,funct[,info])
+  f(argl,result,funct[,info])
   where argl is an array containing the arguments obtained by call_
   primitive, result is the result in case we are implementing a
   function, and info (optional) is extra information, typically a
   pointer to a structure.
- */
+*/
 
 #define NOVALUE   (1<<5)
 
@@ -1434,7 +1434,7 @@
 */
 
 #define   global_it 5
-   /*  RM: Feb  8 1993  */
+/*  RM: Feb  8 1993  */
 #ifdef CLIFE
 
 /*! \def block_it
@@ -1443,7 +1443,7 @@
 */
 
 #define   block_it 6
-       /*  AA: Mar  8 1993  */
+/*  AA: Mar  8 1993  */
 #endif 
 /* CLIFE */
 

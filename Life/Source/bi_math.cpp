@@ -35,7 +35,7 @@ static char vcid[] = "$Id: bi_math.c,v 1.2 1994/12/08 23:07:37 duchier Exp $";
 /* For machines that do not have a 'trunc(x)' function: */
 #ifdef NEED_TRUNC
 double trunc(x)
-double x;
+  double x;
 {
   return ((x>=0)?floor(x):ceil(x));
 }
@@ -44,11 +44,11 @@ double x;
 
 
 /******** C_MULT
-  Multiplication is considered as a 3-variable relation as in Prolog:
+	  Multiplication is considered as a 3-variable relation as in Prolog:
   
-  arg1 * arg2 = arg3
+	  arg1 * arg2 = arg3
   
-  Only it may residuate or curry.
+	  Only it may residuate or curry.
 */
 static long long c_mult()
 {
@@ -82,12 +82,12 @@ static long long c_mult()
           residuate3(arg1,arg2,arg3);
 
 	  /* if(arg1==arg3)
-	    success=unify_real_result(arg2,(REAL)1);
-	  else
-	    if(arg2==arg3)
-	      success=unify_real_result(arg1,(REAL)1);
-	    else
-	      residuate2(arg1,arg3);
+	     success=unify_real_result(arg2,(REAL)1);
+	     else
+	     if(arg2==arg3)
+	     success=unify_real_result(arg1,(REAL)1);
+	     else
+	     residuate2(arg1,arg3);
 	  */
 	  break;
 	case 1:
@@ -155,7 +155,7 @@ static long long c_mult()
 
 
 /******** C_DIV
-  Similar to multiply.
+	  Similar to multiply.
 */
 static long long c_div()
 {
@@ -279,9 +279,9 @@ static long long c_div()
 
 
 /******** C_INTDIV
-  Similar to division, but arguments and result must be integers.
-  Does all deterministic local inversions that can be determined in
-  constant-time independent of argument values.
+	  Similar to division, but arguments and result must be integers.
+	  Does all deterministic local inversions that can be determined in
+	  constant-time independent of argument values.
 */
 static long long c_intdiv()
 {
@@ -492,7 +492,7 @@ static long long c_floor_ceiling(long long floorflag)
 
 
 /******** C_FLOOR
-  Return the largest integer inferior or equal to the argument
+	  Return the largest integer inferior or equal to the argument
 */
 static long long c_floor()
 {
@@ -503,7 +503,7 @@ static long long c_floor()
 
 
 /******** C_CEILING
-  Return the smallest integer larger or equal to the argument
+	  Return the smallest integer larger or equal to the argument
 */
 static long long c_ceiling()
 {
@@ -513,7 +513,7 @@ static long long c_ceiling()
 
 
 /******** C_SQRT
-  Return the square root of the argument
+	  Return the square root of the argument
 */
 static long long c_sqrt()
 {
@@ -597,15 +597,15 @@ static long long c_trig(long long trigflag)
           break;
         case 1:
           ans=(trigflag==SINFLAG?sin(val1):
-              (trigflag==COSFLAG?cos(val1):
-              (trigflag==TANFLAG?tan(val1):0.0)));
+	       (trigflag==COSFLAG?cos(val1):
+		(trigflag==TANFLAG?tan(val1):0.0)));
           success=unify_real_result(arg3,ans);
           break;
         case 4:
           if (trigflag==TANFLAG || (val3>= -1 && val3<=1)) {
             ans=(trigflag==SINFLAG?asin(val3):
-                (trigflag==COSFLAG?acos(val3):
-                (trigflag==TANFLAG?atan(val3):0.0)));
+		 (trigflag==COSFLAG?acos(val3):
+		  (trigflag==TANFLAG?atan(val3):0.0)));
             success=unify_real_result(arg1,ans);
           }
           else
@@ -613,8 +613,8 @@ static long long c_trig(long long trigflag)
           break;
         case 5:
           ans=(trigflag==SINFLAG?asin(val1):
-              (trigflag==COSFLAG?acos(val1):
-              (trigflag==TANFLAG?atan(val1):0.0)));
+	       (trigflag==COSFLAG?acos(val1):
+		(trigflag==TANFLAG?atan(val1):0.0)));
           success=(val3==ans);
         }
     }
@@ -628,7 +628,7 @@ static long long c_trig(long long trigflag)
 
 
 /******** C_COSINE
-  Return the cosine of the argument (in radians).
+	  Return the cosine of the argument (in radians).
 */
 static long long c_cos()
 {
@@ -639,7 +639,7 @@ static long long c_cos()
 
 
 /******** C_SINE
-  Return the sine of the argument
+	  Return the sine of the argument
 */
 static long long c_sin()
 {
@@ -649,7 +649,7 @@ static long long c_sin()
 
 
 /******** C_TAN
-  Return the tangent of the argument
+	  Return the tangent of the argument
 */
 static long long c_tan()
 {
@@ -710,7 +710,7 @@ static long long c_bit_not()
 
 
 /******** C_BIT_AND
-  Return the bitwise operation: ARG1 and ARG2.
+	  Return the bitwise operation: ARG1 and ARG2.
 */
 static long long c_bit_and()
 {
@@ -791,7 +791,7 @@ static long long c_bit_and()
 
 
 /******** C_BIT_OR
-  Return the bitwise operation: ARG1 or ARG2.
+	  Return the bitwise operation: ARG1 or ARG2.
 */
 static long long c_bit_or()
 {
@@ -856,7 +856,7 @@ static long long c_bit_or()
 
 
 /******** C_SHIFT
-  Return the bitwise shift left or shift right.
+	  Return the bitwise shift left or shift right.
 */
 
 static long long c_shift(long long);
@@ -938,7 +938,7 @@ static long long c_shift(long long dir)
 
 
 /******** C_MOD
-  The modulo operation.
+	  The modulo operation.
 */
 static long long c_mod()
 {
@@ -1002,14 +1002,14 @@ static long long c_mod()
 }
 
 /******** C_ADD
-  Addition is considered as a 3-variable relation as in Prolog:
+	  Addition is considered as a 3-variable relation as in Prolog:
   
-  arg1 + arg2 = arg3
+	  arg1 + arg2 = arg3
   
-  Only it may residuate or curry.
+	  Only it may residuate or curry.
 
-  Addition is further complicated by the fact that it is both a unary and
-  binary function.
+	  Addition is further complicated by the fact that it is both a unary and
+	  binary function.
 */
 static long long c_add()
 {
@@ -1089,29 +1089,29 @@ static long long c_add()
     }
     else
       curry(); 
-/*
-'+' is no long longer a function of a single argument:
-      if(arg1) {
-	deref(arg3);
-	success=get_real_value(arg3,&val3,&num3);
-	if(success)
-	  switch(num1+4*num3) {
-	  case 0:
-	    residuate2(arg1,arg3);
-	    break;
-	  case 1:
-	    success=unify_real_result(arg3,val1);
-	    break;
-	  case 4:
-	    success=unify_real_result(arg1,val3);
-	    break;
-	  case 5:
-	    success=(val1==val3);
-	  }
-      }
-      else
-	curry();
-*/
+  /*
+    '+' is no long longer a function of a single argument:
+    if(arg1) {
+    deref(arg3);
+    success=get_real_value(arg3,&val3,&num3);
+    if(success)
+    switch(num1+4*num3) {
+    case 0:
+    residuate2(arg1,arg3);
+    break;
+    case 1:
+    success=unify_real_result(arg3,val1);
+    break;
+    case 4:
+    success=unify_real_result(arg1,val3);
+    break;
+    case 5:
+    success=(val1==val3);
+    }
+    }
+    else
+    curry();
+  */
   
   nonnum_warning(t,arg1,arg2);
   return success;
@@ -1121,7 +1121,7 @@ static long long c_add()
 
 
 /******** C_SUB
-  Identical (nearly) to C_ADD
+	  Identical (nearly) to C_ADD
 */
 static long long c_sub()
 {
@@ -1224,7 +1224,7 @@ static long long c_sub()
 }
 
 /******** C_LOG
-  Natural logarithm.
+	  Natural logarithm.
 */
 static long long c_log()
 {
@@ -1281,7 +1281,7 @@ static long long c_log()
 
 
 /******** C_EXP
-  Exponential.
+	  Exponential.
 */
 static long long c_exp()
 {

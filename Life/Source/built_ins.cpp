@@ -25,8 +25,8 @@ static unsigned int randomseed;
 #endif
 
 /********* STACK_NIL
-  Create the NIL object on the stack.
-  */
+	   Create the NIL object on the stack.
+*/
 
 static long long built_in_index=0;
 
@@ -45,8 +45,8 @@ ptr_psi_term stack_nil()
 
 
 /******** STACK_CONS(head,tail)
-  Create a CONS object.
-  */
+	  Create a CONS object.
+*/
 
 ptr_psi_term stack_cons(ptr_psi_term head, ptr_psi_term tail)
 //     ptr_psi_term head;
@@ -65,8 +65,8 @@ ptr_psi_term stack_cons(ptr_psi_term head, ptr_psi_term tail)
 }
 
 /********* STACK_PAIR(left,right)
-  create a PAIR object.
-  */
+	   create a PAIR object.
+*/
 
 ptr_psi_term stack_pair(ptr_psi_term left, ptr_psi_term right)
 //     ptr_psi_term left;
@@ -85,8 +85,8 @@ ptr_psi_term stack_pair(ptr_psi_term left, ptr_psi_term right)
 }
 
 /********* STACK_INT(n)
-  create an INT object
-  */
+	   create an INT object
+*/
 
 ptr_psi_term stack_int(long long n)
 //     long long n;
@@ -100,8 +100,8 @@ ptr_psi_term stack_int(long long n)
 }
 
 /********* STACK_STRING(s)
-  create a STRING object
-  */
+	   create a STRING object
+*/
 
 ptr_psi_term stack_string(char *s)
 //     char *s;			  
@@ -115,8 +115,8 @@ ptr_psi_term stack_string(char *s)
 /***  RM: Dec  9 1992  (END) ***/
 
 /********* STACK_BYTES(s,n)
-  create a STRING object given a sequence of bytes
-  */
+	   create a STRING object given a sequence of bytes
+*/
 
 ptr_psi_term stack_bytes(char *s, int n)
 //     char *s;
@@ -131,8 +131,8 @@ ptr_psi_term stack_bytes(char *s, int n)
   
 
 /********* PSI_TO_STRING(t,fn)
-  Get the value of a Life string, or the name of a non-string psi-term.
-  Return TRUE iff a valid string is found.
+	   Get the value of a Life string, or the name of a non-string psi-term.
+	   Return TRUE iff a valid string is found.
 */
 long long psi_to_string(ptr_psi_term t, char **fn)
 // ptr_psi_term t;
@@ -216,7 +216,7 @@ ptr_psi_term make_feature_list(ptr_node tree,ptr_psi_term tail,
 
 
 /******** CHECK_REAL(t,v,n)
-  Like get_real_value, but does not force the type of T to be real.
+	  Like get_real_value, but does not force the type of T to be real.
 */
 long long check_real(ptr_psi_term t,REAL *v,long long *n)
 // ptr_psi_term t;
@@ -231,7 +231,7 @@ long long check_real(ptr_psi_term t,REAL *v,long long *n)
     if (success) {
       *n=FALSE;
       if (smaller && t->value_3){
-	  *v= *(REAL *)t->value_3;
+	*v= *(REAL *)t->value_3;
         *n=TRUE;
       }
     }
@@ -242,10 +242,10 @@ long long check_real(ptr_psi_term t,REAL *v,long long *n)
 
 
 /******** GET_REAL_VALUE(t,v,n)
-  Check if psi_term T is a real number.  Return N=TRUE iff T <| REAL.
-  If T has a real value then set V to that value.
-  Also force the type of T to REAL if REAL <| T.
-  This is used in all the arithmetic built-in functions to get their arguments.
+	  Check if psi_term T is a real number.  Return N=TRUE iff T <| REAL.
+	  If T has a real value then set V to that value.
+	  Also force the type of T to REAL if REAL <| T.
+	  This is used in all the arithmetic built-in functions to get their arguments.
 */
 long long get_real_value(ptr_psi_term t,REAL *v,long long *n)
 // ptr_psi_term t;
@@ -282,9 +282,9 @@ long long get_real_value(ptr_psi_term t,REAL *v,long long *n)
 
 
 /******** GET_BOOL_VALUE(t,v,n)
-  This is identical in nature to
-  GET_REAL_VALUE. The values handled here have to be booleans.
-  Check if psi_term T is a boolean. V <- TRUE or FALSE value of T.
+	  This is identical in nature to
+	  GET_REAL_VALUE. The values handled here have to be booleans.
+	  Check if psi_term T is a boolean. V <- TRUE or FALSE value of T.
 */
 static long long get_bool_value(ptr_psi_term t,REAL *v,long long *n)
 // ptr_psi_term t;
@@ -328,8 +328,8 @@ static long long get_bool_value(ptr_psi_term t,REAL *v,long long *n)
 
 
 /******** UNIFY_BOOL_RESULT(t,v)
-  Unify psi_term T to the boolean value V = TRUE or FALSE.
-  This is used by built-in logical functions to return their result.
+	  Unify psi_term T to the boolean value V = TRUE or FALSE.
+	  This is used by built-in logical functions to return their result.
 */
 void unify_bool_result(ptr_psi_term t,long long v)
 // ptr_psi_term t;
@@ -344,33 +344,33 @@ void unify_bool_result(ptr_psi_term t,long long v)
   /* Completely commented out by Richard on Nov 25th 1993
      What's *your* Birthday? Maybe you'd like a Birthday-Bug-Card!
      
-  if((GENERIC)t<heap_pointer) {
-    push_ptr_value(def_ptr,(GENERIC *)&(t->type)); //cast REV401PLUS
-    if (v) {
-      t->type=true;
-      t->status=0;
-    }
-    else {
-      t->type=false;
-      t->status=0;
-    }
+     if((GENERIC)t<heap_pointer) {
+     push_ptr_value(def_ptr,(GENERIC *)&(t->type)); //cast REV401PLUS
+     if (v) {
+     t->type=true;
+     t->status=0;
+     }
+     else {
+     t->type=false;
+     t->status=0;
+     }
   
-    i_check_out(t);
-    if (t->resid)
-      release_resid(t);
-  }
-  else {
-    Warningline("the persistent term '%P' appears in a boolean constraint and cannot be refined\n",t);
-    }
-    */
+     i_check_out(t);
+     if (t->resid)
+     release_resid(t);
+     }
+     else {
+     Warningline("the persistent term '%P' appears in a boolean constraint and cannot be refined\n",t);
+     }
+  */
 }
 
 
 
 
 /******** UNIFY_REAL_RESULT(t,v)
-  Unify psi_term T to the real value V.
-  This is used by built-in arithmetic functions to return their result.
+	  Unify psi_term T to the real value V.
+	  This is used by built-in arithmetic functions to return their result.
 */
 long long unify_real_result(ptr_psi_term t,REAL v)
 // ptr_psi_term t;
@@ -421,7 +421,7 @@ long long unify_real_result(ptr_psi_term t,REAL v)
 
 
 /******** C_GT
-  Greater than.
+	  Greater than.
 */
 static long long c_gt()
 {
@@ -487,7 +487,7 @@ static long long c_gt()
 
 
 /******** C_EQUAL
-  Arithmetic equality.
+	  Arithmetic equality.
 */
 static long long c_equal()
 {
@@ -567,8 +567,8 @@ static long long c_equal()
 /*** RM: 9 Dec 1992 (START) ***/
 
 /******** C_EVAL_DISJUNCTION
-  Evaluate a disjunction.
-  */
+	  Evaluate a disjunction.
+*/
 
 static long long c_eval_disjunction()
      
@@ -612,7 +612,7 @@ static long long c_eval_disjunction()
 
   
 /******** C_LT
-  Less than.
+	  Less than.
 */
 static long long c_lt()
 {
@@ -679,7 +679,7 @@ static long long c_lt()
 
 
 /******** C_GTOE
-  Greater than or equal.
+	  Greater than or equal.
 */
 static long long c_gtoe()
 {
@@ -745,7 +745,7 @@ static long long c_gtoe()
 
 
 /******** C_LTOE
-  Less than or equal.
+	  Less than or equal.
 */
 static long long c_ltoe()
 {
@@ -812,8 +812,8 @@ static long long c_ltoe()
 
 
 /******** C_BOOLPRED
-  Internal built-in predicate that handles functions in predicate positions.
-  This predicate should never be called directly by the user.
+	  Internal built-in predicate that handles functions in predicate positions.
+	  This predicate should never be called directly by the user.
 */
 
 static long long c_boolpred()
@@ -961,8 +961,8 @@ static long long c_logical_main(long long sel)
 
 
 /******** C_AND, C_OR
-  Logical and & or.
-  These functions do all possible local propagations.
+	  Logical and & or.
+	  These functions do all possible local propagations.
 */
 static long long c_and()
 {
@@ -978,8 +978,8 @@ static long long c_or()
 
 
 /******** C_NOT
-  Logical not.
-  This function does all possible local propagations.
+	  Logical not.
+	  This function does all possible local propagations.
 */
 static long long c_not()
 {
@@ -1031,8 +1031,8 @@ static long long c_not()
 
 
 /******** C_XOR
-  Logical exclusive or.
-  This function does all possible local propagations.
+	  Logical exclusive or.
+	  This function does all possible local propagations.
 */
 static long long c_xor()
 {
@@ -1110,8 +1110,8 @@ static long long c_xor()
 
 
 /******** C_APPLY
-  This evaluates "apply(functor => F,Args)".  If F is
-  a known function, then it builds the psi-term F(Args), and evaluates it.
+	  This evaluates "apply(functor => F,Args)".  If F is
+	  a known function, then it builds the psi-term F(Args), and evaluates it.
 */
 static long long c_apply()
 {
@@ -1153,10 +1153,10 @@ static long long c_apply()
 
 
 /******** C_PROJECT   /*  RM: Jan  7 1993 
-  Here we evaluate "project(Psi-term,Label)". This
-  returns the psi-term associated to label Label in Psi-term.
-  It is identical to C_PROJECT except that the order of the arguments is
-  inversed.
+	  Here we evaluate "project(Psi-term,Label)". This
+	  returns the psi-term associated to label Label in Psi-term.
+	  It is identical to C_PROJECT except that the order of the arguments is
+	  inversed.
 */
 static long long c_project()
 
@@ -1257,7 +1257,7 @@ static long long c_project()
 
 
 /******** C_DIFF
-  Arithmetic not-equal.
+	  Arithmetic not-equal.
 */
 static long long c_diff()
 {
@@ -1336,7 +1336,7 @@ static long long c_diff()
 
 
 /******** C_FAIL
-  Always fail.
+	  Always fail.
 */
 static long long c_fail()
 {
@@ -1346,7 +1346,7 @@ static long long c_fail()
 
 
 /******** C_SUCCEED
-  Always succeed.
+	  Always succeed.
 */
 static long long c_succeed()
 {
@@ -1360,7 +1360,7 @@ static long long c_succeed()
 
 
 /******** C_REPEAT
-  Succeed indefinitely on backtracking.
+	  Succeed indefinitely on backtracking.
 */
 static long long c_repeat()
 {
@@ -1374,7 +1374,7 @@ static long long c_repeat()
 
 
 /******** C_VAR
-  Return true/false iff argument is/is not '@' (top with no attributes).
+	  Return true/false iff argument is/is not '@' (top with no attributes).
 */
 static long long c_var()
 {
@@ -1405,7 +1405,7 @@ static long long c_var()
 
 
 /******** C_NONVAR
-  Return true/false iff argument is not/is '@' (top with no attributes).
+	  Return true/false iff argument is not/is '@' (top with no attributes).
 */
 static long long c_nonvar()
 {
@@ -1436,7 +1436,7 @@ static long long c_nonvar()
 
 
 /******** C_IS_FUNCTION
-  Succeed iff argument is a function (built-in or user-defined).
+	  Succeed iff argument is a function (built-in or user-defined).
 */
 static long long c_is_function()
 {
@@ -1467,7 +1467,7 @@ static long long c_is_function()
 
 
 /******** C_IS_PREDICATE
-  Succeed iff argument is a predicate (built-in or user-defined).
+	  Succeed iff argument is a predicate (built-in or user-defined).
 */
 static long long c_is_predicate()
 {
@@ -1498,7 +1498,7 @@ static long long c_is_predicate()
 
 
 /******** C_IS_SORT
-  Succeed iff argument is a sort (built-in or user-defined).
+	  Succeed iff argument is a sort (built-in or user-defined).
 */
 static long long c_is_sort()
 {
@@ -1547,8 +1547,8 @@ long long only_arg1(ptr_psi_term t, ptr_psi_term *arg1)
 
 
 /******** C_DYNAMIC()
-  Mark all the arguments as 'unprotected', i.e. they may be changed
-  by assert/retract/redefinition.
+	  Mark all the arguments as 'unprotected', i.e. they may be changed
+	  by assert/retract/redefinition.
 */
 static long long c_dynamic()
 {
@@ -1562,8 +1562,8 @@ static long long c_dynamic()
 
 
 /******** C_STATIC()
-  Mark all the arguments as 'protected', i.e. they may not be changed
-  by assert/retract/redefinition.
+	  Mark all the arguments as 'protected', i.e. they may not be changed
+	  by assert/retract/redefinition.
 */
 static long long c_static()
 {
@@ -1577,10 +1577,10 @@ static long long c_static()
 
 
 /******** C_DELAY_CHECK()
-  Mark that the properties of the types in the arguments are delay checked
-  during unification (i.e. they are only checked when the psi-term is
-  given attributes, and they are not checked as long long as the psi-term has
-  no attributes.)
+	  Mark that the properties of the types in the arguments are delay checked
+	  during unification (i.e. they are only checked when the psi-term is
+	  given attributes, and they are not checked as long long as the psi-term has
+	  no attributes.)
 */
 static long long c_delay_check()
 {
@@ -1596,8 +1596,8 @@ static long long c_delay_check()
 
 
 /******** C_NON_STRICT()
-  Mark that the function or predicate's arguments are not evaluated when
-  the function or predicate is called.
+	  Mark that the function or predicate's arguments are not evaluated when
+	  the function or predicate is called.
 */
 static long long c_non_strict()
 {
@@ -1612,7 +1612,7 @@ static long long c_non_strict()
 
 
 /******** C_OP()
-  Declare an operator.
+	  Declare an operator.
 */
 static long long c_op()
 {
@@ -1642,7 +1642,7 @@ long long file_exists(char *s)
 
 
 /******** C_EXISTS
-  Succeed iff a file can be read in (i.e. if it exists).
+	  Succeed iff a file can be read in (i.e. if it exists).
 */
 static long long c_exists()
 {
@@ -1681,8 +1681,8 @@ static long long c_exists()
 
 
 /******** C_LOAD
-  Load a file.  This load accepts and executes any queries in the loaded
-  file, including calls to user-defined predicates and other load predicates.
+	  Load a file.  This load accepts and executes any queries in the loaded
+	  file, including calls to user-defined predicates and other load predicates.
 */
 static long long c_load()
 {
@@ -1720,8 +1720,8 @@ static long long c_load()
 
 
 /******** C_GET_CHOICE()
-  Return the current state of the choice point stack (i.e., the time stamp
-  of the current choice point).
+	  Return the current state of the choice point stack (i.e., the time stamp
+	  of the current choice point).
 */
 static long long c_get_choice()
 {
@@ -1736,7 +1736,7 @@ static long long c_get_choice()
     gts=choice_stack->time_stamp;
   else
     gts=global_time_stamp-1;
-    /* gts=INIT_TIME_STAMP; PVR 11.2.94 */
+  /* gts=INIT_TIME_STAMP; PVR 11.2.94 */
   push_goal(unify,result,real_stack_psi_term(4,(REAL)gts),NULL);
 
   return success;
@@ -1745,20 +1745,20 @@ static long long c_get_choice()
 
 
 /******** C_SET_CHOICE()
-  Set the choice point stack to a state no later than (i.e. the same or earlier
-  than) the state of the first argument (i.e., remove all choice points up to
-  the first one whose time stamp is =< the first argument).  This predicate
-  will remove zero or more choice points, never add them.  The first argument
-  must come from a past call to get_choice.
-  Together, get_choice and set_choice allow one to implement an "ancestor cut"
-  that removes all choice points created between the current execution point
-  and an execution point arbitarily remote in the past.
-  The built-ins get_choice, set_choice, and exists_choice are implemented
-  using the timestamping mechanism in the interpreter.  The two
-  relevant properties of the timestamping mechanism are that each choice
-  point is identified by an integer and that the integers are in increasing
-  order (but not necessarily consecutive) from the bottom to the top of the
-  choice point stack.
+	  Set the choice point stack to a state no later than (i.e. the same or earlier
+	  than) the state of the first argument (i.e., remove all choice points up to
+	  the first one whose time stamp is =< the first argument).  This predicate
+	  will remove zero or more choice points, never add them.  The first argument
+	  must come from a past call to get_choice.
+	  Together, get_choice and set_choice allow one to implement an "ancestor cut"
+	  that removes all choice points created between the current execution point
+	  and an execution point arbitarily remote in the past.
+	  The built-ins get_choice, set_choice, and exists_choice are implemented
+	  using the timestamping mechanism in the interpreter.  The two
+	  relevant properties of the timestamping mechanism are that each choice
+	  point is identified by an integer and that the integers are in increasing
+	  order (but not necessarily consecutive) from the bottom to the top of the
+	  choice point stack.
 */
 static long long c_set_choice()
 {
@@ -1808,12 +1808,12 @@ static long long c_set_choice()
 
 
 /******** C_EXISTS_CHOICE()
-  Return true iff there exists a choice point A such that arg1 < A <= arg2,
-  i.e. A is more recent than the choice point marked by arg1 and no more
-  recent than the choice point marked by arg2.  The two arguments to
-  exists_choice must come from past calls to get_choice.
-  This function allows one to check whether a choice point exists between
-  any two arbitrary execution points of the program.
+	  Return true iff there exists a choice point A such that arg1 < A <= arg2,
+	  i.e. A is more recent than the choice point marked by arg1 and no more
+	  recent than the choice point marked by arg2.  The two arguments to
+	  exists_choice must come from past calls to get_choice.
+	  This function allows one to check whether a choice point exists between
+	  any two arbitrary execution points of the program.
 */
 static long long c_exists_choice()
 {
@@ -1867,8 +1867,8 @@ static long long c_exists_choice()
 
 
 /******** C_PRINT_VARIABLES
-  Print the global variables and their values,
-  in the same way as is done in the user interface.
+	  Print the global variables and their values,
+	  in the same way as is done in the user interface.
 */
 static long long c_print_variables()
 {
@@ -1895,19 +1895,19 @@ static void set_parse_queryflag(ptr_node thelist, long long sort)
     arg=(ptr_psi_term)n->data;
     queryflag=stack_psi_term(4);
     queryflag->type =
-    update_symbol(bi_module,
-		  ((sort==QUERY)?(char*)"query":
-		   ((sort==FACT)?(char*)"declaration":(char*)"error")));
+      update_symbol(bi_module,
+		    ((sort==QUERY)?(char*)"query":
+		     ((sort==FACT)?(char*)"declaration":(char*)"error")));
     push_goal(unify,queryflag,arg,NULL);
   }
 }
 
 
 /******** C_PARSE
-  Parse a string and return a quoted psi-term.
-  The global variable names are recognized (see the built-in
-  print_variables).  All variables in the parsed string
-  are added to the set of global variables.
+	  Parse a string and return a quoted psi-term.
+	  The global variable names are recognized (see the built-in
+	  print_variables).  All variables in the parsed string
+	  are added to the set of global variables.
 */
 static long long c_parse()
 {
@@ -1939,30 +1939,30 @@ static long long c_parse()
         var_occurred=FALSE;
         t=stack_copy_psi_term(parse(&sort));
         
-          /* Optional second argument returns 'query', 'declaration', or
-          /* 'error'. */
-          n=find(FEATCMP,two,funct->attr_list);
-   	  if (n) {
-            ptr_psi_term queryflag;
-            arg2=(ptr_psi_term)n->data;
-            queryflag=stack_psi_term(4);
-            queryflag->type=
-              update_symbol(bi_module,
-			    ((sort==QUERY)?(char*)"query":((sort==FACT)?(char*)"declaration":(char*)"error"))
-              );
-            push_goal(unify,queryflag,arg2,NULL);
-          }
+	/* Optional second argument returns 'query', 'declaration', or
+	   /* 'error'. */
+	n=find(FEATCMP,two,funct->attr_list);
+	if (n) {
+	  ptr_psi_term queryflag;
+	  arg2=(ptr_psi_term)n->data;
+	  queryflag=stack_psi_term(4);
+	  queryflag->type=
+	    update_symbol(bi_module,
+			  ((sort==QUERY)?(char*)"query":((sort==FACT)?(char*)"declaration":(char*)"error"))
+			  );
+	  push_goal(unify,queryflag,arg2,NULL);
+	}
   
-          /* Optional third argument returns true or false if the psi-term
-          /* contains a variable or not. */
-          n=find(FEATCMP,three,funct->attr_list);
-          if (n) {
-            ptr_psi_term varflag;
-            arg3=(ptr_psi_term)n->data;
-            varflag=stack_psi_term(4);
-            varflag->type=var_occurred?lf_true:lf_false;
-            push_goal(unify,varflag,arg3,NULL);
-          }
+	/* Optional third argument returns true or false if the psi-term
+	   /* contains a variable or not. */
+	n=find(FEATCMP,three,funct->attr_list);
+	if (n) {
+	  ptr_psi_term varflag;
+	  arg3=(ptr_psi_term)n->data;
+	  varflag=stack_psi_term(4);
+	  varflag->type=var_occurred?lf_true:lf_false;
+	  push_goal(unify,varflag,arg3,NULL);
+	}
 
         var_occurred = var_occurred || old_var_occurred;
         stringparse=FALSE;
@@ -1983,7 +1983,7 @@ static long long c_parse()
       success=FALSE;
   }
   else
-   curry();
+    curry();
 
   return success;
 }
@@ -1993,9 +1993,9 @@ static long long c_parse()
 
 
 /******** C_READ
-  Read a psi_term or a token from the current input stream.
-  The variables in the object read are not added to the set
-  of global variables.
+	  Read a psi_term or a token from the current input stream.
+	  The variables in the object read are not added to the set
+	  of global variables.
 */
 
 static long long c_read(long long);
@@ -2086,7 +2086,7 @@ static long long c_read(long long psi_flag)
 
 
 /******** C_HALT
-  Exit the Wild_Life interpreter.
+	  Exit the Wild_Life interpreter.
 */
 long long c_halt()   /*  RM: Jan  8 1993  Used to be 'void' */ // REV401PLUS chg to long long
 {
@@ -2102,12 +2102,12 @@ void exit_life(long long nl_flag)
   open_input_file((char*)"stdin");   // CHAR * MSVC
   life_end = clock();
   if (NOTQUIET) { /* 21.1 */
-      if (nl_flag) printf("\n");
-      printf("*** Exiting Wild_Life  ");
-      printf("[%1.3lfs cpu, %1.3lfs gc (%2.1lf% %)]\n",
-	     ((REAL)(life_end - life_start) / (REAL)CLOCKS_PER_SEC),
-	     ((REAL)garbage_time),
-	     ((REAL)((garbage_time * 100.0) / (REAL)(life_end - life_start))));
+    if (nl_flag) printf("\n");
+    printf("*** Exiting Wild_Life  ");
+    printf("[%1.3lfs cpu, %1.3lfs gc (%2.1lf% %)]\n",
+	   ((REAL)(life_end - life_start) / (REAL)CLOCKS_PER_SEC),
+	   ((REAL)garbage_time),
+	   ((REAL)((garbage_time * 100.0) / (REAL)(life_end - life_start))));
 
   }
   exit(0);
@@ -2140,7 +2140,7 @@ void exit_life(long long nl_flag)
 
 
 /******** C_ABORT
-  Return to the top level of the interpreter.
+	  Return to the top level of the interpreter.
 */
 long long c_abort()   /*  RM: Feb 15 1993  */
 {
@@ -2178,8 +2178,8 @@ long long abort_life(int nlflag) /*  RM: Feb 15 1993  */
   }
 #ifndef REVBACK102
   // REV102back added next 2 lines to match Reference in 4.+ comment for 1.02
-    if(NOTQUIET) fprintf(stderr,"\n*** END Abort"); /*  RM: Feb 17 1993  */
-    //    if(NOTQUIET && nlflag) fprintf(stderr,"\n");/*  RM: Feb 17 1993  */
+  if(NOTQUIET) fprintf(stderr,"\n*** END Abort"); /*  RM: Feb 17 1993  */
+  //    if(NOTQUIET && nlflag) fprintf(stderr,"\n");/*  RM: Feb 17 1993  */
 #endif
   return TRUE;
 }
@@ -2187,7 +2187,7 @@ long long abort_life(int nlflag) /*  RM: Feb 15 1993  */
 
 
 /******** C_NOT_IMPLEMENTED
-  This function always fails, it is in fact identical to BOTTOM.
+	  This function always fails, it is in fact identical to BOTTOM.
 */
 static long long c_not_implemented()
 {
@@ -2202,7 +2202,7 @@ static long long c_not_implemented()
 
 
 /******** C_DECLARATION
-  This function always fails, it is in fact identical to BOTTOM.
+	  This function always fails, it is in fact identical to BOTTOM.
 */
 static long long c_declaration()
 {
@@ -2218,12 +2218,12 @@ static long long c_declaration()
 
 /******** C_SETQ
 
-  Create a function with one rule F -> X, where F and X are the
-  arguments of setq.  Setq evaluates its first argument and quotes the first.
-  away any previous definition of F.  F must be undefined or a function, there
-  is an error if F is a sort or a predicate.  This gives an error for a static
-  function, but none for an undefined (i.e. uninterpreted) psi-term, which is
-  made dynamic.  */
+	  Create a function with one rule F -> X, where F and X are the
+	  arguments of setq.  Setq evaluates its first argument and quotes the first.
+	  away any previous definition of F.  F must be undefined or a function, there
+	  is an error if F is a sort or a predicate.  This gives an error for a static
+	  function, but none for an undefined (i.e. uninterpreted) psi-term, which is
+	  made dynamic.  */
 
 
 static long long c_setq()
@@ -2254,7 +2254,7 @@ static long long c_setq()
           success=TRUE;
         }
         else
-         Errorline("%P may not have arguments in %P.\n",arg1,g);
+	  Errorline("%P may not have arguments in %P.\n",arg1,g);
       }
       else
         Errorline("%P should be dynamic in %P.\n",arg1,g);
@@ -2271,8 +2271,8 @@ static long long c_setq()
 
 
 /******** C_ASSERT_FIRST
-  Assert a fact, inserting it as the first clause
-  for that predicate or function.
+	  Assert a fact, inserting it as the first clause
+	  for that predicate or function.
 */
 static long long c_assert_first()
 {
@@ -2300,7 +2300,7 @@ static long long c_assert_first()
 
 
 /******** C_ASSERT_LAST
-  Assert a fact, inserting as the last clause for that predicate or function.
+	  Assert a fact, inserting as the last clause for that predicate or function.
 */
 static long long c_assert_last()
 {
@@ -2328,9 +2328,9 @@ static long long c_assert_last()
 
 
 /******** PRED_CLAUSE(t,r,g)
-  Set about finding a clause that unifies with psi_term T.
-  This routine is used both for CLAUSE and RETRACT.
-  If R==TRUE then delete the first clause which unifies with T.
+	  Set about finding a clause that unifies with psi_term T.
+	  This routine is used both for CLAUSE and RETRACT.
+	  If R==TRUE then delete the first clause which unifies with T.
 */
 long long pred_clause(ptr_psi_term t,long long r,ptr_psi_term g)
 // ptr_psi_term t, g;
@@ -2394,9 +2394,9 @@ long long pred_clause(ptr_psi_term t,long long r,ptr_psi_term g)
 
 
 /******** C_CLAUSE
-  Find the clauses that unify with the argument in the rules.
-  The argument must be a predicate or a function.
-  Use PRED_CLAUSE to perform the search.
+	  Find the clauses that unify with the argument in the rules.
+	  The argument must be a predicate or a function.
+	  Use PRED_CLAUSE to perform the search.
 */
 static long long c_clause()
 {
@@ -2412,8 +2412,8 @@ static long long c_clause()
 
 
 /******** C_RETRACT
-  Retract the first clause that unifies with the argument.
-  Use PRED_CLAUSE to perform the search.
+	  Retract the first clause that unifies with the argument.
+	  Use PRED_CLAUSE to perform the search.
 */
 static long long c_retract()
 {
@@ -2433,11 +2433,11 @@ void global_tree();
 void global_one();
 
 /******** C_GLOBAL
-  Declare that a symbol is a global variable.
-  Handle multiple arguments and initialization
-  (the initialization term is evaluated).
-  If there is an error anywhere in the declaration,
-  then evaluate and declare nothing.
+	  Declare that a symbol is a global variable.
+	  Handle multiple arguments and initialization
+	  (the initialization term is evaluated).
+	  If there is an error anywhere in the declaration,
+	  then evaluate and declare nothing.
 */
 static long long c_global()    /*  RM: Feb 10 1993  */
 {
@@ -2549,7 +2549,7 @@ void global_one(ptr_psi_term t)
 
 
 /******** C_PERSISTENT
-  Declare that a symbol is a persistent variable.
+	  Declare that a symbol is a persistent variable.
 */
 static long long c_persistent()     /*  RM: Feb 10 1993  */
 {
@@ -2584,8 +2584,8 @@ void persistent_error_check(ptr_node n, long long *error) //REV401PLUS add void
     deref_ptr(t);
     if (t->type->type_def!=(def_type)undef_it && t->type->type_def!=(def_type)global_it) {
       Errorline("%T %P cannot be redeclared persistent (%E).\n",
-	         t->type->type_def,
-	         t);
+		t->type->type_def,
+		t);
       t->type=error_psi_term->type;
       *error=TRUE;
     }
@@ -2624,7 +2624,7 @@ void persistent_one(ptr_psi_term t) // REV401PLUS add void
 
 
 /******** C_OPEN_IN
-  Create a stream for input from the specified file.
+	  Create a stream for input from the specified file.
 */
 static long long c_open_in()
 {
@@ -2668,7 +2668,7 @@ static long long c_open_in()
 
 
 /******** C_OPEN_OUT
-  Create a stream for output from the specified file.
+	  Create a stream for output from the specified file.
 */
 static long long c_open_out()
 {
@@ -2714,8 +2714,8 @@ static long long c_open_out()
 
 
 /******** C_SET_INPUT
-  Set the current input stream to a given stream.
-  If the given stream is closed, then do nothing.
+	  Set the current input stream to a given stream.
+	  If the given stream is closed, then do nothing.
 */
 static long long c_set_input()
 {
@@ -2750,7 +2750,7 @@ static long long c_set_input()
 
 
 /******** C_SET_OUTPUT
-  Set the current output stream.
+	  Set the current output stream.
 */
 static long long c_set_output()
 {
@@ -2777,7 +2777,7 @@ static long long c_set_output()
 }
 
 /******** C_CLOSE
-  Close a stream.
+	  Close a stream.
 */
 static long long c_close()
 {
@@ -2791,10 +2791,10 @@ static long long c_close()
   if (arg1) {
     deref(arg1);
     deref_args(g,set_1);
-/*
-    if (sub_type(arg1->type,sys_stream))
+    /*
+      if (sub_type(arg1->type,sys_stream))
       return sys_close(arg1);
-*/
+    */
     outclose=equal_types(arg1->type,stream) && arg1->value_3;
     inclose=FALSE;
     if (equal_types(arg1->type,inputfilesym)) {
@@ -2829,10 +2829,10 @@ static long long c_close()
  
 
 /******** C_GET
-  Read the next character from the current input stream and return
-  its Ascii code.  This includes blank characters, so this predicate
-  differs slightly from Edinburgh Prolog's get(X).
-  At end of file, return the psi-term 'end_of_file'.
+	  Read the next character from the current input stream and return
+	  its Ascii code.  This includes blank characters, so this predicate
+	  differs slightly from Edinburgh Prolog's get(X).
+	  At end of file, return the psi-term 'end_of_file'.
 */
 static long long c_get()
 {
@@ -2881,11 +2881,11 @@ static long long c_get()
 
 
 /******** C_PUT, C_PUT_ERR
-  Write the root of a psi-term to the current output stream or to stderr.
-  This routine accepts the string type (which is written without quotes),
-  a number type (whose integer part is considered an Ascii code if it is
-  in the range 0..255), and any other psi-term (in which case its name is
-  written).
+	  Write the root of a psi-term to the current output stream or to stderr.
+	  This routine accepts the string type (which is written without quotes),
+	  a number type (whose integer part is considered an Ascii code if it is
+	  in the range 0..255), and any other psi-term (in which case its name is
+	  written).
 */
 static long long c_put_main(long long); /* Forward declaration */
 
@@ -2938,7 +2938,7 @@ static long long c_put_main(long long to_stderr)
 
 
 /******** GENERIC_WRITE
-  Implements write, writeq, pretty_write, pretty_writeq.
+	  Implements write, writeq, pretty_write, pretty_writeq.
 */
 static long long generic_write()
 {
@@ -2953,8 +2953,8 @@ static long long generic_write()
 }
 
 /******** C_WRITE_ERR
-  Write a list of arguments to stderr.  Print cyclical terms
-  correctly, but don't use the pretty printer indentation.
+	  Write a list of arguments to stderr.  Print cyclical terms
+	  correctly, but don't use the pretty printer indentation.
 */
 static long long c_write_err()
 {
@@ -2968,9 +2968,9 @@ static long long c_write_err()
 }
 
 /******** C_WRITEQ_ERR
-  Write a list of arguments to stderr in a form that allows them to be
-  read in again.  Print cyclical terms correctly, but don't use the pretty
-  printer indentation.
+	  Write a list of arguments to stderr in a form that allows them to be
+	  read in again.  Print cyclical terms correctly, but don't use the pretty
+	  printer indentation.
 */
 static long long c_writeq_err()
 {
@@ -2984,8 +2984,8 @@ static long long c_writeq_err()
 }
 
 /******** C_WRITE
-  Write a list of arguments. Print cyclical terms
-  correctly, but don't use the pretty printer indentation.
+	  Write a list of arguments. Print cyclical terms
+	  correctly, but don't use the pretty printer indentation.
 */
 static long long c_write()
 {
@@ -2999,9 +2999,9 @@ static long long c_write()
 }
 
 /******** C_WRITEQ
-  Write a list of arguments in a form that allows them to be read in
-  again.  Print cyclical terms correctly, but don't use the pretty
-  printer indentation.
+	  Write a list of arguments in a form that allows them to be read in
+	  again.  Print cyclical terms correctly, but don't use the pretty
+	  printer indentation.
 */
 static long long c_writeq()
 {
@@ -3015,9 +3015,9 @@ static long long c_writeq()
 }
 
 /******** C_WRITE_CANONICAL
-  Write a list of arguments in a form that allows them to be read in
-  again.  Print cyclical terms correctly, but don't use the pretty
-  printer indentation.
+	  Write a list of arguments in a form that allows them to be read in
+	  again.  Print cyclical terms correctly, but don't use the pretty
+	  printer indentation.
 */
 static long long c_write_canonical()
 {
@@ -3031,7 +3031,7 @@ static long long c_write_canonical()
 }
 
 /******** C_PRETTY_WRITE
-  The same as write, only indenting if output is wider than PAGEWIDTH.
+	  The same as write, only indenting if output is wider than PAGEWIDTH.
 */
 static long long c_pwrite()
 {
@@ -3046,7 +3046,7 @@ static long long c_pwrite()
 
 
 /******** C_PRETTY_WRITEQ
-  The same as writeq, only indenting if output is wider than PAGEWIDTH.
+	  The same as writeq, only indenting if output is wider than PAGEWIDTH.
 */
 static long long c_pwriteq()
 {
@@ -3062,7 +3062,7 @@ static long long c_pwriteq()
 
 
 /******** C_PAGE_WIDTH
-  Set the page width.
+	  Set the page width.
 */
 static long long c_page_width()
 {
@@ -3100,7 +3100,7 @@ static long long c_page_width()
 
 
 /******** C_PRINT_DEPTH
-  Set the depth limit of printing.
+	  Set the depth limit of printing.
 */
 static long long c_print_depth()
 {
@@ -3141,8 +3141,8 @@ static long long c_print_depth()
 
 
 /******** C_ROOTSORT
-  Return the principal sort of the argument == create a copy with the
-  attributes detached.
+	  Return the principal sort of the argument == create a copy with the
+	  attributes detached.
 */
 static long long c_rootsort()
 {
@@ -3173,12 +3173,12 @@ static long long c_rootsort()
 
 
 /******** C_DISJ
-  This implements disjunctions (A;B).
-  A nonexistent A or B is taken to mean 'fail'.
-  Disjunctions should not be implemented in Life, because doing so results in
-  both A and B being evaluated before the disjunction is.
-  Disjunctions could be implemented in Life if there were a 'melt' predicate.
-  */
+	  This implements disjunctions (A;B).
+	  A nonexistent A or B is taken to mean 'fail'.
+	  Disjunctions should not be implemented in Life, because doing so results in
+	  both A and B being evaluated before the disjunction is.
+	  Disjunctions could be implemented in Life if there were a 'melt' predicate.
+*/
 static long long c_disj()
 {
   long long success=TRUE;
@@ -3203,10 +3203,10 @@ static long long c_disj()
 
 
 /******** C_COND
-  This implements COND(Condition,Then,Else).
-  First Condition is evaluated.  If it returns true, return the Then value.
-  If it returns false, return the Else value.  Either the Then or the Else
-  values may be omitted, in which case they are considered to be true.
+	  This implements COND(Condition,Then,Else).
+	  First Condition is evaluated.  If it returns true, return the Then value.
+	  If it returns false, return the Else value.  Either the Then or the Else
+	  values may be omitted, in which case they are considered to be true.
 */
 static long long c_cond()
 {
@@ -3277,12 +3277,12 @@ static long long c_cond()
 
 
 /******** C_EXIST_FEATURE
-  Here we evaluate "has_feature(Label,Psi-term,Value)". This
-  is a boolean function that returns true iff Psi-term
-  has the feature Label.
+	  Here we evaluate "has_feature(Label,Psi-term,Value)". This
+	  is a boolean function that returns true iff Psi-term
+	  has the feature Label.
 
-  Added optional 3rd argument which is unified with the feature value if it exists.
-  */
+	  Added optional 3rd argument which is unified with the feature value if it exists.
+*/
 
 static long long c_exist_feature()  /*  PVR: Dec 17 1992  */  /* PVR 11.4.94 */
 {
@@ -3300,7 +3300,7 @@ static long long c_exist_feature()  /*  PVR: Dec 17 1992  */  /* PVR 11.4.94 */
 
   
   n=find(FEATCMP,three,funct->attr_list); /*  RM: Feb 10 1993  */ // REV401PLUS - was too many args
- // was  n=find(FEATCMP,three,funct->attr_list,&arg3); /*  RM: Feb 10 1993  */
+  // was  n=find(FEATCMP,three,funct->attr_list,&arg3); /*  RM: Feb 10 1993  */
   if(n)
     arg3=(ptr_psi_term)n->data;
   else
@@ -3346,8 +3346,8 @@ static long long c_exist_feature()  /*  PVR: Dec 17 1992  */  /* PVR 11.4.94 */
 
 
 /******** C_FEATURES
-  Convert the feature names of a psi_term into a list of psi-terms.
-  This uses the MAKE_FEATURE_LIST routine.
+	  Convert the feature names of a psi_term into a list of psi-terms.
+	  This uses the MAKE_FEATURE_LIST routine.
 */
 static long long c_features()
 {
@@ -3356,7 +3356,7 @@ static long long c_features()
   ptr_psi_term the_list; /*  RM: Dec  9 1992
 			     Modified the routine to use 'cons'
 			     instead of the old list representation.
-			     */
+			 */
   /*  RM: Mar 11 1993  Added MODULE argument */
   ptr_module module=NULL;
   ptr_module save_current;
@@ -3403,8 +3403,8 @@ static long long c_features()
 
 
 /******** C_FEATURES
-  Return the list of values of the features of a term.
-  */
+	  Return the list of values of the features of a term.
+*/
 static long long c_feature_values()
 {
   long long success=TRUE;
@@ -3412,7 +3412,7 @@ static long long c_feature_values()
   ptr_psi_term the_list; /*  RM: Dec  9 1992
 			     Modified the routine to use 'cons'
 			     instead of the old list representation.
-			     */
+			 */
   /*  RM: Mar 11 1993  Added MODULE argument */
   ptr_module module=NULL;
   ptr_module save_current;
@@ -3461,10 +3461,10 @@ static long long c_feature_values()
 long long hidden_type(ptr_definition t)
 // ptr_definition t;
 {
-   return (/* (t==conjunction) || 19.8 */
-	   /* (t==disjunction) || RM: Dec  9 1992 */
-           (t==constant) || (t==variable) ||
-           (t==comment) || (t==functor));
+  return (/* (t==conjunction) || 19.8 */
+	  /* (t==disjunction) || RM: Dec  9 1992 */
+	  (t==constant) || (t==variable) ||
+	  (t==comment) || (t==functor));
 }
 
 
@@ -3566,8 +3566,8 @@ ptr_psi_term collect_symbols(long long sel) /*  RM: Feb  3 1993  */
 
 
 /******** C_OPS
-  Return a list of all operators (represented as 3-tuples op(prec,type,atom)).
-  This function has no arguments.
+	  Return a list of all operators (represented as 3-tuples op(prec,type,atom)).
+	  This function has no arguments.
 */
 static long long c_ops()
 {
@@ -3605,8 +3605,8 @@ static ptr_node copy_attr_list(ptr_node n)
 
 
 /******** C_STRIP
-  Return the attributes of a psi-term, that is, a psi-term of type @ but with
-  all the attributes of the argument.
+	  Return the attributes of a psi-term, that is, a psi-term of type @ but with
+	  all the attributes of the argument.
 */
 static long long c_strip()
 {
@@ -3634,7 +3634,7 @@ static long long c_strip()
 
 
 /******** C_SAME_ADDRESS
-  Return TRUE if two arguments share the same address.
+	  Return TRUE if two arguments share the same address.
 */
 static long long c_same_address()
 {
@@ -3676,7 +3676,7 @@ static long long c_same_address()
 
 
 /******** C_DIFF_ADDRESS
-  Return TRUE if two arguments have different addresses.
+	  Return TRUE if two arguments have different addresses.
 */
 static long long c_diff_address()
 {
@@ -3719,7 +3719,7 @@ static long long c_diff_address()
 
 
 /******** C_EVAL
-  Evaluate an expression and return its value.
+	  Evaluate an expression and return its value.
 */
 static long long c_eval()
 {
@@ -3750,7 +3750,7 @@ static long long c_eval()
 
 
 /******** C_EVAL_INPLACE
-  Evaluate an expression and return its value.
+	  Evaluate an expression and return its value.
 */
 static long long c_eval_inplace()
 {
@@ -3779,9 +3779,9 @@ static long long c_eval_inplace()
 
 
 /******** C_QUOTE
-  Quote an expression, i.e. do not evaluate it but mark it as completely
-  evaluated.
-  This works if the function is declared as non_strict.
+	  Quote an expression, i.e. do not evaluate it but mark it as completely
+	  evaluated.
+	  This works if the function is declared as non_strict.
 */
 static long long c_quote()
 {
@@ -3804,8 +3804,8 @@ static long long c_quote()
 
 
 /******** C_SPLIT_DOUBLE
-  Split a double into two 32-bit words.
-  */
+	  Split a double into two 32-bit words.
+*/
 
 static long long c_split_double()
 {
@@ -3865,8 +3865,8 @@ static long long c_split_double()
 
 
 /******** C_STRING_ADDRESS
-  Return the address of a string.
-  */
+	  Return the address of a string.
+*/
 
 static long long c_string_address()
 {
@@ -3885,29 +3885,29 @@ static long long c_string_address()
   if(arg1) {
     deref_ptr(arg1);
     deref_ptr(result);
-      success=matches(arg1->type,quoted_string,&smaller);
-      if (success) {
-	if (arg1->value_3) {
-	  unify_real_result(result,(REAL)(long long)(arg1->value_3));
-	}
-	else {
-	  if(success=get_real_value(result,&val,&num)) {
-	    if(num) {
-	      t=stack_psi_term(4);
-	      t->type=quoted_string;
-	      t->value_3=(GENERIC)(long long)val;
-	      push_goal(unify,t,arg1,NULL);
-	    }
-	    else
-	      residuate2(arg1,result);
-	  
+    success=matches(arg1->type,quoted_string,&smaller);
+    if (success) {
+      if (arg1->value_3) {
+	unify_real_result(result,(REAL)(long long)(arg1->value_3));
+      }
+      else {
+	if(success=get_real_value(result,&val,&num)) {
+	  if(num) {
+	    t=stack_psi_term(4);
+	    t->type=quoted_string;
+	    t->value_3=(GENERIC)(long long)val;
+	    push_goal(unify,t,arg1,NULL);
 	  }
 	  else
-	    Errorline("result is not a real in %P\n",funct);
+	    residuate2(arg1,result);
+	  
 	}
+	else
+	  Errorline("result is not a real in %P\n",funct);
       }
-      else
-	Errorline("argument is not a string in %P\n",funct);
+    }
+    else
+      Errorline("argument is not a string in %P\n",funct);
   }
   else
     curry();
@@ -3918,8 +3918,8 @@ static long long c_string_address()
 
 
 /******** C_CHDIR
-  Change the current working directory
-  */
+	  Change the current working directory
+*/
 
 static long long c_chdir()
 {
@@ -3937,12 +3937,12 @@ static long long c_chdir()
   if(arg1) {
     deref_ptr(arg1);
     if(matches(arg1->type,quoted_string,&smaller) && arg1->value_3)
-      #ifdef _WIN64
+#ifdef _WIN64
       success=!_chdir(expand_file_name((char *)arg1->value_3));
-    #endif
-      #ifdef __unix__
-      success=!chdir(expand_file_name((char *)arg1->value_3));
-    #endif
+#endif
+#ifdef __unix__
+    success=!chdir(expand_file_name((char *)arg1->value_3));
+#endif
     else
       Errorline("bad argument in %P\n",funct);
   }
@@ -3955,8 +3955,8 @@ static long long c_chdir()
 
 
 /******** C_CALL_ONCE
-  Prove a predicate, return true or false if it succeeds or fails.
-  An implicit cut is performed: only only solution is given.
+	  Prove a predicate, return true or false if it succeeds or fails.
+	  An implicit cut is performed: only only solution is given.
 */
 #if 0	/* DENYS Jan 25 1995 */
 static long long c_call_once()
@@ -4008,8 +4008,8 @@ static long long c_call_once()
 
 
 /******** C_CALL
-  Prove a predicate, return true or false if it succeeds or fails.
-  No implicit cut is performed.
+	  Prove a predicate, return true or false if it succeeds or fails.
+	  No implicit cut is performed.
 */
 static long long c_call()
 {
@@ -4058,7 +4058,7 @@ static long long c_call()
 
 
 /******** C_BK_ASSIGN()
-  This implements backtrackable assignment.
+	  This implements backtrackable assignment.
 */
 static long long c_bk_assign()
 {
@@ -4113,10 +4113,10 @@ static long long c_bk_assign()
 
 
 /******** C_ASSIGN()
-  This implements non-backtrackable assignment.
-  It doesn't work because backtrackable unifications can have been made before
-  this assignment was reached. It is complicated by the fact that the assigned
-  term has to be copied into the heap as it becomes a permanent object.
+	  This implements non-backtrackable assignment.
+	  It doesn't work because backtrackable unifications can have been made before
+	  this assignment was reached. It is complicated by the fact that the assigned
+	  term has to be copied into the heap as it becomes a permanent object.
 */
 static long long c_assign()
 {
@@ -4146,11 +4146,11 @@ static long long c_assign()
 
 
 /******** C_GLOBAL_ASSIGN()
-  This implements non-backtrackable assignment on global variables.
+	  This implements non-backtrackable assignment on global variables.
 
-  Closely modelled on 'c_assign', except that pointers to the heap are not
-  copied again onto the heap.
-  */
+	  Closely modelled on 'c_assign', except that pointers to the heap are not
+	  copied again onto the heap.
+*/
 
 static long long c_global_assign()
 {
@@ -4190,7 +4190,7 @@ static long long c_global_assign()
 
 
 /******** C_UNIFY_FUNC
-  An explicit unify function that curries on its two arguments.
+	  An explicit unify function that curries on its two arguments.
 */
 static long long c_unify_func()
 {
@@ -4218,7 +4218,7 @@ static long long c_unify_func()
 
 
 /******** C_UNIFY_PRED()
-  This unifies its two arguments (i.e. implements the predicate A=B).
+	  This unifies its two arguments (i.e. implements the predicate A=B).
 */
 static long long c_unify_pred()
 {
@@ -4243,9 +4243,9 @@ static long long c_unify_pred()
 
 
 /******** C_COPY_POINTER
-  Make a fresh copy of the input's sort, keeping exactly the same
-  arguments as before (i.e., copying the sort and feature table but not
-  the feature values).
+	  Make a fresh copy of the input's sort, keeping exactly the same
+	  arguments as before (i.e., copying the sort and feature table but not
+	  the feature values).
 */
 static long long c_copy_pointer()   /*  PVR: Dec 17 1992  */
 {
@@ -4274,8 +4274,8 @@ static long long c_copy_pointer()   /*  PVR: Dec 17 1992  */
 
 
 /******** C_COPY_TERM
-  Make a fresh copy of the input argument, keeping its structure
-  but with no connections to the input.
+	  Make a fresh copy of the input argument, keeping its structure
+	  but with no connections to the input.
 */
 static long long c_copy_term()
 {
@@ -4303,16 +4303,16 @@ static long long c_copy_term()
 
 
 /******** C_UNDO
-  This will prove a goal on backtracking.
-  This is a completely uninteresting implmentation which is equivalent to:
+	  This will prove a goal on backtracking.
+	  This is a completely uninteresting implmentation which is equivalent to:
 
-  undo.
-  undo(G) :- G.
+	  undo.
+	  undo(G) :- G.
 
-  The problem is that it can be affected by CUT.
-  A correct implementation would be very simple:
-  stack the pair (ADDRESS=NULL, VALUE=GOAL) onto the trail and when undoing
-  push the goal onto the goal-stack.
+	  The problem is that it can be affected by CUT.
+	  A correct implementation would be very simple:
+	  stack the pair (ADDRESS=NULL, VALUE=GOAL) onto the trail and when undoing
+	  push the goal onto the goal-stack.
 */
 static long long c_undo()
 {
@@ -4338,24 +4338,24 @@ static long long c_undo()
 
 
 /******** C_FREEZE_INNER
-  This implements the freeze and implies predicates.
-  For example:
+	  This implements the freeze and implies predicates.
+	  For example:
 
-    freeze(g)
+	  freeze(g)
 
-  The proof will use matching on the heads of g's definition rather than
-  unification to prove Goal.  An implicit cut is put at the beginning
-  of each clause body.  Body goals are executed in the same way as
-  without freeze.  Essentially, the predicate is called as if it were
-  a function.
+	  The proof will use matching on the heads of g's definition rather than
+	  unification to prove Goal.  An implicit cut is put at the beginning
+	  of each clause body.  Body goals are executed in the same way as
+	  without freeze.  Essentially, the predicate is called as if it were
+	  a function.
 
-    implies(g)
+	  implies(g)
 
-  The proof will use matching as for freeze, but there is no cut at the
-  beginning of the clause body & no residuation is done (the clause
-  fails if its head is not implied by the caller).  Essentially, the
-  predicate is called as before except that matching is used instead
-  of unification to decide whether to enter a clause.
+	  The proof will use matching as for freeze, but there is no cut at the
+	  beginning of the clause body & no residuation is done (the clause
+	  fails if its head is not implied by the caller).  Essentially, the
+	  predicate is called as before except that matching is used instead
+	  of unification to decide whether to enter a clause.
 */
 static long long c_freeze_inner(long long freeze_flag)
 // long long freeze_flag;
@@ -4461,7 +4461,7 @@ static long long c_freeze_inner(long long freeze_flag)
 
 
 /******** C_FREEZE()
-  See c_freeze_inner.
+	  See c_freeze_inner.
 */
 static long long c_freeze()
 {
@@ -4470,7 +4470,7 @@ static long long c_freeze()
 
 
 /******** C_IMPLIES()
-  See c_freeze_inner.
+	  See c_freeze_inner.
 */
 static long long c_implies()
 {
@@ -4481,7 +4481,7 @@ static long long c_implies()
 /*  RM: May  6 1993  Changed C_CHAR to return a string */
 
 /******** C_CHAR
-  Create a 1 character string from an ASCII code.
+	  Create a 1 character string from an ASCII code.
 */
 static long long c_char()
 
@@ -4534,8 +4534,8 @@ static long long c_char()
 
 
 /******** C_ASCII
-  Return the Ascii code of the first character of a string or of a
-  psi-term's name.
+	  Return the Ascii code of the first character of a string or of a
+	  psi-term's name.
 */
 static long long c_ascii()
 {
@@ -4552,31 +4552,31 @@ static long long c_ascii()
 
   /* success=get_real_value(result,&val1,&num1); */
   /* if (success) { */
-    get_two_args(funct->attr_list,&arg1,&arg2);
-    if (arg1) {
-      deref(arg1);
-      deref_args(funct,set_1);
-      success=matches(arg1->type,quoted_string,&smaller);
-      if (success) {
-	if (arg1->value_3) {
-	  unify_real_result(result,(REAL)(*((unsigned char *)arg1->value_3)));
-	}
-	else
-	  residuate(arg1);
+  get_two_args(funct->attr_list,&arg1,&arg2);
+  if (arg1) {
+    deref(arg1);
+    deref_args(funct,set_1);
+    success=matches(arg1->type,quoted_string,&smaller);
+    if (success) {
+      if (arg1->value_3) {
+	unify_real_result(result,(REAL)(*((unsigned char *)arg1->value_3)));
       }
-      else {/*  RM: Feb 18 1994  */
-	success=FALSE;
-	Errorline("String argument expected in '%P'\n",funct);
-      }
-      /*
-      else {
-        success=TRUE;
-        unify_real_result(result,(REAL)(*((unsigned char *)arg1->type->keyword->symbol)));
-	}
-	*/
+      else
+	residuate(arg1);
     }
-    else
-      curry();
+    else {/*  RM: Feb 18 1994  */
+      success=FALSE;
+      Errorline("String argument expected in '%P'\n",funct);
+    }
+    /*
+      else {
+      success=TRUE;
+      unify_real_result(result,(REAL)(*((unsigned char *)arg1->type->keyword->symbol)));
+      }
+    */
+  }
+  else
+    curry();
   /* } */
   
   return success;
@@ -4585,7 +4585,7 @@ static long long c_ascii()
 
 
 /******** C_STRING2PSI(P)
-  Convert a string to a psi-term whose name is the string's value.
+	  Convert a string to a psi-term whose name is the string's value.
 */
 static long long c_string2psi()
 {
@@ -4651,7 +4651,7 @@ static long long c_string2psi()
 
 
 /******** C_PSI2STRING(P)
-  Convert a psi-term's name into a string with the name as value.
+	  Convert a psi-term's name into a string with the name as value.
 */
 static long long c_psi2string()
 {
@@ -4694,7 +4694,7 @@ static long long c_psi2string()
 
 
 /******** C_INT2STRING(P)
-  Convert an integer psi-term into a string representing its value.
+	  Convert an integer psi-term into a string representing its value.
 */
 static long long c_int2string()
 {
@@ -4755,12 +4755,12 @@ static long long c_int2string()
 
 
 /******** C_SUCH_THAT
-  This implements 'Value | Goal'.
-  First it unifies Value with the result, then it proves Goal.
+	  This implements 'Value | Goal'.
+	  First it unifies Value with the result, then it proves Goal.
 
-  This routine is different than the straight-forward implementation in Life
-  which would have been: "V|G => cond(G,V,{})" because
-  V is evaluated and unified before G is proved.
+	  This routine is different than the straight-forward implementation in Life
+	  which would have been: "V|G => cond(G,V,{})" because
+	  V is evaluated and unified before G is proved.
 */
 static long long c_such_that()
 {
@@ -4791,15 +4791,15 @@ static long long c_such_that()
 /* Return an attr_list with one argument */
 ptr_node one_attr()
 {
-   ptr_node n;
+  ptr_node n;
 
-   n = STACK_ALLOC(node);
-   n->key = one;
-   n->data = NULL; /* To be filled in later */
-   n->left = NULL;
-   n->right = NULL;
+  n = STACK_ALLOC(node);
+  n->key = one;
+  n->data = NULL; /* To be filled in later */
+  n->left = NULL;
+  n->right = NULL;
 
-   return n;
+  return n;
 }
 
 
@@ -4810,30 +4810,30 @@ ptr_psi_term new_psi_term(long long numargs, ptr_definition typ,
 // ptr_definition typ;
 // ptr_psi_term **a1, **a2;
 {
-   ptr_psi_term t;
-   ptr_node n1, n2;
+  ptr_psi_term t;
+  ptr_node n1, n2;
 
-   if (numargs==2) {
-     n2 = STACK_ALLOC(node);
-     n2->key = two;
-     *a2 = (ptr_psi_term *) &(n2->data);
-     n2->left = NULL;
-     n2->right = NULL;
-   }
-   else
-     n2=NULL;
+  if (numargs==2) {
+    n2 = STACK_ALLOC(node);
+    n2->key = two;
+    *a2 = (ptr_psi_term *) &(n2->data);
+    n2->left = NULL;
+    n2->right = NULL;
+  }
+  else
+    n2=NULL;
 
-   n1 = STACK_ALLOC(node);
-   n1->key = one;
-   *a1 = (ptr_psi_term *) &(n1->data);
-   n1->left = NULL;
-   n1->right = n2;
+  n1 = STACK_ALLOC(node);
+  n1->key = one;
+  *a1 = (ptr_psi_term *) &(n1->data);
+  n1->left = NULL;
+  n1->right = n2;
 
-   t=stack_psi_term(4);
-   t->type = typ;
-   t->attr_list = n1;
+  t=stack_psi_term(4);
+  t->type = typ;
+  t->attr_list = n1;
 
-   return t;
+  return t;
 }
 
 
@@ -4897,8 +4897,8 @@ void list_special(ptr_psi_term t) // REV401PLUS add void
 
 
 /******** C_LISTING
-  List the definition of a predicate or a function, and the own constraints
-  of a type (i.e. the non-inherited constraints).
+	  List the definition of a predicate or a function, and the own constraints
+	  of a type (i.e. the non-inherited constraints).
 */
 static long long c_listing()
 {
@@ -5009,7 +5009,7 @@ static long long c_listing()
 
 
 /******** C_print_codes
-  Print the codes of all the sorts.
+	  Print the codes of all the sorts.
 */
 static long long c_print_codes()
 {
@@ -5029,7 +5029,7 @@ static long long c_print_codes()
 
 
 /******** C_PRED
-  Template for C built-in predicates.
+	  Template for C built-in predicates.
 */
 static long long c_pred()
 {
@@ -5053,7 +5053,7 @@ static long long c_pred()
 
 
 /******** C_FUNCT
-  Template for C built-in functions.
+	  Template for C built-in functions.
 */
 static long long c_funct()
 {
@@ -5082,18 +5082,18 @@ static long long c_funct()
   Here are the routines which allow a new built_in type, predicate or function
   to be declared.
   
-  ****************************************************************************/
+****************************************************************************/
 
 
 
 /******** NEW_BUILT_IN(m,s,t,r)
-  Add a new built-in predicate or function.
-  Used also in x_pred.c
+	  Add a new built-in predicate or function.
+	  Used also in x_pred.c
 
-  M=module.
-  S=string.
-  T=type (function or predicate).
-  R=address of C routine to call.
+	  M=module.
+	  S=string.
+	  T=type (function or predicate).
+	  R=address of C routine to call.
 */
 void new_built_in(ptr_module m,char *s,def_type t,long long (*r)())
 //     ptr_module m;
@@ -5121,8 +5121,8 @@ void new_built_in(ptr_module m,char *s,def_type t,long long (*r)())
 
 
 /******** OP_DECLARE(p,t,s)
-  Declare that string S is an operator of precedence P and of type T where
-  T=xf, fx, yf, fy, xfx etc...
+	  Declare that string S is an operator of precedence P and of type T where
+	  T=xf, fx, yf, fy, xfx etc...
 */
 static void op_declare(long long p,wl_operator t,char *s)
 // long long p;
@@ -5151,10 +5151,10 @@ static void op_declare(long long p,wl_operator t,char *s)
 
 
 /******** DECLARE_OPERATOR(t)
-  Declare a new operator or change a pre-existing one.
+	  Declare a new operator or change a pre-existing one.
 
-  For example: '*op*'(3,xfx,+)?
-  T is the OP declaration.
+	  For example: '*op*'(3,xfx,+)?
+	  T is the OP declaration.
 */
 long long declare_operator(ptr_psi_term t)
 // ptr_psi_term t;
@@ -5272,11 +5272,11 @@ long long append_files(char *s1,char *s2)
     }
     else
       Errorline("couldn't open \"%s\"\n",f2);
-      /* printf("*** Error: couldn't open \"%s\"\n",f2); PVR 14.9.93 */
-   }
+    /* printf("*** Error: couldn't open \"%s\"\n",f2); PVR 14.9.93 */
+  }
   else
     Errorline("couldn't open \"%s\"\n",f1);
-    /* printf("*** Error: couldn't open \"%s\"\n",f1); PVR 14.9.93 */
+  /* printf("*** Error: couldn't open \"%s\"\n",f1); PVR 14.9.93 */
 
   return result;
 }
@@ -5285,7 +5285,7 @@ long long append_files(char *s1,char *s2)
 
 
 /******** C_CONCATENATE
-  Concatenate the strings in arguments 1 and 2.
+	  Concatenate the strings in arguments 1 and 2.
 */
 long long c_concatenate()
 {
@@ -5318,15 +5318,15 @@ long long c_concatenate()
 
   if (success) {
     if (n1) {
-       if (overlap_type(arg1->type,quoted_string)) /* 10.8 */
-          if (arg1->value_3)
-              c_arg1= (char *)arg1->value_3;
-          else {
-            residuate(arg1);
-            all_args=FALSE;
-          }
-       else
-         success=FALSE;
+      if (overlap_type(arg1->type,quoted_string)) /* 10.8 */
+	if (arg1->value_3)
+	  c_arg1= (char *)arg1->value_3;
+	else {
+	  residuate(arg1);
+	  all_args=FALSE;
+	}
+      else
+	success=FALSE;
     }
     else {
       all_args=FALSE;
@@ -5336,15 +5336,15 @@ long long c_concatenate()
 
   if (success) {
     if (n2) {
-       if (overlap_type(arg2->type,quoted_string)) /* 10.8 */
-          if (arg2->value_3)
-              c_arg2= (char *)arg2->value_3;
-          else {
-            residuate(arg2);
-            all_args=FALSE;
-          }
-       else
-         success=FALSE;
+      if (overlap_type(arg2->type,quoted_string)) /* 10.8 */
+	if (arg2->value_3)
+	  c_arg2= (char *)arg2->value_3;
+	else {
+	  residuate(arg2);
+	  all_args=FALSE;
+	}
+      else
+	success=FALSE;
     }
     else {
       all_args=FALSE;
@@ -5353,11 +5353,11 @@ long long c_concatenate()
   }
 
   if(success && all_args) {
-      c_result=str_conc( c_arg1, c_arg2 );
-      temp_result=stack_psi_term(0);
-      temp_result->type=quoted_string;
-      temp_result->value_3=(GENERIC) c_result;
-      push_goal(unify,temp_result,result,NULL);
+    c_result=str_conc( c_arg1, c_arg2 );
+    temp_result=stack_psi_term(0);
+    temp_result->type=quoted_string;
+    temp_result->value_3=(GENERIC) c_result;
+    push_goal(unify,temp_result,result,NULL);
   }
 
   return success;
@@ -5366,8 +5366,8 @@ long long c_concatenate()
 
 
 /******** C_MODULE_NAME
-  Return the module in which a term resides.
-  */
+	  Return the module in which a term resides.
+*/
 static long long c_module_name()
 {
   long long success=TRUE;
@@ -5397,8 +5397,8 @@ static long long c_module_name()
 
 
 /******** C_COMBINED_NAME
-  Return the string module#name for a term.
-  */
+	  Return the string module#name for a term.
+*/
 static long long c_combined_name()
 {
   long long success=TRUE;
@@ -5429,8 +5429,8 @@ static long long c_combined_name()
 
 
 /******** C_STRING_LENGTH
-  Return the length of the string in argument 1.
-  */
+	  Return the length of the string in argument 1.
+*/
 long long c_string_length()
 {
   ptr_psi_term result,funct;
@@ -5455,15 +5455,15 @@ long long c_string_length()
 
   if (success) {
     if (n1) {
-       if (overlap_type(arg1->type,quoted_string)) /* 10.8 */
-          if (arg1->value_3)
-              c_arg1= (char *)arg1->value_3;
-          else {
-            residuate(arg1);
-            all_args=FALSE;
-          }
-       else
-         success=FALSE;
+      if (overlap_type(arg1->type,quoted_string)) /* 10.8 */
+	if (arg1->value_3)
+	  c_arg1= (char *)arg1->value_3;
+	else {
+	  residuate(arg1);
+	  all_args=FALSE;
+	}
+      else
+	success=FALSE;
     }
     else {
       all_args=FALSE;
@@ -5472,19 +5472,19 @@ long long c_string_length()
   };
 
   if (success && all_args) {
-      c_result=strlen(c_arg1);
-      push_goal(unify,real_stack_psi_term(0,(REAL)c_result),result,NULL);
+    c_result=strlen(c_arg1);
+    push_goal(unify,real_stack_psi_term(0,(REAL)c_result),result,NULL);
   };
 
-return success;
+  return success;
 }
 
 
 
 
 /******** C_SUB_STRING
-  Return the substring of argument 1 from position argument 2 for a
-  length of argument 3 characters.
+	  Return the substring of argument 1 from position argument 2 for a
+	  length of argument 3 characters.
 */
 long long c_sub_string()
 {
@@ -5524,15 +5524,15 @@ long long c_sub_string()
 
   if (success) {
     if (n1) {
-       if (overlap_type(arg1->type,quoted_string)) /* 10.8 */
-          if (arg1->value_3)
-              c_arg1= (char *)arg1->value_3;
-          else {
-            residuate(arg1);
-            all_args=FALSE;
-          }
-       else
-         success=FALSE;
+      if (overlap_type(arg1->type,quoted_string)) /* 10.8 */
+	if (arg1->value_3)
+	  c_arg1= (char *)arg1->value_3;
+	else {
+	  residuate(arg1);
+	  all_args=FALSE;
+	}
+      else
+	success=FALSE;
     }
     else {
       all_args=FALSE;
@@ -5542,15 +5542,15 @@ long long c_sub_string()
 
   if (success) {
     if (n2) {
-       if (overlap_type(arg2->type,integer)) /* 10.8 */
-          if (arg2->value_3)
-              c_arg2= (long long)(* (double *)(arg2->value_3));
-          else {
-            residuate(arg2);
-            all_args=FALSE;
-          }
-       else
-         success=FALSE;
+      if (overlap_type(arg2->type,integer)) /* 10.8 */
+	if (arg2->value_3)
+	  c_arg2= (long long)(* (double *)(arg2->value_3));
+	else {
+	  residuate(arg2);
+	  all_args=FALSE;
+	}
+      else
+	success=FALSE;
     }
     else {
       all_args=FALSE;
@@ -5560,15 +5560,15 @@ long long c_sub_string()
 
   if (success) {
     if (n3) {
-       if (overlap_type(arg3->type,integer)) /* 10.8 */
-          if (arg3->value_3)
-              c_arg3= (long long)(* (double *)(arg3->value_3));
-          else {
-            residuate(arg3);
-            all_args=FALSE;
-          }
-       else
-         success=FALSE;
+      if (overlap_type(arg3->type,integer)) /* 10.8 */
+	if (arg3->value_3)
+	  c_arg3= (long long)(* (double *)(arg3->value_3));
+	else {
+	  residuate(arg3);
+	  all_args=FALSE;
+	}
+      else
+	success=FALSE;
     }
     else {
       all_args=FALSE;
@@ -5577,22 +5577,22 @@ long long c_sub_string()
   };
 
   if (success && all_args) {
-      c_result=sub_str(c_arg1,c_arg2,c_arg3);
-      temp_result=stack_psi_term(0);
-      temp_result->type=quoted_string;
-      temp_result->value_3=(GENERIC) c_result;
-      push_goal(unify,temp_result,result,NULL);
+    c_result=sub_str(c_arg1,c_arg2,c_arg3);
+    temp_result=stack_psi_term(0);
+    temp_result->type=quoted_string;
+    temp_result->value_3=(GENERIC) c_result;
+    push_goal(unify,temp_result,result,NULL);
   };
 
-return success;
+  return success;
 }
 
 
 
 
 /******** C_APPEND_FILE
-  Append the file named by argument 2 to the file named by argument 1.
-  This predicate will not residuate; it requires string arguments.
+	  Append the file named by argument 2 to the file named by argument 1.
+	  This predicate will not residuate; it requires string arguments.
 */
 long long c_append_file()
 {
@@ -5622,15 +5622,15 @@ long long c_append_file()
 
   if (success) {
     if (n1) {
-       if (overlap_type(arg1->type,quoted_string))
-          if (arg1->value_3)
-              c_arg1= (char *)arg1->value_3;
-          else {
-            success=FALSE;
-            Errorline("bad argument in %P.\n",g);
-          }
-       else
-         success=FALSE;
+      if (overlap_type(arg1->type,quoted_string))
+	if (arg1->value_3)
+	  c_arg1= (char *)arg1->value_3;
+	else {
+	  success=FALSE;
+	  Errorline("bad argument in %P.\n",g);
+	}
+      else
+	success=FALSE;
     }
     else {
       success=FALSE;
@@ -5640,15 +5640,15 @@ long long c_append_file()
 
   if (success) {
     if (n2) {
-       if (overlap_type(arg2->type,quoted_string))
-          if (arg2->value_3)
-              c_arg2= (char *)arg2->value_3;
-          else {
-            success=FALSE;
-            Errorline("bad argument in %P.\n",g);
-          }
-       else
-         success=FALSE;
+      if (overlap_type(arg2->type,quoted_string))
+	if (arg2->value_3)
+	  c_arg2= (char *)arg2->value_3;
+	else {
+	  success=FALSE;
+	  Errorline("bad argument in %P.\n",g);
+	}
+      else
+	success=FALSE;
     }
     else {
       success=FALSE;
@@ -5659,14 +5659,14 @@ long long c_append_file()
   if (success)
     success=append_files(c_arg1,c_arg2);
 
-return success;
+  return success;
 }
 
 
 
 /******** C_RANDOM
-  Return an integer random number between 0 and abs(argument1).
-  Uses the Unix random() function (rand_r(&seed) for Solaris).
+	  Return an integer random number between 0 and abs(argument1).
+	  Uses the Unix random() function (rand_r(&seed) for Solaris).
 */
 long long c_random()
 {
@@ -5692,15 +5692,15 @@ long long c_random()
 
   if (success) {
     if (n1) {
-       if (overlap_type(arg1->type,integer))
-          if (arg1->value_3)
-              c_arg1= (long long)(* (double *)(arg1->value_3));
-          else {
-            residuate(arg1);
-            all_args=FALSE;
-          }
-       else
-         success=FALSE;
+      if (overlap_type(arg1->type,integer))
+	if (arg1->value_3)
+	  c_arg1= (long long)(* (double *)(arg1->value_3));
+	else {
+	  residuate(arg1);
+	  all_args=FALSE;
+	}
+      else
+	success=FALSE;
     }
     else {
       all_args=FALSE;
@@ -5709,21 +5709,21 @@ long long c_random()
   }
 
   if (success && all_args) {
-      if (c_arg1) {
+    if (c_arg1) {
 #ifdef __unix__
-        c_result=random();
+      c_result=random();
 #endif
 #ifdef _WIN64
-        c_result=rand();
+      c_result=rand();
 #endif
 
 	
-        c_result=c_result-(c_result/c_arg1)*c_arg1;
-      }
-      else
-        c_result=0;
+      c_result=c_result-(c_result/c_arg1)*c_arg1;
+    }
+    else
+      c_result=0;
 
-      push_goal(unify,real_stack_psi_term(0,(REAL)c_result),result,NULL);
+    push_goal(unify,real_stack_psi_term(0,(REAL)c_result),result,NULL);
   }
 
   return success;
@@ -5732,8 +5732,8 @@ long long c_random()
 
 
 /******** C_INITRANDOM
-  Uses its integer argument to initialize
-  the random number generator, which is the Unix random() function.
+	  Uses its integer argument to initialize
+	  the random number generator, which is the Unix random() function.
 */
 
 
@@ -5760,15 +5760,15 @@ long long c_initrandom()
 
   if (success) {
     if (n1) {
-       if (overlap_type(arg1->type,integer))
-          if (arg1->value_3)
-              c_arg1= (long long)(* (double *)(arg1->value_3));
-          else {
-            residuate(arg1);
-            all_args=FALSE;
-          }
-       else
-         success=FALSE;
+      if (overlap_type(arg1->type,integer))
+	if (arg1->value_3)
+	  c_arg1= (long long)(* (double *)(arg1->value_3));
+	else {
+	  residuate(arg1);
+	  all_args=FALSE;
+	}
+      else
+	success=FALSE;
     }
     else {
       all_args=FALSE;
@@ -5788,8 +5788,8 @@ long long c_initrandom()
 
 
 /******** C_DEREF_LENGTH
-  Return the length of the dereference chain for argument 1.
-  */
+	  Return the length of the dereference chain for argument 1.
+*/
 /*  RM: Jul 15 1993  */
 long long c_deref_length()
 {
@@ -5822,8 +5822,8 @@ long long c_deref_length()
 
 
 /******** C_ARGS
-  Return the Unix "ARGV" array as a list of strings.
-  */
+	  Return the Unix "ARGV" array as a list of strings.
+*/
 /*  RM: Sep 20 1993  */
 long long c_args()
 {
@@ -5846,12 +5846,12 @@ long long c_args()
 }
 
 /******** INIT_BUILT_IN_TYPES
-  Initialise the symbol tree with the built-in types.
-  Declare all built-in predicates and functions.
-  Initialise system type variables.
-  Declare all standard operators.
+	  Initialise the symbol tree with the built-in types.
+	  Declare all built-in predicates and functions.
+	  Initialise system type variables.
+	  Declare all standard operators.
 
-  Called by life.c
+	  Called by life.c
 */
 void init_built_in_types()
 {

@@ -1,6 +1,6 @@
 /* Copyright 1991 Digital Equipment Corporation.
- ** All Rights Reserved.
- *****************************************************************/
+** All Rights Reserved.
+*****************************************************************/
 /* 	$Id: login.c,v 1.4 1995/01/14 00:25:33 duchier Exp $	 */
 
 #ifndef lint
@@ -30,15 +30,15 @@ static char vcid[] = "$Id: login.c,v 1.4 1995/01/14 00:25:33 duchier Exp $";
   What follows are the functions which assert facts in their correct places:
   function definitions, rule definitions or type definitions.
   
-  ****************************************************************************/
+****************************************************************************/
 
 
 
 /******** GET_TWO_ARGS(attr_list,arg1,arg2)
-  Get the arguments labelled '1' and '2' as quickly as possible from the
-  binary tree ATTR_LIST, place them in ARG1 and ARG2. This routine nearly
-  always makes a direct hit.
-  */
+	  Get the arguments labelled '1' and '2' as quickly as possible from the
+	  binary tree ATTR_LIST, place them in ARG1 and ARG2. This routine nearly
+	  always makes a direct hit.
+*/
 void get_two_args(ptr_node t,ptr_psi_term *a,ptr_psi_term *b)
 //     ptr_node t;
 //     ptr_psi_term *a;
@@ -85,10 +85,10 @@ void get_two_args(ptr_node t,ptr_psi_term *a,ptr_psi_term *b)
 
 
 /******** GET_ONE_ARG(attr_list,arg1)
-  Get the argument labelled '1' as quickly as possible from the
-  binary tree ATTR_LIST, place it in ARG1. This routine nearly
-  always makes a direct hit.
-  */
+	  Get the argument labelled '1' as quickly as possible from the
+	  binary tree ATTR_LIST, place it in ARG1. This routine nearly
+	  always makes a direct hit.
+*/
 void get_one_arg(ptr_node t,ptr_psi_term *a)
 //     ptr_node t;
 //     ptr_psi_term *a;
@@ -114,10 +114,10 @@ void get_one_arg(ptr_node t,ptr_psi_term *a)
 
 
 /******** GET_ONE_ARG_ADDR(attr_list,arg1addr)
-  Get address of slot in the attr_list that points to the argument labelled
-  '1' as quickly as possible from the binary tree ATTR_LIST.
-  This routine nearly always makes a direct hit.
-  */
+	  Get address of slot in the attr_list that points to the argument labelled
+	  '1' as quickly as possible from the binary tree ATTR_LIST.
+	  This routine nearly always makes a direct hit.
+*/
 void get_one_arg_addr(ptr_node t,ptr_psi_term **a)
 //     ptr_node t;
 //     ptr_psi_term **a;
@@ -143,14 +143,14 @@ void get_one_arg_addr(ptr_node t,ptr_psi_term **a)
 
 
 /******** ADD_RULE(head,body,typ)
-  The TYP argument is either 'predicate', 'function', or 'type'.
-  For predicates or functions, insert the clause 'HEAD :- BODY' or the rule
-  'HEAD -> BODY' into the definition of HEAD.
-  For types, insert HEAD as a term of type attributes and BODY as a type
-  constraint.
-  The global flag ASSERT_FIRST indicates whether to do the insertion at the
-  head or the tail of the existing list.
-  */
+	  The TYP argument is either 'predicate', 'function', or 'type'.
+	  For predicates or functions, insert the clause 'HEAD :- BODY' or the rule
+	  'HEAD -> BODY' into the definition of HEAD.
+	  For types, insert HEAD as a term of type attributes and BODY as a type
+	  constraint.
+	  The global flag ASSERT_FIRST indicates whether to do the insertion at the
+	  head or the tail of the existing list.
+*/
 void add_rule(ptr_psi_term head,ptr_psi_term body,def_type typ)
 //     ptr_psi_term head;
 //     ptr_psi_term body;
@@ -235,11 +235,11 @@ void add_rule(ptr_psi_term head,ptr_psi_term body,def_type typ)
 
 
 /******** ASSERT_RULE(t,typ)
-  Add a rule to the rule tree.
-  It may be either a predicate or a function.
-  The psi_term T is of the form 'H :- B' or 'H -> B', but it may be incorrect
-  (report errors). TYP is the type, function or predicate.
-  */
+	  Add a rule to the rule tree.
+	  It may be either a predicate or a function.
+	  The psi_term T is of the form 'H :- B' or 'H -> B', but it may be incorrect
+	  (report errors). TYP is the type, function or predicate.
+*/
 void assert_rule(psi_term t,def_type typ)
 //     psi_term t;
 //     def_type typ;
@@ -262,13 +262,13 @@ void assert_rule(psi_term t,def_type typ)
 
 
 /******** ASSERT_CLAUSE(t)
-  Assert the clause T.
-  Cope with various syntaxes for predicates.
+	  Assert the clause T.
+	  Cope with various syntaxes for predicates.
   
-  ASSERT_FIRST is a flag indicating the position:
-  1= insert before existing rules (asserta),
-  0= insert after existing rules (assert),
-  */
+	  ASSERT_FIRST is a flag indicating the position:
+	  1= insert before existing rules (asserta),
+	  0= insert after existing rules (assert),
+*/
 
 void assert_clause(ptr_psi_term t)
 //     ptr_psi_term t;
@@ -296,7 +296,7 @@ void assert_clause(ptr_psi_term t)
       Errorline("arguments missing in %P.\n",t);
       }
       else
-      */
+  */
   
   if (equ_tok((*t),":-"))
     assert_rule((*t),(def_type)predicate_it);
@@ -317,7 +317,7 @@ void assert_clause(ptr_psi_term t)
 	     declare T as global. To do... maybe.
 	     }
 	     else
-	     */
+	  */
 	  
 	  if (equ_tok((*t),"<|") || equ_tok((*t),":="))
 	    assert_complicated_type(t);
@@ -330,12 +330,12 @@ void assert_clause(ptr_psi_term t)
 
 
 /******** START_CHRONO()
-  This initialises the CPU time counter.
-  */
+	  This initialises the CPU time counter.
+*/
 
 void start_chrono()
 {
- #ifdef __unix__
+#ifdef __unix__
   times(&start_time);
 #endif
 #ifdef _WIN64
@@ -359,15 +359,15 @@ void start_chrono()
   Prove then passes that on the goal stack to MAIN_PROVE() which does
   the real work, involving calls to UNIFY_AIM, PROVE_AIM and backtracking.
   
-  ****************************************************************************/
+****************************************************************************/
 
 
 
 /******* PUSH_PTR_VALUE(p)
-  Push the pair (P,*P) onto the stack of things to be undone (trail).
-  It needn't be done if P is greater than the latest choice point because in
-  that case memory is reclaimed.
-  */
+	 Push the pair (P,*P) onto the stack of things to be undone (trail).
+	 It needn't be done if P is greater than the latest choice point because in
+	 that case memory is reclaimed.
+*/
 void push_ptr_value(type_ptr t,GENERIC *p)
 //     type_ptr t;
 //     GENERIC *p;
@@ -390,13 +390,13 @@ void push_ptr_value(type_ptr t,GENERIC *p)
 
 
 /******** PUSH_DEF_PTR_VALUE(q,p) (9.6)
-  Same as push_ptr_value, but only for psi-terms whose definition field is
-  being modified.  (If another field is modified, use push_ptr_value.)
-  This routine implements the time-stamp technique of only trailing
-  once between choice point creations, even on multiple bindings.
-  q is address of psi-term, p is address of field inside psi-term
-  that is modified.  Both the definition and the time_stamp must be trailed.
-  */
+	  Same as push_ptr_value, but only for psi-terms whose definition field is
+	  being modified.  (If another field is modified, use push_ptr_value.)
+	  This routine implements the time-stamp technique of only trailing
+	  once between choice point creations, even on multiple bindings.
+	  q is address of psi-term, p is address of field inside psi-term
+	  that is modified.  Both the definition and the time_stamp must be trailed.
+*/
 void push_def_ptr_value(ptr_psi_term q,GENERIC *p)
 //     ptr_psi_term q;
 //     GENERIC *p;
@@ -444,13 +444,13 @@ void push_def_ptr_value(ptr_psi_term q,GENERIC *p)
 
 
 /******** PUSH_PSI_PTR_VALUE(q,p) (9.6)
-  Same as push_ptr_value, but only for psi-terms whose coref field is being
-  modified.  (If another field is modified, use push_ptr_value.)
-  This routine implements the time-stamp technique of only trailing
-  once between choice point creations, even on multiple bindings.
-  q is address of psi-term, p is address of field inside psi-term
-  that is modified.  Both the coref and the time_stamp must be trailed.
-  */
+	  Same as push_ptr_value, but only for psi-terms whose coref field is being
+	  modified.  (If another field is modified, use push_ptr_value.)
+	  This routine implements the time-stamp technique of only trailing
+	  once between choice point creations, even on multiple bindings.
+	  q is address of psi-term, p is address of field inside psi-term
+	  that is modified.  Both the coref and the time_stamp must be trailed.
+*/
 void push_psi_ptr_value(ptr_psi_term q,GENERIC *p)
 //     ptr_psi_term q;
 //     GENERIC *p;
@@ -514,10 +514,10 @@ void push_ptr_value_global(type_ptr t,GENERIC *p)
 
 
 /******* PUSH_WINDOW(type,disp,wind)
-  Push the window information (operation, display and window identifiers) on
-  the undo_stack (trail) so that the window can be destroyed, redrawn, or
-  hidden on backtracking.
-  */
+	 Push the window information (operation, display and window identifiers) on
+	 the undo_stack (trail) so that the window can be destroyed, redrawn, or
+	 hidden on backtracking.
+*/
 void push_window(long long type,long long disp,long long wind)
 //     long long type,disp,wind;
 {
@@ -535,10 +535,10 @@ void push_window(long long type,long long disp,long long wind)
 
 
 /******* PUSH2_PTR_VALUE(p)
-  Push the pair (P,V) onto the stack of things to be undone (trail).
-  It needn't be done if P is greater than the latest choice point because in
-  that case memory is reclaimed.
-  */
+	 Push the pair (P,V) onto the stack of things to be undone (trail).
+	 It needn't be done if P is greater than the latest choice point because in
+	 that case memory is reclaimed.
+*/
 void push2_ptr_value(type_ptr t,GENERIC *p,GENERIC v)
 //     type_ptr t;
 //     GENERIC *p;
@@ -559,10 +559,10 @@ void push2_ptr_value(type_ptr t,GENERIC *p,GENERIC v)
 
 
 /******** PUSH_GOAL(t,a,b,c)
-  Push a goal onto the goal stack.
-  T is the type of the goal, A,B and C are various parameters.
-  See PUSH_CHOICE_POINT(t,a,b,c).
-  */
+	  Push a goal onto the goal stack.
+	  T is the type of the goal, A,B and C are various parameters.
+	  See PUSH_CHOICE_POINT(t,a,b,c).
+*/
 void push_goal(goals t,ptr_psi_term a,ptr_psi_term b,GENERIC c)
 //     goals t;
 //     ptr_psi_term  a;
@@ -586,19 +586,19 @@ void push_goal(goals t,ptr_psi_term a,ptr_psi_term b,GENERIC c)
 
 
 /******** PUSH_CHOICE_POINT(t,a,b,c)
-  T,A,B,C is an alternative goal to try.
-  T is the type of the goal: unify or prove.
+	  T,A,B,C is an alternative goal to try.
+	  T is the type of the goal: unify or prove.
   
-  If T=prove then
-  a=goal to prove
-  b=definition to use
-  if b=DEFRULES then that means it's a first call.
+	  If T=prove then
+	  a=goal to prove
+	  b=definition to use
+	  if b=DEFRULES then that means it's a first call.
   
-  If T=unify then
-  a and b are the terms to unify.
+	  If T=unify then
+	  a and b are the terms to unify.
   
-  etc...
-  */
+	  etc...
+*/
 void push_choice_point(goals t,ptr_psi_term a,ptr_psi_term b,GENERIC c)
 //      goals t;
 //     ptr_psi_term a;
@@ -636,30 +636,30 @@ void push_choice_point(goals t,ptr_psi_term a,ptr_psi_term b,GENERIC c)
 }
 
 
-#define RESTORE_TIME_STAMP global_time_stamp=\
-choice_stack?choice_stack->time_stamp:INIT_TIME_STAMP;
+#define RESTORE_TIME_STAMP global_time_stamp=			\
+    choice_stack?choice_stack->time_stamp:INIT_TIME_STAMP;
 
 
 
 /******** UNDO(limit)
-  Undoes any side-effects up to LIMIT. Limit being the adress of the stack of
-  side-effects you wish to return to.
+	  Undoes any side-effects up to LIMIT. Limit being the adress of the stack of
+	  side-effects you wish to return to.
   
-  Possible improvement:
-  LIMIT is a useless parameter because GOAL_STACK is equivalent if one takes
-  care when stacking UNDO actions. Namely, anything to be undone must be
-  stacked LATER (=after) the goal which caused these things to be done, so that
-  when the goal fails, everything done after it can be undone and the memory
-  used can be reclaimed.
-  This routine could be modified in order to cope with goals to be proved
-  on backtracking: undo(goal).
-  */
+	  Possible improvement:
+	  LIMIT is a useless parameter because GOAL_STACK is equivalent if one takes
+	  care when stacking UNDO actions. Namely, anything to be undone must be
+	  stacked LATER (=after) the goal which caused these things to be done, so that
+	  when the goal fails, everything done after it can be undone and the memory
+	  used can be reclaimed.
+	  This routine could be modified in order to cope with goals to be proved
+	  on backtracking: undo(goal).
+*/
 void undo(ptr_stack limit)
 //     ptr_stack limit;
 {
   /*
     while((unsigned long long)undo_stack>(unsigned long long)goal_stack)
-    */
+  */
   
   while ((unsigned long long)undo_stack>(unsigned long long)limit) { 
 #ifdef X11
@@ -694,10 +694,10 @@ void undo(ptr_stack limit)
 
 
 /******** UNDO_ACTIONS()
-  A subset of undo(limit) (the detrailing routine) that does all undo
-  actions on the undo_stack, but does not undo any variable bindings,
-  nor does it change the value of undo_stack.
-  */
+	  A subset of undo(limit) (the detrailing routine) that does all undo
+	  actions on the undo_stack, but does not undo any variable bindings,
+	  nor does it change the value of undo_stack.
+*/
 void undo_actions()
 {
   ptr_stack u=undo_stack;
@@ -722,16 +722,16 @@ void undo_actions()
     u=u->next;
     }
     #endif
-    */
+  */
 }
 
 
 
 /******** BACKTRACK()
-  Undo everything back to the previous choice-point and take the alternative
-  decision. This routine would have to be modified, along long with UNDO to cope
-  with goals to be proved on backtracking.
-  */
+	  Undo everything back to the previous choice-point and take the alternative
+	  decision. This routine would have to be modified, along long with UNDO to cope
+	  with goals to be proved on backtracking.
+*/
 void backtrack()
 {
   long long gts;
@@ -757,14 +757,14 @@ void backtrack()
 
 
 /******** CLEAN_TRAIL(cutpt)
-  This routine removes all trail entries between the top of the undo_stack
-  and the cutpt, whose addresses are between the cutpt and stack_pointer.
-  (The cutpt is the choice point that will become the most recent
-  one after the cut.)
-  This routine should be called when a cut built-in is done.
-  This routine is careful not to remove any trailed entries that are
-  on the heap or outside of Life space.
-  */
+	  This routine removes all trail entries between the top of the undo_stack
+	  and the cutpt, whose addresses are between the cutpt and stack_pointer.
+	  (The cutpt is the choice point that will become the most recent
+	  one after the cut.)
+	  This routine should be called when a cut built-in is done.
+	  This routine is careful not to remove any trailed entries that are
+	  on the heap or outside of Life space.
+*/
 static void clean_trail(ptr_choice_point cutpt)
 //     ptr_choice_point cutpt;
 {
@@ -797,9 +797,9 @@ static void clean_trail(ptr_choice_point cutpt)
 
 
 /******* CLEAN_UNDO_WINDOW(disp,wind)
-  Remove all trail entries that reference a given window.
-  This is called when the window is destroyed.
-  */
+	 Remove all trail entries that reference a given window.
+	 This is called when the window is destroyed.
+*/
 void clean_undo_window(long long disp,long long wind)
 //     long long disp,wind;
 {
@@ -997,16 +997,16 @@ void merge3(ptr_node *u,ptr_node v)
 
 
 /******** MERGE(u,v)
-  U and V are two binary trees containing the
-  attributes fields of psi-terms.  U and V are merged together, that is U
-  becomes the union of U and V:
-  For each label L in V and L->Vpsi_term:
-  If L is in U Then With L->Upsi_term Do unify(Upsi_term,Vpsi_term)
-  Else merge L->Vpsi_term in U.
-  Unification is simply done by appending the 2 psi_terms to the unification
-  stack.  All effects must be recorded in the trail so that they can be
-  undone on backtracking.
-  */
+	  U and V are two binary trees containing the
+	  attributes fields of psi-terms.  U and V are merged together, that is U
+	  becomes the union of U and V:
+	  For each label L in V and L->Vpsi_term:
+	  If L is in U Then With L->Upsi_term Do unify(Upsi_term,Vpsi_term)
+	  Else merge L->Vpsi_term in U.
+	  Unification is simply done by appending the 2 psi_terms to the unification
+	  stack.  All effects must be recorded in the trail so that they can be
+	  undone on backtracking.
+*/
 
 #if FALSE
 /* This version is not quite right */
@@ -1089,10 +1089,10 @@ void merge_unify(ptr_node *u,ptr_node v)
 
 
 /******** SHOW_COUNT()
-  This routine doesn't do anything if not in verbose mode.
-  It prints the number of of sub-goals attempted, along long with cpu-time
-  spent during the proof etc...
-  */
+	  This routine doesn't do anything if not in verbose mode.
+	  It prints the number of of sub-goals attempted, along long with cpu-time
+	  spent during the proof etc...
+*/
 void show_count()
 {
   float t;
@@ -1129,18 +1129,18 @@ void show_count()
 
 
 /******** FETCH_DEF(psi_term)
-  Fetch the type definition of a psi_term and execute it.
-  That is, get the list of (term,predicate) pairs that define the type.
-  Unify the psi_term with the term, then prove the predicate.
+	  Fetch the type definition of a psi_term and execute it.
+	  That is, get the list of (term,predicate) pairs that define the type.
+	  Unify the psi_term with the term, then prove the predicate.
   
-  This routine only gets the pairs that are defined in the type itself,
-  not those defined in any types above it.  This is the correct behavior
-  for enumerating type disjunctions--all higher constraints have already
-  been checked.
+	  This routine only gets the pairs that are defined in the type itself,
+	  not those defined in any types above it.  This is the correct behavior
+	  for enumerating type disjunctions--all higher constraints have already
+	  been checked.
   
-  The above is true if allflag==FALSE.  If allflag==TRUE then all constraints
-  are executed, not just those defined in the type itself.
-  */
+	  The above is true if allflag==FALSE.  If allflag==TRUE then all constraints
+	  are executed, not just those defined in the type itself.
+*/
 void fetch_def(ptr_psi_term u, long long allflag)
 //     ptr_psi_term u;
 //     long long allflag;
@@ -1179,28 +1179,28 @@ void fetch_def(ptr_psi_term u, long long allflag)
 
 
 /******** FETCH_DEF_LAZY(psi_term,type1,type2,attr_list1,attr_list2)
-  Fetch the type definition of a psi_term and execute it.
-  That is, get the list of (term,pred) pairs that define the type.
-  'Term' is one of the type's attributes and 'pred' is a constraint.
-  Unify the psi_term with the term, then prove pred.
+	  Fetch the type definition of a psi_term and execute it.
+	  That is, get the list of (term,pred) pairs that define the type.
+	  'Term' is one of the type's attributes and 'pred' is a constraint.
+	  Unify the psi_term with the term, then prove pred.
   
-  Only those (term,pred) pairs are executed whose original type is
-  below both type1 and type2, the types of the two psi-terms whose
-  unification created psi_term.  This avoids doing much superfluous work.
+	  Only those (term,pred) pairs are executed whose original type is
+	  below both type1 and type2, the types of the two psi-terms whose
+	  unification created psi_term.  This avoids doing much superfluous work.
   
-  The above behavior is correct for a psi_term when always_check==TRUE for
-  that psi_term.  If always_check==FALSE for a psi_term, then if it does not
-  have attributes it is not checked, and the addition of an attribute will
-  force checking to occur.
+	  The above behavior is correct for a psi_term when always_check==TRUE for
+	  that psi_term.  If always_check==FALSE for a psi_term, then if it does not
+	  have attributes it is not checked, and the addition of an attribute will
+	  force checking to occur.
   
-  Example:
+	  Example:
   
-  :: t(a=>one,b=>two,c=> X) | thing(X).
+	  :: t(a=>one,b=>two,c=> X) | thing(X).
   
-  psi_term = A:t (it can be any psi_term of type t)
-  term     = t(a=>one,b=>two,c=> X)
-  pred     = thing(X)
-  */
+	  psi_term = A:t (it can be any psi_term of type t)
+	  term     = t(a=>one,b=>two,c=> X)
+	  pred     = thing(X)
+*/
 void fetch_def_lazy(ptr_psi_term u, ptr_definition old1, ptr_definition old2,
 		    ptr_node old1attr, ptr_node old2attr,
 		    long long old1stat, long long old2stat)
@@ -1256,23 +1256,23 @@ void fetch_def_lazy(ptr_psi_term u, ptr_definition old1, ptr_definition old2,
 
 
 /******** UNIFY_AIM()
-  This routine performs one unification step.
-  AIM is the current unification goal.
+	  This routine performs one unification step.
+	  AIM is the current unification goal.
   
-  U and V are the two psi-terms to unify.
+	  U and V are the two psi-terms to unify.
   
-  It swaps the two psi-terms into chronological order.
-  U is the oldest (smallest stack address).
-  Calculates their GLB, check their values are unifiable.
-  It deals with all the messy things like:
-  curried functions gaining missing arguments,
-  types which need checking,
-  residuation variables whose constraints must be released,
-  disjunctions appearing in the GLB etc...
+	  It swaps the two psi-terms into chronological order.
+	  U is the oldest (smallest stack address).
+	  Calculates their GLB, check their values are unifiable.
+	  It deals with all the messy things like:
+	  curried functions gaining missing arguments,
+	  types which need checking,
+	  residuation variables whose constraints must be released,
+	  disjunctions appearing in the GLB etc...
   
-  It's a rather lengthy routine, only its speed is fairly crucial in the
-  overall performance of Wild_Life, and the code is not duplicated elsewhere.
-  */
+	  It's a rather lengthy routine, only its speed is fairly crucial in the
+	  overall performance of Wild_Life, and the code is not duplicated elsewhere.
+*/
 
 long long unify_body();
 
@@ -1403,7 +1403,7 @@ long long unify_body(long long eval_flag)
 	u->status,
 	v->status,
 	new_stat);
-	*/
+      */
       
       /**** Check that integers have no decimals ****/
       if (u->value_3 && sub_type(new_type,integer)) {
@@ -1485,17 +1485,17 @@ long long unify_body(long long eval_flag)
 	
 	/**** Look after curried functions ****/
 	/*
-	if ((u_func && more_v_attr) || (v_func && more_u_attr)) {
+	  if ((u_func && more_v_attr) || (v_func && more_u_attr)) {
 	  if (!(u->flags&QUOTED_TRUE | v->flags&QUOTED_TRUE)) {
-            Traceline("re-evaluating curried expression %P\n", u);
-	    if (u->status!=0) {
-	      push_ptr_value(int_ptr,&(u->status));
-	      u->status=0;
-	    }
-            check_func(u);
+	  Traceline("re-evaluating curried expression %P\n", u);
+	  if (u->status!=0) {
+	  push_ptr_value(int_ptr,&(u->status));
+	  u->status=0;
+	  }
+	  check_func(u);
           }
 	  }
-	  */
+	*/
 	
 	if (v->flags&QUOTED_TRUE && !(u->flags&QUOTED_TRUE)) { /* 16.9 */
 	  push_ptr_value(int_ptr,(GENERIC *)&(u->flags));  // REV401PLUS cast
@@ -1517,7 +1517,7 @@ long long unify_body(long long eval_flag)
 	
 	/**** VERIFY CONSTRAINTS ****/
 	/* if ((old1stat<4 || old2stat<4) &&
-	     (u->type->type==type || v->type->type==type)) { 18.2.94 */
+	   (u->type->type==type || v->type->type==type)) { 18.2.94 */
         if (new_stat<4 && u->type->type_def==(def_type)type_it) {
           /* This does not check the already-checked properties     */
           /* (i.e. those in types t with t>=old1 or t>=old2),       */
@@ -1537,11 +1537,11 @@ long long unify_body(long long eval_flag)
 
 
 /******** DISJUNCT_AIM()
-  This is the disjunction enumeration routine.
-  If U is the disjunction {H|T} then first bind U to H, then on backtracking
-  enumerate the disjunction T.  U is always passed along long so that every choice
-  of the disjunction can be bound to U.
-  */
+	  This is the disjunction enumeration routine.
+	  If U is the disjunction {H|T} then first bind U to H, then on backtracking
+	  enumerate the disjunction T.  U is always passed along long so that every choice
+	  of the disjunction can be bound to U.
+*/
 long long disjunct_aim()
 {
   ptr_psi_term u,v;
@@ -1556,12 +1556,12 @@ long long disjunct_aim()
 
 
 /******** PROVE_AIM()
-  This is the proving routine.  It performs one
-  proof step, that is: finding the definition to use to prove AIM, and
-  unifying the HEAD with the GOAL before proving. It all works by pushing
-  sub-goals onto the goal_stack. Special cases are CUT and AND (","). Built-in
-  predicates written in C are called.
-  */
+	  This is the proving routine.  It performs one
+	  proof step, that is: finding the definition to use to prove AIM, and
+	  unifying the HEAD with the GOAL before proving. It all works by pushing
+	  sub-goals onto the goal_stack. Special cases are CUT and AND (","). Built-in
+	  predicates written in C are called.
+*/
 long long prove_aim()
 {
   long long success=TRUE;
@@ -1595,9 +1595,9 @@ long long prove_aim()
 	      }
 	      else if ( thegoal->type->type_def==(def_type)function_it
 			|| ( thegoal->type->type_def==(def_type)type_it
-			 && sub_type(boolean,thegoal->type)
-			 )
-	              ) {
+			     && sub_type(boolean,thegoal->type)
+			     )
+			) {
 		if (thegoal->type->type_def==(def_type)function_it && !rule)
 		  /* This can happen when RETRACT is used */
 		  success=FALSE;
@@ -1662,9 +1662,9 @@ long long prove_aim()
 		success=c_rule[(unsigned long long)rule]();
 		
 		/* RESPRED */ if (curried)
-		/* RESPRED */   do_currying();
+		  /* RESPRED */   do_currying();
 		/* RESPRED */ else if (resid_vars)
-		/* RESPRED */   success=do_residuation_user(); /* 21.9 */ /* PVR 9.2.94 */
+		  /* RESPRED */   success=do_residuation_user(); /* 21.9 */ /* PVR 9.2.94 */
 	      }
 	      else {
 		
@@ -1756,10 +1756,10 @@ long long prove_aim()
 
 
 /******** TYPE_DISJ_AIM()
-  This routine implements type disjunctions, that is, when a type has been
-  decoded and found to be a disjunction of types, enumerates the different
-  values one by one.
-  */
+	  This routine implements type disjunctions, that is, when a type has been
+	  decoded and found to be a disjunction of types, enumerates the different
+	  values one by one.
+*/
 
 void type_disj_aim()
 {
@@ -1788,10 +1788,10 @@ void type_disj_aim()
 
 
 /******** CLAUSE_AIM(r)
-  Prove a CLAUSE or RETRACT goal. That is try to
-  unify the calling argument with the current rule. If this succeeds and
-  R=TRUE then delete the rule (RETRACT).
-  */
+	  Prove a CLAUSE or RETRACT goal. That is try to
+	  unify the calling argument with the current rule. If this succeeds and
+	  R=TRUE then delete the rule (RETRACT).
+*/
 long long clause_aim(long long r)
 //     long long r;
 {
@@ -1953,12 +1953,12 @@ void reset_stacks()
 
 
 /******** WHAT_NEXT_AIM()
-  Find out what the user wants to do:
-  a) retry current goal -> ';'
-  b) quit current goal -> RETURN
-  c) add current goal -> 'new goal ?'
-  d) return to top level -> '.'
-  */
+	  Find out what the user wants to do:
+	  a) retry current goal -> ';'
+	  b) quit current goal -> RETURN
+	  c) add current goal -> 'new goal ?'
+	  d) return to top level -> '.'
+*/
 long long what_next_aim()
 {
   long long result=FALSE;
@@ -1985,7 +1985,7 @@ long long what_next_aim()
         /* Keep level same if no window & no X event */
 	&& !x_window_creation && !eventflag
 #endif
-       ) {
+	) {
       /* Keep level the same if in a query, the number of choice points */
       /* has not increased and there are no variables. */
       /* This has to have the same behavior as if an EOLN was typed */
@@ -2104,12 +2104,12 @@ long long what_next_aim()
 
 
 /******** LOAD_AIM()
-  Continue loading a file from the current psi-term up to the next query.
-  Files are loaded in blocks of assertions that end with a query.
-  Such a chunk is loaded by a 'load' goal on the goal_stack.
-  This goal contains the input file state information.  This guarantees that
-  all queries in the input file are executed in the order they are encountered
-  (which includes load operations).
+	  Continue loading a file from the current psi-term up to the next query.
+	  Files are loaded in blocks of assertions that end with a query.
+	  Such a chunk is loaded by a 'load' goal on the goal_stack.
+	  This goal contains the input file state information.  This guarantees that
+	  all queries in the input file are executed in the order they are encountered
+	  (which includes load operations).
 */
 long long load_aim()
 {
@@ -2188,11 +2188,11 @@ long long load_aim()
       INPUT_FILE_NAME))->value,
       ((ptr_psi_term)get_attr(input_state,
       CURRENT_MODULE))->value);
-      */
+    */
 	   
     set_current_module(
 		       find_module((char *)((ptr_psi_term)get_attr(input_state,
-       CURRENT_MODULE))->value_3));
+								   CURRENT_MODULE))->value_3));
   }
 
   
@@ -2207,10 +2207,10 @@ long long load_aim()
 
 
 /******** MAIN_PROVE()
-  This is the inference engine.  It distributes sub-goals to the appropriate
-  routines.  It deals with backtracking.  It fails if there is not enough
-  memory available or if there is an interrupt that causes the current query
-  to be aborted. 
+	  This is the inference engine.  It distributes sub-goals to the appropriate
+	  routines.  It deals with backtracking.  It fails if there is not enough
+	  memory available or if there is an interrupt that causes the current query
+	  to be aborted. 
 */
 void main_prove()
 {
@@ -2228,18 +2228,18 @@ void main_prove()
   while (main_loop_ok && goal_stack) {
 
     /*  RM: Oct 28 1993  For debugging a horrible mess.
-    { 
-      ptr_choice_point c=choice_stack;
-      while(c) {
+	{ 
+	ptr_choice_point c=choice_stack;
+	while(c) {
 	if((GENERIC)stack_pointer<(GENERIC)c) {
-	  printf("########### Choice stack corrupted! %x\n",c);
-	  trace=TRUE;
-	  c=NULL;
+	printf("########### Choice stack corrupted! %x\n",c);
+	trace=TRUE;
+	c=NULL;
 	}
 	else
-	  c=c->next;
-      }
-    }
+	c=c->next;
+	}
+	}
     */
 
     
@@ -2252,8 +2252,8 @@ void main_prove()
       success=unify_aim();
       break;
       
-    /* Same as above, but do not evaluate top level */
-    /* Used to bind with unbound variables */
+      /* Same as above, but do not evaluate top level */
+      /* Used to bind with unbound variables */
     case unify_noeval:
       goal_stack=aim->next;
       goal_count++;
@@ -2490,27 +2490,27 @@ void main_prove()
       if (heap_pointer-stack_pointer < GC_THRESHOLD)
         memory_check();
 #ifdef __unix__
-        if (interrupted || (stepflag && steptrace))
-            handle_interrupt();
-        else if (stepcount > 0) {
-            stepcount--;
-            if (stepcount == 0 && !stepflag) {
-                stepflag = TRUE;
-                handle_interrupt();
-            }
-    }
+      if (interrupted || (stepflag && steptrace))
+	handle_interrupt();
+      else if (stepcount > 0) {
+	stepcount--;
+	if (stepcount == 0 && !stepflag) {
+	  stepflag = TRUE;
+	  handle_interrupt();
+	}
+      }
 #endif
 #ifdef _WIN64
 
-        if (stepcount > 0) {
-            stepcount--;
-            if (stepcount == 0 && !stepflag) {
-                stepflag = TRUE;
-            }
-        }
+      if (stepcount > 0) {
+	stepcount--;
+	if (stepcount == 0 && !stepflag) {
+	  stepflag = TRUE;
+	}
+      }
 #endif
 
-      }
+    }
   }
 }
 
