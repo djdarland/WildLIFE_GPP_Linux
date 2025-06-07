@@ -15,8 +15,6 @@
 #define FALSE 0L
 #endif
 
-
-
 /*! \def least_sel
   \brief used by collect_symbols in built_ins.c 
 
@@ -621,26 +619,26 @@ ORing some constants chosen from the set:
   
 OPTIONAL	for an optional argument
 REQUIRED	for a required argument (i.e. residuate on it if not
-					 present
-					 UNEVALED	if the argument should not be evaluated
-					 JUSTFAIL	to just fail is the argument does not meet its type
-					 restriction
-					 POLYTYPE	sometimes you want to permit several particular sorts
-					 in that case the 2nd psi_arg field is interpreted as
-					 a pointer to a NULL terminated array of ptr_definitions
-					 MANDATORY	like REQUIRED, but it is an error for it not to be
-					 present; don't residuate.  This is useful for
-					 predicates since it doesn't make sense for them to
-					 residuate.
-					 NOVALUE	no value required for this argument.
+		 present
+UNEVALED	if the argument should not be evaluated
+JUSTFAIL	to just fail is the argument does not meet its type
+		 restriction
+POLYTYPE	sometimes you want to permit several particular sorts
+		 in that case the 2nd psi_arg field is interpreted as
+		 a pointer to a NULL terminated array of ptr_definitions
+MANDATORY	like REQUIRED, but it is an error for it not to be
+		 present; don't residuate.  This is useful for
+		 predicates since it doesn't make sense for them to
+		 residuate.
+		 NOVALUE	no value required for this argument.
 
-					 The primitive must be defined to take the following arguments
-					 f(argl,result,funct[,info])
-					 where argl is an array containing the arguments obtained by call_
-					 primitive, result is the result in case we are implementing a
-					 function, and info (optional) is extra information, typically a
-					 pointer to a structure.
-					 */
+		 The primitive must be defined to take the following arguments
+		 f(argl,result,funct[,info])
+		 where argl is an array containing the arguments obtained by call_
+		 primitive, result is the result in case we are implementing a
+		 function, and info (optional) is extra information, typically a
+		 pointer to a structure.
+		 */
 
 #define REQUIRED  1
 

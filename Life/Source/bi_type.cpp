@@ -18,14 +18,8 @@
  */
 /* 	$Id: bi_type.c,v 1.2 1994/12/08 23:08:52 duchier Exp $	 */
 
-#ifndef lint
-static char vcid[] = "$Id: bi_type.c,v 1.2 1994/12/08 23:08:52 duchier Exp $";
-#endif /* lint */
-
 #define EXTERN extern
 #define REV401PLUS
-
-
 #ifdef REV401PLUS
 #include "defs.h"
 #endif
@@ -47,36 +41,17 @@ static long long c_children()   /*  RM: Dec 14 1992  Re-wrote most of the routin
   deref_ptr(funct);
   result=aim->bbbb_1;
   get_two_args(funct->attr_list,&arg1,&arg2);
-  
   if (!arg1) {
     curry();
     return success;
   }
-
   deref(arg1);
   deref_args(funct,set_1);
   resid_aim=NULL;
-  
   if (arg1->type==top)
     t=collect_symbols(greatest_sel); /*  RM: Feb  3 1993  */
   else {
     p=arg1->type->children;
-
-    /* Hack: check there's enough memory to build the list */
-    /*  RM: Jul 22 1993  */
-    /*
-      { int count=0;
-      while(p) {
-      count++;
-      p=p->next;
-      }
-      if (heap_pointer-stack_pointer < 3*count*sizeof(psi_term)) {
-      goal_stack=aim;
-      garbage();
-      return success;
-      }
-    */
-    
     t=stack_nil();
     if (!(arg1->type==real && arg1->value_3)) /* PVR 15.2.94 */
       while (p) {
@@ -91,11 +66,8 @@ static long long c_children()   /*  RM: Dec 14 1992  Re-wrote most of the routin
       }
   }
   push_goal(unify,result,t,NULL);
-
   return success;
 }
-
-
 
 /******** C_PARENTS
 	  Return a list of roots of the parent types of T.
@@ -135,7 +107,6 @@ static long long c_parents()
         /* Look at the parents list */
         while (p) {
           ptr_definition ptype;
-
           ptype = (ptr_definition) p->value_1;
           if (hidden_type(ptype)) { p=p->next; continue; }
           p1 = stack_psi_term(4);
@@ -149,13 +120,8 @@ static long long c_parents()
   }
   else
     curry();
-
   return success;
 }
-
-
-
-
 /******** C_SMALLEST
 	  Return the parents of bottom.
 	  This function has no arguments.
@@ -170,7 +136,6 @@ static long long c_smallest()
   result=aim->bbbb_1;
   t=collect_symbols(least_sel); /*  RM: Feb  3 1993  */
   push_goal(unify,result,t,NULL);
-  
   return success;
 }
 
@@ -218,7 +183,6 @@ static long long isa(ptr_psi_term arg1, ptr_psi_term arg2)
 	      && (arg1->value_3 || arg2->value_3)
 	      )
 	) {
-
     if(arg1->type==cut) /*  RM: Jan 21 1993  */
       ans=TRUE;
     else
@@ -227,13 +191,8 @@ static long long isa(ptr_psi_term arg1, ptr_psi_term arg2)
   else {
     matches(arg1->type, arg2->type, &ans);
   }
-
-  /*Errorline("isa %P %P -> %d\n",arg1,arg2,ans);*/
-
   return ans;
 }
-  
-
 #define isa_le_sel 0
 #define isa_lt_sel 1
 #define isa_ge_sel 2
@@ -246,7 +205,6 @@ static long long isa(ptr_psi_term arg1, ptr_psi_term arg2)
 #define isa_neq_sel 9
 #define isa_cmp_sel 10
 #define isa_ncmp_sel 11
-
 /* Utility that selects one of several isa functions */
 static long long isa_select(ptr_psi_term arg1, ptr_psi_term arg2, long long sel)
 // ptr_psi_term arg1,arg2;
@@ -265,7 +223,6 @@ static long long isa_select(ptr_psi_term arg1, ptr_psi_term arg2, long long sel)
     break;
   case isa_eq_sel: ans=isa(arg1,arg2) && isa(arg2,arg1);
     break;
-
   case isa_nle_sel: ans= !isa(arg1,arg2);
     break;
   case isa_nlt_sel: ans= !(isa(arg1,arg2) && !isa(arg2,arg1));
@@ -276,7 +233,6 @@ static long long isa_select(ptr_psi_term arg1, ptr_psi_term arg2, long long sel)
     break;
   case isa_neq_sel: ans= !(isa(arg1,arg2) && isa(arg2,arg1));
     break;
-
   case isa_cmp_sel: ans=isa(arg1,arg2) || isa(arg2,arg1);
     break;
   case isa_ncmp_sel: ans= !(isa(arg1,arg2) || isa(arg2,arg1));
@@ -306,10 +262,8 @@ static long long c_isa_main(long long sel)
     unify_bool_result(result,ans);
   }
   else curry();
-
   return success;
 }
-
 /******** C_ISA_LE
 	  Type t1 isa t2 in the hierarchy, i.e. t1 is less than or equal to t2.
 	  This boolean function requires two arguments and never residuates.
@@ -322,64 +276,50 @@ static long long c_isa_le()
 {
   return c_isa_main(isa_le_sel);
 }
-
 static long long c_isa_lt()
 {
   return c_isa_main(isa_lt_sel);
 }
-
 static long long c_isa_ge()
 {
   return c_isa_main(isa_ge_sel);
 }
-
 static long long c_isa_gt()
 {
   return c_isa_main(isa_gt_sel);
 }
-
 static long long c_isa_eq()
 {
   return c_isa_main(isa_eq_sel);
 }
-
 static long long c_isa_nle()
 {
   return c_isa_main(isa_nle_sel);
 }
-
 static long long c_isa_nlt()
 {
   return c_isa_main(isa_nlt_sel);
 }
-
 static long long c_isa_nge()
 {
   return c_isa_main(isa_nge_sel);
 }
-
 static long long c_isa_ngt()
 {
   return c_isa_main(isa_ngt_sel);
 }
-
 static long long c_isa_neq()
 {
   return c_isa_main(isa_neq_sel);
 }
-
 static long long c_isa_cmp()
 {
   return c_isa_main(isa_cmp_sel);
 }
-
 static long long c_isa_ncmp()
 {
   return c_isa_main(isa_ncmp_sel);
 }
-
-
-
 /******** C_IS_FUNCTION
 	  Succeed iff argument is a function (built-in or user-defined).
 */
@@ -399,12 +339,8 @@ static long long c_is_function() /*  RM: Jan 29 1993  */ // REV401PLUS long long
     unify_bool_result(result,ans);
   }
   else curry();
-
   return success;
 }
-
-
-
 /******** C_IS_PERSISTENT
 	  Succeed iff argument is a quoted persistent or on the heap.
 */
@@ -431,9 +367,6 @@ static long long c_is_persistent() /*  RM: Feb  9 1993  */ // REV401PLUS long lo
   
   return success;
 }
-
-
-
 /******** C_IS_PREDICATE
 	  Succeed iff argument is a predicate (built-in or user-defined).
 */
@@ -453,12 +386,8 @@ static long long c_is_predicate() /*  RM: Jan 29 1993  */ // REV401PLUS long lon
     unify_bool_result(result,ans);
   }
   else curry();
-
   return success;
 }
-
-
-
 /******** C_IS_SORT
 	  Succeed iff argument is a sort (built-in or user-defined).
 */
@@ -478,12 +407,8 @@ static long long c_is_sort() /*  RM: Jan 29 1993  */ // REV401PLUS long long
     unify_bool_result(result,ans);
   }
   else curry();
-
   return success;
 }
-
-
-
 /******** C_IS_VALUE
 	  Return true iff argument has a value, i.e. if it is implemented in
 	  a quirky way in Wild_Life.  This is true for integers, reals,
@@ -505,12 +430,8 @@ static long long c_is_value()
     unify_bool_result(result,ans);
   }
   else curry();
-
   return success;
 }
-
-
-
 /******** C_IS_NUMBER
 	  Return true iff argument is an actual number.
 */
@@ -530,11 +451,8 @@ static long long c_is_number()
     unify_bool_result(result,ans);
   }
   else curry();
-
   return success;
 }
-
-
 /******** C_ISA_SUBSORT(A,B)
 	  if A is a subsort of B => succeed and residuate on B
 	  else			 => fail
@@ -546,15 +464,11 @@ long long c_isa_subsort() // changed to long long REV401PLUS
   pred=aim->aaaa_1;
   deref_ptr(pred);
   get_two_args(pred->attr_list,&arg1,&arg2);
-
   if (!arg1) reportAndAbort(pred,"no first argument");
   deref(arg1);
-  
   if (!arg2) reportAndAbort(pred,"no second argument");
   deref(arg2);
-
   deref_args(pred, set_1_2);
-
   if (isa(arg1, arg2))
     {
       residuate(arg2);
@@ -562,17 +476,11 @@ long long c_isa_subsort() // changed to long long REV401PLUS
     }
   return FALSE;
 }
-
-
-
 long long isValue(ptr_psi_term p)  // REV401PLUS to long long
 // ptr_psi_term p;
 {
   return (p->value_3 != NULL);
 }
-
-
-
 /******** C_GLB(A,B)
 	  Return glb(A,B).  Continued calls will return each following type in
 	  the disjunction of the glb of A,B.
@@ -613,27 +521,20 @@ long long c_glb()  // REV401PLUS long long
     decodedType = decodedType->next;
   }
   other=makePsiTerm(ans);
-
   if (isValue(arg1)) other->value_3=arg1->value_3;
   if (isValue(arg2)) other->value_3=arg2->value_3;
-    
   if (isValue(arg1) || isValue(arg2)) {
     if (decodedType) {
       Errorline("glb of multiple-inheritance value sorts not yet implemented.\n");
       return FALSE;
     }
   }
-    
   if (decodedType)
     push_choice_point(type_disj, result, (ptr_psi_term)decodedType, NULL);
-
   resid_aim = NULL;
   push_goal(unify,result,other,NULL);
   return TRUE;
 }
-
-
-
 /******** C_LUB(A,B)
 	  Return lub(A,B).  Continued calls will return each following type in
 	  the disjunction of the lub of A,B.
@@ -647,7 +548,6 @@ long long c_lub()  // REV401PLUS long long
   func=aim->aaaa_1;
   deref_ptr(func);
   get_two_args(func->attr_list,&arg1,&arg2);
-
   if ((!arg1) || (!arg2))
     {
       curry();
@@ -658,17 +558,13 @@ long long c_lub()  // REV401PLUS long long
   deref(arg1);
   deref(arg2);
   deref_args(func, set_1_2);
-
   /* now lets find the list of types that is the lub */
-  
   decodedType = lub(arg1, arg2, &other);
-
   if (decodedType) {
     ans = (ptr_definition)decodedType->value_1;
     decodedType = decodedType->next;
     other = makePsiTerm(ans);
   }
-
   if (decodedType)
     push_choice_point(type_disj, result, (ptr_psi_term) decodedType, NULL); // cast added REV401PLUS
     
@@ -676,9 +572,6 @@ long long c_lub()  // REV401PLUS long long
   push_goal(unify,result,other,NULL);
   return TRUE;
 }
-
-
-
 void insert_type_builtins() /*  RM: Jan 29 1993  */
 {
   /* Sort comparisons */
@@ -694,8 +587,6 @@ void insert_type_builtins() /*  RM: Jan 29 1993  */
   new_built_in(syntax_module,":\\>",(def_type)function_it,c_isa_ngt);
   new_built_in(syntax_module,":\\==",(def_type)function_it,c_isa_neq);
   new_built_in(syntax_module,":\\><",(def_type)function_it,c_isa_ncmp);
-
-
   /* Type checks */
   new_built_in(bi_module,"is_value",(def_type)function_it,c_is_value);
   new_built_in(bi_module,"is_number",(def_type)function_it,c_is_number);
@@ -703,7 +594,6 @@ void insert_type_builtins() /*  RM: Jan 29 1993  */
   new_built_in(bi_module,"is_predicate",(def_type)function_it,c_is_predicate);
   new_built_in(bi_module,"is_sort",(def_type)function_it,c_is_sort);
   new_built_in(bi_module,"is_persistent",(def_type)function_it,c_is_persistent);
-  
   /* Sort hierarchy maneuvering */
   new_built_in(bi_module,"children",(def_type)function_it,c_children);
   new_built_in(bi_module,"parents",(def_type)function_it,c_parents);

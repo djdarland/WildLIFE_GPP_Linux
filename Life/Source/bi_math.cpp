@@ -17,11 +17,6 @@
  */
 /* 	$Id: bi_math.c,v 1.2 1994/12/08 23:07:37 duchier Exp $	 */
 
-#ifndef lint
-static char vcid[] = "$Id: bi_math.c,v 1.2 1994/12/08 23:07:37 duchier Exp $";
-#endif /* lint */
-
-
 #define EXTERN extern
 #define REV401PLUS
 
@@ -40,8 +35,6 @@ double trunc(x)
   return ((x>=0)?floor(x):ceil(x));
 }
 #endif
-
-
 
 /******** C_MULT
 	  Multiplication is considered as a 3-variable relation as in Prolog:
@@ -80,15 +73,6 @@ static long long c_mult()
 	switch(num1+num2*2+num3*4) {
 	case 0:
           residuate3(arg1,arg2,arg3);
-
-	  /* if(arg1==arg3)
-	     success=unify_real_result(arg2,(REAL)1);
-	     else
-	     if(arg2==arg3)
-	     success=unify_real_result(arg1,(REAL)1);
-	     else
-	     residuate2(arg1,arg3);
-	  */
 	  break;
 	case 1:
 	  if (val1==1.0)
@@ -151,9 +135,6 @@ static long long c_mult()
   nonnum_warning(t,arg1,arg2);
   return success;
 }
-
-
-
 /******** C_DIV
 	  Similar to multiply.
 */
@@ -178,7 +159,6 @@ static long long c_div()
       success=get_real_value(arg2,&val2,&num2);
     }
   }
-  
   if (success)
     if (arg1 && arg2) {
       deref(arg3);
@@ -266,7 +246,6 @@ static long long c_div()
           }
 	  break;
 	}
-      
     }
     else
       curry();
@@ -274,10 +253,6 @@ static long long c_div()
   nonnum_warning(t,arg1,arg2);
   return success;
 }
-
-
-
-
 /******** C_INTDIV
 	  Similar to division, but arguments and result must be integers.
 	  Does all deterministic local inversions that can be determined in
@@ -304,7 +279,6 @@ static long long c_intdiv()
       success=get_real_value(arg2,&val2,&num2);
     }
   }
-  
   if (success)
     if (arg1 && arg2) {
       deref(arg3);
@@ -438,13 +412,9 @@ static long long c_intdiv()
     }
     else
       curry();
-  
   nonnum_warning(t,arg1,arg2);
   return success;
 }
-
-
-
 /* Main routine for floor & ceiling functions */
 static long long c_floor_ceiling(long long floorflag)
 // long long floorflag;
@@ -458,7 +428,6 @@ static long long c_floor_ceiling(long long floorflag)
   deref_ptr(t);
   get_two_args(t->attr_list,&arg1,&arg2);
   arg3=aim->bbbb_1;
-  
   if(arg1) {
     deref(arg1);
     deref_args(t,set_1);
@@ -484,13 +453,9 @@ static long long c_floor_ceiling(long long floorflag)
   }
   else
     curry();
-
   nonnum_warning(t,arg1,NULL);
   return success;
 }
-
-
-
 /******** C_FLOOR
 	  Return the largest integer inferior or equal to the argument
 */
@@ -498,10 +463,6 @@ static long long c_floor()
 {
   return c_floor_ceiling(TRUE);
 }
-
-
-
-
 /******** C_CEILING
 	  Return the smallest integer larger or equal to the argument
 */
@@ -509,9 +470,6 @@ static long long c_ceiling()
 {
   return c_floor_ceiling(FALSE);
 }
-
-
-
 /******** C_SQRT
 	  Return the square root of the argument
 */
@@ -526,7 +484,6 @@ static long long c_sqrt()
   deref_ptr(t);
   get_one_arg(t->attr_list,&arg1);
   arg3=aim->bbbb_1;
-  
   if (arg1) {
     deref(arg1);
     deref_args(t,set_1);
@@ -558,17 +515,12 @@ static long long c_sqrt()
   }
   else
     curry();
-
   nonnum_warning(t,arg1,NULL);
   return success;
 }
-
-
 #define SINFLAG 1
 #define COSFLAG 2
 #define TANFLAG 3
-
-
 /* Main routine for sine and cosine */
 static long long c_trig(long long trigflag)
 // long long trigflag;
@@ -582,7 +534,6 @@ static long long c_trig(long long trigflag)
   deref_ptr(t);
   get_one_arg(t->attr_list,&arg1);
   arg3=aim->bbbb_1;
-
   if (arg1) {
     deref(arg1);
     deref_args(t,set_1);
@@ -621,12 +572,9 @@ static long long c_trig(long long trigflag)
   }
   else
     curry();
-
   nonnum_warning(t,arg1,NULL);
   return success;
 }
-
-
 /******** C_COSINE
 	  Return the cosine of the argument (in radians).
 */
@@ -634,10 +582,6 @@ static long long c_cos()
 {
   return (c_trig(COSFLAG));
 }
-
-
-
-
 /******** C_SINE
 	  Return the sine of the argument
 */
@@ -645,9 +589,6 @@ static long long c_sin()
 {
   return (c_trig(SINFLAG));
 }
-
-
-
 /******** C_TAN
 	  Return the tangent of the argument
 */
@@ -655,9 +596,6 @@ static long long c_tan()
 {
   return (c_trig(TANFLAG));
 }
-
-
-
 static long long c_bit_not()
 {
   long long success=TRUE;
@@ -669,7 +607,6 @@ static long long c_bit_not()
   deref_ptr(t);
   get_one_arg(t->attr_list,&arg1);
   arg3=aim->bbbb_1;
-
   if (arg1) {
     deref(arg1);
     deref_args(t,set_1);
@@ -701,14 +638,9 @@ static long long c_bit_not()
   }
   else
     curry();
-
   nonnum_warning(t,arg1,NULL);
   return success;
 }
-
-
-
-
 /******** C_BIT_AND
 	  Return the bitwise operation: ARG1 and ARG2.
 */
@@ -723,7 +655,6 @@ static long long c_bit_and()
   deref_ptr(t);
   get_two_args(t->attr_list,&arg1,&arg2);
   arg3=aim->bbbb_1;
-  
   if(arg1) {
     deref(arg1);
     success=get_real_value(arg1,&val1,&num1);
@@ -733,7 +664,6 @@ static long long c_bit_and()
       success=get_real_value(arg2,&val2,&num2);
     }
   }
-  
   if(success)
     if(arg1 && arg2) {
       deref(arg3);
@@ -779,17 +709,12 @@ static long long c_bit_and()
 	  success=(val3==(REAL)(((unsigned long long)val1) & ((unsigned long long)val2)));
 	  break;
 	}
-      
     }
     else
       curry();
-  
   nonnum_warning(t,arg1,arg2);
   return success;
 }
-
-
-
 /******** C_BIT_OR
 	  Return the bitwise operation: ARG1 or ARG2.
 */
@@ -804,7 +729,6 @@ static long long c_bit_or()
   deref_ptr(t);
   get_two_args(t->attr_list,&arg1,&arg2);
   arg3=aim->bbbb_1;
-  
   if(arg1) {
     deref(arg1);
     success=get_real_value(arg1,&val1,&num1);
@@ -814,7 +738,6 @@ static long long c_bit_or()
       success=get_real_value(arg2,&val2,&num2);
     }
   }
-  
   if(success)
     if(arg1 && arg2) {
       deref(arg3);
@@ -849,29 +772,21 @@ static long long c_bit_or()
     }
     else
       curry();
-  
   nonnum_warning(t,arg1,arg2);
   return success;
 }
-
-
 /******** C_SHIFT
 	  Return the bitwise shift left or shift right.
 */
-
 static long long c_shift(long long);
-
-
 static long long c_shift_left()
 {
   return (c_shift(FALSE));
 }
-
 static long long c_shift_right()
 {
   return (c_shift(TRUE));
 }
-
 static long long c_shift(long long dir)
 // long long dir;
 {
@@ -884,7 +799,6 @@ static long long c_shift(long long dir)
   deref_ptr(t);
   get_two_args(t->attr_list,&arg1,&arg2);
   arg3=aim->bbbb_1;
-  
   if(arg1) {
     deref(arg1);
     success=get_real_value(arg1,&val1,&num1);
@@ -894,7 +808,6 @@ static long long c_shift(long long dir)
       success=get_real_value(arg2,&val2,&num2);
     }
   }
-  
   if(success)
     if(arg1 && arg2) {
       deref(arg3);
@@ -931,12 +844,9 @@ static long long c_shift(long long dir)
     }
     else
       curry();
-  
   nonnum_warning(t,arg1,arg2);
   return success;
 }
-
-
 /******** C_MOD
 	  The modulo operation.
 */
@@ -951,7 +861,6 @@ static long long c_mod()
   deref_ptr(t);
   get_two_args(t->attr_list,&arg1,&arg2);
   arg3=aim->bbbb_1;
-  
   if(arg1) {
     deref(arg1);
     success=get_real_value(arg1,&val1,&num1);
@@ -961,7 +870,6 @@ static long long c_mod()
       success=get_real_value(arg2,&val2,&num2);
     }
   }
-  
   if(success)
     if(arg1 && arg2) {
       deref(arg3);
@@ -996,11 +904,9 @@ static long long c_mod()
     }
     else
       curry();
-  
   nonnum_warning(t,arg1,arg2);
   return success;
 }
-
 /******** C_ADD
 	  Addition is considered as a 3-variable relation as in Prolog:
   
@@ -1022,7 +928,6 @@ static long long c_add()
   deref_ptr(t);
   get_two_args(t->attr_list,&arg1,&arg2);
   arg3=aim->bbbb_1;
-  
   if(arg1) {
     deref(arg1);
     success=get_real_value(arg1,&val1,&num1);
@@ -1032,7 +937,6 @@ static long long c_add()
       success=get_real_value(arg2,&val2,&num2);
     }
   }
-  
   if(success)
     if(arg1 && arg2) {
       deref(arg3);
@@ -1089,37 +993,9 @@ static long long c_add()
     }
     else
       curry(); 
-  /*
-    '+' is no long longer a function of a single argument:
-    if(arg1) {
-    deref(arg3);
-    success=get_real_value(arg3,&val3,&num3);
-    if(success)
-    switch(num1+4*num3) {
-    case 0:
-    residuate2(arg1,arg3);
-    break;
-    case 1:
-    success=unify_real_result(arg3,val1);
-    break;
-    case 4:
-    success=unify_real_result(arg1,val3);
-    break;
-    case 5:
-    success=(val1==val3);
-    }
-    }
-    else
-    curry();
-  */
-  
   nonnum_warning(t,arg1,arg2);
   return success;
 }
-
-
-
-
 /******** C_SUB
 	  Identical (nearly) to C_ADD
 */
@@ -1144,7 +1020,6 @@ static long long c_sub()
       success=get_real_value(arg2,&val2,&num2);
     }
   }
-  
   if(success)
     if(arg1 && arg2) {
       deref(arg3);
@@ -1218,11 +1093,9 @@ static long long c_sub()
       }
       else
 	curry();
-  
   nonnum_warning(t,arg1,arg2);
   return success;
 }
-
 /******** C_LOG
 	  Natural logarithm.
 */
@@ -1237,7 +1110,6 @@ static long long c_log()
   deref_ptr(t);
   get_one_arg(t->attr_list,&arg1);
   arg3=aim->bbbb_1;
-  
   if(arg1) {
     deref(arg1);
     deref_args(t,set_1);
@@ -1272,14 +1144,9 @@ static long long c_log()
   }
   else
     curry();
-
   nonnum_warning(t,arg1,NULL);
   return success;
 }
-
-
-
-
 /******** C_EXP
 	  Exponential.
 */
@@ -1327,7 +1194,6 @@ static long long c_exp()
   nonnum_warning(t,arg1,NULL);
   return success;
 }
-
 void insert_math_builtins()
 {
   new_built_in(syntax_module,"*",(def_type)function_it,c_mult);

@@ -2,28 +2,21 @@
    All Rights Reserved
 */
 /* 	$Id: bi_sys.c,v 1.2 1994/12/08 23:08:17 duchier Exp $	 */
-
-#ifndef lint
-static char vcid[] = "$Id: bi_sys.c,v 1.2 1994/12/08 23:08:17 duchier Exp $";
-#endif /* lint */
 #define EXTERN extern
 #define REV401PLUS
-
 #ifdef REV401PLUS
 #include "defs.h"
 #endif
-
 #define copyPsiTerm(a,b)        (ptr_psi_term )memcpy(a,b,sizeof(psi_term))
-
 /******** C_TRACE
-	  With no arguments: Toggle the trace flag & print a message saying whether
-	  tracing is on or off.
-	  With argument 1: If it is top, return the trace flag and disable tracing.
-	  If it is true or false, set the trace flag to that value.  Otherwise, give
-	  an error.
-	  With argument 2: If it is top, return the stepflag and disable stepping.
-	  If it is true or false, set the stepflag to that value.  Otherwise, give
-	  an error.
+With no arguments: Toggle the trace flag & print a message saying whether
+tracing is on or off.
+With argument 1: If it is top, return the trace flag and disable tracing.
+If it is true or false, set the trace flag to that value.  Otherwise, give
+an error.
+With argument 2: If it is top, return the stepflag and disable stepping.
+If it is true or false, set the stepflag to that value.  Otherwise, give
+an error.
 */
 long long c_trace()
 {
@@ -123,13 +116,10 @@ static long long c_warning()
   t=aim->aaaa_1;
   deref_args(t,set_empty);
   warningflag = !warningflag;
-
   /*  RM: Sep 24 1993  */
   Infoline("*** Warning messages are%s printed\n",warningflag?"":" not");
-  
   return TRUE;
 }
-
 /******** C_MAXINT
 	  Return the integer of greatest magnitude that guarantees exact
 	  integer arithmetic.
@@ -153,9 +143,6 @@ static long long c_maxint()
   }
   return success;
 }
-
-
-
 /* 21.1 */
 /******** C_QUIET
 	  Return the value of not(NOTQUIET).
@@ -174,15 +161,10 @@ long long c_quiet()
   push_goal(unify,result,ans,NULL);
   return success;
 }
-
-
-
 /******** C_CPUTIME
 	  Return the cpu-time in seconds used by the Wild_Life interpreter.
 */
-
 #ifdef _WIN64
-
 static long long c_cputime()
 {
   ptr_psi_term result, t;
@@ -204,13 +186,8 @@ static long long c_cputime()
   }
   return success;
 }
-
 #endif
-
-
-
 #ifdef __unix__
-
 static long long c_cputime()
 {
   ptr_psi_term result, t;
@@ -232,16 +209,13 @@ static long long c_cputime()
   }
   return success;
 }
-
 #endif
 
 /******** C_REALTIME
 	  Return the time in seconds since 00:00:00 GMT, January 1, 1970.
 	  This is useful for building real-time applications such as clocks.
 */
-
 // REV401PLUS I had revised c_realtime as below in prior work on X
-
 static long long c_realtime()
 {
   ptr_psi_term result, t;
@@ -260,22 +234,21 @@ static long long c_realtime()
   deref_ptr(result);
   success=get_real_value(result,&val,&num);
   if (success) {
+
 #ifdef _WIN64
     time(&rawtime);
     thetime = (REAL)rawtime;
 #endif
+
 #ifdef __unix__
     gettimeofday(&tp, &tzp);
-    
     thetime=(REAL)tp.tv_sec + ((REAL)tp.tv_usec/1000000.0);
-    
 #endif
+
     success=unify_real_result(result,thetime);
   }
   return success;
 }
-
-
 /******** C_LOCALTIME
 	  Return a psi-term containing the local time split up into year, month, day,
 	  hour, minute, second, and weekday.
@@ -293,15 +266,12 @@ static long long c_localtime()
   time_t rawtime;
   struct tm *thetime;
 
-
   t=aim->aaaa_1;
   deref_args(t,set_empty);
   result=aim->bbbb_1;
   deref_ptr(result);
-
   time(&rawtime);
   thetime=localtime(&rawtime);
-
   psitime=stack_psi_term(4);
   psitime->type=timesym;
   stack_add_int_attr(psitime, year_attr,    thetime->tm_year+1900);
@@ -311,9 +281,7 @@ static long long c_localtime()
   stack_add_int_attr(psitime, minute_attr,  thetime->tm_min);
   stack_add_int_attr(psitime, second_attr,  thetime->tm_sec);
   stack_add_int_attr(psitime, weekday_attr, thetime->tm_wday);
-
   push_goal(unify,result,psitime,NULL);
-
   return success;
 }
 #endif
@@ -331,10 +299,8 @@ static long long c_localtime()
   deref_args(t,set_empty);
   result=aim->bbbb_1;
   deref_ptr(result);
-
   gettimeofday(&tp, &tzp);
   thetime=localtime((time_t *) &(tp.tv_sec));
-
   psitime=stack_psi_term(4);
   psitime->type=timesym;
   stack_add_int_attr(psitime, year_attr,    thetime->tm_year+1900);
@@ -344,12 +310,9 @@ static long long c_localtime()
   stack_add_int_attr(psitime, minute_attr,  thetime->tm_min);
   stack_add_int_attr(psitime, second_attr,  thetime->tm_sec);
   stack_add_int_attr(psitime, weekday_attr, thetime->tm_wday);
-
   push_goal(unify,result,psitime,NULL);
-
   return success;
 }
-
 #endif
 
 /******** C_STATISTICS
@@ -363,29 +326,23 @@ static long long c_statistics()
 
   t=aim->aaaa_1;
   deref_args(t,set_empty);
-
   t1 = sizeof(mem_base)*(stack_pointer-mem_base);
   t2 = sizeof(mem_base)*(mem_limit-heap_pointer);
   t3 = sizeof(mem_base)*(mem_limit-mem_base);
-
   printf("\n");
   /* printf("************** SYSTEM< INFORMATION **************\n"); */
   printf("Stack size  : %8lld bytes (%5lldK) (%lld%%)\n",t1,t1/1024,100*t1/t3);
   printf("Heap size   : %8lld bytes (%5lldK) (%lld%%)\n",t2,t2/1024,100*t2/t3);
   printf("Total memory: %8lld bytes (%5lldK)\n",t3,t3/1024);
-
 #ifdef X11
   printf("X predicates are installed.\n");
 #else
   printf("X predicates are not installed.\n");
 #endif
-  
   /* printf("\n"); */
   /* printf("************************************************\n"); */
   return success;
 }
-
-
 /******** C_GARBAGE
 	  Force a call to the garbage collector.
 */
@@ -398,8 +355,6 @@ static long long c_garbage()
   garbage();
   return TRUE;
 }
-
-
 /******** C_GETENV
 	  Get the value of an environment variable.
 */
@@ -408,12 +363,11 @@ static long long c_getenv()
   long long success=FALSE;
   ptr_psi_term arg1,arg2,funct,result,t;
   long long smaller;  // REV401PLUS int -> long long
-  
+
   funct = aim->aaaa_1;
   result=aim->bbbb_1;
   deref_ptr(funct);
   deref_ptr(result);
-  
   get_two_args(funct->attr_list, &arg1, &arg2);
   if(arg1) {
     deref_ptr(arg1);
@@ -433,11 +387,8 @@ static long long c_getenv()
   }
   else
     Errorline("argument missing in %P\n",funct);
-  
   return success;
 }
-
-
 /******** C_SYSTEM
 	  Pass a string to shell for execution. Return the value as the result.
 */
@@ -479,10 +430,8 @@ static long long c_system()
   }
   else
     curry();
-  
   return success;
 }
-
 /******** C_ENCODE
 	  Force type encoding.
 	  This need normally never be called by the user.
@@ -496,9 +445,7 @@ static long long c_encode()
   encode_types();
   return TRUE;
 }
-
 static GENERIC unitListElement;
-
 void setUnitList(GENERIC x)
 // GENERIC x;
 {
@@ -528,23 +475,10 @@ GENERIC intListNext(ptr_int_list p)
   return (GENERIC )(p->next);
 }
 
-#if FALSE
-ptr_psi_term quotedStackCopy(p)
-  ptr_psi_term p;  // REV401PLUS unveverting - def_proto.h
-{
-  ptr_psi_term q;
-
-  q = stack_copy_psi_term(p); // added * REV401PLUS
-  mark_quote(q);
-  return q;
-}
-#endif
-
 /* Return a ptr to a psi-term marked as  evaluated.  The psi-term is a copy at
  * the top level of the goal residuated on p, with the rest of the psi-term
  * shared.
  */
-
 ptr_psi_term residListGoalQuote(ptr_residuation p)
 // ptr_residuation p;
 {
@@ -571,17 +505,12 @@ ptr_psi_term makePsiTerm(ptr_definition x)
   p->type = x;
   return p;
 }
-
-
-
 ptr_psi_term makePsiList(GENERIC head, ptr_psi_term (*valueFunc)(GENERIC), GENERIC (*nextFunc)(GENERIC))
 //     GENERIC head;
 //     ptr_psi_term (*valueFunc)();
 //     GENERIC (*nextFunc)();
 {
   ptr_psi_term result;
-
-  
   /*  RM: Dec 14 1992: Added the new list representation  */
   result=stack_nil();
   
@@ -591,9 +520,6 @@ ptr_psi_term makePsiList(GENERIC head, ptr_psi_term (*valueFunc)(GENERIC), GENER
   }
   return result;
 }
-
-
-
 /******** C_ResidList
 	  rlist(A) ->  list all eval/prove goals residuated on variable 'A'.
 */
@@ -611,7 +537,6 @@ static long long c_residList()
       curry();
       return TRUE;
     }
-	
   result = aim->bbbb_1;
   deref(result);
   deref_ptr(arg1);
@@ -626,7 +551,6 @@ static long long c_residList()
   return TRUE;
 }
 
-
 ptr_goal makeGoal(ptr_psi_term p)
 // ptr_psi_term p;
 {
@@ -639,8 +563,6 @@ ptr_goal makeGoal(ptr_psi_term p)
   goal_stack = old;
   return g;
 }
-
-
 /******** C_residuate
 	  residuate(A,B) ->  residuate goal B on variable A, non_strict in both args
 */
@@ -652,7 +574,6 @@ static long long c_residuate()
 	
   pred = aim->aaaa_1;
   deref_ptr(pred);
-
   get_two_args(pred->attr_list, &arg1, &arg2);
   if ((!arg1)||(!arg2)) {
     Errorline("%P requires two arguments.\n",pred);
@@ -662,10 +583,8 @@ static long long c_residuate()
   deref_ptr(arg1);
   deref_ptr(arg2);
   deref_args(pred, set_1_2);
-
   g = makeGoal(arg2);
   residuateGoalOnVar(g, arg1, NULL);
-	
   return TRUE;
 }
 
@@ -676,7 +595,6 @@ static long long c_residuate()
 	  The list must have finite length.
 */
 static long long c_mresiduate()
-     
 {
   long long success=TRUE;
   ptr_psi_term pred;
@@ -685,19 +603,15 @@ static long long c_mresiduate()
   
   pred = aim->aaaa_1;
   deref_ptr(pred);
-  
   get_two_args(pred->attr_list, &arg1, &arg2);
   if ((!arg1)||(!arg2)) {
     Errorline("%P requires two arguments.\n",pred);
     return FALSE;
   }
-  
   deref_ptr(arg1);
   deref_ptr(arg2);
   deref_args(pred, set_1_2);
-  
   g = makeGoal(arg2);
-  
   /* Then residuate on all the list variables: */
   tmp=arg1;
   while(tmp && tmp->type==alist) { /*  RM: Dec 14 1992  */
@@ -709,16 +623,12 @@ static long long c_mresiduate()
     if(tmp)
       deref_ptr(tmp);
   }
-  
   if(!tmp || tmp->type!=nil) {
     Errorline("%P should be a nil-terminated list in mresiduate.\n",arg1);
     success=FALSE;
   }
-
   return success;
 }
-
-
 
 void insert_system_builtins()
 {
