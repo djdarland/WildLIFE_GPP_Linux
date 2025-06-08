@@ -2,41 +2,16 @@
 ** All Rights Reserved.
 *****************************************************************/
 /* 	$Id: lib.c,v 1.2 1994/12/08 23:26:47 duchier Exp $	 */
-
-#ifndef lint
-static char vcid[] = "$Id: lib.c,v 1.2 1994/12/08 23:26:47 duchier Exp $";
-#endif /* lint */
-
 /* VERSION of Wild-LIFE for calling from C */
 /*  RM: Mar 31 1993  */
 #define EXTERN extern
 #define REV401PLUS
-
 #ifdef REV401PLUS
 #include "defs.h"
 #endif
-
-
-
 #ifdef X11
 #include "xpred.h"
 #endif
-
-#ifdef SOLARIS
-#include <stdlib.h>
-static unsigned int libseed;
-#endif
-
-
-
-// REV401PLUS -- moved nex 4 down
-/* long long noisy=TRUE;
-   long long file_date=3;
-   long long types_done=FALSE;
-   float garbage_time=0;
-*/ // REMOVED above for MINT
-
-
 char **group_features(char **f,ptr_node n)
 //     char **f;
 //     ptr_node n;
@@ -50,11 +25,8 @@ char **group_features(char **f,ptr_node n)
     if(n->right)
       f=group_features(f,n->right);
   }
-  
   return f;
 }
-
-
 void exit_if_true(long long exitflag)
 //     long long exitflag;
 {
@@ -64,9 +36,6 @@ void exit_if_true(long long exitflag)
     exit(1);
   }
 }
-
-
-
 /* I/O initialization */
 void init_io()
 {
@@ -77,18 +46,15 @@ void init_io()
 #ifdef _WIN64
   fstat(_fileno(stdin), &buffer);
 #endif
-  
   /* True iff stdin is from a terminal */
   stdin_terminal=(S_IFCHR & buffer.st_mode)!=0;
   input_state=NULL;
   stdin_state=NULL;
   output_stream=stdout;
 }
-
 #ifdef REV102
 extern char prompt_buffer[];
 #endif
-
 /* Initial state of system to begin a query */
 void init_system()
 {
@@ -100,7 +66,6 @@ void init_system()
   choice_stack=NULL;
   undo_stack=NULL; /* 7.8 */
   var_tree=NULL;
-
   /*  RM: Oct 13 1993  */
   if(current_module==user_module)
     prompt=PROMPT;
@@ -108,10 +73,8 @@ void init_system()
     prompt=prompt_buffer;
     sprintf(prompt_buffer,"%s%s",current_module->module_name,PROMPT);
   }
-    
   resid_aim=NULL;
   exit_if_true(!memory_check());
-  
 #ifdef X11
   /*  RM: Dec 15 1992  */
   xevent_list=stack_nil();
@@ -119,11 +82,9 @@ void init_system()
   
   init_global_vars(); /*  RM: Feb 15 1993  */
 }
-
 void WFInit(long long argc, char *argv[])
 {
   ptr_stack save_undo_stack;
-  
   int i;
 #ifdef __unix__
   for(i=0;i<256;i++)
@@ -133,8 +94,6 @@ void WFInit(long long argc, char *argv[])
   for (i = 0;i < 256;i++)
     rand_array[i] = rand();
 #endif
-
-  
   if (argc < 10)
     {
       arg_c=argc;
@@ -146,9 +105,7 @@ void WFInit(long long argc, char *argv[])
     {
       Errorline("Too many command line arguments\n");
     }
-  
   quietflag = TRUE; /*  RM: Mar 31 1993  */
-  
   init_io();
   init_memory();
   exit_if_true(!mem_base || !other_base);
@@ -157,7 +114,6 @@ void WFInit(long long argc, char *argv[])
   assert(stack_pointer==mem_base); /* 8.10 */
   init_print();
   assert(stack_pointer==mem_base); /* 8.10 */
-  
   /* Timekeeping initialization */
 #ifdef __unix__
   tzset();
@@ -168,9 +124,7 @@ void WFInit(long long argc, char *argv[])
   life_start = clock();
 #endif
   assert(stack_pointer==mem_base); /* 8.10 */
-  
   init_modules(); /*  RM: Jan  8 1993  */
-  
   init_built_in_types();
   assert(stack_pointer==mem_base); /* 8.10 */
 #ifdef X11
@@ -185,26 +139,17 @@ void WFInit(long long argc, char *argv[])
   assert(stack_pointer==mem_base); /* 8.10 */
   init_trace();
   noisy=FALSE;
-  
   assert(stack_pointer==mem_base); /* 8.10 */
-  
-  
   set_current_module(user_module); /*  RM: Jan 27 1993  */
-  
   /* Read in the .set_up file */
   init_system();
-  
 #ifdef ARITY  /*  RM: Mar 29 1993  */
   arity_init();
 #endif
-  
-  
   open_input_file("~/life_local/Source/.set_up");
   push_goal(load,input_state,(ptr_psi_term)file_date,(GENERIC)heap_copy_string("~/life_local/Source/.set_up")); // REV401PLUS casts
   file_date+=2;
   main_prove();
-  
-  
   setjmp(env);
   /* printf("%ld\n",(long long)(stack_pointer-mem_base)); */ /* 8.10 */
   init_system(); 
@@ -213,14 +158,9 @@ void WFInit(long long argc, char *argv[])
   var_occurred=FALSE;
   save_undo_stack=undo_stack;
   stdin_cleareof();
-  
   c_query_level=0;
 }
-
-
-
 int WFInput(char *query)
-     
 //     char *query;
 {
   ptr_psi_term t;
@@ -229,12 +169,8 @@ int WFInput(char *query)
   int result=WFno;
   ptr_stack save_undo_stack;
   ptr_choice_point old_choice;
-  
-  
   save_undo_stack=undo_stack;
   old_choice=choice_stack;
-
-  
   if(!strcmp(query,".")) {
     reset_stacks();
     result=WFyes;
@@ -255,12 +191,10 @@ int WFInput(char *query)
       /* old_var_occurred=var_occurred; */
       var_occurred=FALSE;
       t=stack_copy_psi_term(parse(&sort));
-      
       /* Main loop of interpreter */
       if(sort==QUERY) {
 	ignore_eff=TRUE;
 	goal_count=0;
-		
 	push_choice_point(c_what_next,(ptr_psi_term)c_query_level,NULL,NULL); // REV401PLUS cast
 	c_query_level++;
 	push_goal(c_what_next,(ptr_psi_term)c_query_level,(ptr_psi_term)var_occurred,NULL); // REV401PLUS casts
@@ -277,13 +211,10 @@ int WFInput(char *query)
 	encode_types();
       }
     }
-
     if(sort==QUERY) {
       start_chrono();
       main_prove();
-      
       if(goal_stack && goal_stack->type==c_what_next) {
-	  
 	if((unsigned long long)(goal_stack->aaaa_1)==c_query_level) // REV401PLUS cast
 	  if(choice_stack==old_choice) {
 	    result=WFyes;
@@ -295,19 +226,13 @@ int WFInput(char *query)
 	  result=WFno;
 	  c_query_level--;
 	}
-	
 	goal_stack=goal_stack->next;
       }
     }
   }
-  
   return result;
 }
-
-
-
 PsiTerm WFGetVar(char *name)
-     
 //     char *name;
 {
   ptr_psi_term result=NULL;
@@ -319,13 +244,9 @@ PsiTerm WFGetVar(char *name)
     if(result)
       deref_ptr(result);
   }
-  
   return result;
 }
-
-
 int WFfeature_count_loop(ptr_node n)
-     
 //     ptr_node n;
 {
   int result=0;
@@ -337,14 +258,9 @@ int WFfeature_count_loop(ptr_node n)
     if(n->right)
       result+=WFfeature_count_loop(n->right);
   }
-
   return result;
 }
-
-
-
 int WFFeatureCount(ptr_psi_term psi)
-
 //   ptr_psi_term psi;
 {
   int result=0;
@@ -353,14 +269,9 @@ int WFFeatureCount(ptr_psi_term psi)
     deref_ptr(psi);
     result=WFfeature_count_loop(psi->attr_list);
   }
-  
   return result;
 }
-
-
-
 char *WFType(ptr_psi_term psi)
-
 //   ptr_psi_term psi;
 {
   char *result=NULL;
@@ -370,11 +281,7 @@ char *WFType(ptr_psi_term psi)
   }
   return result;
 }
-
-
-
 char **WFFeatures(ptr_psi_term psi)
-
 //     ptr_psi_term psi;
 {
   char **features=NULL;
@@ -382,20 +289,14 @@ char **WFFeatures(ptr_psi_term psi)
   
   if(psi) {
     deref_ptr(psi);
-    
     n=WFfeature_count_loop(psi->attr_list);
     if(n) {
       features=(char **)malloc((n+1)*sizeof(char *));
       group_features(features,psi->attr_list);
     }
   }
-
   return features;
 }
-
-
-
-
 double WFGetDouble(ptr_psi_term psi,int *ok)
 //     ptr_psi_term psi;
 //     int *ok;
@@ -404,10 +305,8 @@ double WFGetDouble(ptr_psi_term psi,int *ok)
   
   if(ok)
     *ok=FALSE;
-  
   if(psi) {
     deref_ptr(psi);
-    
     if(sub_type(psi->type,real) && psi->value_3) {
       value= *((double *)psi->value_3);
       if(ok)
@@ -416,9 +315,6 @@ double WFGetDouble(ptr_psi_term psi,int *ok)
   }
   return value;
 }
-
-
-
 char *WFGetString(ptr_psi_term psi,int *ok)
 //     ptr_psi_term psi;
 //     int *ok;
@@ -427,10 +323,8 @@ char *WFGetString(ptr_psi_term psi,int *ok)
   
   if(ok)
     *ok=FALSE;
-  
   if(psi) {
     deref_ptr(psi);
-    
     if(sub_type(psi->type,quoted_string) && psi->value_3) {
       value=(char *)psi->value_3;
       if(ok)
@@ -439,11 +333,7 @@ char *WFGetString(ptr_psi_term psi,int *ok)
   }
   return value;
 }
-
-
-
 ptr_psi_term WFGetFeature(ptr_psi_term psi,char *feature)  // changed g++
-
 //     ptr_psi_term psi;
 //     char *feature;
 {
@@ -456,6 +346,5 @@ ptr_psi_term WFGetFeature(ptr_psi_term psi,char *feature)  // changed g++
     if(n)
       result=(ptr_psi_term)n->data;  // changed g++
   }
-  
   return result;
 }

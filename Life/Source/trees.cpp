@@ -2,17 +2,11 @@
 ** All Rights Reserved.
 *****************************************************************/
 /* 	$Id: trees.c,v 1.3 1995/07/27 21:22:21 duchier Exp $	 */
-
-#ifndef lint
-static char vcid[] = "$Id: trees.c,v 1.3 1995/07/27 21:22:21 duchier Exp $";
-#endif /* lint */
-
 #define EXTERN extern
 #define REV401PLUS
 #ifdef REV401PLUS
 #include "defs.h"
 #endif
-
 /******** INTCMP(a,b)
 	  Compares two integers, for use in FIND or INSERT.
 */
@@ -22,8 +16,6 @@ long long intcmp(long long a,long long b)
 {
   return a-b;
 }
-
-
 /* Return TRUE iff the string s represents an integer. */
 /* Modify s to point to first non-zero digit. */
 /* Return number of significant digits in the integer and its sign. */
@@ -34,14 +26,6 @@ long long is_int(char **s, long long *len, long long *sgn)
 {
   char *sint; /* Ptr to first non-zero digit */
   char *stmp; /* Scratchpad for string ptr */
-
-  /*
-    { register char *p= *s;
-    register char c= *p;
-    if(c>'0' && c<='9' && *(p+1)==0) return TRUE;
-    }
-  */
-  
   stmp=(*s);
   if (*sgn=(*stmp=='-')) {
     stmp++;
@@ -58,10 +42,6 @@ long long is_int(char **s, long long *len, long long *sgn)
   *s=sint;
   return TRUE;
 }
-
-
-
-
 /******** FEATCMP(s1,s2)
 	  Compares two strings which represent features, for use
 	  in FIND or INSERT.  This differs from strcmp for those strings
@@ -77,16 +57,10 @@ long long featcmp(char *str1, char *str2)
 
   if(str1==str2)
     return 0;
-  
-  /* if (*str1==0 && *str2==0) return 0; "" bug is unaffected -- PVR 23.2.94 */
-
   if(*(str1+1)==0 && *(str2+1)==0)
     return *str1 - *str2;
-  
-  
   s1=str1; /* Local copies of the pointers */
   s2=str2;
-
   if (is_int(&s1,&len1,&sgn1)) {
     if (is_int(&s2,&len2,&sgn2)) {
       if (sgn1!=sgn2) return (sgn2-sgn1); /* Check signs first */
@@ -103,8 +77,6 @@ long long featcmp(char *str1, char *str2)
       return strcmp(s1,s2);
   }
 }
-
-
 /******** HEAP_NCOPY_STRING(string,length)
 	  Make a copy of the string in the heap, and return a pointer to that.
 	  Exceptions: "1" and "2" are unique (and in the heap).
@@ -116,14 +88,11 @@ char *heap_ncopy_string(char *s,int n)
   char *p;
   
   if (s==one || s==two) return s;
-
   p=(char *)heap_alloc(n+1);
   strncpy(p,s,n);
   p[n]='\0';
-  
   return p;
 }
-
 /******** HEAP_COPY_STRING(string)
 	  Make a copy of the string in the heap, and return a pointer to that.
 	  Exceptions: "1" and "2" are unique (and in the heap).
@@ -131,9 +100,6 @@ char *heap_ncopy_string(char *s,int n)
 char *heap_copy_string(char *s)
 // char *s;
 { return heap_ncopy_string(s,strlen(s)); }
-
-
-
 /******** STACK_COPY_STRING(string)
 	  Make a copy of the string in the stack, and return a pointer to that.
 	  Exceptions: "1" and "2" are unique (and in the heap).
@@ -142,33 +108,27 @@ char *stack_copy_string(char *s)
 // char *s;
 {
   char *p;
-  
   if (s==one || s==two) return s;
-
   p=(char *)stack_alloc(strlen(s)+1);
   strcpy(p,s);
-  
   return p;
 }
-
-
-
 /******** GENERAL_INSERT(comp,keystr,tree,info,heapflag,copystr,bkflag)
-	  General tree insertion routine.
-	  comp     = comparison routine for insertion.
-	  keystr   = the insertion key.
-	  tree     = the tree to insert in.
-	  info     = the information to insert.
-	  heapflag = HEAP or STACK for heap or stack allocation of insertion node.
-	  copystr  = TRUE iff copy the keystr to the heap on insertion.
-	  bkflag   = 1 iff the insertion is backtrackable (trailed with trail check).
-	  2 iff the insertion must always be trailed.
-	  Returns a pointer to the node containing the pair (keystr,info).
+General tree insertion routine.
+comp     = comparison routine for insertion.
+keystr   = the insertion key.
+tree     = the tree to insert in.
+info     = the information to insert.
+heapflag = HEAP or STACK for heap or stack allocation of insertion node.
+copystr  = TRUE iff copy the keystr to the heap on insertion.
+bkflag   = 1 iff the insertion is backtrackable (trailed with trail check).
+2 iff the insertion must always be trailed.
+Returns a pointer to the node containing the pair (keystr,info).
 
-	  Here KEYSTR can be either a pointer to a string, an integer, or a feature.
-	  COMP is the function to call to compare 2 keys so it has three
-	  possible values: COMP==strcmp(), COMP==intcmp(), or COMP==featcmp().
-	  COMP(a,b) should return n where: n=0 if a=b; n>0 if a>b; n<0 if a<b.
+Here KEYSTR can be either a pointer to a string, an integer, or a feature.
+COMP is the function to call to compare 2 keys so it has three
+possible values: COMP==strcmp(), COMP==intcmp(), or COMP==featcmp().
+COMP(a,b) should return n where: n=0 if a=b; n>0 if a>b; n<0 if a<b.
 */
 ptr_node general_insert(long long comp,char *keystr,
 			ptr_node *tree,GENERIC info,
@@ -183,7 +143,6 @@ ptr_node general_insert(long long comp,char *keystr,
   long long cmp;
   ptr_node result;
   long long to_do=TRUE;
-
   
   do {
     if (*tree==NULL) {
@@ -202,7 +161,6 @@ ptr_node general_insert(long long comp,char *keystr,
       if (comp == INTCMP) cmp=intcmp((long long)keystr,(long long)(*tree)->key); // REV401PLUS cast
       else if (comp == STRCMP) cmp=strcmp(keystr,(*tree)->key);
       else if (comp == FEATCMP) cmp=featcmp(keystr,(*tree)->key);
-
       if (cmp<0)
 	tree=(&((*tree)->left));
       else
@@ -218,16 +176,12 @@ ptr_node general_insert(long long comp,char *keystr,
 	  tree=(&((*tree)->right));
     }
   } while (to_do);
-  
   return result;
 }
-
-
-
 /******** HEAP_INSERT_COPYSTR(keystr,tree,info)
-	  Insert the pointer INFO under the reference string KEYSTR (which is
-	  a feature name) in the binary tree TREE.  KEYSTR is copied to the heap.
-	  A potential additional node allocated to TREE is put on the heap.
+Insert the pointer INFO under the reference string KEYSTR (which is
+a feature name) in the binary tree TREE.  KEYSTR is copied to the heap.
+A potential additional node allocated to TREE is put on the heap.
 */
 void heap_insert_copystr(char *keystr,ptr_node *tree, GENERIC info)
 // char *keystr;
@@ -236,13 +190,10 @@ void heap_insert_copystr(char *keystr,ptr_node *tree, GENERIC info)
 {
   general_insert(FEATCMP,keystr,tree,info,HEAP,TRUE,0);
 }
-
-
-
 /******** STACK_INSERT_COPYSTR(keystr,tree,info)
-	  Insert the pointer INFO under the reference string KEYSTR (which is
-	  a feature name) in the binary tree TREE.  KEYSTR is copied to the heap.
-	  A potential additional node allocated to TREE is put on the stack.
+Insert the pointer INFO under the reference string KEYSTR (which is
+a feature name) in the binary tree TREE.  KEYSTR is copied to the heap.
+A potential additional node allocated to TREE is put on the stack.
 */
 void stack_insert_copystr(char *keystr,ptr_node *tree,GENERIC info)
 // char *keystr;
@@ -251,13 +202,10 @@ void stack_insert_copystr(char *keystr,ptr_node *tree,GENERIC info)
 {
   general_insert(FEATCMP,keystr,tree,info,STACK,TRUE,0);
 }
-
-
-
 /******** HEAP_INSERT(comp,keystr,tree,info)
-	  Insert the pointer INFO under the reference KEYSTR in the
-	  binary tree TREE stored in the heap.
-	  Return the pointer to the node of KEYSTR.
+Insert the pointer INFO under the reference KEYSTR in the
+binary tree TREE stored in the heap.
+Return the pointer to the node of KEYSTR.
 */
 ptr_node heap_insert(long long comp,char *keystr,ptr_node *tree,GENERIC info)
 // long long comp;
@@ -267,11 +215,8 @@ ptr_node heap_insert(long long comp,char *keystr,ptr_node *tree,GENERIC info)
 {
   return general_insert(comp,keystr,tree,info,HEAP,FALSE,0);
 }
-
-
-
 /******** STACK_INSERT(comp,keystr,tree,info)
-	  Exactly the same as heap_insert, only the new node is in the stack.
+Exactly the same as heap_insert, only the new node is in the stack.
 */
 ptr_node stack_insert(long long comp,char *keystr,ptr_node *tree,GENERIC info)
 // long long comp;
@@ -281,9 +226,6 @@ ptr_node stack_insert(long long comp,char *keystr,ptr_node *tree,GENERIC info)
 {
   return general_insert(comp,keystr,tree,info,STACK,FALSE,0);
 }
-
-
-
 /******** BK_STACK_INSERT(comp,keystr,tree,info)
 	  Insert the pointer INFO under the reference string KEYSTR of
 	  length len in the binary tree TREE. Return the pointer to the permanent
@@ -298,14 +240,11 @@ ptr_node bk_stack_insert(long long comp,char *keystr,ptr_node *tree,GENERIC info
 {
   return general_insert(comp,keystr,tree,info,STACK,FALSE,1);
 }
-
-
-
 /******** BK2_STACK_INSERT(comp,keystr,tree,info)
-	  Insert the pointer INFO under the reference string KEYSTR of
-	  length len in the binary tree TREE. Return the pointer to the permanent
-	  storage place of KEY. This is used by C_APPLY_LABEL
-	  Always trail the change.
+Insert the pointer INFO under the reference string KEYSTR of
+length len in the binary tree TREE. Return the pointer to the permanent
+storage place of KEY. This is used by C_APPLY_LABEL
+Always trail the change.
 */
 ptr_node bk2_stack_insert(long long comp,char *keystr,ptr_node *tree,GENERIC info)
 // long long comp;
@@ -315,12 +254,9 @@ ptr_node bk2_stack_insert(long long comp,char *keystr,ptr_node *tree,GENERIC inf
 {
   return general_insert(comp,keystr,tree,info,STACK,FALSE,2);
 }
-
-
-
 /******** FIND(comp,keystr,tree)
-	  Return the NODE address corresponding to key KEYSTR in TREE using function
-	  COMP to compare keys.
+Return the NODE address corresponding to key KEYSTR in TREE using function
+COMP to compare keys.
 */
 ptr_node find(long long comp,char *keystr,ptr_node tree)
 // long long comp;
@@ -330,11 +266,6 @@ ptr_node find(long long comp,char *keystr,ptr_node tree)
   ptr_node result;
   long long cmp;
   long long to_do=TRUE;
-
-  /*
-    if(comp==strcmp)
-    printf("%s ",keystr);
-  */
     
   do {
     if (tree==NULL) {
@@ -346,7 +277,6 @@ ptr_node find(long long comp,char *keystr,ptr_node tree)
       if (comp == INTCMP) cmp=intcmp((long long)keystr,(long long)((struct wl_node *)tree)->key);
       else if (comp == STRCMP) cmp=strcmp((char *)keystr,(char *)((struct wl_node *)tree)->key);
       else if (comp == FEATCMP) cmp=featcmp(keystr,((struct wl_node *)tree)->key);
-
       if (cmp<0)
 	tree=tree->left;
       else
@@ -358,22 +288,12 @@ ptr_node find(long long comp,char *keystr,ptr_node tree)
 	  tree=tree->right;
     }
   } while (to_do);
-
-
-  /* RM: Jan 27 1993 
-     if(comp==strcmp)
-     printf("Find: '%s' -> %x\n",keystr,result);
-  */
-  
   return result;
 }
-
-
-
 /******** FIND_DATA(p,t)
-	  Return the node containing the data P in tree T. This is a linear search and
-	  can be used to find the key to some data if it is unkown.
-	  Return NULL if no key corresponds to data P.
+Return the node containing the data P in tree T. This is a linear search and
+can be used to find the key to some data if it is unkown.
+Return NULL if no key corresponds to data P.
 */
 ptr_node find_data(GENERIC p,ptr_node t)
 // GENERIC p;
@@ -389,56 +309,8 @@ ptr_node find_data(GENERIC p,ptr_node t)
       if(r==NULL)
 	r=find_data(p,t->right);
     }
-  
   return r;
 }
-
-
-
-/******** UPDATE_SYMBOL(s)
-	  S is a string of characters encountered during parsing.
-	  If it is an existing symbol then simply return its definition,
-	  otherwise create a definition for it, and return that.
-*/
-/*  Commented out by RM: Jan  7 1993
-    New routine is in modules.c
-    
-    ptr_definition update_symbol(s)
-    char *s;
-    {
-    ptr_node n;
-    ptr_definition result;
-
-    n=find(strcmp,s,symbol_table);
-    if(n)
-    result=(ptr_definition )n->data;
-    else {
-    s=heap_copy_string(s);
-      
-    result=HEAP_ALLOC(definition);
-    result->keyword->symbol=s;
-    result->rule=NULL;
-    result->properties=NULL;
-    result->date=0;
-    result->type=undef;
-    result->always_check=TRUE;
-    result->protected=TRUE;
-    result->evaluate_args=TRUE;
-    result->already_loaded=FALSE;
-    result->children=NULL;
-    result->parents=NULL;
-    result->code=NOT_CODED;
-    result->op_data=NULL;
-    
-    heap_insert(strcmp,s,&symbol_table,result);
-    }
-
-    return result;
-    }
-*/
-
-
-
 /******** DELETE_ATTR(key,tree)
 	  Remove the node addressed by KEY from TREE.
 */

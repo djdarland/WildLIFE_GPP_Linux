@@ -2,39 +2,26 @@
 ** All Rights Reserved.
 *****************************************************************/
 /* 	$Id: token.c,v 1.4 1995/07/27 19:22:17 duchier Exp $	 */
-
-#ifndef lint
-static char vcid[] = "$Id: token.c,v 1.4 1995/07/27 19:22:17 duchier Exp $";
-#endif /* lint */
 #define EXTERN extern
 #define REV401PLUS
-
-
 #ifdef REV401PLUS
 #include "defs.h"
 #endif
-
 // REV401PLUS moved down
 // long long trace_input=FALSE;
-
 /***********************************************/
 /* Utilities */
 /* All psi-terms created here are on the HEAP. */
 /* Many utilities exist in two versions that allocate on the heap */
 /* or the stack. */
 /* All these routines are NON-backtrackable. */
-
 void TOKEN_ERROR(ptr_psi_term p)    /*  RM: Feb  1 1993  */
-
 //     ptr_psi_term p;
 {
   if(p->type==error_psi_term->type) {
     Syntaxerrorline("Module violation (%E).\n");
   }
 }
-
-
-
 /* Clear EOF if necessary for stdin */
 void stdin_cleareof()
 {
@@ -48,8 +35,6 @@ void stdin_cleareof()
     eof_flag=FALSE;
   }
 }
-
-
 /* Add an attribute whose value is an integer to a psi-term */
 /* that does not yet contains this attribute. */
 void heap_add_int_attr(ptr_psi_term t, char *attrname, long long value)
@@ -63,22 +48,8 @@ void heap_add_int_attr(ptr_psi_term t, char *attrname, long long value)
   t1->type=integer;
   t1->value_3=heap_alloc(sizeof(REAL));
   *(REAL *)t1->value_3 = (REAL) value;
-
   heap_insert(FEATCMP,heap_copy_string(attrname),&(t->attr_list), (GENERIC)t1); // REV401PLUS cast
 }
-
-#ifdef NEVER
-REAL cp2R(char *cp_in)
-{
-  union {
-    REAL R;
-    char *cp;
-  } it;
-  it.cp = cp_in; 
-  return it.R;
-}
-#endif
-
 void stack_add_int_attr(ptr_psi_term t, char *attrname, long long value)
 // ptr_psi_term t;
 // char *attrname;
@@ -94,8 +65,6 @@ void stack_add_int_attr(ptr_psi_term t, char *attrname, long long value)
   //*(REAL *)t1->value_3 = cp2R(value);
   stack_insert(FEATCMP,heap_copy_string(attrname),&(t->attr_list), (GENERIC)t1); // REV401PLUS cast
 }
-
-
 /* Modify an attribute whose value is an integer to a psi-term */
 /* that already contains this attribute with another integer value. */
 void heap_mod_int_attr(ptr_psi_term t, char *attrname, long long value)
@@ -110,23 +79,6 @@ void heap_mod_int_attr(ptr_psi_term t, char *attrname, long long value)
   t1=(ptr_psi_term)n->data;
   *(REAL *)t1->value_3 = (REAL) value;
 }
-
-/*
-  void stack_mod_int_attr(t, attrname, value)
-  ptr_psi_term t;
-  char *attrname;
-  long long value;
-  {
-  ptr_node n;
-  ptr_psi_term t1;
-
-  n=find(FEATCMP,attrname,t->attr_list);
-  t1=(ptr_psi_term)n->data;
-  *(REAL *)t1->value = (REAL) value;
-  }
-*/
-
-
 /* Add an attribute whose value is a string to a psi-term */
 /* that does not yet contains this attribute. */
 void heap_add_str_attr(ptr_psi_term t, char *attrname, char *str)
@@ -139,9 +91,7 @@ void heap_add_str_attr(ptr_psi_term t, char *attrname, char *str)
   t1=heap_psi_term(4);
   t1->type=quoted_string;
   t1->value_3=(GENERIC)heap_copy_string(str);
-
   heap_insert(FEATCMP,heap_copy_string(attrname),&(t->attr_list), (GENERIC)t1); // REV401PLUS cast
- 
 }
 
 void stack_add_str_attr(ptr_psi_term t, char *attrname, char *str)
@@ -154,11 +104,8 @@ void stack_add_str_attr(ptr_psi_term t, char *attrname, char *str)
   t1=stack_psi_term(4);
   t1->type=quoted_string;
   t1->value_3=(GENERIC)stack_copy_string(str);
-
   stack_insert(FEATCMP,heap_copy_string(attrname),&(t->attr_list), (GENERIC)t1); // REV401PLUS cast
 }
-
-
 /* Modify an attribute whose value is a string to a psi-term */
 /* that already contains this attribute with another integer value. */
 void heap_mod_str_attr(ptr_psi_term t, char *attrname, char *str)
@@ -173,24 +120,6 @@ void heap_mod_str_attr(ptr_psi_term t, char *attrname, char *str)
   t1=(ptr_psi_term)n->data;
   t1->value_3=(GENERIC)heap_copy_string(str);
 }
-
-/*
-  ATTENTION - This should be made backtrackable if used
-  void stack_mod_str_attr(t, attrname, str)
-  ptr_psi_term t;
-  char *attrname;
-  char *str;
-  {
-  ptr_node n;
-  ptr_psi_term t1;
-
-  n=find(FEATCMP,attrname,t->attr_list);
-  t1=(ptr_psi_term)n->data;
-  t1->value=(GENERIC)stack_copy_string(str);
-  }
-*/
-
-
 /* Attach a psi-term to another as an attribute. */
 void heap_add_psi_attr(ptr_psi_term t, char *attrname, ptr_psi_term g)
 // ptr_psi_term t;
@@ -199,7 +128,6 @@ void heap_add_psi_attr(ptr_psi_term t, char *attrname, ptr_psi_term g)
 {
   heap_insert(FEATCMP,heap_copy_string(attrname),&(t->attr_list), (GENERIC)g); // REV401PLUS cast
 }
-
 void stack_add_psi_attr(ptr_psi_term t, char *attrname, ptr_psi_term g)
 // ptr_psi_term t;
 // char *attrname;
@@ -207,7 +135,6 @@ void stack_add_psi_attr(ptr_psi_term t, char *attrname, ptr_psi_term g)
 {
   stack_insert(FEATCMP,heap_copy_string(attrname),&(t->attr_list), (GENERIC)g); // REV401PLUS cast
 }
-
 void bk_stack_add_psi_attr(ptr_psi_term t, char *attrname, ptr_psi_term g)
 // ptr_psi_term t;
 // char *attrname;
@@ -215,8 +142,6 @@ void bk_stack_add_psi_attr(ptr_psi_term t, char *attrname, ptr_psi_term g)
 {
   bk_stack_insert(FEATCMP,heap_copy_string(attrname),&(t->attr_list), (GENERIC)g); // REV401PLUS
 }
-
-
 /* Get the GENERIC value of a psi-term's attribute */
 GENERIC get_attr(ptr_psi_term t, char *attrname)
 // ptr_psi_term t;
@@ -225,18 +150,14 @@ GENERIC get_attr(ptr_psi_term t, char *attrname)
   ptr_node n=find(FEATCMP,attrname,t->attr_list);
   return (GENERIC) n->data;
 }
-
 /* Get the psi-term's STREAM attribute */
 FILE *get_stream(ptr_psi_term t)
 // ptr_psi_term t;
 {
   return (FILE *) ((ptr_psi_term)get_attr(t,STREAM))->value_3;
 }
-
 /***********************************************/
 /* Main routines for saving & restoring state */
-
-
 /* Save global state into an existing file state psi-term t */
 void save_state(ptr_psi_term t)
 // ptr_psi_term t;
@@ -247,67 +168,41 @@ void save_state(ptr_psi_term t)
   n=find(FEATCMP,STREAM,t->attr_list);
   t1=(ptr_psi_term)n->data;
   t1->value_3=(GENERIC)input_stream;
-
-  /*  RM: Jan 27 1993
-      heap_mod_str_attr(t,CURRENT_MODULE,current_module->module_name);
-  */
-  
   heap_mod_str_attr(t,INPUT_FILE_NAME,input_file_name);
   heap_mod_int_attr(t,LINE_COUNT,line_count);
   heap_mod_int_attr(t,SAVED_CHAR,saved_char);
   heap_mod_int_attr(t,OLD_SAVED_CHAR,old_saved_char);
-
   t1=saved_psi_term?saved_psi_term:null_psi_term;
   heap_add_psi_attr(t,SAVED_PSI_TERM,t1);
-
   t1=old_saved_psi_term?old_saved_psi_term:null_psi_term;
   heap_add_psi_attr(t,OLD_SAVED_PSI_TERM,t1);
-
   t1=heap_psi_term(4);
   t1->type=(eof_flag?lf_true:lf_false);
   heap_add_psi_attr(t,EOF_FLAG,t1);
-
   t1=heap_psi_term(4);
   t1->type=(start_of_line?lf_true:lf_false);
   heap_add_psi_attr(t,START_OF_LINE,t1);
 }
-
-
-
 /* Restore global state from an existing file state psi-term t */
 void restore_state(ptr_psi_term t)
 // ptr_psi_term t;
 {
   long long i;
   char *str;
-
   
   input_stream = (FILE *) ((ptr_psi_term)get_attr(t,STREAM))->value_3;
   str = (char*) ((ptr_psi_term)get_attr(t,INPUT_FILE_NAME))->value_3;
   strcpy(input_file_name,str);
-  /* for (i=0;i++;i<=strlen(str)) input_file_name[i]=str[i]; */
   line_count = *(REAL *) ((ptr_psi_term)get_attr(t,LINE_COUNT))->value_3;
   saved_char = *(REAL *) ((ptr_psi_term)get_attr(t,SAVED_CHAR))->value_3;
   old_saved_char= *(REAL *)((ptr_psi_term)get_attr(t,OLD_SAVED_CHAR))->value_3;
-
   saved_psi_term=(ptr_psi_term)get_attr(t,SAVED_PSI_TERM);
   if (saved_psi_term==null_psi_term) saved_psi_term=NULL;
-
   old_saved_psi_term=(ptr_psi_term)get_attr(t,OLD_SAVED_PSI_TERM);
   if (old_saved_psi_term==null_psi_term) old_saved_psi_term=NULL;
-
   eof_flag = ((ptr_psi_term)get_attr(t,EOF_FLAG))->type==lf_true;
   start_of_line = ((ptr_psi_term)get_attr(t,START_OF_LINE))->type==lf_true;
-
-  
-  /*  RM: Jan 27 1993
-      set_current_module(
-      find_module(((ptr_psi_term)get_attr(input_state,
-      CURRENT_MODULE))->value));
-  */
 }
-
-
 /* Create a new file state psi-term that reflects the current global state */
 void new_state(ptr_psi_term *t)
 // ptr_psi_term *t;
@@ -316,48 +211,29 @@ void new_state(ptr_psi_term *t)
 
   *t=heap_psi_term(4);
   (*t)->type=inputfilesym;
-
   t1=heap_psi_term(4);
   t1->type=stream;
   t1->value_3=(GENERIC)input_stream;
   heap_add_psi_attr(*t,STREAM,t1);
-
   /*  RM: Jan 27 1993  */
   heap_add_str_attr(*t,CURRENT_MODULE,current_module->module_name);
-  
-  /*
-    printf("Creating new state for file '%s', module '%s'\n",
-    input_file_name,
-    current_module->module_name);
-  */
-  
   heap_add_str_attr(*t,INPUT_FILE_NAME,input_file_name);
   heap_add_int_attr(*t,LINE_COUNT,line_count);
   heap_add_int_attr(*t,SAVED_CHAR,saved_char);
   heap_add_int_attr(*t,OLD_SAVED_CHAR,old_saved_char);
-
   t1=saved_psi_term?saved_psi_term:null_psi_term;
   heap_add_psi_attr(*t,SAVED_PSI_TERM,t1);
-
   t1=old_saved_psi_term?old_saved_psi_term:null_psi_term;
   heap_add_psi_attr(*t,OLD_SAVED_PSI_TERM,t1);
-
   t1=heap_psi_term(4);
   t1->type=(eof_flag?lf_true:lf_false);
   heap_add_psi_attr(*t,EOF_FLAG,t1);
-
   t1=heap_psi_term(4);
   t1->type=(start_of_line?lf_true:lf_false);
   heap_add_psi_attr(*t,START_OF_LINE,t1);
 }
-
-
-
 /****************************************************************************/
-
-
 /* Parser/tokenizer state handling */
-
 void save_parse_state(ptr_parse_block pb)
 // ptr_parse_block pb;
 {
@@ -371,8 +247,6 @@ void save_parse_state(ptr_parse_block pb)
     pb->ef   = eof_flag;
   }
 }
-
-
 void restore_parse_state(ptr_parse_block pb)
 //ptr_parse_block pb;
 {
@@ -386,8 +260,6 @@ void restore_parse_state(ptr_parse_block pb)
     eof_flag           = pb->ef;
   }
 }
-
-
 /* Initialize the parser/tokenizer state variables. */
 void init_parse_state()
 {
@@ -400,17 +272,10 @@ void init_parse_state()
   eof_flag=FALSE;
   stringparse=FALSE;
 }
-
-
 /****************************************************************************/
-
-
 static long long inchange, outchange;
 static FILE *out;
 // ptr_psi_term old_state=NULL; /*  RM: Feb 17 1993  */
-
-
-
 /******** BEGIN_TERMINAL_IO()
 	  These two routines must bracket any I/O directed to the terminal.
 	  This is to avoid mix-ups between terminal and file I/O since the
@@ -422,20 +287,15 @@ void begin_terminal_io()
 {
   inchange = (input_stream!=stdin);
   outchange = (output_stream!=stdout);
-
   if (outchange) {
     out=output_stream;
     output_stream=stdout;
   }
-
   if (inchange) {
     old_state=input_state;
     open_input_file("stdin");
   }
 }
-
-
-
 /******** END_TERMINAL_IO()
 	  End of terminal I/O bracketing.
 */
@@ -449,17 +309,11 @@ void end_terminal_io()
   if (outchange)
     output_stream=out;
 }
-
-
-
 /******** EXPAND_FILE_NAME(str)
-	  Return the expansion of file name STR.
-	  For the time being all this does is replace '~' by the HOME directory
-	  if no user is given, or tries to find the user.
+Return the expansion of file name STR.
+For the time being all this does is replace '~' by the HOME directory
+if no user is given, or tries to find the user.
 */
-
-
-
 #ifdef __unix__
 char* expand_file_name(char* s)
 // char *s;
@@ -502,17 +356,11 @@ char* expand_file_name(char* s)
 	/* if (warning()) printf("no HOME directory.\n") */;
     }
   }
-
   /* printf("*** Using file name: '%s'\n",r); */
-
   return r;
 }
-
-
 #endif
-
 #ifdef _WIN64
-
 char* expand_file_name(char* s)
 // char *s;
 {
@@ -541,14 +389,10 @@ char* expand_file_name(char* s)
       }
       else
 	if (warning()) printf("no HOME directory.\n");
-
-
       for (slash_count = 0, i = 0; r[i] != 0; i++)
 	if (r[i] == '/') slash_count++;
       // printf("slash_count = %d\n", slash_count);
-
       r3 = (char*)malloc(strlen(r) + slash_count + 1);
-
       for (i = 0;i < strlen(r); i++) {
 	if (r[i] == '/')
 	  r3[i] = '\\';
@@ -563,14 +407,11 @@ char* expand_file_name(char* s)
   else return s;
 }
 #endif
-
-
-  
 /******** OPEN_INPUT_FILE(file)
-	  Open the input file specified by the string FILE.  If the file is "stdin",
-	  restore the stdin state.  Otherwise, open the file and create a new global
-	  state for it.
-	  If the file can't be opened, print an error and open "stdin" instead.
+Open the input file specified by the string FILE.  If the file is "stdin",
+restore the stdin state.  Otherwise, open the file and create a new global
+state for it.
+If the file can't be opened, print an error and open "stdin" instead.
 */   
 long long open_input_file(char *file)
 // char *file;
@@ -580,9 +421,7 @@ long long open_input_file(char *file)
 
   /* Save global input file state */
   if (input_state!=NULL) save_state(input_state);
-
   file=expand_file_name(file);
-  
   if (stdin_flag=(!strcmp(file,"stdin"))) {
     input_stream=stdin;
     noisy=TRUE;
@@ -591,7 +430,6 @@ long long open_input_file(char *file)
     input_stream=fopen(file,"r");
     noisy=FALSE;
   }
-  
   if (input_stream==NULL) {
     Errorline("file '%s' does not exist.\n",file);
     file="stdin";
@@ -599,7 +437,6 @@ long long open_input_file(char *file)
     noisy=TRUE;
     ok=FALSE;
   }
-
   if (!stdin_flag || stdin_state==NULL) {
     /* Initialize a new global input file state */
     strcpy(input_file_name,file);
@@ -612,12 +449,8 @@ long long open_input_file(char *file)
     input_state=stdin_state;
     restore_state(input_state);
   }
-
   return ok;
 }
-
-
-
 /******** OPEN_OUTPUT_FILE(file)
 	  Same thing as OPEN_INPUT_FILE, only for output. If FILE="stdout" then
 	  output_stream=stdout.
@@ -627,9 +460,7 @@ long long open_output_file(string file)
 {
   long long ok=TRUE;
 
-
   file=expand_file_name(file);
-  
   if (!strcmp(file,"stdout"))
     output_stream=stdout;
   else
@@ -637,18 +468,13 @@ long long open_output_file(string file)
       output_stream=stderr;
     else
       output_stream=fopen(file,"w");
-   
   if (output_stream==NULL) {
     Errorline("file '%s' could not be opened for output.\n",file);
     ok=FALSE;
     output_stream=stdout;
   }
-  
   return ok;
 }
-
-
-
 /******** READ_CHAR
 	  Return the char read from the input stream, if end of file reached
 	  then return EOF.
@@ -677,9 +503,7 @@ long long read_char()
       line_count++;
       if (input_stream==stdin) Infoline("%s",prompt); /* 21.1 */
     }
-     
     c=fgetc(input_stream);
-    
     if(trace_input)   /*  RM: Jan 13 1993  */
       if(c!=EOF)
 	printf("%c",(int)c); // REV401PLUS cast
@@ -689,17 +513,11 @@ long long read_char()
     if (c==EOLN)
       start_of_line=TRUE;
   }
-
-  /* printf("%c\n",c); RM: Jan  5 1993  Just to trace the parser */
-  
   return c;
 }
-
-
-
 /******** PUT_BACK_CHAR
-	  Put back one character, if there already are 2 saved characters then report
-	  an error (= bug).
+Put back one character, if there already are 2 saved characters then report
+an error (= bug).
 */
 void put_back_char(long long c)
 // long long c;
@@ -709,11 +527,9 @@ void put_back_char(long long c)
   old_saved_char=saved_char;
   saved_char=c;
 }
-
-
 /******** PUT_BACK_TOKEN
-	  Put back a psi_term, if there already are two saved then report an
-	  error (= bug).
+Put back a psi_term, if there already are two saved then report an
+error (= bug).
 */
 void put_back_token(psi_term t)
 // psi_term t;
@@ -723,9 +539,6 @@ void put_back_token(psi_term t)
   old_saved_psi_term=saved_psi_term;
   saved_psi_term=stack_copy_psi_term(t);
 }
-
-
-
 /******** PSI_TERM_ERROR
 	  Print the line number at which the current psi_term started.
 */
@@ -738,9 +551,6 @@ void psi_term_error()
   /* prompt="error>"; 20.8 */
   parse_ok=FALSE;
 }
-
-
-
 /******** READ_COMMENT
 	  Read a comment starting with '%' to the end of the line.
 */
@@ -752,10 +562,8 @@ void read_comment(ptr_psi_term tok)
   do {
     c=read_char();
   } while (c!=EOF && c!=EOLN);
-  
   tok->type=comment;
 }
-
 void read_string_error(int n)
 //     int n;
 {
@@ -770,7 +578,6 @@ void read_string_error(int n)
       break;
     }
 }
-
 int base2int(int n)
 //      int n;
 {
@@ -802,12 +609,10 @@ int base2int(int n)
     exit(-1);
   }
 }
-
 #define isoctal(c) (c=='0'||c=='1'||c=='2'||c=='3'||c=='4'||c=='5'||c=='6'||c=='7')
-
 /******** READ_STRING(e)
-	  Read a string ending with character E, where E=" or '. Transform a double
-	  occurrence into a single one so that 'ab""cd' is the string 'ab"cd'.
+Read a string ending with character E, where E=" or '. Transform a double
+occurrence into a single one so that 'ab""cd' is the string 'ab"cd'.
 */
 void read_string(ptr_psi_term tok,long long e)
 // ptr_psi_term tok;
@@ -820,7 +625,6 @@ void read_string(ptr_psi_term tok,long long e)
   long long flag=TRUE;
   
   str[len]=0;
-  
   do {
     c=read_char();
     if (c==EOF) {
@@ -910,9 +714,6 @@ void read_string(ptr_psi_term tok,long long e)
     TOKEN_ERROR(tok);		/*  RM: Feb  1 1993  */
   }
 }
-
-
-
 /******** SYMBOLIC(character)
 	  Tests if character is a symbol (see macro).
 */
@@ -921,9 +722,6 @@ long long symbolic(long long c)
 {
   return SYMBOL(c);
 }
-
-
-
 /******** LEGAL_IN_NAME(character)
 	  Tests if character is legal in a name or a variable (see macros).
 */
@@ -937,12 +735,9 @@ long long legal_in_name(long long c)
 
   /* || c=='\'' RM: Dec 16 1992  */ ;
 }
-
-
-
 /******** READ_NAME(C,F,TYP)
-	  Read in the name starting with character C followed by character of whose
-	  type function is F. The result is a psi_term of symbol type TYP.
+Read in the name starting with character C followed by character of whose
+type function is F. The result is a psi_term of symbol type TYP.
 */
 void read_name(ptr_psi_term tok,long long ch,long long (*f)(long long),ptr_definition typ)
 // ptr_psi_term tok;
@@ -961,13 +756,10 @@ void read_name(ptr_psi_term tok,long long ch,long long (*f)(long long),ptr_defin
   tok->coref=NULL;
   tok->resid=NULL;
   tok->attr_list=NULL;
-
   str[0]=ch;
-  
   do {
     c=read_char();
     flag=(*f)(c);
-    
     if(c=='#' &&       /*  RM: Feb  3 1993  */
        f==legal_in_name &&
        len>0 &&
@@ -977,7 +769,6 @@ void read_name(ptr_psi_term tok,long long ch,long long (*f)(long long),ptr_defin
       module=create_module(str);
       len=0;
       flag=TRUE;
-
       /*  RM: Sep 21 1993  */
       /* Change the type function if required */
       c=read_char();
@@ -998,54 +789,26 @@ void read_name(ptr_psi_term tok,long long ch,long long (*f)(long long),ptr_defin
       else
 	put_back_char(c);
   } while(flag);
-
   if(module && len==0) { /*  RM: Feb  3 1993  */
     strcpy(str,module->module_name);
     len=strlen(str);
     put_back_char('#');
     module=NULL;
   }
-  
   str[len]=0;
-  
   tok->type=typ;
-  
   if(typ==constant) {
-    /* printf("module=%s\n",module->module_name); */
     tok->type=update_symbol(module,str); /*  RM: Feb  3 1993  */
     tok->value_3=NULL;
-
     TOKEN_ERROR(tok); /*  RM: Feb  1 1993  */
-
     /* PVR 4.2.94 for correct level incrementing */
     if (tok->type->type_def==(def_type)global_it) {
       var_occurred=TRUE;
     }
-    if (FALSE /*tok->type->type==global && tok->type->global_value*/) {
-      /*  RM: Nov 10 1993  */
-      
-      /* Remove this for Bruno who didn't like it, and doesn't like
-	 to use "print_depth" */
-      
-      /*  RM: Feb  9 1993  */
-      /* Add into the variable tree */
-      var_occurred=TRUE;
-      n=find(STRCMP,tok->type->keyword->symbol,var_tree);
-      if (n==NULL) {
-	/* The change is always trailed. */
-	bk2_stack_insert(STRCMP,
-			 tok->type->keyword->symbol,
-			 &var_tree,
-			 (GENERIC)tok->type->global_value); // REV401PLUS cast
-      }
-    }
-    
   }
   else	
     tok->value_3=(GENERIC)heap_copy_string(str);
 }
-
-
 
 /******** READ_NUMBER(c)
 	  Read in the number whose first character is c.
@@ -1060,17 +823,11 @@ void read_number(ptr_psi_term tok,long long c)
   REAL f,p;
   long long sgn,pwr,posflag;
 
-  /* if (sgn=(c=='-')) c=read_char(); */
-
-  /* tok->type=integer;   RM: Mar  8 1993  */
-
   f=0.0;
   do { f=f*10.0+(c-'0'); c=read_char(); } while (DIGIT(c));
-
   if (c=='.') {
     c2=read_char();
     if DIGIT(c2) {
-	/* tok->type=real;     RM: Mar  8 1993  */
 	p=10.0;
 	while (DIGIT(c2)) { f=f+(c2-'0')/p; p=p*10.0; c2=read_char(); }
 	put_back_char(c2);
@@ -1082,7 +839,6 @@ void read_number(ptr_psi_term tok,long long c)
   }
   else
     put_back_char(c);
-
   c=read_char();
   if (c=='e' || c=='E') {
     c2=read_char();
@@ -1106,39 +862,29 @@ void read_number(ptr_psi_term tok,long long c)
   }
   else
     put_back_char(c);
-
-  /* if (sgn) f = -f; */
   tok->value_3=heap_alloc(sizeof(REAL)); /* 12.5 */
   *(REAL *)tok->value_3=f;
-
   /*  RM: Mar  8 1993  */
   if(f==floor(f))
     tok->type=integer;
   else
     tok->type=real;
 }
-
-
-
 /******** READ_TOKEN
 	  Read in one token from the input stream, represented as a psi_term.
 	  Return the psi_term 'end_of_file' if that is the case.
 */
-
 void read_token_main(); /* Forward declaration */
-
 /* Used in the parser */
 /* Set prompt to the 'partial input' prompt */
 void read_token(ptr_psi_term tok)
 // ptr_psi_term tok;
 { read_token_main(tok, TRUE); }
-
 /* Used as a built-in */
 /* Prompt is unchanged */
 void read_token_b(ptr_psi_term tok)
 // ptr_psi_term tok;
 { read_token_main(tok, FALSE); }
-
 void read_token_main(ptr_psi_term tok, long long for_parser)
 // ptr_psi_term tok;
 // long long for_parser;
@@ -1154,13 +900,10 @@ void read_token_main(ptr_psi_term tok, long long for_parser)
   }
   else {
     tok->type=nothing;
-    
     do {
       c=read_char();
     } while(c!=EOF && (c<=32));
-    
     if (for_parser) psi_term_line_number=line_count;
-    
     switch(c) {
     case EOF:
       tok->type=eof;
@@ -1176,20 +919,10 @@ void read_token_main(ptr_psi_term tok, long long for_parser)
     case 39: /* The quote symbol "'" */
       read_string(tok,c);
       break;
-      
     default:
-      
-      /* Adding this results in problems with terms like (N-1) */
-      /* if (c=='-' && (c2=read_char()) && DIGIT(c2)) {
-	 put_back_char(c2);
-	 read_number(tok,c);
-	 }
-	 else */
-
       if(c=='.' || c=='?') { /*  RM: Jul  7 1993  */
 	c2=read_char();
 	put_back_char(c2);
-	/*printf("c2=%d\n",c2);*/
 	if(c2<=' ' || c2==EOF) {
 	  if(c=='.')
 	    tok->type=final_dot;
@@ -1227,7 +960,6 @@ void read_token_main(ptr_psi_term tok, long long for_parser)
 		  Errorline("illegal character %d in input (%E).\n",c);
 		}
     }
-
     if (tok->type==variable) {
       if (tok->value_3) {
         /* If the variable read in has name "_", then it becomes 'top' */
@@ -1256,21 +988,16 @@ void read_token_main(ptr_psi_term tok, long long for_parser)
       /* else do nothing */
     }
   }
-
   if (tok->type==comment)
     read_token(tok);
-
   if (tok->type!=variable)
     tok->coref=NULL;
-
   tok->attr_list=NULL;
   tok->status=0;
   tok->flags=FALSE; /* 14.9 */
   tok->resid=NULL;
-
   if (tok->type==cut) /* 12.7 */
     tok->value_3=(GENERIC)choice_stack;
-
   do {
     c=read_char();
     if (c==EOLN) {
@@ -1282,8 +1009,6 @@ void read_token_main(ptr_psi_term tok, long long for_parser)
       c=0;
     }
   } while(c && c!=EOF);
-  
   if (for_parser) prompt="|    ";
 }
-
 /****************************************************************************/

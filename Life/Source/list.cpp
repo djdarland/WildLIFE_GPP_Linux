@@ -3,11 +3,6 @@
  * All Rights Reserved.
  */
 /* 	$Id: list.c,v 1.2 1994/12/08 23:28:16 duchier Exp $	 */
-
-#ifndef lint
-static char vcid[] = "$Id: list.c,v 1.2 1994/12/08 23:28:16 duchier Exp $";
-#endif /* lint */
-
 /*
 ** list.c contains the functions to manage double link list
 ** with 2 entries (first and last element)
@@ -15,84 +10,59 @@ static char vcid[] = "$Id: list.c,v 1.2 1994/12/08 23:28:16 duchier Exp $";
 */
 #define EXTERN extern
 #define REV401PLUS
-
 #ifdef REV401PLUS
 #include "defs.h"
 #endif
-
-
 /*=============================================================================*/
 /*			Set functions					       */
 /*=============================================================================*/
-
 void List_SetLinkProc (RefListHeader header, RefListGetLinksProc getLinks)
 // RefListHeader header;
 // RefListGetLinksProc getLinks;
 {
   header->First = NULL;
   header->Last = NULL;
-
 #ifdef prlDEBUG
   header->Lock = 0;
 #endif
-
   header->GetLinks = getLinks;
 }
-
 /*=============================================================================*/
 /*			List functions					       */
 /*=============================================================================*/
-
 void List_InsertAhead (RefListHeader header, Ref atom) 
 // RefListHeader header;
 // Ref atom;
 {
   RefListGetLinksProc  getLinks = header->GetLinks;
-
   /* Update links of atom to insert */
-
   (*getLinks)(atom)->Next = header->First;
   (*getLinks)(atom)->Prev = NULL;
-
   /* Link to the head of list */
-
   if (header->First != NULL)
     (*getLinks)(header->First)->Prev = atom;
-
   else	/* The list is empty */
     header->Last  = atom;
-
   header->First = atom;
 }
-
 /*==============================================================================*/
-
 void List_Append (RefListHeader header, Ref atom) 
 // RefListHeader header;
 // Ref atom;
 {
   RefListGetLinksProc  getLinks = header->GetLinks;
-
   /* Link to the end of list */
-
   if (header->Last != NULL)
     (*getLinks)(header->Last)->Next = atom;
-
   else	/* The list is empty */
     header->First = atom;
-
   /* Update links of atom to insert */
-
   (*getLinks)(atom)->Prev = header->Last;
   (*getLinks)(atom)->Next = NULL;
-
   /* Update last element of header */
-
   header->Last  = atom;
 }
-
 /*==============================================================================*/
-
 void List_InsertBefore (RefListHeader header, Ref atom, Ref mark)
 // RefListHeader header;
 // Ref atom;
@@ -103,7 +73,6 @@ void List_InsertBefore (RefListHeader header, Ref atom, Ref mark)
   if (mark != NULL)
     {
       (*getLinks)(atom)->Next = mark;
-
       if (mark != header->First)
         {
 	  (*getLinks)(atom)->Prev = (*getLinks)(mark)->Prev;
@@ -114,15 +83,12 @@ void List_InsertBefore (RefListHeader header, Ref atom, Ref mark)
 	  (*getLinks)(atom)->Prev = NULL;
 	  header->First = atom;
         }
-
       (*getLinks)(mark)->Prev = atom;
     }
   else        /* Append to the list */
     List_Append (header, atom);
 } 
-
 /*==============================================================================*/
-
 void List_InsertAfter (RefListHeader header, Ref atom, Ref mark)
 // RefListHeader header;
 // Ref atom;
@@ -134,11 +100,9 @@ void List_InsertAfter (RefListHeader header, Ref atom, Ref mark)
   if (header->Lock > 1)
     OS_PrintMessage ("List_InsertAfter: Warning insert after on recursive List_Enum call !!\n");
 #endif
-
   if (mark != NULL)
     {
       (*getLinks)(atom)->Prev = mark;
-
       if (mark != header->Last)
         {
 	  (*getLinks)(atom)->Next = (*getLinks)(mark)->Next;
@@ -149,24 +113,19 @@ void List_InsertAfter (RefListHeader header, Ref atom, Ref mark)
 	  (*getLinks)(atom)->Next = NULL;
 	  header->Last = atom;
         }
-
       (*getLinks)(mark)->Next = atom;
     }
   else        /* Insert ahead the list */
     List_InsertAhead (header, atom);
 } 
-
 /*==============================================================================*/
-
 void List_Swap (RefListHeader header, Ref first, Ref second)
 // RefListHeader header;
 // Ref first;
 // Ref second;
 {
   RefListGetLinksProc	getLinks = header->GetLinks;
-
   /* Don't swap if the input is wrong */
-
   if ((*getLinks)(first)->Next != second)
     {
 #ifdef prlDEBUG
@@ -174,29 +133,22 @@ void List_Swap (RefListHeader header, Ref first, Ref second)
 #endif
       return;
     }
-
   /* Special Cases */
-
   if (header->First == first)
     header->First = second;
   else
     (*getLinks)((*getLinks)(first)->Prev)->Next = second;
-    
   if (header->Last == second)
     header->Last = first;
   else
     (*getLinks)((*getLinks)(second)->Next)->Prev = first;
-
   /* Swap the atoms */
-
   (*getLinks)(second)->Prev = (*getLinks)(first)->Prev;
   (*getLinks)(first)->Next  = (*getLinks)(second)->Next;
   (*getLinks)(first)->Prev  = second;
   (*getLinks)(second)->Next = first;
 }
-
 /*==============================================================================*/
-
 static long long List_SwapLinks (RefListHeader header, Ref atom)
 // RefListHeader header;
 // Ref atom;
@@ -206,24 +158,18 @@ static long long List_SwapLinks (RefListHeader header, Ref atom)
   save = (*header->GetLinks)(atom)->Next;
   (*header->GetLinks)(atom)->Next = (*header->GetLinks)(atom)->Prev;
   (*header->GetLinks)(atom)->Prev = save;
-
   return TRUE;
 }
-
 void List_Reverse (RefListHeader header)
 // RefListHeader header;
 {
   Ref			cur, next;
   RefListGetLinksProc	getLinks = header->GetLinks;
-
   /* This traverse cannot be done with function List_Enum() */
-
   cur = header->First;
-
   /* Swap the headers */
   header->First = header->Last;
   header->Last  = cur;
-
   while (cur != NULL)
     {
       next = (*getLinks)(cur)->Next;
@@ -231,30 +177,23 @@ void List_Reverse (RefListHeader header)
       cur = next;
     }
 }
-
 /*==============================================================================*/
-
 void List_Remove (RefListHeader header, Ref atom)
 // RefListHeader header;
 // Ref atom;
 {
   /*-----------------------------------------------------------------------------
-
     WARNING
     - The container is 'updated' two times if the first and last atom
     of list is the only one to remove.
-
     -----------------------------------------------------------------------------*/
-
   RefListGetLinksProc  getLinks = header->GetLinks;
 
 #ifdef prlDEBUG
   if (header->Lock > 1)
     OS_PrintMessage ("List_Remove: Warning remove on recursive List_Enum call !!\n");
 #endif
-
   /* Update the DownStream links */
-
   if ((*getLinks)(atom)->Prev != NULL)
     {
       (*getLinks)((*getLinks)(atom)->Prev)->Next = 
@@ -262,9 +201,7 @@ void List_Remove (RefListHeader header, Ref atom)
     }
   else            /* Atom is the first of list */
     header->First = (*getLinks)(atom)->Next;
-
   /* Update the UpStream links */
-
   if ((*getLinks)(atom)->Next != NULL)
     {
       (*getLinks)((*getLinks)(atom)->Next)->Prev = 
@@ -272,21 +209,16 @@ void List_Remove (RefListHeader header, Ref atom)
     }
   else            /* Atom is the last of list */
     header->Last = (*getLinks)(atom)->Prev;
-
   /* Reset the atom links */
-
   (*getLinks)(atom)->Prev = NULL;
   (*getLinks)(atom)->Next = NULL;
 } 
-
 /*==============================================================================*/
-
 void List_Concat (RefListHeader header1, RefListHeader header2)
 // RefListHeader header1;
 // RefListHeader header2;
 {
   RefListGetLinksProc  getLinks = header1->GetLinks;
-
   if (header1->GetLinks == header2->GetLinks)
     {
 #ifdef prlDEBUG
@@ -294,13 +226,10 @@ void List_Concat (RefListHeader header1, RefListHeader header2)
 #endif
       return;
     }
-
   /* Concatenate only if the second list is not empty */
-
   if (header2->First != NULL)
     {
       /* Obvious concatenate when the first list is empty */
-
       if (header1->First == NULL)
 	header1->First = header2->First;
 
@@ -312,9 +241,7 @@ void List_Concat (RefListHeader header1, RefListHeader header2)
       header1->Last = header2->Last;
     }
 } 
-
 /*==============================================================================*/
-
 long long List_EnumFrom (RefListHeader header, Ref atom,
 			 RefListEnumProc proc, Ref closure)
 // RefListHeader	header;
@@ -328,7 +255,6 @@ long long List_EnumFrom (RefListHeader header, Ref atom,
 #ifdef prlDEBUG
   header->Lock += 1;
 #endif
-
   cur = atom;
   while (cur != NULL && notInterrupted)
     {
@@ -336,34 +262,26 @@ long long List_EnumFrom (RefListHeader header, Ref atom,
       notInterrupted = (*proc)(cur, closure);
       cur = next;
     }
-
 #ifdef prlDEBUG
   header->Lock -=1;
 #endif
-    
   return (notInterrupted);
 }
-
 /*==============================================================================*/
-
 long long List_Enum (RefListHeader header, RefListEnumProc proc, Ref closure)
 // RefListHeader	header;
 // RefListEnumProc	proc;
 // Ref closure;
 /*-----------------------------------------------------------------------------
-
   (NO) SIDE EFFECTS
   The current atom can be modified by the function RemoveAtom () during
   the traversing of the list. This is the reason why the current pointer
   is managed on the header.
-
   -----------------------------------------------------------------------------*/
 {
   return (List_EnumFrom (header, header->First, proc, closure));
 }
-
 /*==============================================================================*/
-
 long long List_EnumBackFrom (RefListHeader header, Ref atom,
 			     RefListEnumProc proc, Ref closure)
 // RefListHeader	header;
@@ -377,7 +295,6 @@ long long List_EnumBackFrom (RefListHeader header, Ref atom,
 #ifdef prlDEBUG
   header->Lock += 1;
 #endif
-
   cur = atom;
   while (cur != NULL && notInterrupted)
     {
@@ -385,16 +302,12 @@ long long List_EnumBackFrom (RefListHeader header, Ref atom,
       notInterrupted = (*proc)(cur, closure);
       cur = prev;
     }
-
 #ifdef prlDEBUG
   header->Lock -=1;
 #endif
-    
   return (notInterrupted);
 }
-
 /*==============================================================================*/
-
 long long List_EnumBack (RefListHeader header, RefListEnumProc proc, Ref closure)
 // RefListHeader	header;
 // RefListEnumProc	proc;
@@ -404,7 +317,6 @@ long long List_EnumBack (RefListHeader header, RefListEnumProc proc, Ref closure
 }
 
 /*==============================================================================*/
-
 /*ARGSUSED*/
 static long long List_CountAtom (Ref p, Ref nbR)
 // Ref p; 
@@ -415,7 +327,6 @@ static long long List_CountAtom (Ref p, Ref nbR)
   ++*nb;
   return TRUE;
 }
-
 long long List_Card (RefListHeader header)
 // RefListHeader header;
 {
@@ -424,17 +335,13 @@ long long List_Card (RefListHeader header)
   List_Enum (header,(RefListEnumProc) List_CountAtom, &n); // REV401PLUS cast
   return n;
 }
-
 /*==============================================================================*/
-
 long long List_IsUnlink (RefListLinks links)
 // RefListLinks links;
 {
   return (links->Next == NULL && links->Prev == NULL);
 }
-
 /*==============================================================================*/
-
 void List_Cut (RefListHeader header, Ref atom, RefListHeader newHeader)
 // RefListHeader	header;
 // Ref			atom;
@@ -446,13 +353,10 @@ void List_Cut (RefListHeader header, Ref atom, RefListHeader newHeader)
     {
       newHeader->First = List_Next (header, atom);
       newHeader->Last  = header->Last;
-
       header->Last = atom;
-
       /* Update the links */
       (*getLinks)(atom)->Next = NULL;
       (*getLinks)(newHeader->First)->Prev = NULL;
     }
 }
-
 /*==============================================================================*/

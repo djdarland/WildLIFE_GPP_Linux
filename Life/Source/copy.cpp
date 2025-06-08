@@ -3,12 +3,8 @@
 *****************************************************************/
 /* 	$Id: copy.c,v 1.2 1994/12/08 23:21:30 duchier Exp $	 */
 
-#ifndef lint
-static char vcid[] = "$Id: copy.c,v 1.2 1994/12/08 23:21:30 duchier Exp $";
-#endif /* lint */
 #define EXTERN extern
 #define REV401PLUS
-
 #ifdef REV401PLUS
 #include "defs.h"
 #endif
@@ -37,16 +33,12 @@ void init_copy()
 {
   long long i;
 
-  /* for(i=0; i<HASHSTATS; i++) hashstats[i]=0; 20.8 */
-
   for(i=0; i<HASHSIZE; i++) hashtable[i].timestamp = 0;
   hashtime = 0;
   numbuckets = NUMBUCKETS;
   hashbuckets = (struct hashbucket *)
     malloc(NUMBUCKETS * sizeof(struct hashbucket));
 }
-
-
 /******** CLEAR_COPY()
 	  Erase the hash table.
 	  This must be done as a prelude to any copying operation.
@@ -56,8 +48,6 @@ void clear_copy()
   hashtime++;
   hashfree=0;
 }
-
-
 /******** INSERT_TRANSLATION(a,b,info)
 	  Add the translation of address A to address B in the translation table.
 	  Also add an info field.
@@ -78,7 +68,6 @@ void clear_copy()
     /* *** Do error handling here *** */
     Traceline("doubled the number of hashbuckets to %d\n", numbuckets);
   }
-
   /* Add a bucket to the beginning of the list */
   index = HASH(a);
   if (hashtable[index].timestamp == hashtime)
@@ -94,8 +83,6 @@ void clear_copy()
   hashbuckets[hashfree].next = lastbucket;
   hashfree++;
 }
-
-
 /******** TRANSLATE(a,info)
 	  Get the translation of address A and the info field stored with it.
 	  Return NULL if none is found.
@@ -124,25 +111,18 @@ void clear_copy()
   else
     return NULL;
 }
-
-
 /****************************************************************************/
-
-
 /******** COPY_TREE(t)
 	  Return a pointer to a copy of the binary tree t.
 	  Structure sharing between trees is not preserved by this routine,
 	  this is not a problem seeing that coreferences in the nodes will ensure
 	  coherence.
 */
-
 /* TRUE means: heap_flag==TRUE & only copy to heap those objects not */
 /* already on heap, i.e. incremental copy to heap.                   */
 // long long to_heap;    // removed for MINT
-
 /* TRUE iff R is on the heap */
 #define ONHEAP(R) ((GENERIC)R>=heap_pointer)
-
 /* Allocate a new record on the heap or stack if necessary: */
 #define NEW(A,TYPE) (heap_flag==HEAP		\
 		     ? (to_heap			\
@@ -154,22 +134,16 @@ void clear_copy()
 			)			\
 		     : STACK_ALLOC(TYPE)	\
 		     )
-
 /* TRUE iff to_heap is TRUE & work is done, i.e. the term is on the heap. */
 #define HEAPDONE(R) (to_heap && ONHEAP(R))
-
-
 ptr_psi_term copy(); /* Forward declarations */
 void mark_quote_c();
-
 static ptr_node copy_tree(ptr_node t, long long copy_flag, long long heap_flag)
 //ptr_node t;
 //long long copy_flag, heap_flag;
 {
   ptr_node r;
   ptr_psi_term t1,t2;
-
-  /* if (t) {   RM: Dec 15 1992  this test is useless */
   
   if (HEAPDONE(t)) return t;
   r=NEW(t,node);
@@ -179,51 +153,43 @@ static ptr_node copy_tree(ptr_node t, long long copy_flag, long long heap_flag)
   t2 = copy(t1,copy_flag,heap_flag);
   r->data = (GENERIC) t2;
   r->right = (t->right) ? copy_tree(t->right,copy_flag,heap_flag) : NULL;
-
-  /* } else r=NULL; */
-
   return r;
 }
-
-
-
 /******** COPY(t)
-	  This is the workhorse of the interpreter (alas!).
-	  All copy-related routines are non-interruptible by the garbage collector.
+This is the workhorse of the interpreter (alas!).
+All copy-related routines are non-interruptible by the garbage collector.
   
-	  Make a copy in the STACK or in the HEAP of psi_term t, which is located in
-	  the HEAP.  A copy is done whenever invoking a rule, so it had better be fast.
-	  This routine uses hash tables with buckets and partial inlining for speed.
+Make a copy in the STACK or in the HEAP of psi_term t, which is located in
+the HEAP.  A copy is done whenever invoking a rule, so it had better be fast.
+This routine uses hash tables with buckets and partial inlining for speed.
 
-	  The following three versions of copy all rename their variables and return
-	  a completely dereferenced object:
+The following three versions of copy all rename their variables and return
+a completely dereferenced object:
 
-	  u=exact_copy(t,hf)  u is an exact copy of t.
-	  u=quote_copy(t,hf)  u is a copy of t that is recursively marked evaluated.
-	  u=eval_copy(t,hf)   u is a copy of t that is recursively marked unevaluated.
+u=exact_copy(t,hf)  u is an exact copy of t.
+u=quote_copy(t,hf)  u is a copy of t that is recursively marked evaluated.
+u=eval_copy(t,hf)   u is a copy of t that is recursively marked unevaluated.
 
-	  This version of copy is an incremental copy to the heap.  It copies only
-	  those parts of a psi_term that are on the stack, leaving the others
-	  unchanged:
+This version of copy is an incremental copy to the heap.  It copies only
+those parts of a psi_term that are on the stack, leaving the others
+unchanged:
 
-	  u=inc_heap_copy(t)  u is an exact copy of t, on the heap.  This is like
-	  hf==HEAP, except that objects already on the heap are
-	  untouched.  Relies on no pointers from heap to stack.
+u=inc_heap_copy(t)  u is an exact copy of t, on the heap.  This is like
+hf==HEAP, except that objects already on the heap are
+untouched.  Relies on no pointers from heap to stack.
 
-	  hf = heap_flag.  hf = HEAP or STACK means allocate in the HEAP or STACK.
-	  Marking eval/uneval is done by modifying the STATUS field of the copied
-	  psi_term.
-	  In eval_copy, a term's status is set to 0 if the term or any subterm needs
-	  evaluation.
-	  Terms are dereferenced when copying them to the heap.
+hf = heap_flag.  hf = HEAP or STACK means allocate in the HEAP or STACK.
+Marking eval/uneval is done by modifying the STATUS field of the copied
+psi_term.
+In eval_copy, a term's status is set to 0 if the term or any subterm needs
+evaluation.
+Terms are dereferenced when copying them to the heap.
 */
-
 #define EXACT_FLAG 0
 #define QUOTE_FLAG 1
 #define EVAL_FLAG  2
 /* See mark_quote_c: */ /* 15.9 */
 #define QUOTE_STUB 3
-
 ptr_psi_term exact_copy(ptr_psi_term t, long long heap_flag)
 // ptr_psi_term t;
 // long long heap_flag;
@@ -245,9 +211,6 @@ ptr_psi_term inc_heap_copy(ptr_psi_term t)
 { to_heap=TRUE; return (copy(t, EXACT_FLAG, TRUE)); }
 
 static long long curr_status;
-
-
-
 ptr_psi_term copy(ptr_psi_term t, long long copy_flag, long long heap_flag)
 //     ptr_psi_term t;
 //     long long copy_flag,heap_flag;
@@ -256,14 +219,11 @@ ptr_psi_term copy(ptr_psi_term t, long long copy_flag, long long heap_flag)
   long long old_status;
   long long local_copy_flag;
   long long *infoptr;
-
   
   if (u=t) {    
     deref_ptr(t); /* Always dereference when copying */
-    
     if (HEAPDONE(t)) return t;
     u = translate(t,&infoptr);
-    
     if (u && *infoptr!=QUOTE_STUB) { /* 24.8 */
       /* If it was eval-copied before, then quote it now. */
       if (*infoptr==EVAL_FLAG && copy_flag==QUOTE_FLAG) { /* 24.8 25.8 */
@@ -306,25 +266,20 @@ ptr_psi_term copy(ptr_psi_term t, long long copy_flag, long long heap_flag)
 #ifdef TS
       u->time_stamp=global_time_stamp; /* 9.6 */
 #endif
-      
       if (t->attr_list)
 	u->attr_list=copy_tree(t->attr_list, local_copy_flag, heap_flag);
-      
       if (copy_flag==EVAL_FLAG) {
 	switch((long long)t->type->type_def) {
 	case type_it:
 	  if (t->type->properties)
 	    curr_status=0;
 	  break;
-	  
 	case function_it:
 	  curr_status=0;
 	  break;
-
 	case global_it: /*  RM: Feb  8 1993  */
 	  curr_status=0;
 	  break;
-
 	default:
 	  break;
 	}
@@ -338,7 +293,6 @@ ptr_psi_term copy(ptr_psi_term t, long long copy_flag, long long heap_flag)
 	u->flags=QUOTED_TRUE; /* 14.9 */
       }
       /* else copy_flag==EXACT_FLAG & u->status=t->status */
-      
       if (heap_flag==HEAP) {
 	if (t->type==cut) u->value_3=NULL;
       }	else {
@@ -349,25 +303,18 @@ ptr_psi_term copy(ptr_psi_term t, long long copy_flag, long long heap_flag)
       }
     }
   }
-
   return u;
 }
-
-
-
 /****************************************************************************/
-
-
 /******** DISTINCT_TREE(t)
-	  Return an exact copy of an attribute tree.
-	  This is used by APPLY in order to build the calling psi-term which is used
-	  for matching.
+Return an exact copy of an attribute tree.
+This is used by APPLY in order to build the calling psi-term which is used
+for matching.
 */
 ptr_node distinct_tree(ptr_node t)
 // ptr_node t;
 {
   ptr_node n;
-  
   n=NULL;
   if (t) {
     n=STACK_ALLOC(node);
@@ -376,16 +323,13 @@ ptr_node distinct_tree(ptr_node t)
     n->left=distinct_tree(t->left);
     n->right=distinct_tree(t->right);
   }
-
   return n;
 }
-
-
 /******** DISTINCT_COPY(t)
-	  Make a distinct copy of T and T's attribute tree, which are identical to T,
-	  only located elsewhere in memory. This is used by apply to build the calling
-	  psi-term which is used for matching.  Note that this routine is not
-	  recursive, i.e. it only copies the main functor & the attribute tree.
+Make a distinct copy of T and T's attribute tree, which are identical to T,
+only located elsewhere in memory. This is used by apply to build the calling
+psi-term which is used for matching.  Note that this routine is not
+recursive, i.e. it only copies the main functor & the attribute tree.
 */
 ptr_psi_term distinct_copy(ptr_psi_term t)
 // ptr_psi_term t;
@@ -399,13 +343,9 @@ ptr_psi_term distinct_copy(ptr_psi_term t)
 #endif
   /* res->coref=distinct_copy(t->coref); */
   res->attr_list=distinct_tree(t->attr_list);
-
   return res;
 }
-
-
 /****************************************************************************/
-
 /* Meaning of the info field in the translation table: */
 /* With u=translate(t,&infoptr): */
 /* If infoptr==QUOTE_FLAG then the whole subgraph from u is quoted. */
@@ -450,7 +390,6 @@ void mark_quote_c(ptr_psi_term t, long long heap_flag)
     }
   }
 }
-
 void mark_quote_tree_c(ptr_node n,long long heap_flag)
 // ptr_node n;
 // long long heap_flag;
@@ -461,22 +400,16 @@ void mark_quote_tree_c(ptr_node n,long long heap_flag)
     mark_quote_tree_c(n->right,heap_flag);
   }
 }
-
 /****************************************************************************/
-
 /* A (possibly) correct mark_eval and its companion mark_quote. */
-
 /* The translation table is used to record whether a subgraph has already */
 /* been quoted or not. */
-
 /* Forward declarations */
 void mark_eval_new();
 void mark_quote_new();
 void mark_eval_tree_new();
 void mark_quote_tree_new();
-
 static long long mark_nonstrict_flag;
-
 /* Mark a psi-term as to be evaluated (i.e. strict), except for arguments   */
 /* of a nonstrict term, which are marked quoted.  Set status correctly and  */
 /* propagate zero status upwards.  Avoid doing superfluous work: non-shared */
@@ -492,7 +425,6 @@ void mark_eval(ptr_psi_term t) /* 24.8 25.8 */
   mark_nonstrict_flag=FALSE;
   mark_eval_new(t);
 }
-
 /* Same as above, except that the status is only changed from 0 to 4 when */
 /* needed; it is never changed from 4 to 0. */
 void mark_nonstrict(ptr_psi_term t)
@@ -502,7 +434,6 @@ void mark_nonstrict(ptr_psi_term t)
   mark_nonstrict_flag=TRUE;
   mark_eval_new(t);
 }
-
 /* Mark a term as quoted. */
 void mark_quote_new2(ptr_psi_term t)
 // ptr_psi_term t;
@@ -511,7 +442,6 @@ void mark_quote_new2(ptr_psi_term t)
   mark_nonstrict_flag=FALSE;
   mark_quote_new(t);
 }
-
 void mark_eval_new(ptr_psi_term t)
 // ptr_psi_term t;
 {
@@ -540,26 +470,21 @@ void mark_eval_new(ptr_psi_term t)
       insert_translation(t,(ptr_psi_term)TRUE,flag);
       old_status=curr_status;
       curr_status=4;
-
       if (flag) /* 16.9 */
         mark_eval_tree_new(t->attr_list);
       else
 	mark_quote_tree_new(t->attr_list);
-
       switch((long long)t->type->type_def) {
       case type_it:
         if (t->type->properties)
           curr_status=0;
         break;
-	
       case function_it:
         curr_status=0;
         break;
-
       case global_it: /*  RM: Feb  8 1993  */
         curr_status=0;
         break;
-
       default:
 	break;
       }
@@ -578,7 +503,6 @@ void mark_eval_new(ptr_psi_term t)
     }
   }
 }
-
 void mark_eval_tree_new(ptr_node n)
 // ptr_node n;
 {
@@ -588,8 +512,6 @@ void mark_eval_tree_new(ptr_node n)
     mark_eval_tree_new(n->right);
   }
 }
-
-
 void mark_quote_new(ptr_psi_term t)
 // ptr_psi_term t;
 {
@@ -600,10 +522,8 @@ void mark_quote_new(ptr_psi_term t)
   if (t) {
     deref_ptr(t);
     u=translate(t,&infoptr);
-
     /* Return if the subgraph is already quoted. */
     if (u && !*infoptr) return;
-
     /* Otherwise quote the subgraph */
     if (!u) insert_translation(t,(ptr_psi_term)TRUE,FALSE);
     else *infoptr = FALSE;	/* sanjay */
@@ -612,8 +532,6 @@ void mark_quote_new(ptr_psi_term t)
     mark_quote_tree_new(t->attr_list);
   }
 }
-
-
 void mark_quote_tree_new(ptr_node n)
 // ptr_node n;
 {
@@ -623,16 +541,11 @@ void mark_quote_tree_new(ptr_node n)
     mark_quote_tree_new(n->right);
   }
 }
-
-
 /****************************************************************************/
-
 /* A more efficient version of mark_quote */
 /* This version avoids using the translation table by setting a 'visited' */
 /* in the status field. */
-
 extern void mark_quote_tree(); /* A forward declaration */
-
 /* Mark a psi-term as completely evaluated. */
 void mark_quote(ptr_psi_term t)
 // ptr_psi_term t;
@@ -648,7 +561,6 @@ void mark_quote(ptr_psi_term t)
     t->status &= ~RMASK;
   }
 }
-
 void mark_quote_tree(ptr_node t)
 // ptr_node t;
 {
@@ -658,12 +570,8 @@ void mark_quote_tree(ptr_node t)
     mark_quote_tree(t->right);
   }
 }
-
-
 /* Back-trackably mark a psi-term as completely evaluated. */
-
 void bk_mark_quote_tree();
-     
 void bk_mark_quote(ptr_psi_term t)
 // ptr_psi_term t;
 {
@@ -680,7 +588,6 @@ void bk_mark_quote(ptr_psi_term t)
     t->status &= ~RMASK;
   }
 }
-
 void bk_mark_quote_tree(ptr_node t)
 // ptr_node t;
 {
@@ -690,5 +597,3 @@ void bk_mark_quote_tree(ptr_node t)
     bk_mark_quote_tree(t->right);
   }
 }
-
-

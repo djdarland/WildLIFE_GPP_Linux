@@ -2,30 +2,16 @@
 ** All Rights Reserved.
 *****************************************************************/
 /* 	$Id: life.c,v 1.2 1994/12/08 23:27:02 duchier Exp $	 */
-
-#ifndef lint
-static char vcid[] = "$Id: life.c,v 1.2 1994/12/08 23:27:02 duchier Exp $";
-#endif /* lint */
-
 #define REV401PLUS
 #ifdef REV401PLUS
 #include "defs.h"
 #endif
-
-
 #ifdef X11
 #include "xpred.h"
 #endif
-
-#ifdef SOLARIS
-#include <stdlib.h>
-static unsigned int lifeseed;
-#endif
-
 /******** MAIN(argc,argv)
 	  This routine contains the Read-Solve-Prlong long loop.
 */
-
 int main(int argc, char *argv[])  // REV401PLUS correct main proto
 {
   // next taken from REV233
@@ -33,8 +19,8 @@ int main(int argc, char *argv[])  // REV401PLUS correct main proto
   ptr_stack save_undo_stack;
   long long sort,exitflag;
   long long c; /* 21.12 (prev. char) */ 
-
   int i;
+
 #ifdef __unix__
   for(i=0;i<256;i++)
     rand_array[i]=random();
@@ -56,10 +42,8 @@ int main(int argc, char *argv[])  // REV401PLUS correct main proto
     }
   else
     Errorline("Too many command line arguments\n");
-  
   quietflag = GetBoolOption("q");
   cygwin_flag = GetBoolOption("cyg");
-
   init_io();
   init_memory();
   exit_if_true(!mem_base || !other_base);
@@ -68,7 +52,6 @@ int main(int argc, char *argv[])  // REV401PLUS correct main proto
   assert(stack_pointer==mem_base); /* 8.10 */
   init_print();
   assert(stack_pointer==mem_base); /* 8.10 */
-
   /* Timekeeping initialization */
 #ifdef __unix__
   tzset();
@@ -79,9 +62,7 @@ int main(int argc, char *argv[])  // REV401PLUS correct main proto
   life_start = clock();
 #endif
   assert(stack_pointer==mem_base); /* 8.10 */
-
   init_modules(); /*  RM: Jan  8 1993  */
-  
   init_built_in_types();
   assert(stack_pointer==mem_base); /* 8.10 */
 #ifdef X11
@@ -96,35 +77,23 @@ int main(int argc, char *argv[])  // REV401PLUS correct main proto
   assert(stack_pointer==mem_base); /* 8.10 */
   init_trace();
   noisy=FALSE;
-
   assert(stack_pointer==mem_base); /* 8.10 */
-
-
   set_current_module(user_module); /*  RM: Jan 27 1993  */
-  
   /* Read in the .set_up file */
   init_system();
-  
 #ifdef ARITY  /*  RM: Mar 29 1993  */
   arity_init();
 #endif
-
-  
   open_input_file("~/life_local/Source/.set_up");
-
   push_goal(load,input_state,(ptr_psi_term)file_date,(GENERIC)heap_copy_string("~/life_local/Source/.set_up")); // REV401PLUS casts
-
   file_date+=2;
   main_prove();
-
-
   /* Main loop of interpreter */
   do {
     setjmp(env);
     /* printf("%ld\n",(long long)(stack_pointer-mem_base)); */ /* 8.10 */
     init_system(); 
     init_trace();
-
     begin_terminal_io();
     var_occurred=FALSE;
     save_undo_stack=undo_stack;
@@ -140,12 +109,8 @@ int main(int argc, char *argv[])  // REV401PLUS correct main proto
       exitflag=(s->type==eof);
     }
     end_terminal_io();
-
     if (!exitflag) {
       if (sort==QUERY) {
-
-	/* clear_already_loaded(symbol_table);     RM: Feb  3 1993  */
-	
         push_goal(what_next,(ptr_psi_term)TRUE,(ptr_psi_term)var_occurred,(GENERIC)1); // REV401PLUS casts
         ignore_eff=TRUE;
         goal_count=0;
@@ -171,12 +136,8 @@ int main(int argc, char *argv[])  // REV401PLUS correct main proto
       }
     }
   } while (!exitflag);
-
-  /* hash_display(x_module->symbol_table); */
-  
   exit_life(TRUE);
 }
-
 void init_globals()
 {
   first_definition=NULL;
@@ -185,10 +146,8 @@ void init_globals()
   quietflag=FALSE;  // 21.1
   trace=FALSE;
   verbose=FALSE; // 21.1 
-
   module_table=NULL;        /* The table of modules */
   current_module=NULL;    /* The current module for the tokenizer */
-  
   no_module=NULL;
   bi_module=NULL;
   syntax_module=NULL;
@@ -200,16 +159,11 @@ void init_globals()
   write_canon=FALSE;
   write_stderr=FALSE;
   write_corefs=TRUE;
-  
   page_width=PAGE_WIDTH;
-  
   display_persistent=FALSE;
-  
   no_name="pointer";
   name="symbol";
-  
   display_modules=TRUE;   /* Should really default to FALSE */
-  
   numbers[0] = "1";
   numbers[1] = "2";
   numbers[2] = "3";
@@ -231,21 +185,17 @@ void init_globals()
   numbers[18] = "19";
   numbers[19] = "20";
   numbers[20] = NULL;
-
   set_extra_args[0] = set_empty;
   set_extra_args[1] = set_1;
   set_extra_args[2] = set_2;
   set_extra_args[3] = set_1_2;
   set_extra_args[4] = set_1_2_3;
   set_extra_args[5] = set_1_2_3_4;
-
   old_state=NULL; /*  RM: Feb 17 1993  */
   trace_input=FALSE;
-
 #ifdef X11
   xevent_existing = NULL;
   xevent_list = NULL;
   x_window_creation = FALSE;
 #endif
-  
 }
