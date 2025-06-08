@@ -122,7 +122,7 @@ static ptr_psi_term make_bytedata(ptr_definition sort, unsigned long long bytes)
 //     unsigned long long bytes;
 {
   ptr_psi_term temp_result;
-  char *b = (char *) heap_alloc(bytes+sizeof(bytes));
+  char *b = (char *) wl_mem->heap_alloc(bytes+sizeof(bytes));
   *((long long *) b) = bytes;
   bzero(b+sizeof(bytes),bytes);
   temp_result=stack_psi_term(0);
@@ -672,7 +672,7 @@ static long long get_buffer_internal(ptr_psi_term args[],
   long long size = *(REAL*)args[1]->value_3;
   ptr_psi_term t = stack_psi_term(4);
   t->type = quoted_string;
-  t->value_3=(GENERIC)heap_alloc(size+1);
+  t->value_3=(GENERIC)wl_mem->heap_alloc(size+1);
   bzero((char*)t->value_3,size+1);
   FP_PREPARE(srm,FP_INPUT);
   if (fread((void*)t->value_3,sizeof(char),size,srm->fp) <= 0)
@@ -843,7 +843,7 @@ static long long get_record_internal(ptr_psi_term args[],
     size += lastbuf->top;
   t=stack_psi_term(0);
   t->type=quoted_string;
-  t->value_3=(GENERIC)heap_alloc(size+1);
+  t->value_3=(GENERIC)wl_mem->heap_alloc(size+1);
   for(lastbuf=&rootbuf,sep=(char*)t->value_3;
       lastbuf!=NULL;sep+=lastbuf->top,lastbuf=lastbuf->next)
     bcopy(lastbuf->data,sep,lastbuf->top);
@@ -1662,18 +1662,18 @@ extern void check_ndbm_definitions();
 #endif
 void check_sys_definitions()
 {
-  check_definition(&sys_bytedata);	/* DENYS: BYTEDATA */
-  check_definition(&sys_bitvector);
-  check_definition(&sys_regexp);
-  check_definition(&sys_stream);
-  check_definition(&sys_file_stream);
+  wl_mem->check_definition(&sys_bytedata);	/* DENYS: BYTEDATA */
+  wl_mem->check_definition(&sys_bitvector);
+  wl_mem->check_definition(&sys_regexp);
+  wl_mem->check_definition(&sys_stream);
+  wl_mem->check_definition(&sys_file_stream);
 #ifdef __unix__
-  check_definition(&sys_socket_stream);
-  check_definition(&sys_process_no_children);
-  check_definition(&sys_process_exited);
-  check_definition(&sys_process_signaled);
-  check_definition(&sys_process_stopped);
-  check_definition(&sys_process_continued);
+  wl_mem->check_definition(&sys_socket_stream);
+  wl_mem->check_definition(&sys_process_no_children);
+  wl_mem->check_definition(&sys_process_exited);
+  wl_mem->check_definition(&sys_process_signaled);
+  wl_mem->check_definition(&sys_process_stopped);
+  wl_mem->check_definition(&sys_process_continued);
 #endif
 #ifdef LIFE_NDBM
   check_ndbm_definitions();

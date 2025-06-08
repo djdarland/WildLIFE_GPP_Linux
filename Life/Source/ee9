@@ -1,4 +1,4 @@
-.echo "WildLife Edit Utility"
+echo "WildLife Edit Utility"
 echo "Edit any .cpp  file a-l"
 echo "enter 0 to proceed 999 to quit"
 read select

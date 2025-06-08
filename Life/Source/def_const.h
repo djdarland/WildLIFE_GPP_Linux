@@ -4,10 +4,6 @@
 
 */
 
-#ifndef  EXTERN
-#define EXTERN
-#endif
-
 #ifndef TRUE
 #define TRUE 1L
 #endif
@@ -126,7 +122,7 @@
   number of words 
 */
 
-#define GC_THRESHOLD (alloc_words>>3) 
+#define GC_THRESHOLD (wl_mem->alloc_words_val()>>3) 
 
 /*! \def COPY_THRESHOLD
   \brief Copy threshold (1/8 of GC_THRESHOLD is reasonable) 

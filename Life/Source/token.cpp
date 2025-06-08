@@ -46,7 +46,7 @@ void heap_add_int_attr(ptr_psi_term t, char *attrname, long long value)
 
   t1=heap_psi_term(4);
   t1->type=integer;
-  t1->value_3=heap_alloc(sizeof(REAL));
+  t1->value_3=wl_mem->heap_alloc(sizeof(REAL));
   *(REAL *)t1->value_3 = (REAL) value;
   heap_insert(FEATCMP,heap_copy_string(attrname),&(t->attr_list), (GENERIC)t1); // REV401PLUS cast
 }
@@ -59,7 +59,7 @@ void stack_add_int_attr(ptr_psi_term t, char *attrname, long long value)
 
   t1=stack_psi_term(4);
   t1->type=integer;
-  t1->value_3=heap_alloc(sizeof(REAL)); /* 12.5 */
+  t1->value_3=wl_mem->heap_alloc(sizeof(REAL)); /* 12.5 */
   //  *(REAL *)t1->value_3cp =  value;
   *(REAL *)t1->value_3 = (REAL) value;
   //*(REAL *)t1->value_3 = cp2R(value);
@@ -862,7 +862,7 @@ void read_number(ptr_psi_term tok,long long c)
   }
   else
     put_back_char(c);
-  tok->value_3=heap_alloc(sizeof(REAL)); /* 12.5 */
+  tok->value_3=wl_mem->heap_alloc(sizeof(REAL)); /* 12.5 */
   *(REAL *)tok->value_3=f;
   /*  RM: Mar  8 1993  */
   if(f==floor(f))

@@ -497,7 +497,7 @@ psi_term make_life_form(ptr_psi_term tok,ptr_psi_term arg1,ptr_psi_term arg2)
        (a1->type==integer || a1->type==real))  {
       
       tok->type=a1->type;
-      tok->value_3=(GENERIC)heap_alloc(sizeof(REAL));
+      tok->value_3=(GENERIC)wl_mem->heap_alloc(sizeof(REAL));
       *(REAL *)tok->value_3 = - *(REAL *)a1->value_3;
       return *tok;
     }

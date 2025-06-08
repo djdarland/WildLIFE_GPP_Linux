@@ -88,7 +88,7 @@ char *heap_ncopy_string(char *s,int n)
   char *p;
   
   if (s==one || s==two) return s;
-  p=(char *)heap_alloc(n+1);
+  p=(char *)wl_mem->heap_alloc(n+1);
   strncpy(p,s,n);
   p[n]='\0';
   return p;
@@ -109,7 +109,7 @@ char *stack_copy_string(char *s)
 {
   char *p;
   if (s==one || s==two) return s;
-  p=(char *)stack_alloc(strlen(s)+1);
+  p=(char *)wl_mem->stack_alloc(strlen(s)+1);
   strcpy(p,s);
   return p;
 }

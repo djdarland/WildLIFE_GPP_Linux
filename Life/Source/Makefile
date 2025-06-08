@@ -107,7 +107,7 @@ LIBSOURCE = \
 	arity.cpp bi_math.cpp bi_sys.cpp bi_type.cpp built_ins.cpp copy.cpp error.cpp \
 	hash_table.cpp info.cpp interrupt.cpp lefun.cpp lib.cpp list.cpp login.cpp \
 	lub.cpp memory.cpp modules.cpp parser.cpp print.cpp raw.cpp sys.cpp templates.cpp \
-	token.cpp trees.cpp types.cpp $(XSOURCE) $(DBMSOURCE)
+	token.cpp trees.cpp types.cpp .wl_memory.cpp $(XSOURCE) $(DBMSOURCE)
 
 LIBOBJECT_X = \
 	arity_x.o bi_math_x.o bi_sys_x.o bi_type_x.o built_ins_x.o copy_x.o \
@@ -120,12 +120,12 @@ LIBOBJECT = \
 	arity.o bi_math.o bi_sys.o bi_type.o built_ins.o copy.o error.o \
 	hash_table.o info2.o interrupt.o lefun.o lib2.o list.o login.o \
 	lub.o memory.o modules.o parser.o print.o raw.o sys.o templates.o \
-	token.o trees.o types.o
+	token.o trees.o types.o wl_memory.o
 
 # $(XOBJECT) $(DBMOBJECT)
 
 LIBINCLUDE = def_const.h def_glob.h def_macro.h def_proto.h \
-	defs.h def_struct.h
+	defs.h def_struct.h wl_memory.h
 
 
 REINCLUDE = regexp.h
@@ -229,6 +229,9 @@ trees.o : trees.cpp  $(LIBINCLUDE)
 
 types.o : types.cpp  $(LIBINCLUDE)
 	$(CC) types.cpp -o types.o $(CFLAGS) $(CPPFLAGS) $(DEFS_EXT_MINT) -c
+
+wl_memory.o : types.cpp  $(LIBINCLUDE)
+	$(CC) wl_memory.cpp -o wl_memory.o $(CFLAGS) $(CPPFLAGS) $(DEFS_EXT_MINT) -c
 
 # End regular Life
 

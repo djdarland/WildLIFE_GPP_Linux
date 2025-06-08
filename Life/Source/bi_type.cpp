@@ -358,9 +358,9 @@ static long long c_is_persistent() /*  RM: Feb  9 1993  */ // REV401PLUS long lo
     deref_args(glob,set_1);
     ans=(
 	 arg1->type->type_def==(def_type)global_it &&
-	 (GENERIC)arg1->type->global_value>=heap_pointer
+	 (GENERIC)arg1->type->global_value>=wl_mem->heap_pointer_val()
 	 ) ||
-      (GENERIC)arg1>=heap_pointer;
+      (GENERIC)arg1>=wl_mem->heap_pointer_val();
     unify_bool_result(result,ans);
   }
   else curry();

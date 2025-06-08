@@ -122,7 +122,7 @@ void clear_copy()
 /* already on heap, i.e. incremental copy to heap.                   */
 // long long to_heap;    // removed for MINT
 /* TRUE iff R is on the heap */
-#define ONHEAP(R) ((GENERIC)R>=heap_pointer)
+// #define ONHEAP(R) ((GENERIC)R>=wl_mem->heap_pointer_val()) also in def_macro
 /* Allocate a new record on the heap or stack if necessary: */
 #define NEW(A,TYPE) (heap_flag==HEAP		\
 		     ? (to_heap			\
@@ -239,7 +239,7 @@ ptr_psi_term copy(ptr_psi_term t, long long copy_flag, long long heap_flag)
       }
     }
     else {
-      if (heap_pointer-stack_pointer < COPY_THRESHOLD) {
+      if (wl_mem->heap_pointer_val()-wl_mem->stack_pointer_val() < COPY_THRESHOLD) {
 	Errorline("psi-term too large -- get a bigger Life!\n");
 	abort_life(TRUE);
 	longjmp(env,FALSE); /* Back to main loop */ /*  RM: Feb 15 1993  */
@@ -578,7 +578,7 @@ void bk_mark_quote(ptr_psi_term t)
   ptr_list l;
 
   if (t && !(t->status&RMASK)) {
-    if(t->status!=4 && (GENERIC)t<heap_pointer)/*  RM: Jul 16 1993  */
+    if(t->status!=4 && (GENERIC)t<wl_mem->heap_pointer_val())/*  RM: Jul 16 1993  */
       push_ptr_value(int_ptr,(GENERIC *)&(t->status)); // REV401PLUS cast
     t->status = 4;
     t->flags=QUOTED_TRUE; /* 14.9 */

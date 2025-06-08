@@ -2,6 +2,7 @@
 ** All Rights Reserved.
 *****************************************************************/
 /* 	$Id: life.c,v 1.2 1994/12/08 23:27:02 duchier Exp $	 */
+#define EXTERN 
 #define REV401PLUS
 #ifdef REV401PLUS
 #include "defs.h"
@@ -45,13 +46,13 @@ int main(int argc, char *argv[])  // REV401PLUS correct main proto
   quietflag = GetBoolOption("q");
   cygwin_flag = GetBoolOption("cyg");
   init_io();
-  init_memory();
-  exit_if_true(!mem_base || !other_base);
-  assert(stack_pointer==mem_base); /* 8.10 */
+  wl_mem = new wl_memory();
+  wl_mem->exit_mem_err_1();
+  wl_mem->exit_mem_err_2();
   init_copy();
-  assert(stack_pointer==mem_base); /* 8.10 */
+  wl_mem->exit_mem_err_2();
   init_print();
-  assert(stack_pointer==mem_base); /* 8.10 */
+  wl_mem->exit_mem_err_2();
   /* Timekeeping initialization */
 #ifdef __unix__
   tzset();
@@ -61,10 +62,10 @@ int main(int argc, char *argv[])  // REV401PLUS correct main proto
   _tzset();
   life_start = clock();
 #endif
-  assert(stack_pointer==mem_base); /* 8.10 */
+  wl_mem->exit_mem_err_2();
   init_modules(); /*  RM: Jan  8 1993  */
   init_built_in_types();
-  assert(stack_pointer==mem_base); /* 8.10 */
+  wl_mem->exit_mem_err_2();
 #ifdef X11
   x_setup_builtins();
   assert(stack_pointer==mem_base); /* 8.10 */
@@ -72,12 +73,12 @@ int main(int argc, char *argv[])  // REV401PLUS correct main proto
 #ifdef __unix__
   init_interrupt();
 #endif
-  assert(stack_pointer==mem_base); /* 8.10 */
+  wl_mem->exit_mem_err_2();
   title();
-  assert(stack_pointer==mem_base); /* 8.10 */
+  wl_mem->exit_mem_err_2();
   init_trace();
   noisy=FALSE;
-  assert(stack_pointer==mem_base); /* 8.10 */
+  wl_mem->exit_mem_err_2();
   set_current_module(user_module); /*  RM: Jan 27 1993  */
   /* Read in the .set_up file */
   init_system();

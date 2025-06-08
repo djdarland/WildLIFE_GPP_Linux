@@ -319,7 +319,7 @@ ptr_int_list lub(ptr_psi_term a,ptr_psi_term b,ptr_psi_term *pp);
 char *GetStrOption(char *name,char *def);
 int GetBoolOption(char *name);
 int GetIntOption(char *name,int def);
-void pchoices();
+// void pchoices();
 void print_undo_stack();
 long long bounds_undo_stack();
 void fail_all();

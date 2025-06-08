@@ -61,7 +61,7 @@ void init_system()
 #ifdef X11
   x_window_creation=FALSE;
 #endif
-  stack_pointer=mem_base;
+  wl_mem->set_stack_pointer(wl_mem->mem_base_val());
   goal_stack=NULL;
   choice_stack=NULL;
   undo_stack=NULL; /* 7.8 */
@@ -74,7 +74,7 @@ void init_system()
     sprintf(prompt_buffer,"%s%s",current_module->module_name,PROMPT);
   }
   resid_aim=NULL;
-  exit_if_true(!memory_check());
+  exit_if_true(!wl_mem->memory_check());
 #ifdef X11
   /*  RM: Dec 15 1992  */
   xevent_list=stack_nil();
@@ -107,13 +107,13 @@ void WFInit(long long argc, char *argv[])
     }
   quietflag = TRUE; /*  RM: Mar 31 1993  */
   init_io();
-  init_memory();
-  exit_if_true(!mem_base || !other_base);
-  assert(stack_pointer==mem_base); /* 8.10 */
+  wl_mem = new wl_memory();
+  wl_mem->exit_mem_err_1();
+  wl_mem->exit_mem_err_2();
   init_copy();
-  assert(stack_pointer==mem_base); /* 8.10 */
+  wl_mem->exit_mem_err_2();
   init_print();
-  assert(stack_pointer==mem_base); /* 8.10 */
+  wl_mem->exit_mem_err_2();
   /* Timekeeping initialization */
 #ifdef __unix__
   tzset();
@@ -123,23 +123,24 @@ void WFInit(long long argc, char *argv[])
   _tzset();
   life_start = clock();
 #endif
-  assert(stack_pointer==mem_base); /* 8.10 */
+  wl_mem->exit_mem_err_2();
   init_modules(); /*  RM: Jan  8 1993  */
+  wl_mem->exit_mem_err_2();
   init_built_in_types();
-  assert(stack_pointer==mem_base); /* 8.10 */
+  wl_mem->exit_mem_err_2();
 #ifdef X11
   x_setup_builtins();
-  assert(stack_pointer==mem_base); /* 8.10 */
+  wl_mem->exit_mem_err_2();
 #endif
 #ifdef __unix__
   init_interrupt();
 #endif
-  assert(stack_pointer==mem_base); /* 8.10 */
+  wl_mem->exit_mem_err_2();
   title();
-  assert(stack_pointer==mem_base); /* 8.10 */
+  wl_mem->exit_mem_err_2();
   init_trace();
   noisy=FALSE;
-  assert(stack_pointer==mem_base); /* 8.10 */
+  wl_mem->exit_mem_err_2();
   set_current_module(user_module); /*  RM: Jan 27 1993  */
   /* Read in the .set_up file */
   init_system();

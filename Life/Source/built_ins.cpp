@@ -66,7 +66,7 @@ ptr_psi_term stack_int(long long n)
   ptr_psi_term m;
   m=stack_psi_term(4);
   m->type=integer;
-  m->value_3=heap_alloc(sizeof(REAL));
+  m->value_3=wl_mem->heap_alloc(sizeof(REAL));
   *(REAL *)m->value_3=(REAL)n;
   return m;
 }
@@ -153,7 +153,7 @@ ptr_psi_term make_feature_list(ptr_node tree,ptr_psi_term tail,
       else {
 	wl_new=stack_psi_term(4);      
 	wl_new->type=(d==floor(d))?integer:real;
-	wl_new->value_3=heap_alloc(sizeof(REAL));
+	wl_new->value_3=wl_mem->heap_alloc(sizeof(REAL));
 	*(REAL *)wl_new->value_3=(REAL)d;
 	tail=stack_cons(wl_new,tail);
       }
@@ -212,7 +212,7 @@ long long get_real_value(ptr_psi_term t,REAL *v,long long *n)
 	}
       }
       else {
-	if((GENERIC)t<heap_pointer) { /*  RM: Jun  8 1993  */
+	if((GENERIC)t<wl_mem->heap_pointer_val()) { /*  RM: Jun  8 1993  */
 	  push_ptr_value(def_ptr,(GENERIC *)&(t->type)); //cast REV401PLUS
 	  push_ptr_value(int_ptr,(GENERIC *)&(t->status)); //cast REV401PLUS
 	  t->type=real;
@@ -253,7 +253,7 @@ static long long get_bool_value(ptr_psi_term t,REAL *v,long long *n)
 	  }
       }
       else {
-	if((GENERIC)t<heap_pointer) { /*  RM: Jun  8 1993  */
+	if((GENERIC)t<wl_mem->heap_pointer_val()) { /*  RM: Jun  8 1993  */
 	  push_ptr_value(def_ptr,(GENERIC *)&(t->type)); //cast REV401PLUS
 	  push_ptr_value(int_ptr,(GENERIC *)&(t->status)); //cast REV401PLUS
 	  t->type=boolean;
@@ -294,11 +294,11 @@ long long unify_real_result(ptr_psi_term t,REAL v)
     printf("*** BUG: value already present in UNIFY_REAL_RESULT\n");
   }
 #endif
-  if((GENERIC)t<heap_pointer) { /*  RM: Jun  8 1993  */
+  if((GENERIC)t<wl_mem->heap_pointer_val()) { /*  RM: Jun  8 1993  */
     deref_ptr(t);
     assert(t->value_3==NULL); /* 10.6 */
     push_ptr_value(int_ptr,(GENERIC *)&(t->value_3)); //cast REV401PLUS
-    t->value_3=heap_alloc(sizeof(REAL)); /* 12.5 */
+    t->value_3=wl_mem->heap_alloc(sizeof(REAL)); /* 12.5 */
     *(REAL *)t->value_3 = v;
     matches(t->type,integer,&smaller);
     if (v==floor(v)){
@@ -1037,8 +1037,8 @@ static long long c_project()
       }
       else {
 	deref_ptr(result);
-	if((GENERIC)arg1>=heap_pointer) { /*  RM: Feb  9 1993  */
-	  if((GENERIC)result<heap_pointer)
+	if((GENERIC)arg1>=wl_mem->heap_pointer_val()) { /*  RM: Feb  9 1993  */
+	  if((GENERIC)result<wl_mem->heap_pointer_val())
 	    push_psi_ptr_value(result,(GENERIC *)&(result->coref)); //REV401PLUS cast
 	  clear_copy();
 	  result->coref=inc_heap_copy(result);
@@ -1767,7 +1767,7 @@ static long long c_read(long long psi_flag)
 	  arg3=(ptr_psi_term)n->data;
 	  g=stack_psi_term(4);
 	  g->type=integer;
-	  g->value_3=heap_alloc(sizeof(REAL));
+	  g->value_3=wl_mem->heap_alloc(sizeof(REAL));
 	  *(REAL *)g->value_3=line;
 	  push_goal(unify,g,arg3,NULL);
 	}
@@ -1813,8 +1813,8 @@ void exit_life(long long nl_flag)
     printf("*** Exiting Wild_Life  ");
     printf("[%1.3lfs cpu, %1.3lfs gc (%2.1lf% %)]\n",
 	   ((REAL)(life_end - life_start) / (REAL)CLOCKS_PER_SEC),
-	   ((REAL)garbage_time),
-	   ((REAL)((garbage_time * 100.0) / (REAL)(life_end - life_start))));
+	   ((REAL)wl_mem->garbage_time_val()),
+	   ((REAL)((wl_mem->garbage_time_val() * 100.0) / (REAL)(life_end - life_start))));
 
   }
   exit(0);
@@ -1833,8 +1833,8 @@ void exit_life(long long nl_flag)
     printf("*** Exiting Wild_Life  ");
     printf("[%1.3lfs cpu, %1.3fs gc (%2.1lf%%)]\n",
            ((REAL)(life_end.tms_utime-life_start.tms_utime)/(REAL)sysconf(_SC_CLK_TCK)),
-           garbage_time,
-           (REAL)garbage_time * 100.0) / (REAL) (life_end.tms_utime-life_start.tms_utime)/(REAL)sysconf(_SC_CLK_TCK);
+           wl_mem->garbage_time_val(),
+           (REAL)wl_mem->garbage_time_val() * 100.0) / (REAL) (life_end.tms_utime-life_start.tms_utime)/(REAL)sysconf(_SC_CLK_TCK);
   }
   exit(0);
 }
@@ -2244,7 +2244,7 @@ void persistent_one(ptr_psi_term t) // REV401PLUS add void
 // ptr_psi_term t;
 { 
   t->type->type_def=(def_type)global_it;
-  if ((GENERIC)t->type->global_value<(GENERIC)heap_pointer)
+  if ((GENERIC)t->type->global_value<(GENERIC)wl_mem->heap_pointer_val())
     t->type->global_value=heap_psi_term(4);
 }
 /******** C_OPEN_IN
@@ -2457,7 +2457,7 @@ static long long c_get()
       }
       else {
         t->type=integer;
-        t->value_3=heap_alloc(sizeof(REAL)); /* 12.5 */
+        t->value_3=wl_mem->heap_alloc(sizeof(REAL)); /* 12.5 */
         * (REAL *)t->value_3 = (REAL) c;
       }
     }
@@ -3435,7 +3435,7 @@ static long long c_bk_assign()
     deref_args(g,set_1_2);
     if (arg1 != arg2) {
       /*  RM: Mar 10 1993  */
-      if((GENERIC)arg1>=heap_pointer) {
+      if((GENERIC)arg1>=wl_mem->heap_pointer_val()) {
 	Errorline("cannot use '<-' on persistent value in %P\n",g);
 	return c_abort();
       }
@@ -3482,7 +3482,7 @@ static long long c_assign()
     deref_ptr(arg1);
     deref_rec(arg2); /* 17.9 */
     deref_args(g,set_1_2);
-    if ((GENERIC)arg1<heap_pointer || arg1!=arg2) {
+    if ((GENERIC)arg1<wl_mem->heap_pointer_val() || arg1!=arg2) {
       clear_copy();
       *arg1 = *exact_copy(arg2,HEAP);
     }
@@ -3514,7 +3514,7 @@ static long long c_global_assign()
     if (arg1!=arg2) {
       clear_copy();
       wl_new=inc_heap_copy(arg2);
-      if((GENERIC)arg1<heap_pointer) {
+      if((GENERIC)arg1<wl_mem->heap_pointer_val()) {
 	push_psi_ptr_value(arg1,(GENERIC *)&(arg1->coref)); // REV401PLUS cast
 	arg1->coref= wl_new;
       }
@@ -3697,7 +3697,7 @@ static long long c_freeze_inner(long long freeze_flag)
       return success;
     }
     resid_aim=aim;
-    match_date=(ptr_psi_term)stack_pointer;
+    match_date=(ptr_psi_term)wl_mem->stack_pointer_val();
     cutpt=choice_stack; /* 13.6 */
     /* Third argument of freeze's aim is used to keep track of which */
     /* clause is being tried in the frozen goal. */
@@ -3799,7 +3799,7 @@ static long long c_char()
         ptr_psi_term t;
         t=stack_psi_term(4);
 	t->type=quoted_string;
-	str=(char *)heap_alloc(2);
+	str=(char *)wl_mem->heap_alloc(2);
         str[0] = (unsigned char) floor(*(REAL *) arg1->value_3);
 	str[1] = 0;
 	t->value_3=(GENERIC)str;
@@ -4334,7 +4334,7 @@ static void op_declare(long long p,wl_operator t,char *s)
     return;
   }
   d=update_symbol(NULL,s);
-  od= (ptr_operator_data) heap_alloc (sizeof(operator_data));
+  od= (ptr_operator_data) wl_mem->heap_alloc (sizeof(operator_data));
   od->precedence=p;
   od->type=t;
   od->next=d->op_data;
@@ -4402,7 +4402,7 @@ char *str_conc(char *s1,char *s2)
 {
   char *result;
 
-  result=(char *)heap_alloc(strlen(s1)+strlen(s2)+1);
+  result=(char *)wl_mem->heap_alloc(strlen(s1)+strlen(s2)+1);
   sprintf(result,"%s%s",s1,s2);
   return result;
 }
@@ -4421,7 +4421,7 @@ char *sub_str(char *s,long long p,long long n)
   else
     if(p+n-1>l)
       n=l-p+1;
-  result=(char *)heap_alloc(n+1);
+  result=(char *)wl_mem->heap_alloc(n+1);
   for(i=0;i<n;i++)
     *(result+i)= *(s+p+i-1);
   *(result+n)=0;

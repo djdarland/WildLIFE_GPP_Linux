@@ -752,7 +752,7 @@ int global_unify(ptr_psi_term u,ptr_psi_term v)      /*  RM: Feb 11 1993  */
   deref_ptr(u);
   deref_ptr(v);
   Traceline("match persistent %P with %P\n",u,v);
-  if((GENERIC)u>=heap_pointer) {
+  if((GENERIC)u>=wl_mem->heap_pointer_val()) {
     Errorline("cannot unify persistent values\n");
     return c_abort();
   }

@@ -1,0 +1,21 @@
+echo "WildLife Classes Edit Utility"
+echo "Edit any class .h and ,cpp files"
+echo "enter 0 to proceed 999 to quit"
+read select
+while [ $select -ne 999 ]
+do 
+echo "-----------"
+echo ".h and .cpp files for wild life"
+echo "-----------"
+echo "1 memory"
+echo "777 NOTES_DJD.txt"
+
+echo "999 quit"
+echo "select"
+read select
+case $select in
+1) ./eewl memory   ;;
+777) $EDITOR NOTES_DJD.txt ;;
+esac
+done
+

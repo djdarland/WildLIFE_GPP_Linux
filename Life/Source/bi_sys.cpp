@@ -326,9 +326,9 @@ static long long c_statistics()
 
   t=aim->aaaa_1;
   deref_args(t,set_empty);
-  t1 = sizeof(mem_base)*(stack_pointer-mem_base);
-  t2 = sizeof(mem_base)*(mem_limit-heap_pointer);
-  t3 = sizeof(mem_base)*(mem_limit-mem_base);
+  t1 = wl_mem->bi_sys_t1();
+  t2 = wl_mem->bi_sys_t2();
+  t3 = wl_mem->bi_sys_t3();
   printf("\n");
   /* printf("************** SYSTEM< INFORMATION **************\n"); */
   printf("Stack size  : %8lld bytes (%5lldK) (%lld%%)\n",t1,t1/1024,100*t1/t3);
@@ -352,7 +352,7 @@ static long long c_garbage()
 
   t=aim->aaaa_1;
   deref_args(t,set_empty);
-  garbage();
+  wl_mem->garbage();
   return TRUE;
 }
 /******** C_GETENV

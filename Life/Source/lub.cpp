@@ -176,7 +176,7 @@ ptr_int_list lub(ptr_psi_term a,ptr_psi_term b,ptr_psi_term *pp)
   or_codes(pattern, tb->code);		/* pattern to search for */
   ans = copyTypeCode(pattern);		/* resulting pattern */
   /* initialize the table to be non-searched */
-  flags = (long long *)stack_alloc(sizeof(unsigned long long) * type_count);
+  flags = (long long *)wl_mem->stack_alloc(sizeof(unsigned long long) * type_count);
   memset(flags, 0, sizeof(unsigned long long) * type_count);
   /* now do a breadth first search for each of arg1 and arg2 */
   found  = bfs(ta, ans, pattern, flags);

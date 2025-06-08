@@ -45,7 +45,7 @@ ptr_psi_term real_stack_psi_term(long long stat,REAL thereal)
   result->time_stamp=global_time_stamp; /* 9.6 */
 #endif
   result->resid=NULL;
-  result->value_3=(GENERIC)heap_alloc(sizeof(REAL));
+  result->value_3=(GENERIC)wl_mem->heap_alloc(sizeof(REAL));
   (* (REAL *)(result->value_3)) = thereal;
 
   return result;
@@ -153,7 +153,7 @@ long long residuateGoalOnVar(ptr_goal g, ptr_psi_term var, ptr_psi_term othervar
   ptr_residuation *r;
     
   /* 5.8 PVR */
-  if ((GENERIC)var>=heap_pointer) {
+  if ((GENERIC)var>=wl_mem->heap_pointer_val()) {
     Errorline("attempt to residuate on psi-term %P in the heap.\n",var);
     return FALSE;
   }
@@ -397,7 +397,7 @@ long long eval_aim()
   funct->status=4;
   result=(ptr_psi_term )aim->bbbb_1;
   rule=(ptr_pair_list )aim->cccc_1;
-  match_date=(ptr_psi_term )stack_pointer;
+  match_date=(ptr_psi_term )wl_mem->stack_pointer_val();
   cutpt=choice_stack; /* 13.6 */
   /* For currying and residuation */
   curried=FALSE;
@@ -830,7 +830,7 @@ long long check_out(ptr_psi_term t)
   long long flag=FALSE;
   
   deref_ptr(t);
-  if (t->status || (GENERIC)t>=heap_pointer) /*  RM: Feb  8 1993  */
+  if (t->status || (GENERIC)t>=wl_mem->heap_pointer_val()) /*  RM: Feb  8 1993  */
     flag=TRUE;
   else {
     t->status |= RMASK;
@@ -920,7 +920,7 @@ long long deref_eval(ptr_psi_term t)
       }
       else {
 	if (t->status!=2) {
-	  if((GENERIC)t<heap_pointer)
+	  if((GENERIC)t<wl_mem->heap_pointer_val())
 	    push_ptr_value(int_ptr,(GENERIC *)&(t->status)); /*  RM: Jul 15 1993  */ // REV401PLUS cast
 	  t->status=4;
 	  deref_flag=FALSE;
@@ -959,7 +959,7 @@ void deref_rec_body(ptr_psi_term t)
 	deref_rec_body(t);
       }
       else {
-	if((GENERIC)t<heap_pointer)
+	if((GENERIC)t<wl_mem->heap_pointer_val())
 	  push_ptr_value(int_ptr,(GENERIC *)&(t->status));/*  RM: Jul 15 1993  */ // REV401PLUS cast
 	t->status=4;
 	deref_rec_args(t->attr_list);
@@ -1117,7 +1117,7 @@ void init_global_vars()  /*  RM: Feb 15 1993  */
   ptr_definition def;
   
   for(def=first_definition;def;def=def->next)
-    if((GENERIC)(def->global_value)<(GENERIC)heap_pointer)
+    if((GENERIC)(def->global_value)<(GENERIC)wl_mem->heap_pointer_val())
       def->global_value=NULL;
 }
 
