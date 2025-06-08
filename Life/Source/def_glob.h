@@ -40,40 +40,6 @@ EXTERN int arg_c;
 
 EXTERN char *arg_v[ARGNN]; // Modified DJD
 
-/*! \var alloc_words
-  \brief number of words to allocate - from either command lind or ALLOC_WORDS define
-
-*/
-
-// EXTERN struct tms life_start;
-
-/*! \var life_start
-  \brief time life ended - seconds
-
-*/
-
-// EXTERN struct tms life_end;
-
-/*! \var other_base
-  \brief mem_size memory allocated in init_memory by malloc 
-
-  only used for the half-space garbage collector
-*/
-
-EXTERN GENERIC other_base;
-
-/*! \var other_limit
-  \brief only used for the half-space garbage collector
-*/
-
-EXTERN GENERIC other_limit;
-
-/*! \var other_pointer
-  \brief NOT USED - according to comment
-
-*/
-
-EXTERN GENERIC other_pointer;
 
 /*! \var error_psi_term
   \brief symbol in bi module

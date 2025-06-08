@@ -319,26 +319,6 @@ ptr_int_list lub(ptr_psi_term a,ptr_psi_term b,ptr_psi_term *pp);
 char *GetStrOption(char *name,char *def);
 int GetBoolOption(char *name);
 int GetIntOption(char *name,int def);
-// void pchoices();
-void print_undo_stack();
-long long bounds_undo_stack();
-void fail_all();
-void check_hash_table(ptr_hash_table table);
-void check_definition(ptr_definition *d);
-void check_definition_list();
-void check_resid_block(ptr_resid_block *rb);
-void check_psi_term(ptr_psi_term *t);
-void check_attr(ptr_node *n);
-void check_gamma_code();
-void print_gc_info(long long timeflag);
-void garbage();
-GENERIC heap_alloc(long long s);
-GENERIC stack_alloc(long long s);
-void init_memory ();
-long long memory_check ();
-
-
-
 // from modules.c
 
 void init_modules();

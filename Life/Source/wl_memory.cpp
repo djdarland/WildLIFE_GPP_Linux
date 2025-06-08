@@ -1,7 +1,7 @@
 #define EXTERN extern
 #include "wl_memory.h"
 /****************************************************************************/
- void wl_memory::pchoices() /*  RM: Oct 28 1993  For debugging. */
+void wl_memory::pchoices() /*  RM: Oct 28 1993  For debugging. */
 {
   ptr_choice_point c;
   printf("stack pointer is: %llx\n",(unsigned long long)stack_pointer); // REV401PLUS  "%x" -> "%lx" and cast
@@ -77,9 +77,9 @@ void wl_memory::fail_all()
 */
 /*  RM: Jan 29 1993  Replaced with PVR's version of 26.1 */
 /******** COMPRESS()
-This routine compresses the memory contents and
-calculates the new addresses. First the Stack is compressed, bottom up.
-Secondly the Heap is compressed, top down.
+	  This routine compresses the memory contents and
+	  calculates the new addresses. First the Stack is compressed, bottom up.
+	  Secondly the Heap is compressed, top down.
 */
 void wl_memory::compress()
 {
@@ -397,8 +397,8 @@ void wl_memory::check_module(ptr_module *m)        /*  RM: Jan 12 1993  */
   }
 }
 /******** CHECK_HASH_TABLE(table)
-Check a hash table of keywords. The actual table is not stored within LIFE
-memory.
+	  Check a hash table of keywords. The actual table is not stored within LIFE
+	  memory.
 */
 void wl_memory::check_hash_table(ptr_hash_table table)
 //     ptr_hash_table table;
@@ -423,9 +423,9 @@ void wl_memory::check_keyword(ptr_keyword *k)
   }
 }
 /******** CHECK_DEFINITION
-This goes through the type tree which contains the parents and children lists
-for all types, and the attributed code. The code field is not checked as
-this has been done separately by CHECK_GAMMA.
+	  This goes through the type tree which contains the parents and children lists
+	  for all types, and the attributed code. The code field is not checked as
+	  this has been done separately by CHECK_GAMMA.
 */
 void wl_memory::check_definition(ptr_definition *d)
 // ptr_definition *d;
@@ -495,8 +495,8 @@ void wl_memory::check_def_rest(ptr_definition *d)
   }
 }
 /******** CHECK_SYMBOL
-This goes through the symbol table, checking all nodes, symbols, strings
-and definitions not contained in the type table.
+	  This goes through the symbol table, checking all nodes, symbols, strings
+	  and definitions not contained in the type table.
 */
 void wl_memory::check_symbol(ptr_node *n)
 // ptr_node *n;
@@ -520,9 +520,9 @@ void wl_memory::check_type_disj(ptr_int_list *p)
   }
 }
 /******** CHECK_GOAL_STACK
-Check the goal_stack. This is quite complicated as each type of goal (prove,
-unify, eval, eval_cut etc...) gives its own meanings to the three other
-fields (A,B and C) present in each goal.
+	  Check the goal_stack. This is quite complicated as each type of goal (prove,
+	  unify, eval, eval_cut etc...) gives its own meanings to the three other
+	  fields (A,B and C) present in each goal.
 */
 void wl_memory::check_goal_stack(ptr_goal *g)
 // ptr_goal *g;
@@ -728,12 +728,12 @@ void wl_memory::check_attr(ptr_node *n)
   }
 }
 /******** CHECK_GAMMA_CODE()
-Check and update the code
-reversing table.  In this part, only the codes are checked in
-the definitions, this is vital because these codes are used
-later to distinguish between the various data types and to
-determine the type of the VALUE field in psi_terms. Misunderstanding this
-caused a lot of bugs in the GC.
+	  Check and update the code
+	  reversing table.  In this part, only the codes are checked in
+	  the definitions, this is vital because these codes are used
+	  later to distinguish between the various data types and to
+	  determine the type of the VALUE field in psi_terms. Misunderstanding this
+	  caused a lot of bugs in the GC.
 */
 void wl_memory::check_gamma_code()
 {
@@ -755,9 +755,9 @@ void wl_memory::check_gamma_rest()
     check_def_rest(&(gamma_table[i]));
 }
 /******** CHECK_UNDO_STACK()
-This looks after checking the addresses of objects pointed to in the trail.
-The type of the pointer to be restored on backtracking is known, which
-allows the structure it is referring to to be accordingly checked.
+	  This looks after checking the addresses of objects pointed to in the trail.
+	  The type of the pointer to be restored on backtracking is known, which
+	  allows the structure it is referring to to be accordingly checked.
 */
 void wl_memory::check_undo_stack(ptr_stack *s)
 // ptr_stack *s;
@@ -819,9 +819,9 @@ void wl_memory::check_choice(ptr_choice_point *c)
   }
 }
 /******** CHECK_SPECIAL_ADDRESSES
-Here we check all the addresses which do not point to a whole data structure,
-but to something within, for example a field such as VALUE which might
-have been modified in a PSI_TERM structure.  These are the LONELY addresses.
+	  Here we check all the addresses which do not point to a whole data structure,
+	  but to something within, for example a field such as VALUE which might
+	  have been modified in a PSI_TERM structure.  These are the LONELY addresses.
 */
 void wl_memory::check_special_addresses()
 {
@@ -845,8 +845,8 @@ void wl_memory::check_special_addresses()
   }
 }
 /******** CHECK_PSI_LIST
-Update all the values in the list of residuation variables, which is a list
-of psi_terms.
+	  Update all the values in the list of residuation variables, which is a list
+	  of psi_terms.
 */
 void wl_memory::check_psi_list(ptr_int_list *l)
 // ptr_int_list *l;
@@ -857,8 +857,8 @@ void wl_memory::check_psi_list(ptr_int_list *l)
   }
 }
 /******** CHECK_RESID_LIST
-Update all the values in the list of residuation variables, which is a list
-of pairs of psi_terms.
+	  Update all the values in the list of residuation variables, which is a list
+	  of pairs of psi_terms.
 */
 void wl_memory::check_resid_list(ptr_resid_list *l)
 // ptr_resid_list *l;
@@ -884,27 +884,27 @@ void wl_memory::check_var(ptr_node *n)
   }
 }
 /******** CHECK
-This routine checks all pointers and psi_terms to find out which memory cells
-must be preserved and which can be discarded.
+	  This routine checks all pointers and psi_terms to find out which memory cells
+	  must be preserved and which can be discarded.
 
-This routine explores all known structures. It is vital that it should visit
-them all exactly once. It thus creates a map of what is used in memory, which
-COMPRESS uses to compact the memory and recalculate the addresses.
-Exploration of these structures should be done in exactly the same order
-in both passes. If it is the second pass, pointers are assigned their new
-values.
+	  This routine explores all known structures. It is vital that it should visit
+	  them all exactly once. It thus creates a map of what is used in memory, which
+	  COMPRESS uses to compact the memory and recalculate the addresses.
+	  Exploration of these structures should be done in exactly the same order
+	  in both passes. If it is the second pass, pointers are assigned their new
+	  values.
 
-A crucial property of this routine: In pass 2, a global variable (i.e. a
-root for GC) must be updated before it is accessed.  E.g. don't use the
-variable goal_stack before updating it.
+	  A crucial property of this routine: In pass 2, a global variable (i.e. a
+	  root for GC) must be updated before it is accessed.  E.g. don't use the
+	  variable goal_stack before updating it.
 */
 void wl_memory::check()
 {
 #ifdef prlDEBUG
   amount_used=0;
 #endif
-/* First of all, get all the codes right so that data type-checking remains
-coherent.
+  /* First of all, get all the codes right so that data type-checking remains
+     coherent.
 
      Kids and Parents cannot be checked because the built-in types have codes
      which might have been moved.
@@ -1058,21 +1058,21 @@ void wl_memory::print_gc_info(long long timeflag)
   fprintf(stderr,"]\n");
 }
 /******** GARBAGE()
-The garbage collector.
-This routine is called whenever memory is getting low.
-It returns TRUE if insufficient memory was freed to allow
-the interpreter to carry on working.
+	  The garbage collector.
+	  This routine is called whenever memory is getting low.
+	  It returns TRUE if insufficient memory was freed to allow
+	  the interpreter to carry on working.
 
-This is a half-space GC, it first explores all known structures, then
-compresses the heap and the stack, then during the second pass assigns
-all the new addresses.
+	  This is a half-space GC, it first explores all known structures, then
+	  compresses the heap and the stack, then during the second pass assigns
+	  all the new addresses.
   
-Bugs will appear if the collector is called during parsing or other
-such routines which are 'unsafe'. In order to avoid this problem, before
-one of these routines is invoked the program will check to see whether
-there is enough memory available to work, and will call the GC if not
-(this is a fix, because it is not possible to determine in advance
-what the size of a psi_term read by the parser will be).
+	  Bugs will appear if the collector is called during parsing or other
+	  such routines which are 'unsafe'. In order to avoid this problem, before
+	  one of these routines is invoked the program will check to see whether
+	  there is enough memory available to work, and will call the GC if not
+	  (this is a fix, because it is not possible to determine in advance
+	  what the size of a psi_term read by the parser will be).
 */
 void wl_memory::garbage()
 {
@@ -1146,10 +1146,10 @@ void wl_memory::garbage()
   MEMORY ALLOCATION ROUTINES.
 */
 /******** HEAP_ALLOC(s)
-This returns a pointer to S bytes of memory in the heap.
-Alignment is taken into account in the following manner:
-the macro ALIGN is supposed to be a power of 2 and the pointer returned
-is a multiple of ALIGN.
+	  This returns a pointer to S bytes of memory in the heap.
+	  Alignment is taken into account in the following manner:
+	  the macro ALIGN is supposed to be a power of 2 and the pointer returned
+	  is a multiple of ALIGN.
 */
 GENERIC wl_memory::heap_alloc (long long s)
 // long long s;
@@ -1163,10 +1163,10 @@ GENERIC wl_memory::heap_alloc (long long s)
   return heap_pointer;
 }
 /******** STACK_ALLOC(s)
-This returns a pointer to S bytes of memory in the stack.
-Alignment is taken into account in the following manner:
-the macro ALIGN is supposed to be a power of 2 and the pointer returned
-is a multiple of ALIGN.
+	  This returns a pointer to S bytes of memory in the stack.
+	  Alignment is taken into account in the following manner:
+	  the macro ALIGN is supposed to be a power of 2 and the pointer returned
+	  is a multiple of ALIGN.
 */
 GENERIC wl_memory::stack_alloc(long long s)
 // long long s;
@@ -1213,9 +1213,9 @@ wl_memory::wl_memory()
     Errorline("Wild_life could not allocate sufficient memory to run.\n\n");
 }
 /******** MEMORY_CHECK()
-This function tests to see whether enough memory is available to allow
-execution to continue.  It causes a garbage collection if not, and if that
-fails to release enough memory it returns FALSE.
+	  This function tests to see whether enough memory is available to allow
+	  execution to continue.  It causes a garbage collection if not, and if that
+	  fails to release enough memory it returns FALSE.
 */
 long long wl_memory::memory_check ()
 {
@@ -1241,7 +1241,7 @@ void wl_memory::exit_mem_err_1()
 }
 void wl_memory::exit_mem_err_2()
 {
-   assert(stack_pointer==mem_base); /* 8.10 */
+  assert(stack_pointer==mem_base); /* 8.10 */
 }
 long long wl_memory::bi_sys_t1()
 {
@@ -1272,19 +1272,19 @@ GENERIC wl_memory::mem_limit_val()
 }
 GENERIC wl_memory::stack_pointer_val()
 {
-    return stack_pointer;
+  return stack_pointer;
 }
 void wl_memory::set_stack_pointer(GENERIC val)
 {
-    stack_pointer = val;
+  stack_pointer = val;
 }
 void wl_memory::set_heap_pointer(GENERIC val)
 {
-    heap_pointer = val;
+  heap_pointer = val;
 }
 float wl_memory::garbage_time_val()
 {
-    return garbage_time;
+  return garbage_time;
 }
 long long wl_memory::alloc_words_val()
 {

@@ -7,26 +7,29 @@
 class wl_memory {
 private:
   void pchoices();
-   long long alloc_words;   
-   long long mem_size;
-   GENERIC mem_base;
-   GENERIC heap_pointer;
-   GENERIC mem_limit;
-   GENERIC stack_pointer;
-   float garbage_time;
-   long long amount_used;
-   long long pass;
+  long long alloc_words;   
+  long long mem_size;
+  GENERIC mem_base;
+  GENERIC heap_pointer;
+  GENERIC mem_limit;
+  GENERIC stack_pointer;
+  float garbage_time;
+  long long amount_used;
+  long long pass;
+  GENERIC other_base;
+  GENERIC other_limit;
+  GENERIC other_pointer;
 #ifdef _WIN64
-   clock_t last_garbage_time;
+  clock_t last_garbage_time;
 #endif
 #ifdef __unix__
-   struct tms last_garbage_time;
+  struct tms last_garbage_time;
 #endif
-   float gc_time, life_time;
-   long long delta;
-   void print_undo_stack();
-   long long bounds_undo_stack();
-   void compress();
+  float gc_time, life_time;
+  long long delta;
+  void print_undo_stack();
+  long long bounds_undo_stack();
+  void compress();
   long long unchecked(GENERIC *p, long long len);
   void fail_all();
   void check_string (GENERIC *s);
