@@ -443,7 +443,6 @@ a:V:b:5:long long => V: <a,b,5,int> (= conjunction list).
 psi_term make_life_form(ptr_psi_term tok,ptr_psi_term arg1,ptr_psi_term arg2)
 // ptr_psi_term tok,arg1,arg2;
 {  
-  ptr_list l;
   ptr_psi_term a1,a2;
 
   deref_ptr(tok);

@@ -827,7 +827,6 @@ void wl_memory::check_special_addresses()
 {
   ptr_choice_point c;
   ptr_stack p;
-  ptr_goal g;
 
   c=choice_stack;
   while(c) {

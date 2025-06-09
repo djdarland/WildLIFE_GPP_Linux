@@ -80,8 +80,7 @@ void remove_cycles(ptr_definition d, ptr_int_list *dl) // REV401PLUS void
 long long redefine(ptr_psi_term t)
 // ptr_psi_term t;
 {
-  ptr_definition d,d2;
-  ptr_int_list l,*l2;
+  ptr_definition d;
   long long success=TRUE;
   
   deref_ptr(t);
@@ -319,7 +318,6 @@ void assert_complicated_type(ptr_psi_term t)
 // ptr_psi_term t;
 {
   ptr_psi_term arg2,typ1,typ2,pred=NULL;
-  ptr_list lst;
   long long eqflag = equ_tok((*t),":=");
   long long ok, any_ok=FALSE;
   
@@ -858,7 +856,7 @@ void encode_types()
 {
   long long p=0,i,possible,ok=TRUE;
   ptr_int_list layer,l,kids,dads,code;
-  ptr_definition xdef,kdef,ddef,err;
+  ptr_definition xdef,kdef,ddef;
   if (types_modified) {
     nothing->parents=NULL;
     nothing->children=NULL;

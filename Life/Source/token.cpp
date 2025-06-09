@@ -187,7 +187,6 @@ void save_state(ptr_psi_term t)
 void restore_state(ptr_psi_term t)
 // ptr_psi_term t;
 {
-  long long i;
   char *str;
   
   input_stream = (FILE *) ((ptr_psi_term)get_attr(t,STREAM))->value_3;
@@ -364,7 +363,7 @@ char* expand_file_name(char* s)
 char* expand_file_name(char* s)
 // char *s;
 {
-  char* r, * r2, * r3, * s2;
+  char* r, * r2, * r3;
   char* home;
   int slash_count, i;
   if (strcmp(s, "stdin") == 0) return s;
@@ -751,7 +750,6 @@ void read_name(ptr_psi_term tok,long long ch,long long (*f)(long long),ptr_defin
   long long store=TRUE;
   long long flag=TRUE;
   ptr_module module=NULL;
-  ptr_node n; /*  RM: Feb  9 1993  */
 
   tok->coref=NULL;
   tok->resid=NULL;
@@ -821,7 +819,7 @@ void read_number(ptr_psi_term tok,long long c)
 {
   long long c2;
   REAL f,p;
-  long long sgn,pwr,posflag;
+  long long pwr,posflag;
 
   f=0.0;
   do { f=f*10.0+(c-'0'); c=read_char(); } while (DIGIT(c));

@@ -1598,7 +1598,6 @@ static long long apply1_internal(ptr_psi_term args[],
     success=FALSE;
   }
   else {
-    char buffer[1000];
     char * feat;
     ptr_psi_term fun;
     if (sub_type(args[1]->type,integer) && args[1]->value_3)

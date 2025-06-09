@@ -27,7 +27,7 @@ void init_print()
 char *heap_nice_name()
 {
   string tmp1,tmp2;
-  long long g,len,leading_a;
+  long long g,len;
 
   g= ++gen_sym_counter;
   len=2;
@@ -195,8 +195,6 @@ referred to elsewhere. T is a dereferenced psi_term.
 void go_through(ptr_psi_term t)
 // ptr_psi_term t;
 {
-  ptr_list l;
-
   go_through_tree(t->attr_list);
 }
 /******** INSERT_VARIABLES(vars,force)
@@ -511,12 +509,11 @@ void pretty_list(ptr_psi_term t,long long depth)
 // long long depth;
 {
   ptr_tab_brk wl_new;
-  ptr_list l;
   ptr_definition t_type;
   ptr_psi_term car,cdr;
-  ptr_node n,n2;
+  ptr_node n;
   char *tag=NULL;
-  char colon[2],sep[4],end[3];
+  char sep[4],end[3];
   long long list_depth; /* 20.8 */
   long long done=FALSE; /* RM: Dec 11 1992 */
   
@@ -686,7 +683,6 @@ long long pretty_psi_with_ops(ptr_psi_term t,long long sprec,long long depth)
 // long long sprec;
 // long long depth;
 {
-  ptr_tab_brk wl_new;
   ptr_psi_term arg1, arg2;
   wl_operator ttype, a1type, a2type;
   long long tprec, a1prec, a2prec;

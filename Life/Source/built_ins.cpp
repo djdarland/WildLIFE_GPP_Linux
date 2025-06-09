@@ -2888,10 +2888,6 @@ static long long c_features()
 {
   long long success=TRUE;
   ptr_psi_term arg1,arg2,funct,result;
-  ptr_psi_term the_list; /*  RM: Dec  9 1992
-			     Modified the routine to use 'cons'
-			     instead of the old list representation.
-			 */
   /*  RM: Mar 11 1993  Added MODULE argument */
   ptr_module module=NULL;
   ptr_module save_current;
@@ -2929,10 +2925,6 @@ static long long c_feature_values()
 {
   long long success=TRUE;
   ptr_psi_term arg1,arg2,funct,result;
-  ptr_psi_term the_list; /*  RM: Dec  9 1992
-			     Modified the routine to use 'cons'
-			     instead of the old list representation.
-			 */
   /*  RM: Mar 11 1993  Added MODULE argument */
   ptr_module module=NULL;
   ptr_module save_current;
@@ -3212,7 +3204,7 @@ static long long c_eval()
 static long long c_eval_inplace()
 {
   long long success=TRUE;
-  ptr_psi_term arg1, copy_arg1, arg2, funct, result;
+  ptr_psi_term arg1, arg2, funct, result;
 
   funct = aim->aaaa_1;
   deref_ptr(funct);
@@ -3355,9 +3347,7 @@ static long long c_string_address()
 static long long c_chdir()
 {
   long long success=FALSE;
-  ptr_psi_term arg1,arg2,funct,result,t;
-  double val;
-  long long num;  // REV401PLUS chg long long
+  ptr_psi_term arg1,arg2,funct;
   long long smaller;  // REV401PLUS chg long long
   
   funct = aim->aaaa_1;
@@ -3472,7 +3462,7 @@ term has to be copied into the heap as it becomes a permanent object.
 static long long c_assign()
 {
   long long success=FALSE;
-  ptr_psi_term arg1,arg2,g,perm,smallest;
+  ptr_psi_term arg1,arg2,g;
   
   g=aim->aaaa_1;
   deref_ptr(g);
@@ -3500,7 +3490,7 @@ copied again onto the heap.
 static long long c_global_assign()
 {
   long long success=FALSE;
-  ptr_psi_term arg1,arg2,g,perm,smallest;
+  ptr_psi_term arg1,arg2,g;
   ptr_psi_term wl_new;
   
   g=aim->aaaa_1;
@@ -3781,9 +3771,6 @@ static long long c_char()
 {
   long long success=TRUE;
   ptr_psi_term arg1,arg2,funct,result;
-  long long smaller;
-  long long num1;
-  REAL val1;
   char *str;
   
   funct=aim->aaaa_1;
@@ -3826,8 +3813,6 @@ static long long c_ascii()
   long long success=TRUE;
   ptr_psi_term arg1,arg2,funct,result;
   long long smaller;
-  long long num1;
-  REAL val1;
   
   funct=aim->aaaa_1;
   deref_ptr(funct);
@@ -3860,8 +3845,7 @@ static long long c_ascii()
 static long long c_string2psi()
 {
   long long success=TRUE;
-  ptr_psi_term arg1,arg2,arg3,funct,result,t;
-  long long smaller;
+  ptr_psi_term arg1,arg2,funct,result,t;
   ptr_module mod=NULL; /*  RM: Mar 11 1993  */
   ptr_module save_current; /*  RM: Mar 12 1993  */
   
@@ -3916,7 +3900,7 @@ static long long c_string2psi()
 static long long c_psi2string()
 {
   long long success=TRUE;
-  ptr_psi_term arg1,arg3,funct,result,t;
+  ptr_psi_term arg1,funct,result,t;
   char buf[100]; /*  RM: Mar 10 1993  */
   
   funct=aim->aaaa_1;
@@ -3953,7 +3937,7 @@ static long long c_int2string()
 {
   char val[STRLEN]; /* Big enough for a _long long_ number */
   long long success=TRUE,i;
-  ptr_psi_term arg1,arg3,funct,result,t;
+  ptr_psi_term arg1,funct,result,t;
   REAL the_int,next,neg;
 
   funct=aim->aaaa_1;
@@ -4855,7 +4839,6 @@ long long c_initrandom()
   ptr_node n1;
   long long success=TRUE;
   long long all_args=TRUE;
-  long long c_result;
   ptr_psi_term arg1; 
   long long c_arg1; 
 
@@ -4901,7 +4884,7 @@ long long c_deref_length()
   ptr_psi_term result,funct;
   long long success=TRUE;
   int count;
-  ptr_psi_term arg1,arg2;
+  ptr_psi_term arg1;
   ptr_node n1;
   
   funct=aim->aaaa_1;
