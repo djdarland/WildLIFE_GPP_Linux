@@ -619,6 +619,8 @@ void pretty_tag_or_psi_term(ptr_psi_term p, long long sprec, long long depth)
     }
     if (printed_pointers)
       n2=((wl_node_ptr*)printed_pointers)->find(INTCMP,(char *)p);  // REV401PLUS cast
+    else
+      n2 = NULL;
     if(n2==NULL) {
       prettyf((char *)n->data);   // REV401PLUS cast
       ((wl_node_ptr_ptr*)&printed_pointers)->heap_insert(INTCMP,(char *)p,n->data);  // REV401PLUS cast
