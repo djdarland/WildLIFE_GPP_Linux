@@ -193,14 +193,21 @@ void feature_insert(char *keystr,ptr_node *tree,ptr_psi_term psi)  // REV401PLUS
 {
   ptr_node loc;
   /* ptr_psi_term stk_psi=stack_copy_psi_term(*psi); 19.8 */
-  if (loc=find(FEATCMP,keystr,*tree)) {
-    /* Give an error message if there is a duplicate feature: */
-    Syntaxerrorline("duplicate feature %s (%E)\n",keystr);
-  }
+  if (*tree)
+    loc=((wl_node_ptr*)*tree)->find(FEATCMP,keystr);
+  else
+    loc = NULL;
+  if (loc)
+    {
+      /* Give an error message if there is a duplicate feature: */
+      Syntaxerrorline("duplicate feature %s (%E)\n",keystr);
+    }
   else {
     /* If the feature does not exist, insert it. */
     ptr_psi_term stk_psi=stack_copy_psi_term(*psi); /* 19.8 */
-    stack_insert_copystr(keystr,tree,(GENERIC)stk_psi); /* 10.8 */
+    if (tree)
+    ((wl_node_ptr_ptr*)tree)->stack_insert_copystr(keystr,(GENERIC)stk_psi); /* 10.8 */
+    else printf("parser DJD - tree NULL\n");
   }
 }
 /*** RM 9 Dec 1992 START ***/
@@ -300,9 +307,9 @@ psi_term parse_list(ptr_definition typ,char e,char s)
 
       result.type=typ;
       if(car)
-	stack_insert(FEATCMP,one,&(result.attr_list),(GENERIC)car);
+	((wl_node_ptr_ptr*)&(result.attr_list))-> stack_insert(FEATCMP,one,(GENERIC)car);
       if(cdr)
-	stack_insert(FEATCMP,two,&(result.attr_list),(GENERIC)cdr);
+	((wl_node_ptr_ptr*)&(result.attr_list))->stack_insert(FEATCMP,two,(GENERIC)cdr);
     }
   }
   return result;
@@ -418,17 +425,15 @@ psi_term read_psi_term()
     t.value_3=NULL;
     t.coref=NULL;
     t.resid=NULL;
-    stack_insert(FEATCMP,functor->keyword->symbol,
-		 &(t.attr_list),
-		 (GENERIC)stack_copy_psi_term(t2)); // REV401PLUS add cast
+    ((wl_node_ptr_ptr*)&(t.attr_list))->stack_insert(FEATCMP,functor->keyword->symbol,(GENERIC)stack_copy_psi_term(t2)); // REV401PLUS add cast
   }
   /*  RM: Mar 12 1993  Nasty hack for Bruno's features in modules */
   if((t.type==add_module1 || t.type==add_module2 || t.type==add_module3) &&
-     !find(FEATCMP,two,t.attr_list)) {
+     (!t.attr_list || ! ((wl_node_ptr*)t.attr_list)->find(FEATCMP,two))) {
     module=stack_psi_term(4);
     module->type=quoted_string;
     module->value_3=(GENERIC)heap_copy_string(current_module->module_name);
-    stack_insert(FEATCMP,two,&(t.attr_list),(GENERIC)module); // REV401PLUS cast
+    ((wl_node_ptr_ptr*)&(t.attr_list))-> stack_insert(FEATCMP,two,(GENERIC)module); // REV401PLUS cast
   }
   return t;
 }
@@ -502,9 +507,9 @@ psi_term make_life_form(ptr_psi_term tok,ptr_psi_term arg1,ptr_psi_term arg2)
       return *tok;
     }
     /* End of other nasty hack */
-    stack_insert(FEATCMP,one,&(tok->attr_list),(GENERIC)stack_copy_psi_term(*arg1));  // REV401PLUS cast
+    ((wl_node_ptr_ptr*)&(tok->attr_list))->stack_insert(FEATCMP,one,(GENERIC)stack_copy_psi_term(*arg1));  // REV401PLUS cast
     if (arg2)
-      stack_insert(FEATCMP,two,&(tok->attr_list),(GENERIC)stack_copy_psi_term(*arg2));    // REV401PLUS cast
+      ((wl_node_ptr_ptr*)&(tok->attr_list))->stack_insert(FEATCMP,two,(GENERIC)stack_copy_psi_term(*arg2));    // REV401PLUS cast
   }
   return *tok;
 }

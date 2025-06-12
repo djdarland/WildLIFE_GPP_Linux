@@ -189,7 +189,7 @@ typedef struct wl_psi_term {
   /* long long curried; Distinguish between quoted and curried object 20.5 */
   long long flags; /* 14.9 */
   GENERIC value_3;
-  ptr_node attr_list;
+  ptr_node attr_list;  // For classes DJD
   ptr_psi_term coref;
   ptr_residuation resid; /* List of goals to prove if type is narrowed. */
 } psi_term;

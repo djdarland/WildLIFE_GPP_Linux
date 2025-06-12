@@ -35,9 +35,9 @@ ptr_psi_term stack_cons(ptr_psi_term head, ptr_psi_term tail)
   cons=stack_psi_term(4);
   cons->type=alist;
   if(head)
-    stack_insert(FEATCMP,one,&(cons->attr_list),(GENERIC)head); //cast REV401PLUS
+    ((wl_node_ptr_ptr*)&(cons->attr_list))->stack_insert(FEATCMP,one,(GENERIC)head); //cast REV401PLUS
   if(tail)
-    stack_insert(FEATCMP,two,&(cons->attr_list),(GENERIC)tail); // cast REV401PLUS
+    ((wl_node_ptr_ptr*)&(cons->attr_list))->stack_insert(FEATCMP,two,(GENERIC)tail); // cast REV401PLUS
   return cons;
 }
 /********* STACK_PAIR(left,right)
@@ -52,9 +52,9 @@ ptr_psi_term stack_pair(ptr_psi_term left, ptr_psi_term right)
   pair=stack_psi_term(4);
   pair->type=wl_and;
   if(left)
-    stack_insert(FEATCMP,one,&(pair->attr_list),(GENERIC)left);  // cast REV401PLUS
+    ((wl_node_ptr_ptr*)&(pair->attr_list))->stack_insert(FEATCMP,one,(GENERIC)left);  // cast REV401PLUS
   if(right)
-    stack_insert(FEATCMP,two,&(pair->attr_list),(GENERIC)right);  // cast REV401PLUS
+    ((wl_node_ptr_ptr*)&(pair->attr_list))->stack_insert(FEATCMP,two,(GENERIC)right);  // cast REV401PLUS
   return pair;
 }
 /********* STACK_INT(n)
@@ -950,7 +950,11 @@ static long long c_apply()
   
   funct=aim->aaaa_1;
   deref_ptr(funct);
-  n=find(FEATCMP,functor->keyword->symbol,funct->attr_list);
+  if (funct->attr_list) {
+    n=((wl_node_ptr*)funct->attr_list)->find(FEATCMP,functor->keyword->symbol);
+  }
+  else
+    n = NULL;
   if (n) {
     other=(ptr_psi_term )n->data;
     deref(other);
@@ -970,7 +974,7 @@ static long long c_apply()
 	push_goal(eval,other,aim->bbbb_1,(GENERIC)other->type->rule); // REV401PLUS cast
 	merge_unify(&(other->attr_list),fattr);
         /* We don't want to remove anything from funct->attr_list here. */
-	delete_attr(functor->keyword->symbol,&(other->attr_list));
+	((wl_node_ptr_ptr*)&(other->attr_list))->delete_attr(functor->keyword->symbol);
       }
   }
   else
@@ -1027,7 +1031,10 @@ static long long c_project()
 	}
     }
     if (label) {
-      n=find(FEATCMP,label,arg1->attr_list);
+      if (arg1->attr_list)
+	n=((wl_node_ptr*)arg1->attr_list)->find(FEATCMP,label);
+      else
+	n = NULL;
       if (n)
 	push_goal(unify,result,(ptr_psi_term)n->data,NULL); //REV401PLUS cast
       else if (arg1->type->type_def==(def_type)function_it && !(arg1->flags&QUOTED_TRUE)) { // _def & (def_type) & _it
@@ -1042,7 +1049,7 @@ static long long c_project()
 	    push_psi_ptr_value(result,(GENERIC *)&(result->coref)); //REV401PLUS cast
 	  clear_copy();
 	  result->coref=inc_heap_copy(result);
-	  heap_insert(FEATCMP,label,&(arg1->attr_list),(GENERIC)result->coref);//REV401PLUS cast
+	  ((wl_node_ptr_ptr*)&(arg1->attr_list))->heap_insert(FEATCMP,label,(GENERIC)result->coref);//REV401PLUS cast
 	}
 	else {
 #ifdef ARITY  /*  RM: Mar 29 1993  */
@@ -1050,9 +1057,9 @@ static long long c_project()
 #endif
 	  /*  RM: Mar 25 1993  */
 	  if(arg1->type->always_check || arg1->attr_list)
-	    bk_stack_insert(FEATCMP,label,&(arg1->attr_list),(GENERIC)result);  // cast REV401PLUS
+	    ((wl_node_ptr_ptr*)&(arg1->attr_list))->bk_stack_insert(FEATCMP,label,(GENERIC)result);  // cast REV401PLUS
 	  else {
-	    bk_stack_insert(FEATCMP,label,&(arg1->attr_list),(GENERIC)result);  // cast REV401PLUS
+	    ((wl_node_ptr_ptr*)&(arg1->attr_list))->bk_stack_insert(FEATCMP,label,(GENERIC)result);  // cast REV401PLUS
 	    fetch_def_lazy(arg1, arg1->type,arg1->type,NULL,NULL,0,0); // djd added zeros // REV401PLUS copied from 2.33
 	    // WAS	    fetch_def_lazy(arg1, arg1->type,arg1->type,NULL,NULL);
 	  }
@@ -1415,7 +1422,10 @@ static long long c_exists()
   g=aim->aaaa_1;
   deref_ptr(g);
   if (success) {
-    n=find(FEATCMP,one,g->attr_list);
+    if(g->attr_list)
+      n=((wl_node_ptr*)g->attr_list)->find(FEATCMP,one);
+    else
+      n = NULL;
     if (n) {
       arg1= (ptr_psi_term )n->data;
       deref(arg1);
@@ -1624,8 +1634,10 @@ static void set_parse_queryflag(ptr_node thelist, long long sort)
   ptr_node n;             /* node pointing to argument 2  */
   ptr_psi_term arg;       /* argumenrt 2 psi-term */
   ptr_psi_term queryflag; /* query term created by this function */
-
-  n=find(FEATCMP,two,thelist);
+  if(thelist)
+    n=((wl_node_ptr*)thelist)->find(FEATCMP,two);
+  else
+    n = NULL;
   if (n) {
     /* there was a second argument */
     arg=(ptr_psi_term)n->data;
@@ -1672,7 +1684,10 @@ static long long c_parse()
         t=stack_copy_psi_term(parse(&sort));
 	/* Optional second argument returns 'query', 'declaration', or
 	   /* 'error'. */
-	n=find(FEATCMP,two,funct->attr_list);
+	if (funct->attr_list)
+	  n=((wl_node_ptr*)funct->attr_list)->find(FEATCMP,two);
+	else
+	  n = NULL;
 	if (n) {
 	  ptr_psi_term queryflag;
 	  arg2=(ptr_psi_term)n->data;
@@ -1685,7 +1700,10 @@ static long long c_parse()
 	}
 	/* Optional third argument returns true or false if the psi-term
 	   /* contains a variable or not. */
-	n=find(FEATCMP,three,funct->attr_list);
+	if(funct->attr_list)
+	  n=((wl_node_ptr*)funct->attr_list)->find(FEATCMP,three);
+	else
+	  n = NULL;
 	if (n) {
 	  ptr_psi_term varflag;
 	  arg3=(ptr_psi_term)n->data;
@@ -1749,7 +1767,10 @@ static long long c_read(long long psi_flag)
         t=stack_copy_psi_term(parse(&sort));
 	/* Optional second argument returns 'query', 'declaration', or
 	   'error'. */
-	n=find(FEATCMP,two,g->attr_list); /*  RM: Jun  8 1993  */
+	if (g->attr_list)
+	  n=((wl_node_ptr*)g->attr_list)->find(FEATCMP,two); /*  RM: Jun  8 1993  */
+	else
+	  n = NULL;
 	if (n) {
 	  ptr_psi_term queryflag;
 	  arg2=(ptr_psi_term)n->data;
@@ -1762,7 +1783,10 @@ static long long c_read(long long psi_flag)
 	}
 	/* Optional third argument returns the starting line number */
 	/*  RM: Oct 11 1993  */
-	n=find(FEATCMP,three,g->attr_list);
+	if (g->attr_list)
+	  n=((wl_node_ptr*)g->attr_list)->find(FEATCMP,three);
+	else
+	  n = NULL;
 	if (n) {
 	  arg3=(ptr_psi_term)n->data;
 	  g=stack_psi_term(4);
@@ -2393,6 +2417,7 @@ static long long c_close()
   long long success=FALSE;
   long long inclose,outclose;
   ptr_psi_term arg1,arg2,g,s;
+  ptr_node n;
   
   g=aim->aaaa_1;
   deref_ptr(g);
@@ -2403,7 +2428,10 @@ static long long c_close()
     outclose=equal_types(arg1->type,stream) && arg1->value_3;
     inclose=FALSE;
     if (equal_types(arg1->type,inputfilesym)) {
-      ptr_node n=find(FEATCMP,STREAM,arg1->attr_list);
+      if(arg1->attr_list)
+	n= ((wl_node_ptr*)arg1->attr_list)->find(FEATCMP,STREAM);
+      else
+	n = NULL;
       if (n) {
         arg1=(ptr_psi_term)n->data;
         inclose=(arg1->value_3!=NULL);
@@ -2804,7 +2832,10 @@ static long long c_cond()
     if (success) {
       if (num1) {
 	resid_aim=NULL;
-        n=find(FEATCMP,(val1?two:three),g->attr_list);
+	if (g->attr_list)
+	  n=((wl_node_ptr*)g->attr_list)->find(FEATCMP,(val1?two:three));
+	else
+	  n = NULL;
         if (n) {
           arg2=(ptr_psi_term)n->data;
 	  /* mark_eval(arg2); XXX 24.8 */
@@ -2846,8 +2877,12 @@ static long long c_exist_feature()  /*  PVR: Dec 17 1992  */  /* PVR 11.4.94 */
   funct=aim->aaaa_1;
   deref_ptr(funct);
   result=aim->bbbb_1;
-  get_two_args(funct->attr_list,&arg1,&arg2);
-  n=find(FEATCMP,three,funct->attr_list); /*  RM: Feb 10 1993  */ // REV401PLUS - was too many args
+  if (funct->attr_list) {
+    get_two_args(funct->attr_list,&arg1,&arg2);
+    n=((wl_node_ptr*)funct->attr_list)->find(FEATCMP,three);
+  }
+  else
+    n = NULL;
   if(n)
     arg3=(ptr_psi_term)n->data;
   else
@@ -2869,7 +2904,10 @@ static long long c_exist_feature()  /*  PVR: Dec 17 1992  */  /* PVR 11.4.94 */
       label=arg1->type->keyword->combined_name;
     } else
       label=arg1->type->keyword->symbol;
-    n=find(FEATCMP,label,arg2->attr_list);
+    if (arg2->attr_list)
+      n=((wl_node_ptr*)arg2->attr_list)->find(FEATCMP,label);
+    else
+      n = NULL;
     ans=stack_psi_term(4);
     ans->type=(n!=NULL)?lf_true:lf_false;
     if(arg3 && n) /*  RM: Feb 10 1993  */
@@ -4359,7 +4397,10 @@ long long declare_operator(ptr_psi_term t)
   deref_ptr(t);
   n=t->attr_list;
   get_two_args(n,&prec,&type);
-  n=find(FEATCMP,three,n);
+  if (n)
+    n=((wl_node_ptr*)n)->find(FEATCMP,three);
+  else
+    n = NULL;
   if (n && prec && type) {
     atom=(ptr_psi_term )n->data;
     deref_ptr(prec);
@@ -4472,12 +4513,18 @@ long long c_concatenate()
   deref_ptr(funct);
   result=aim->bbbb_1;
   /* Evaluate all arguments first: */
-  n1=find(FEATCMP,one,funct->attr_list);
+  if (funct->attr_list)
+    n1=((wl_node_ptr*)funct->attr_list)->find(FEATCMP,one);
+  else
+    n1 = NULL;
   if (n1) {
     arg1= (ptr_psi_term )n1->data;
     deref(arg1);
   }
-  n2=find(FEATCMP,two,funct->attr_list);
+  if(funct->attr_list)
+    n2=((wl_node_ptr*)funct->attr_list)->find(FEATCMP,two);
+  else
+    n2 = NULL;
   if (n2) {
     arg2= (ptr_psi_term )n2->data;
     deref(arg2);
@@ -4591,7 +4638,10 @@ long long c_string_length()
   deref_ptr(funct);
   result=aim->bbbb_1;
   /* Evaluate all arguments first: */
-  n1=find(FEATCMP,one,funct->attr_list);
+  if (funct->attr_list)
+    n1=((wl_node_ptr*)funct->attr_list)->find(FEATCMP,one);
+  else
+    n1 = NULL;
   if (n1) {
     arg1= (ptr_psi_term )n1->data;
     deref(arg1);
@@ -4643,17 +4693,26 @@ long long c_sub_string()
   deref_ptr(funct);
   result=aim->bbbb_1;
   /* Evaluate all arguments first: */
-  n1=find(FEATCMP,one,funct->attr_list);
+  if (funct->attr_list)
+    n1=((wl_node_ptr*)funct->attr_list)->find(FEATCMP,one);
+  else
+    n1 = NULL;
   if (n1) {
     arg1= (ptr_psi_term )n1->data;
     deref(arg1);
   }
-  n2=find(FEATCMP,two,funct->attr_list);
+  if (funct->attr_list)
+    n2=((wl_node_ptr*)funct->attr_list)->find(FEATCMP,two);
+  else
+    n2 = NULL;
   if (n2) {
     arg2= (ptr_psi_term )n2->data;
     deref(arg2);
   }
-  n3=find(FEATCMP,three,funct->attr_list);
+  if (funct->attr_list)
+    n3=((wl_node_ptr*)funct->attr_list)->find(FEATCMP,three);
+  else
+    n3 = NULL;
   if (n3) {
     arg3= (ptr_psi_term )n3->data;
     deref(arg3);
@@ -4737,12 +4796,17 @@ long long c_append_file()
   deref_ptr(g);
 
   /* Evaluate all arguments first: */
-  n1=find(FEATCMP,one,g->attr_list);
+  if (g->attr_list)
+    n1=((wl_node_ptr*)g->attr_list)->find(FEATCMP,one);
+  else n1 =NULL;
   if (n1) {
     arg1= (ptr_psi_term )n1->data;
     deref(arg1);
   }
-  n2=find(FEATCMP,two,g->attr_list);
+  if (g->attr_list)
+    n2=((wl_node_ptr*)g->attr_list)->find(FEATCMP,two);
+  else
+    n2 = NULL;
   if (n2) {
     arg2= (ptr_psi_term )n2->data;
     deref(arg2);
@@ -4806,7 +4870,10 @@ long long c_random()
   result=aim->bbbb_1;
 
   /* Evaluate all arguments first: */
-  n1=find(FEATCMP,one,funct->attr_list);
+  if (funct->attr_list)
+    n1=((wl_node_ptr*)funct->attr_list)->find(FEATCMP,one);
+  else
+    n1 = NULL;
   if (n1) {
     arg1= (ptr_psi_term )n1->data;
     deref(arg1);
@@ -4862,7 +4929,10 @@ long long c_initrandom()
   t=aim->aaaa_1;
   deref_ptr(t);
   /* Evaluate all arguments first: */
-  n1=find(FEATCMP,one,t->attr_list);
+  if (t->attr_list)
+    n1=((wl_node_ptr*)t->attr_list)->find(FEATCMP,one);
+  else
+    n1 = NULL;
   if (n1) {
     arg1= (ptr_psi_term )n1->data;
     deref(arg1);
@@ -4907,7 +4977,10 @@ long long c_deref_length()
   funct=aim->aaaa_1;
   deref_ptr(funct);
   result=aim->bbbb_1;
-  n1=find(FEATCMP,one,funct->attr_list);
+  if (funct->attr_list)
+    n1=((wl_node_ptr*)funct->attr_list)->find(FEATCMP,one);
+  else
+    n1 = NULL;
   if (n1) {
     count=0;
     arg1= (ptr_psi_term )n1->data;

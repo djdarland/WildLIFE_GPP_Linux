@@ -17,8 +17,8 @@ long long get_arg (ptr_psi_term g, ptr_psi_term *arg, char *number)
 // char *number;
 {
   ptr_node n;
-
-  if (n = find (FEATCMP, number, g->attr_list))
+  if (( g->attr_list)
+      && (n = ((wl_node_ptr*) g->attr_list)->find (FEATCMP, number)))
     return (*arg = (ptr_psi_term) n->data) ? TRUE: FALSE;
   else
     return FALSE;

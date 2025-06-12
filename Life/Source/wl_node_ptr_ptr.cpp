@@ -156,3 +156,36 @@ ptr_node wl_node_ptr_ptr::bk2_stack_insert(long long comp,char *keystr,GENERIC i
   tree = (ptr_node *) this;
   return ((wl_node_ptr_ptr*)tree)->general_insert(comp,keystr,info,STACK,FALSE,2);
 }
+/******** DELETE_ATTR(key,tree)
+	  Remove the node addressed by KEY from TREE.
+*/
+void wl_node_ptr_ptr::delete_attr(char *s)
+// char *s;
+// ptr_node *n;
+{
+  ptr_node *n;
+  long long cmp;
+  ptr_node wl_new,r;
+  n = (ptr_node *) this;
+
+  if (*n) {
+    cmp=featcmp(s,(*n)->key);
+    if (cmp<0)
+      ((wl_node_ptr_ptr*)&((*n)->left))->delete_attr(s);
+    else if (cmp>0)
+      ((wl_node_ptr_ptr*)&((*n)->right))->delete_attr(s);
+    else if ((*n)->left) {
+      if ((*n)->right) {
+        r=(*n)->right;
+        wl_new=((wl_node_ptr_ptr*)&(*n)->left)->heap_insert(FEATCMP,r->key,r->data);
+        wl_new->left=r->left;
+        wl_new->right=r->right;
+        *n = (*n) -> left;
+      }
+      else
+        *n = (*n)->left;
+    }
+    else
+      *n = (*n)->right;
+  }
+}

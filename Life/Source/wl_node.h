@@ -1,6 +1,7 @@
 typedef unsigned long long *GENERIC;
 
-struct wl_node {
+class wl_node {
+public:
   char *key;
   ptr_node left;
   ptr_node right;

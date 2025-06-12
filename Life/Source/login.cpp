@@ -40,7 +40,10 @@ void get_two_args(ptr_node t,ptr_psi_term *a,ptr_psi_term *b)
 	if (n->key==two)
 	  *b=(ptr_psi_term )n->data;
 	else {
-	  n=find(FEATCMP,two,t);
+	  if (t)
+	    n=((wl_node_ptr*)t)->find(FEATCMP,two);
+	  else
+	    n = NULL;
 	  if(n==NULL)
 	    *b=NULL;  
 	  else
@@ -50,12 +53,18 @@ void get_two_args(ptr_node t,ptr_psi_term *a,ptr_psi_term *b)
 	*b=NULL; 
     }
     else {
-      n=find(FEATCMP,one,t);
+      if (t)
+	n=((wl_node_ptr*)t)->find(FEATCMP,one);
+      else
+	n = NULL;
       if (n==NULL)
 	*a=NULL; 
       else
-	*a=(ptr_psi_term )n->data; 
-      n=find(FEATCMP,two,t);
+	*a=(ptr_psi_term )n->data;
+      if (t)
+	n=((wl_node_ptr*)t)->find(FEATCMP,two);
+      else
+	n = NULL;
       if (n==NULL)
 	*b=NULL; 
       else
@@ -80,7 +89,10 @@ void get_one_arg(ptr_node t,ptr_psi_term *a)
       *a=(ptr_psi_term)t->data;
     }
     else {
-      n=find(FEATCMP,one,t);
+      if (t)
+	n=((wl_node_ptr*)t)->find(FEATCMP,one);
+      else
+	n = NULL;
       if (n==NULL)
 	*a=NULL;
       else
@@ -105,7 +117,10 @@ void get_one_arg_addr(ptr_node t,ptr_psi_term **a)
     if (t->key==one)
       *a= (ptr_psi_term *)(&t->data);
     else {
-      n=find(FEATCMP,one,t);
+      if (t)
+	n=((wl_node_ptr*)t)->find(FEATCMP,one);
+      else
+	n = NULL;
       if (n==NULL)
 	*a=NULL;
       else

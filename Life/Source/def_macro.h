@@ -118,7 +118,7 @@
 
 #define equal_types(A,B) ((A)==(B))
 
-#define is_top(T) ((T)!=NULL && (T)->type==top && (T)->attr_list==NULL)
+#define is_top(T) ((T)!=NULL && (T)->type==top  && !((T)->attr_list))
 
 /* Object is inside Life data space */
 

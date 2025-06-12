@@ -30,7 +30,10 @@ long long call_primitive(long long (*fun)(ptr_psi_term[],
   deref_ptr(funct);
   result=aim->bbbb_1;
   for (i=0;i<num;i++) {
-    n=find(FEATCMP,argi[i].feature,funct->attr_list);
+    if (funct->attr_list)
+      n=((wl_node_ptr*)funct->attr_list)->find(FEATCMP,argi[i].feature);
+    else
+      n = NULL;
     /* argument present */
     if (n) {
       arg = (ptr_psi_term) n->data;
@@ -482,7 +485,10 @@ static long long regexp_execute_internal(ptr_psi_term args[],
       for (i=0;i<NSUBEXP;i++,sp++,ep++) {
 	if (*sp==NULL) break;
 	sprintf(buffer,"%d",i);
-	n3=find(FEATCMP,buffer,args[2]->attr_list);
+	if (args[2]->attr_list)
+	  n3=((wl_node_ptr*)args[2]->attr_list)->find(FEATCMP,buffer);
+	else
+	  n3 = NULL;
 	if (n3) {
 	  ptr_psi_term psi = (ptr_psi_term) n3->data;
 	  /* need to add 1 to these offsets because somehow life strings
@@ -505,7 +511,7 @@ static long long regexp_execute_internal(ptr_psi_term args[],
 	sprintf(buffer,"%d",i);
 	{ ptr_psi_term bounds = stack_pair(stack_int(*sp - (char *)args[1]->value_3 + 1),
 					   stack_int(*ep - (char *)args[1]->value_3 + 1));
-	  stack_insert_copystr(buffer,&(psi->attr_list),(GENERIC)bounds); }
+	  ((wl_node_ptr_ptr*)&(psi->attr_list))->stack_insert_copystr(buffer,(GENERIC)bounds); }
       }
       /* return the new term */
       push_goal(unify,psi,result,NULL);
@@ -1287,7 +1293,7 @@ static long long unify_pterm_result(ptr_psi_term t,
   u=stack_psi_term(4);
   u->type=sym;
   for(i=0;i<n;i++)
-    stack_insert(FEATCMP,lst[i].name,&(u->attr_list),(GENERIC)lst[i].value);
+    ((wl_node_ptr_ptr*)&(u->attr_list))->stack_insert(FEATCMP,lst[i].name,(GENERIC)lst[i].value);
   push_goal(unify,t,u,NULL);
   return TRUE;
 }
@@ -1463,7 +1469,10 @@ static long long lazy_project_internal(ptr_psi_term args[],
     strcpy(buffer,(char*)args[1]->value_3);
   else
     strcpy(buffer,args[1]->type->keyword->symbol);
-  n=find(FEATCMP,buffer,args[0]->attr_list);
+  if (args[0]->attr_list)
+    n=((wl_node_ptr*)args[0]->attr_list)->find(FEATCMP,buffer);
+  else
+    n = NULL;
   if (n) push_goal(unify,(ptr_psi_term)n->data,result,NULL); // REV401PLUS add cast
   /* this is all bullshit because projection should residuate
      on its 2nd arg until it becomes value.  In particular, think
@@ -1500,7 +1509,8 @@ static long long wait_on_feature_internal(ptr_psi_term args[],
     strcpy(buffer,(char*)args[1]->value_3);
   else
     strcpy(buffer,args[1]->type->keyword->symbol);
-  if (find(FEATCMP,buffer,args[0]->attr_list))
+  if ((args[0]->attr_list)
+    &&  ((wl_node_ptr*)args[0]->attr_list)->find(FEATCMP,buffer))
     push_goal(prove,args[2],(ptr_psi_term)DEFRULES,NULL);
   /* this is all bullshit because projection should residuate
      on its 2nd arg until it becomes value.  In particular, think
@@ -1535,7 +1545,8 @@ static long long my_wait_on_feature_internal(ptr_psi_term args[],
     strcpy(buffer,(char*)args[1]->value_3);
   else
     strcpy(buffer,args[1]->type->keyword->symbol);
-  if (find(FEATCMP,buffer,args[0]->attr_list)) {
+  if  ((args[0]->attr_list) &&
+       ((wl_node_ptr*)args[0]->attr_list)->find(FEATCMP,buffer)) {
     unify_bool_result(result,TRUE);
     push_goal(prove,args[2],(ptr_psi_term)DEFRULES,NULL);
   }
@@ -1609,7 +1620,7 @@ static long long apply1_internal(ptr_psi_term args[],
       feat = heap_copy_string(args[1]->type->keyword->symbol);
     clear_copy();
     fun=distinct_copy(args[0]);
-    stack_insert(FEATCMP,feat,&(fun->attr_list),(GENERIC)args[2]);
+    ((wl_node_ptr_ptr*)&(fun->attr_list))->stack_insert(FEATCMP,feat,(GENERIC)args[2]);
     push_goal(eval,fun,result,(GENERIC)fun->type->rule);
   }
   return success;

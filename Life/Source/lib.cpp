@@ -238,8 +238,10 @@ PsiTerm WFGetVar(char *name)
 {
   ptr_psi_term result=NULL;
   ptr_node n;
-  
-  n=find(STRCMP,name,var_tree);
+  if (var_tree)
+    n=((wl_node_ptr*)var_tree)->find(STRCMP,name);
+  else
+    n = NULL;
   if(n) {
     result=(ptr_psi_term)n->data;
     if(result)
@@ -343,7 +345,10 @@ ptr_psi_term WFGetFeature(ptr_psi_term psi,char *feature)  // changed g++
 
   if(psi && feature) {
     deref_ptr(psi);
-    n=find(FEATCMP,feature,psi->attr_list);
+    if (psi->attr_list)
+      n=((wl_node_ptr*)psi->attr_list)->find(FEATCMP,feature);
+    else
+      n = NULL;
     if(n)
       result=(ptr_psi_term)n->data;  // changed g++
   }

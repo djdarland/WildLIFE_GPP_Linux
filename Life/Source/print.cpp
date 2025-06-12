@@ -56,7 +56,8 @@ GENERIC unique_name()
 {
   char *name;
 
-  do name=heap_nice_name(); while (find(STRCMP,name,var_tree));
+  do name=heap_nice_name(); while (var_tree
+				   && ((wl_node_ptr*)var_tree)->find(STRCMP,name));
   return (GENERIC) name;
 }
 /******** STR_TO_INT(s) 
@@ -165,9 +166,12 @@ void check_pointer(ptr_psi_term p)
   
   if (p) {
     deref_ptr(p);
-    n=find(INTCMP,(char *)p,pointer_names); // REV401PLUS cast
+    if (pointer_names)
+      n=((wl_node_ptr*)pointer_names)->find(INTCMP,(char *)p); // REV401PLUS cast
+    else
+      n = NULL;
     if (n==NULL) {
-      heap_insert(INTCMP,(char *)p,&pointer_names,NULL); // REV401PLUS cast
+      ((wl_node_ptr_ptr*)&pointer_names)->heap_insert(INTCMP,(char *)p,NULL); // REV401PLUS cast
       go_through(p);
     }
     else
@@ -216,7 +220,10 @@ void insert_variables(ptr_node vars,long long force)
     insert_variables(vars->right,force);
     p=(ptr_psi_term )vars->data;
     deref_ptr(p);
-    n=find(INTCMP,(char *)p,pointer_names); // REV401PLUS cast
+    if (pointer_names)
+      n=((wl_node_ptr*)pointer_names)->find(INTCMP,(char *)p); // REV401PLUS cast
+    else
+      n = NULL;
     if (n)
       if (n->data || force)
 	n->data=(GENERIC)vars->key;
@@ -238,7 +245,7 @@ void forbid_variables(ptr_node n)
     forbid_variables(n->right);
     v=(ptr_psi_term )n->data;
     deref_ptr(v);
-    heap_insert(INTCMP,(char *)v,&printed_pointers,(GENERIC)n->key); // REV401PLUS casts
+    ((wl_node_ptr_ptr*)&printed_pointers)->heap_insert(INTCMP,(char *)v,(GENERIC)n->key); // REV401PLUS casts
     forbid_variables(n->left);
   }
 }
@@ -496,9 +503,10 @@ long long check_legal_cons(ptr_psi_term t,ptr_definition t_type)
 //     ptr_definition t_type;
 {
   return (t->type==t_type &&
+	  t->attr_list &&
 	  count_features(t->attr_list)==2 &&
-	  find(FEATCMP,one,t->attr_list) &&
-	  find(FEATCMP,two,t->attr_list));
+	  ((wl_node_ptr*)t->attr_list)->find(FEATCMP,one) &&
+	  ((wl_node_ptr*)t->attr_list)->find(FEATCMP,two));
 }
 /*** RM: Dec 11 1992  (END) ***/
 /******** PRETTY_LIST(t,depth)
@@ -550,7 +558,10 @@ void pretty_list(ptr_psi_term t,long long depth)
     if(list_depth<print_depth)
       pretty_tag_or_psi_term(car,COMMA_PREC,depth);
     /* Determine how to print the CDR */
-    n=find(INTCMP,(char *)cdr,pointer_names); // REV401PLUS
+    if (pointer_names)
+      n=((wl_node_ptr*)pointer_names)->find(INTCMP,(char *)cdr); // REV401PLUS
+    else
+      n = NULL;
     if(n && n->data) {
       prettyf("|");
       pretty_tag_or_psi_term(cdr,MAX_PRECEDENCE+1,depth);
@@ -598,17 +609,19 @@ void pretty_tag_or_psi_term(ptr_psi_term p, long long sprec, long long depth)
     return;
   }
   deref_ptr(p);
-  
-  n=find(INTCMP,(char *)p,pointer_names); // REV401PLUS cast
-  
+  if (pointer_names)
+    n=((wl_node_ptr*)pointer_names)->find(INTCMP,(char *)p); // REV401PLUS cast
+  else
+    n = NULL;
   if (n && n->data) {
     if (n->data==(GENERIC)no_name) {
       n->data=unique_name();
     }
-    n2=find(INTCMP,(char *)p,printed_pointers);  // REV401PLUS cast
+    if (printed_pointers)
+      n2=((wl_node_ptr*)printed_pointers)->find(INTCMP,(char *)p);  // REV401PLUS cast
     if(n2==NULL) {
       prettyf((char *)n->data);   // REV401PLUS cast
-      heap_insert(INTCMP,(char *)p,&printed_pointers,n->data);  // REV401PLUS cast
+      ((wl_node_ptr_ptr*)&printed_pointers)->heap_insert(INTCMP,(char *)p,n->data);  // REV401PLUS cast
       if (!is_top(p)) {
         prettyf(DOTDOT);
         pretty_psi_term(p,COLON_PREC,depth);
@@ -1013,7 +1026,10 @@ void pretty_variables(ptr_node n,ptr_tab_brk tab)
   prettyf(" = ");
   tok=(ptr_psi_term )n->data;
   deref_ptr(tok);
-  n2=find(INTCMP,(char *)tok,printed_pointers); // REV401PLUS cast
+  if (printed_pointers)
+    n2=((wl_node_ptr*)printed_pointers)->find(INTCMP,(char *)tok); // REV401PLUS cast
+  else
+    n2 = NULL;
   if(strcmp((char *)n2->data,n->key)<0)
     /* Reference to previously printed variable */
     prettyf((char *)n2->data); // EV401PLUS cast
