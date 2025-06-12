@@ -64,6 +64,11 @@
 #include <sys/types.h>
 #endif
 
+typedef struct wl_node *ptr_node;
+typedef struct wl_node node;
+#include "wl_node.h"
+#include "wl_node_ptr.h"
+#include "wl_node_ptr_ptr.h"
 
 #include "def_config.h"
 #include "def_const.h"

@@ -7,14 +7,20 @@ do
 echo "-----------"
 echo ".h and .cpp files for wild life"
 echo "-----------"
-echo "1 memory"
+echo "1 wl_node"
+echo "2 wl_node_ptr"
+echo "3 wl_node_ptr_ptr"
+echo "4 memory"
 echo "777 NOTES_DJD.txt"
 
 echo "999 quit"
 echo "select"
 read select
 case $select in
-1) ./eewl memory   ;;
+1) ./eewl node   ;;
+2) ./eewl node_ptr   ;;
+3) ./eewl node_ptr_ptr   ;;
+4) ./eewl memory ;;
 777) $EDITOR NOTES_DJD.txt ;;
 esac
 done

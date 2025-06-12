@@ -113,6 +113,14 @@ char *stack_copy_string(char *s)
   strcpy(p,s);
   return p;
 }
+
+
+
+
+#if FALSE
+
+// PRE CLASS CONVERSION
+
 /******** GENERAL_INSERT(comp,keystr,tree,info,heapflag,copystr,bkflag)
 General tree insertion routine.
 comp     = comparison routine for insertion.
@@ -342,3 +350,4 @@ void delete_attr(char *s,ptr_node *n)
       *n = (*n)->right;
   }
 }
+#endif

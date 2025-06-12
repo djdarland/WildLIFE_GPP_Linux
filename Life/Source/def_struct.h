@@ -63,7 +63,9 @@ typedef struct wl_definition *      ptr_definition;
 typedef struct wl_definition *      def_type;
 typedef struct wl_residuation *     ptr_residuation;
 typedef struct wl_psi_term *        ptr_psi_term;
-typedef struct wl_node *            ptr_node;
+
+// typedef struct wl_node *            ptr_node;
+
 typedef struct wl_pair_list *       ptr_pair_list;
 typedef struct wl_triple_list *     ptr_triple_list;
 typedef struct wl_list *            ptr_list;
@@ -197,12 +199,14 @@ typedef struct wl_psi_term {
 /* DATA is the information accessed under the KEY, in most cases a pointer */
 /* to a PSI-TERM.  */
 
+#if FALSE
 typedef struct wl_node {
   char *key;
   ptr_node left;
   ptr_node right;
   GENERIC data;
 } node;
+#endif
 
 typedef struct wl_pair_list {
   ptr_psi_term aaaa_2;
