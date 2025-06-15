@@ -136,7 +136,7 @@ ptr_psi_term make_feature_list(ptr_node tree,ptr_psi_term tail,
     /* Insert the feature name into the list */
     d=str_to_int(tree->key);
     if (d== -1) { /* Feature is not a number */
-      def=update_feature(module,tree->key); /* Extract module RM: Feb 3 1993 */
+      def=((wl_module_ptr*)module)->update_feature(tree->key); /* Extract module RM: Feb 3 1993 */
       if(def) {
 	if(val) /* RM: Mar  3 1994 Distinguish between features & values */
 	  tail=stack_cons((ptr_psi_term)tree->data,tail); // REV401PLUS cast
@@ -1643,7 +1643,7 @@ static void set_parse_queryflag(ptr_node thelist, long long sort)
     arg=(ptr_psi_term)n->data;
     queryflag=stack_psi_term(4);
     queryflag->type =
-      update_symbol(bi_module,
+      ((wl_module_ptr*)bi_module)->update_symbol(
 		    ((sort==QUERY)?(char*)"query":
 		     ((sort==FACT)?(char*)"declaration":(char*)"error")));
     push_goal(unify,queryflag,arg,NULL);
@@ -1693,7 +1693,7 @@ static long long c_parse()
 	  arg2=(ptr_psi_term)n->data;
 	  queryflag=stack_psi_term(4);
 	  queryflag->type=
-	    update_symbol(bi_module,
+	    ((wl_module_ptr*)bi_module)->update_symbol(
 			  ((sort==QUERY)?(char*)"query":((sort==FACT)?(char*)"declaration":(char*)"error"))
 			  );
 	  push_goal(unify,queryflag,arg2,NULL);
@@ -1776,7 +1776,7 @@ static long long c_read(long long psi_flag)
 	  arg2=(ptr_psi_term)n->data;
 	  queryflag=stack_psi_term(4);
 	  queryflag->type=
-	    update_symbol(bi_module,
+	    ((wl_module_ptr*)bi_module)->update_symbol(
 			  ((sort==QUERY)?(char*)"query":((sort==FACT)?(char*)"declaration":(char*)"error"))
 			  );
 	  push_goal(unify,queryflag,arg2,NULL);
@@ -3928,7 +3928,7 @@ static long long c_string2psi()
 	  save_current=current_module;
 	  if(mod)
 	    current_module=mod;
-	  t->type=update_symbol(mod,(char *)arg1->value_3);
+	  t->type=((wl_module_ptr*)mod)->update_symbol((char *)arg1->value_3);
 	  current_module=save_current;
 	  if(t->type==error_psi_term->type)
 	    success=FALSE;
@@ -4348,7 +4348,7 @@ void new_built_in(ptr_module m,char *s,def_type t,long long (*r)())
 
   if(m!=current_module)  /*  RM: Jan 13 1993  */
     set_current_module(m);
-  d=update_symbol(m,s); /* RM: Jan  8 1993 */
+  d=((wl_module_ptr*)m)->update_symbol(s); /* RM: Jan  8 1993 */
   d->type_def=t;
   built_in_index++;
   d->rule=(ptr_pair_list )built_in_index;
@@ -4371,7 +4371,7 @@ static void op_declare(long long p,wl_operator t,char *s)
 	      MAX_PRECEDENCE);
     return;
   }
-  d=update_symbol(NULL,s);
+  d=((wl_module_ptr*)nill_module)->update_symbol(s);
   od= (ptr_operator_data) wl_mem->heap_alloc (sizeof(operator_data));
   od->precedence=p;
   od->type=t;
@@ -5030,103 +5030,103 @@ void init_built_in_types()
   /*  RM: Jan 13 1993  */
   /* Initialize the minimum syntactic symbols */
   set_current_module(syntax_module); /*  RM: Feb  3 1993  */
-  wl_and=update_symbol(syntax_module,",");  
-  update_symbol(syntax_module,"[");
-  update_symbol(syntax_module,"]");
-  update_symbol(syntax_module,"(");
-  update_symbol(syntax_module,")");
-  update_symbol(syntax_module,"{");
-  update_symbol(syntax_module,"}");
-  update_symbol(syntax_module,".");
-  update_symbol(syntax_module,"?");
-  cut			=update_symbol(syntax_module,"!");
-  colonsym		=update_symbol(syntax_module,":");
-  commasym		=update_symbol(syntax_module,",");
-  disj_nil              =update_symbol(syntax_module,"{}");
-  eof			=update_symbol(syntax_module,"end_of_file");
-  eqsym			=update_symbol(syntax_module,"=");
-  leftarrowsym		=update_symbol(syntax_module,"<-");
-  funcsym		=update_symbol(syntax_module,"->");
-  life_or               =update_symbol(syntax_module,";");/* RM: Apr 6 1993  */
-  minus_symbol          =update_symbol(syntax_module,"-");/* RM: Jun 21 1993 */
-  predsym		=update_symbol(syntax_module,":-");
-  quote			=update_symbol(syntax_module,"`");
-  such_that		=update_symbol(syntax_module,"|");
-  top			=update_symbol(syntax_module,"@");
-  typesym		=update_symbol(syntax_module,"::");
+  wl_and=((wl_module_ptr*)syntax_module)->update_symbol(",");  
+  ((wl_module_ptr*)syntax_module)->update_symbol("[");
+  ((wl_module_ptr*)syntax_module)->update_symbol("]");
+  ((wl_module_ptr*)syntax_module)->update_symbol("(");
+  ((wl_module_ptr*)syntax_module)->update_symbol(")");
+  ((wl_module_ptr*)syntax_module)->update_symbol("{");
+  ((wl_module_ptr*)syntax_module)->update_symbol("}");
+  ((wl_module_ptr*)syntax_module)->update_symbol(".");
+  ((wl_module_ptr*)syntax_module)->update_symbol("?");
+  cut			=((wl_module_ptr*)syntax_module)->update_symbol("!");
+  colonsym		=((wl_module_ptr*)syntax_module)->update_symbol(":");
+  commasym		=((wl_module_ptr*)syntax_module)->update_symbol(",");
+  disj_nil              =((wl_module_ptr*)syntax_module)->update_symbol("{}");
+  eof			=((wl_module_ptr*)syntax_module)->update_symbol("end_of_file");
+  eqsym			=((wl_module_ptr*)syntax_module)->update_symbol("=");
+  leftarrowsym		=((wl_module_ptr*)syntax_module)->update_symbol("<-");
+  funcsym		=((wl_module_ptr*)syntax_module)->update_symbol("->");
+  life_or               =((wl_module_ptr*)syntax_module)->update_symbol(";");/* RM: Apr 6 1993  */
+  minus_symbol          =((wl_module_ptr*)syntax_module)->update_symbol("-");/* RM: Jun 21 1993 */
+  predsym		=((wl_module_ptr*)syntax_module)->update_symbol(":-");
+  quote			=((wl_module_ptr*)syntax_module)->update_symbol("`");
+  such_that		=((wl_module_ptr*)syntax_module)->update_symbol("|");
+  top			=((wl_module_ptr*)syntax_module)->update_symbol("@");
+  typesym		=((wl_module_ptr*)syntax_module)->update_symbol("::");
   /*  RM: Jul  7 1993  */
-  final_dot		=update_symbol(syntax_module,"< . >");
-  final_question	=update_symbol(syntax_module,"< ? >");
+  final_dot		=((wl_module_ptr*)syntax_module)->update_symbol("< . >");
+  final_question	=((wl_module_ptr*)syntax_module)->update_symbol("< ? >");
   /*  RM: Feb  3 1993  */
   set_current_module(bi_module);
   error_psi_term=heap_psi_term(4); /* 8.10 */
-  error_psi_term->type=update_symbol(bi_module,"*** ERROR ***");
+  error_psi_term->type=((wl_module_ptr*)bi_module)->update_symbol("*** ERROR ***");
   error_psi_term->type->code=NOT_CODED;
-  apply			=update_symbol(bi_module,"apply");
-  boolean		=update_symbol(bi_module,"bool");
-  boolpredsym		=update_symbol(bi_module,"bool_pred");
-  built_in		=update_symbol(bi_module,"built_in");
-  calloncesym           =update_symbol(bi_module,"call_once");
+  apply			=((wl_module_ptr*)bi_module)->update_symbol("apply");
+  boolean		=((wl_module_ptr*)bi_module)->update_symbol("bool");
+  boolpredsym		=((wl_module_ptr*)bi_module)->update_symbol("bool_pred");
+  built_in		=((wl_module_ptr*)bi_module)->update_symbol("built_in");
+  calloncesym           =((wl_module_ptr*)bi_module)->update_symbol("call_once");
   /* colon sym */
   /* comma sym */
-  comment		=update_symbol(bi_module,"comment");
-  constant		=update_symbol(bi_module,"*constant*");
-  disjunction		=update_symbol(bi_module,"disj");/*RM:9 Dec 92*/
-  lf_false			=update_symbol(bi_module,"false");
-  functor		=update_symbol(bi_module,"functor");
-  iff			=update_symbol(bi_module,"cond");
-  integer		=update_symbol(bi_module,"int");
-  alist			=update_symbol(bi_module,"cons");/*RM:9 Dec 92*/
-  nothing		=update_symbol(bi_module,"bottom");
-  nil			=update_symbol(bi_module,"nil");/*RM:9 Dec 92*/
-  quoted_string		=update_symbol(bi_module,"string");
-  real			=update_symbol(bi_module,"real");
-  stream		=update_symbol(bi_module,"stream");
-  succeed		=update_symbol(bi_module,"succeed");
-  lf_true			=update_symbol(bi_module,"true");
-  timesym		=update_symbol(bi_module,"time");
-  variable		=update_symbol(bi_module,"*variable*");
-  opsym			=update_symbol(bi_module,"op");
-  loadsym		=update_symbol(bi_module,"load");
-  dynamicsym		=update_symbol(bi_module,"dynamic");
-  staticsym		=update_symbol(bi_module,"static");
-  encodesym		=update_symbol(bi_module,"encode");
-  listingsym		=update_symbol(bi_module,"c_listing");
-  delay_checksym	=update_symbol(bi_module,"delay_check");
-  eval_argsym		=update_symbol(bi_module,"non_strict");
-  inputfilesym		=update_symbol(bi_module,"input_file");
-  call_handlersym	=update_symbol(bi_module,"call_handler");
-  xf_sym		=update_symbol(bi_module,"xf");
-  yf_sym		=update_symbol(bi_module,"yf");
-  fx_sym		=update_symbol(bi_module,"fx");
-  fy_sym		=update_symbol(bi_module,"fy");
-  xfx_sym		=update_symbol(bi_module,"xfx");
-  xfy_sym		=update_symbol(bi_module,"xfy");
-  yfx_sym		=update_symbol(bi_module,"yfx");
-  nullsym		=update_symbol(bi_module,"<NULL PSI TERM>");
+  comment		=((wl_module_ptr*)bi_module)->update_symbol("comment");
+  constant		=((wl_module_ptr*)bi_module)->update_symbol("*constant*");
+  disjunction		=((wl_module_ptr*)bi_module)->update_symbol("disj");/*RM:9 Dec 92*/
+  lf_false			=((wl_module_ptr*)bi_module)->update_symbol("false");
+  functor		=((wl_module_ptr*)bi_module)->update_symbol("functor");
+  iff			=((wl_module_ptr*)bi_module)->update_symbol("cond");
+  integer		=((wl_module_ptr*)bi_module)->update_symbol("int");
+  alist			=((wl_module_ptr*)bi_module)->update_symbol("cons");/*RM:9 Dec 92*/
+  nothing		=((wl_module_ptr*)bi_module)->update_symbol("bottom");
+  nil			=((wl_module_ptr*)bi_module)->update_symbol("nil");/*RM:9 Dec 92*/
+  quoted_string		=((wl_module_ptr*)bi_module)->update_symbol("string");
+  real			=((wl_module_ptr*)bi_module)->update_symbol("real");
+  stream		=((wl_module_ptr*)bi_module)->update_symbol("stream");
+  succeed		=((wl_module_ptr*)bi_module)->update_symbol("succeed");
+  lf_true			=((wl_module_ptr*)bi_module)->update_symbol("true");
+  timesym		=((wl_module_ptr*)bi_module)->update_symbol("time");
+  variable		=((wl_module_ptr*)bi_module)->update_symbol("*variable*");
+  opsym			=((wl_module_ptr*)bi_module)->update_symbol("op");
+  loadsym		=((wl_module_ptr*)bi_module)->update_symbol("load");
+  dynamicsym		=((wl_module_ptr*)bi_module)->update_symbol("dynamic");
+  staticsym		=((wl_module_ptr*)bi_module)->update_symbol("static");
+  encodesym		=((wl_module_ptr*)bi_module)->update_symbol("encode");
+  listingsym		=((wl_module_ptr*)bi_module)->update_symbol("c_listing");
+  delay_checksym	=((wl_module_ptr*)bi_module)->update_symbol("delay_check");
+  eval_argsym		=((wl_module_ptr*)bi_module)->update_symbol("non_strict");
+  inputfilesym		=((wl_module_ptr*)bi_module)->update_symbol("input_file");
+  call_handlersym	=((wl_module_ptr*)bi_module)->update_symbol("call_handler");
+  xf_sym		=((wl_module_ptr*)bi_module)->update_symbol("xf");
+  yf_sym		=((wl_module_ptr*)bi_module)->update_symbol("yf");
+  fx_sym		=((wl_module_ptr*)bi_module)->update_symbol("fx");
+  fy_sym		=((wl_module_ptr*)bi_module)->update_symbol("fy");
+  xfx_sym		=((wl_module_ptr*)bi_module)->update_symbol("xfx");
+  xfy_sym		=((wl_module_ptr*)bi_module)->update_symbol("xfy");
+  yfx_sym		=((wl_module_ptr*)bi_module)->update_symbol("yfx");
+  nullsym		=((wl_module_ptr*)bi_module)->update_symbol("<NULL PSI TERM>");
   null_psi_term		=heap_psi_term(4);
   null_psi_term->type	=nullsym;
   set_current_module(no_module); /*  RM: Feb  3 1993  */
-  t=update_symbol(no_module,"1");
+  t=((wl_module_ptr*)no_module)->update_symbol("1");
   one=t->keyword->symbol;
-  t=update_symbol(no_module,"2");
+  t=((wl_module_ptr*)no_module)->update_symbol("2");
   two=t->keyword->symbol;
-  t=update_symbol(no_module,"3");
+  t=((wl_module_ptr*)no_module)->update_symbol("3");
   three=t->keyword->symbol;
   set_current_module(bi_module); /*  RM: Feb  3 1993  */
-  t=update_symbol(bi_module,"year");
+  t=((wl_module_ptr*)bi_module)->update_symbol("year");
   year_attr=t->keyword->symbol;
-  t=update_symbol(bi_module,"month");
+  t=((wl_module_ptr*)bi_module)->update_symbol("month");
   month_attr=t->keyword->symbol;
-  t=update_symbol(bi_module,"day");
+  t=((wl_module_ptr*)bi_module)->update_symbol("day");
   day_attr=t->keyword->symbol;
-  t=update_symbol(bi_module,"hour");
+  t=((wl_module_ptr*)bi_module)->update_symbol("hour");
   hour_attr=t->keyword->symbol;
-  t=update_symbol(bi_module,"minute");
+  t=((wl_module_ptr*)bi_module)->update_symbol("minute");
   minute_attr=t->keyword->symbol;
-  t=update_symbol(bi_module,"second");
+  t=((wl_module_ptr*)bi_module)->update_symbol("second");
   second_attr=t->keyword->symbol;
-  t=update_symbol(bi_module,"weekday");
+  t=((wl_module_ptr*)bi_module)->update_symbol("weekday");
   weekday_attr=t->keyword->symbol;
   nothing->type_def=(def_type)type_it;
   top->type_def=(def_type)type_it;
@@ -5276,9 +5276,9 @@ void init_built_in_types()
   hash_lookup(bi_module->symbol_table,"set_module")->wl_public=TRUE;
   hash_lookup(bi_module->symbol_table,"built_in")->wl_public=TRUE;
   /*  RM: Jan 29 1993  */
-  abortsym=update_symbol(bi_module,"abort"); /* 26.1 */
-  aborthooksym=update_symbol(bi_module,"aborthook"); /* 26.1 */
-  tracesym=update_symbol(bi_module,"trace"); /* 26.1 */
+  abortsym=((wl_module_ptr*)bi_module)->update_symbol("abort"); /* 26.1 */
+  aborthooksym=((wl_module_ptr*)bi_module)->update_symbol("aborthook"); /* 26.1 */
+  tracesym=((wl_module_ptr*)bi_module)->update_symbol("trace"); /* 26.1 */
   /*  RM: Feb  9 1993  */
   new_built_in(bi_module,"global",(def_type)predicate_it,c_global);
   new_built_in(bi_module,"persistent",(def_type)predicate_it,c_persistent);
@@ -5286,9 +5286,9 @@ void init_built_in_types()
   new_built_in(bi_module,"alias",(def_type)predicate_it,c_alias);
   /*  RM: Mar 11 1993  */
   new_built_in(bi_module,"private_feature",(def_type)predicate_it,c_private_feature);
-  add_module1=update_symbol(bi_module,"features");
-  add_module2=update_symbol(bi_module,"str2psi");
-  add_module3=update_symbol(bi_module,"feature_values"); /* RM: Mar  3 1994  */
+  add_module1=((wl_module_ptr*)bi_module)->update_symbol("features");
+  add_module2=((wl_module_ptr*)bi_module)->update_symbol("str2psi");
+  add_module3=((wl_module_ptr*)bi_module)->update_symbol("feature_values"); /* RM: Mar  3 1994  */
   /*  RM: Jun 29 1993  */
   new_built_in(bi_module,"split_double",(def_type)function_it,c_split_double);
   new_built_in(bi_module,"string_address",(def_type)function_it,c_string_address);

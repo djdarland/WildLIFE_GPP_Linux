@@ -1700,18 +1700,18 @@ void insert_sys_builtins()
 {
   ptr_module curmod = current_module;
   set_current_module(sys_module);
-  sys_bytedata		=update_symbol(sys_module,"bytedata"); /* DENYS: BYTEDATA */
-  sys_bitvector		=update_symbol(sys_module,"bitvector");
-  sys_regexp		=update_symbol(sys_module,"regexp");
-  sys_stream		=update_symbol(sys_module,"stream");
-  sys_file_stream	=update_symbol(sys_module,"file_stream");
+  sys_bytedata		=((wl_module_ptr*)sys_module)->update_symbol("bytedata"); /* DENYS: BYTEDATA */
+  sys_bitvector		=((wl_module_ptr*)sys_module)->update_symbol("bitvector");
+  sys_regexp		=((wl_module_ptr*)sys_module)->update_symbol("regexp");
+  sys_stream		=((wl_module_ptr*)sys_module)->update_symbol("stream");
+  sys_file_stream	=((wl_module_ptr*)sys_module)->update_symbol("file_stream");
 #ifdef __unix__
-  sys_socket_stream	=update_symbol(sys_module,"socket_stream");
-  sys_process_no_children=update_symbol(sys_module,"process_no_children");
-  sys_process_exited	=update_symbol(sys_module,"process_exited");
-  sys_process_signaled	=update_symbol(sys_module,"process_signaled");
-  sys_process_stopped	=update_symbol(sys_module,"process_stopped");
-  sys_process_continued	=update_symbol(sys_module,"process_continued");
+  sys_socket_stream	=((wl_module_ptr*)sys_module)->update_symbol("socket_stream");
+  sys_process_no_children=((wl_module_ptr*)sys_module)->update_symbol("process_no_children");
+  sys_process_exited	=((wl_module_ptr*)sys_module)->update_symbol("process_exited");
+  sys_process_signaled	=((wl_module_ptr*)sys_module)->update_symbol("process_signaled");
+  sys_process_stopped	=((wl_module_ptr*)sys_module)->update_symbol("process_stopped");
+  sys_process_continued	=((wl_module_ptr*)sys_module)->update_symbol("process_continued");
 #endif
   /* DENYS: BYTEDATA */
   /* purely for illustration

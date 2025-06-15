@@ -445,7 +445,7 @@ long long make_public(ptr_psi_term term,long long wl_bool)   /*  RM: Feb 22 1993
     key->wl_public=wl_bool;
   }
   else {
-    def=update_symbol(current_module,term->type->keyword->symbol);
+    def=((wl_module_ptr*)current_module)->update_symbol(term->type->keyword->symbol);
     def->keyword->wl_public=wl_bool;
   }
   return ok;
@@ -918,7 +918,7 @@ int make_feature_private(ptr_psi_term term)  /*  RM: Mar 11 1993  */
     def=key->definition;
   }
   else {
-    def=update_symbol(current_module,term->type->keyword->symbol);
+    def=((wl_module_ptr*)current_module)->update_symbol(term->type->keyword->symbol);
     def->keyword->private_feature=TRUE;
   }
   if(ok && def->keyword->wl_public) {

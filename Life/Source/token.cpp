@@ -720,7 +720,7 @@ void read_string(ptr_psi_term tok,long long e)
   if (e=='"')
     tok->value_3=(GENERIC)heap_copy_string(str);
   else {
-    tok->type=update_symbol(NULL,str); /* Maybe no_module would be better */
+    tok->type=((wl_module_ptr*)nill_module)->update_symbol(str); /* Maybe no_module would be better */
     tok->value_3=NULL;
     TOKEN_ERROR(tok);		/*  RM: Feb  1 1993  */
   }
@@ -809,7 +809,7 @@ void read_name(ptr_psi_term tok,long long ch,long long (*f)(long long),ptr_defin
   str[len]=0;
   tok->type=typ;
   if(typ==constant) {
-    tok->type=update_symbol(module,str); /*  RM: Feb  3 1993  */
+    tok->type=((wl_module_ptr*)module)->update_symbol(str); /*  RM: Feb  3 1993  */
     tok->value_3=NULL;
     TOKEN_ERROR(tok); /*  RM: Feb  1 1993  */
     /* PVR 4.2.94 for correct level incrementing */
@@ -963,7 +963,7 @@ void read_token_main(ptr_psi_term tok, long long for_parser)
 	      else /*  RM: Jul  7 1993  Moved this */
 		if SINGLE(c) {
 		    p[0]=c; p[1]=0;
-		    tok->type=update_symbol(current_module,p);
+		    tok->type=((wl_module_ptr*)current_module)->update_symbol(p);
 		    tok->value_3=NULL;
 		    TOKEN_ERROR(tok); /*  RM: Feb  1 1993  */
 		  }
@@ -978,7 +978,7 @@ void read_token_main(ptr_psi_term tok, long long for_parser)
         /* As a result, '@' and '_' are synonyms in the program input. */
         if (!strcmp((char *)tok->value_3,"_")) {
 	  p[0]='@'; p[1]=0;
-          tok->type=update_symbol(current_module,p);
+          tok->type=((wl_module_ptr*)current_module)->update_symbol(p);
           tok->value_3=NULL;
 	  TOKEN_ERROR(tok); /*  RM: Feb  1 1993  */
         }
