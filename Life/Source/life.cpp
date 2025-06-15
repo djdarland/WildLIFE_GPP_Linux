@@ -44,7 +44,13 @@ int main(int argc, char *argv[])  // REV401PLUS correct main proto
   else
     Errorline("Too many command line arguments\n");
   quietflag = GetBoolOption("q");
+  djd = GetBoolOption("djd");
   cygwin_flag = GetBoolOption("cyg");
+  if (djd)
+    {
+      dbg = fopen("dbg.out","w");
+      dbg_note("life - main", "start dbg");
+    }
   init_io();
   wl_mem = new wl_memory();
   wl_mem->exit_mem_err_1();
@@ -200,3 +206,28 @@ void init_globals()
   x_window_creation = FALSE;
 #endif
 }
+
+void dbg_top(char *fun)
+{
+  if (djd) {
+    fprintf(dbg,"TOP fun = %s\n",fun);
+    fflush(dbg);
+  }
+}
+
+void dbg_bot(char *fun)
+{
+  if (djd) {
+    fprintf(dbg,"BOTTOM fun = %s\n",fun);
+    fflush(dbg);
+  }
+}
+
+void dbg_note(char *fun, char *note)
+{
+  if (djd) {
+    fprintf(dbg,"NOTE fun = %s -- %s\n",fun,note);
+    fflush(dbg);
+  }
+}
+

@@ -697,6 +697,7 @@ EXTERN ptr_module current_module;
 
 */
 EXTERN ptr_module sys_module;
+EXTERN ptr_module nill_module;
 
 /*! \var display_modules
   \brief whether to display modules with symbols
@@ -875,6 +876,10 @@ EXTERN long long psi_term_line_number;
 EXTERN long long warningflag;
 EXTERN long long quietflag;  // 21.1 
 EXTERN long long cygwin_flag;  // 21.1 
+EXTERN long long djd;  // 21.1
+
+EXTERN FILE *dbg;
+
 EXTERN long long trace;
 EXTERN long long verbose; // 21.1 
 

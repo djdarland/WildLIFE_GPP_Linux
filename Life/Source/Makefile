@@ -104,6 +104,7 @@ XOBJ = xpred.o xdisplaylist.o
 XINC = xpred.h xdisplaylist.h
 
 LIBSOURCE = \
+	wl_module.cpp wl_module_ptr.cpp \
 	wl_node.cpp wl_node_ptr.cpp wl_node_ptr_ptr.cpp \
 	arity.cpp bi_math.cpp bi_sys.cpp bi_type.cpp built_ins.cpp copy.cpp error.cpp \
 	hash_table.cpp info.cpp interrupt.cpp lefun.cpp lib.cpp list.cpp login.cpp \
@@ -117,7 +118,8 @@ LIBOBJECT_X = \
 	print_x.o raw_x.o sys_x.o templates_x.o \
 	token_x.o trees_x.o types_x.o xpred.o xdisplaylist.o
 
-LIBOBJECT = wl_node.o wl_node_ptr.o wl_node_ptr_ptr.o \
+LIBOBJECT = wl_module.o wl_module_ptr.o \
+	wl_node.o wl_node_ptr.o wl_node_ptr_ptr.o \
 	arity.o bi_math.o bi_sys.o bi_type.o built_ins.o copy.o error.o \
 	hash_table.o info2.o interrupt.o lefun.o lib2.o list.o login.o \
 	lub.o memory.o modules.o parser.o print.o raw.o sys.o templates.o \
@@ -234,6 +236,7 @@ types.o : types.cpp  $(LIBINCLUDE)
 
 wl_memory.o : memory.cpp  $(LIBINCLUDE)
 	$(CC) wl_memory.cpp -o wl_memory.o $(CFLAGS) $(CPPFLAGS) $(DEFS_EXT_MINT) -c
+
 wl_node.o : wl_node.cpp  $(LIBINCLUDE)
 	$(CC) wl_node.cpp -o wl_node.o $(CFLAGS) $(CPPFLAGS) $(DEFS_EXT_MINT) -c
 
@@ -242,6 +245,14 @@ wl_node_ptr.o : wl_node_ptr.cpp  $(LIBINCLUDE)
 
 wl_node_ptr_ptr.o : wl_node_ptr_ptr.cpp  $(LIBINCLUDE)
 	$(CC) wl_node_ptr_ptr.cpp -o wl_node_ptr_ptr.o $(CFLAGS) $(CPPFLAGS) $(DEFS_EXT_MINT) -c
+
+wl_module.o : wl_module.cpp  $(LIBINCLUDE)
+	$(CC) wl_module.cpp -o wl_module.o $(CFLAGS) $(CPPFLAGS) $(DEFS_EXT_MINT) -c
+
+wl_module_ptr.o : wl_module_ptr.cpp  $(LIBINCLUDE)
+	$(CC) wl_module_ptr.cpp -o wl_module_ptr.o $(CFLAGS) $(CPPFLAGS) $(DEFS_EXT_MINT) -c
+
+
 
 # End regular Life
 

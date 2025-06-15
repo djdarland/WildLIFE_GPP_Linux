@@ -22,6 +22,7 @@ void init_modules()
   syntax_module=create_module("syntax");
   user_module=create_module("user"); /*  RM: Jan 27 1993  */
   sys_module=create_module("sys");
+  nill_module=create_module("nill_mod");
   set_current_module(syntax_module);
 }
 /******** FIND_MODULE(module)
@@ -179,6 +180,8 @@ ptr_definition new_definition(ptr_keyword key)    /*  RM: Feb 22 1993  */
   key->definition=result;
   return result;
 }
+
+#if FALSE
 /******** UPDATE_SYMBOL(m,s)
 S is a string of characters encountered during parsing, M is the module it
 belongs too.
@@ -277,6 +280,7 @@ ptr_definition update_symbol(ptr_module module,char *symbol)   /*  RM: Jan  8 19
       }
   return result;
 }
+#endif
 /******** GET_FUNCTION_VALUE(module,symbol)
 Return the value of a function without arguments. This returns a psi-term on
 the heap which may not be bound etc...
@@ -944,6 +948,8 @@ long long c_private_feature()    /*  RM: Mar 11 1993  */
   }
   return success;
 }
+#if FALSE
+ 
 /********* UPDATE_FEATURE(module,feature)
 	   Look up a FEATURE.
 	   May return NULL if the FEATURE is not visible from MODULE.
@@ -970,6 +976,8 @@ ptr_definition update_feature(ptr_module module,char *feature)
   else
     return update_symbol(module,feature);
 }
+#endif
+
 /******** ALL_PUBLIC_SYMBOLS
 	  Returns all public symbols from all modules or a specific module.
 */

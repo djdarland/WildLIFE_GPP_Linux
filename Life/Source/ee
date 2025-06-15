@@ -1,11 +1,11 @@
 echo "-----------"
 echo "files wild life"
 echo "----------------------------------------------"
-echo "8 ee8 - edit any .h for c++"
-echo "9 ee9 - edit any .cpp file a-l"
-echo "10 ee10 - edit any .cpp file m-z"
+echo "1 ee8 - edit any .h for c++"
+echo "2 ee9 - edit any .cpp file a-l"
+echo "3 ee10 - edit any .cpp file m-z"
 echo "----------------------------------------------"
-echo "16 ee16 - edit .h and .cpp files for any class part 1"
+echo "4 ee16 - edit .h and .cpp files for any class part 1"
 echo "----------------------------------------------"
 echo "110 run splint and view"
 echo "111 make and view"
@@ -28,10 +28,10 @@ read select
 while [ $select -ne 999 ]
 do 
 case $select in
-8) ./ee8 ;;
-9) ./ee9 ;;
-10) ./ee10 ;;
-16) ./ee16 ;;
+1) ./ee8 ;;
+2) ./ee9 ;;
+3) ./ee10 ;;
+4) ./ee16 ;;
 110) splint -warnposix -compdef -usedef -predboolint -boolops -realcompare -nullpass -predboolothers +boolint -shiftnegative -shiftimplementation -formatconst -mustfreeonly -unqualifiedtrans -mustfreefresh -globstate -type -branchstate -nullret -usereleased -nullderef -compmempass -nullstate -onlytrans -observertrans +relaxtypes -abstract -statictrans -fcnuse -redef -nullassign -compdestroy +charindex -kepttrans -immediatetrans -warnlintcomments +matchanyintegral -mayaliasunique -dependenttrans -ptrcompare -unsignedcompare  -exportlocal -paramuse *.c >djd1 2>djd2;
 $EDITOR djd1 djd2 ;;
 
@@ -46,7 +46,9 @@ $EDITOR djd1 djd2 ;;
 120)  wild_life_X++;;
 121) $EDITOR Makefile;;
 122) ./cp_local.sh;;
-201) $EDITOR ~/.emacs ;;
+222)  wild_life++ -djd ; $EDITOR dbg.out;;
+333) gg ;;
+444) $EDITOR ~/life_local/Source/.set_up ;;
 666) $EDITOR Port.txt & ;;
 777) $EDITOR NOTES_DJD.txt & ;;
 
@@ -55,11 +57,11 @@ esac
 echo "-----------"
 echo "files wild life"
 echo "----------------------------------------------"
-echo "8 ee8 - edit any .h for c++"
-echo "9 ee9 - edit any .cpp file a-l"
-echo "10 ee10 - edit any .cpp file m-z"
+echo "1 ee8 - edit any .h for c++"
+echo "2 ee9 - edit any .cpp file a-l"
+echo "3 ee10 - edit any .cpp file m-z"
 echo "----------------------------------------------"
-echo "16 ee16 - edit .h and .cpp files for any class part 1"
+echo "4 ee16 - edit .h and .cpp files for any class part 1"
 echo "----------------------------------------------"
 echo "110 run splint and view"
 echo "111 make and view"

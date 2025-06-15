@@ -106,7 +106,7 @@ typedef struct wl_hash_table * ptr_hash_table;
 
 /************ MODULES **************/
 /*        RM: Jan  7 1993          */
-
+#if FALSE
 struct wl_module {
   char *module_name;
   char *source_file;
@@ -117,6 +117,8 @@ struct wl_module {
 
 
 typedef struct wl_module * ptr_module;
+
+#endif
 
 struct wl_keyword {
   ptr_module module;

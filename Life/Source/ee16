@@ -11,6 +11,8 @@ echo "1 wl_node"
 echo "2 wl_node_ptr"
 echo "3 wl_node_ptr_ptr"
 echo "4 memory"
+echo "5 module"
+echo "6 module_ptr"
 echo "777 NOTES_DJD.txt"
 
 echo "999 quit"
@@ -21,6 +23,10 @@ case $select in
 2) ./eewl node_ptr   ;;
 3) ./eewl node_ptr_ptr   ;;
 4) ./eewl memory ;;
+4) ./eewl memory ;;
+5) ./eewl module ;;
+6) ./eewl module_ptr ;;
+
 777) $EDITOR NOTES_DJD.txt ;;
 esac
 done

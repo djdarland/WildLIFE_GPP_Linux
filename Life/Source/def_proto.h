@@ -715,3 +715,6 @@ long long x_postscript_window(Display *display,Window window,ListHeader *display
 #endif
 ptr_goal GoalFromPsiTerm(ptr_psi_term psiTerm);
 void init_globals();
+void dbg_top(char*);
+void dbg_bot(char*);
+void dbg_note(char*,char*);
