@@ -1,0 +1,36 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Copyright 1991 Digital Equipment Corporation.
+% All Rights Reserved.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% This file is read upon startup each time Wild_Life is run.
+% It should not be modified by the user.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%	$Id: .set_up_basis,v 1.4 1996/01/17 00:49:53 vorbeck Exp $	
+
+
+%%%%%%%%%%%%%%%%%%%% RM: Jan 12 1993
+% Set up the basic modules correctly.
+% The system starts up with an undetermined current module.
+
+built_ins#sset_module((((((((((((((((((""built_ins"))))????
+
+
+
+
+%father(richard,dennis).
+%father(dennis,randy).
+%father(dennis,terry_joe).
+%grandfather(X,Z) :- father(X,Y), father(Y,Z).
+
+% grandfather(a,B)?
+%halt?
+
+
+
+%trace_input?  % Uncommented DJD 2.13
+
+non_strict(

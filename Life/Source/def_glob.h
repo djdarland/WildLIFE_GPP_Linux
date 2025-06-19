@@ -879,6 +879,7 @@ EXTERN long long cygwin_flag;  // 21.1
 EXTERN long long djd;  // 21.1
 
 EXTERN FILE *dbg;
+EXTERN FILE *dbg2;
 
 EXTERN long long trace;
 EXTERN long long verbose; // 21.1 

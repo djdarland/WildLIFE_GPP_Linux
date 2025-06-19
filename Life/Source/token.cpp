@@ -524,6 +524,7 @@ long long read_char()
     if (c==EOLN)
       start_of_line=TRUE;
   }
+  if (djd){fprintf(dbg2,"%c",(int)c); fflush(dbg2);}
   return c;
 }
 /******** PUT_BACK_CHAR

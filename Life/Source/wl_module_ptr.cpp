@@ -22,12 +22,14 @@ ptr_definition wl_module_ptr::update_symbol(char *symbol)   /*  RM: Jan  8 1993 
   ptr_keyword tempkey;
   ptr_module module;
 
+  dbg_top("update_symbol");
   module = (ptr_module) this;
-  
+  if(djd){fprintf(dbg,"symbol = %s\n",symbol); fflush(dbg);}
+  if(djd){fprintf(dbg,"module = %p\n",module); fflush(dbg);}
   /* First clean up the arguments and find out which module to use */
-  if(module == nill_module) {
+  if(!module || (module == nill_module)) {
     module=extract_module_from_name(symbol);  // need to check return DJD
-    if(module == nill_module)
+    if(!module || (module == nill_module))
       module=current_module;
     symbol=strip_module_name(symbol);
   }

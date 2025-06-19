@@ -49,6 +49,7 @@ int main(int argc, char *argv[])  // REV401PLUS correct main proto
   if (djd)
     {
       dbg = fopen("dbg.out","w");
+      dbg2 = fopen("dbg2.out","w");
       dbg_note("life - main", "start dbg");
     }
   init_io();

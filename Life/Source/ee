@@ -46,7 +46,7 @@ $EDITOR djd1 djd2 ;;
 120)  wild_life_X++;;
 121) $EDITOR Makefile;;
 122) ./cp_local.sh;;
-222)  wild_life++ -djd ; $EDITOR dbg.out;;
+222)  wild_life++ -djd ; $EDITOR dbg.out; $EDITOR dbg2.out;;
 333) gg ;;
 444) $EDITOR ~/life_local/Source/.set_up ;;
 666) $EDITOR Port.txt & ;;

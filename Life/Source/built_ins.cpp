@@ -1379,9 +1379,11 @@ static long long c_non_strict()
 {
   ptr_psi_term t=aim->aaaa_1;
 
+  dbg_top("c_non_strict");
   deref_ptr(t);
   /* mark_quote(t); 14.9 */
   assert_args_not_eval(t->attr_list);
+  dbg_bot("c_non_strict");
   return TRUE;
 }
 /******** C_OP()

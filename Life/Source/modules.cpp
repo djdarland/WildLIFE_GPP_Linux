@@ -66,7 +66,10 @@ ptr_module create_module(char *module)
 ptr_module set_current_module(ptr_module module)
 //     ptr_module module;
 {
+  dbg_top("set_current_module");
+  if (djd){fprintf(dbg, "module = %p \n", module); fflush(dbg);} 
   current_module=module;
+  dbg_bot("set_current_module");
   return current_module;
 }
 /******** EXTRACT_MODULE_FROM_NAME
@@ -335,15 +338,18 @@ long long c_set_module()
 {
   ptr_psi_term arg1,arg2;
   ptr_psi_term call;
-  
+
+  dbg_top("c_set_module");
   call=aim->aaaa_1;
   deref_ptr(call);
   get_two_args(call->attr_list,&arg1,&arg2);
   if(arg1) {
+  dbg_bot("c_set_module 1");
     set_current_module(create_module(string_val(arg1)));
     return TRUE;
   }
   else {
+  dbg_bot("c_set_module 2");
     Errorline("argument missing in '%P'\n",call);
     return FALSE;
   }
