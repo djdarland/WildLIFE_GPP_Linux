@@ -1698,7 +1698,8 @@ long long load_aim()
   ptr_choice_point cutpt;
   long long old_var_occurred; /* 18.8 */
   int end_of_file=FALSE; /*  RM: Jan 27 1993  */
-  
+
+  dbg_top("load_aim");
   save_state(input_state);
   input_state=(ptr_psi_term)aim->aaaa_1;
   restore_state(input_state);
@@ -1708,27 +1709,34 @@ long long load_aim()
   noisy=FALSE;
   fn=(char*)aim->cccc_1;
   exitloop=FALSE;
+  dbg_note("load_aim", "000001");
   do {
     /* Variables in queries in files are *completely independent* of top- */
     /* level variables.  I.e.: top-level variables are *not* recognized   */
     /* while loading files and variables in file queries are *not* added. */
+  dbg_note("load_aim", "000002");
     old_var_occurred=var_occurred; /* 18.8 */
     old_var_tree=var_tree;
     var_tree=NULL;
+  dbg_note("load_aim", "000002B");
     s=stack_copy_psi_term(parse(&sort));
+  dbg_note("load_aim", "000003");
     var_tree=old_var_tree;
     var_occurred=old_var_occurred; /* 18.8 */
     if (s->type==eof) {
+  dbg_note("load_aim", "000004");
       encode_types();
       if (input_stream!=stdin) fclose(input_stream);
       exitloop=TRUE;
       end_of_file=TRUE; /*  RM: Jan 27 1993  */
     }
     else if (sort==FACT) {
+  dbg_note("load_aim", "000005");
       assert_first=FALSE;
       assert_clause(s);
     }
     else if (sort==QUERY) {
+  dbg_note("load_aim", "000006");
       encode_types();
       save_state(input_state);
       /* Handle both successful and failing queries correctly. */
@@ -1740,12 +1748,14 @@ long long load_aim()
       exitloop=TRUE;
     }
     else {
+  dbg_note("load_aim", "000008");
       if (input_stream!=stdin) fclose(input_stream);
       abort_life(TRUE);
     }
   } while (success && !exitloop);
   /*  RM: Jan 27 1993 */
   if(end_of_file || !success) {
+  dbg_note("load_aim", "000009");
       set_current_module(
 		       find_module((char *)((ptr_psi_term)get_attr(input_state,
 								   CURRENT_MODULE))->value_3));
@@ -1753,6 +1763,7 @@ long long load_aim()
   noisy=old_noisy;
   file_date=old_file_date;
   open_input_file("stdin");
+  dbg_bot("load_aim");
   return success;
 }
 /******** MAIN_PROVE()
@@ -1767,6 +1778,7 @@ void main_prove()
   ptr_pair_list *p;
   ptr_psi_term unused_match_date; /* 13.6 */
     
+  dbg_top("main_prove");
   xcount=0;
   xeventdelay=XEVENTDELAY;
 #ifdef __unix__
@@ -1775,6 +1787,7 @@ void main_prove()
   main_loop_ok=TRUE;
   while (main_loop_ok && goal_stack) {
     aim=goal_stack;
+    dbg_ll("main_prove switch ",aim->type);
     switch(aim->type) {
     case unify:
       goal_stack=aim->next;
@@ -1994,6 +2007,7 @@ void main_prove()
 #endif
     }
   }
+  dbg_bot("main_prove");
 }
 int dummy_printf(char *f,char *s,char *t)
 //     char *f, *s, *t;

@@ -765,11 +765,13 @@ void read_name(ptr_psi_term tok,long long ch,long long (*f)(long long),ptr_defin
   ptr_module module=NULL;
   ptr_node n; /*  RM: Feb  9 1993  */
 
+  dbg_top("read_name");
   tok->coref=NULL;
   tok->resid=NULL;
   tok->attr_list=NULL;
   str[0]=ch;
   do {
+    dbg_note("read_name","B000001");
     c=read_char();
     flag=(*f)(c);
     if(c=='#' &&       /*  RM: Feb  3 1993  */
@@ -777,6 +779,7 @@ void read_name(ptr_psi_term tok,long long ch,long long (*f)(long long),ptr_defin
        len>0 &&
        len<STRLEN &&
        !module) {
+      dbg_note("read_name","B000002");
       str[len]=0;
       module=create_module(str);
       len=0;
@@ -784,42 +787,64 @@ void read_name(ptr_psi_term tok,long long ch,long long (*f)(long long),ptr_defin
       /*  RM: Sep 21 1993  */
       /* Change the type function if required */
       c=read_char();
-      if SYMBOL(c)
-		 f=symbolic;
+      if SYMBOL(c) {
+	  dbg_note("read_name","B000003");
+	  f=symbolic;
+	}
+      dbg_note("read_name","B000004");
       put_back_char(c);
     }
     else
       if (flag) {
-	if (store)
+	dbg_note("read_name","B000005");
+	if (store) {
+	  dbg_note("read_name","B000006");
 	  if (len==STRLEN) {
+	    dbg_note("read_name","B000007");
 	    Warningline("name too long long, extra ignored (%E).\n");
 	    store=FALSE;
 	  }
-	  else
+	  else {
+	    dbg_note("read_name","B000008");
 	    str[len++]=c;
+	  }
+	}
       }
-      else
+      else {
+	dbg_note("read_name","B000009");
 	put_back_char(c);
+      }
+    dbg_note("read_name","B000010");
   } while(flag);
+  dbg_note("read_name","B000011");
   if(module && len==0) { /*  RM: Feb  3 1993  */
+    dbg_note("read_name","B000012");
     strcpy(str,module->module_name);
     len=strlen(str);
     put_back_char('#');
     module=NULL;
   }
+  dbg_note("read_name","B000013");
   str[len]=0;
   tok->type=typ;
   if(typ==constant) {
+    dbg_note("read_name","B000014");
+    if (!module) module = nill_module;
+    dbg_ptr("read_name",(GENERIC)module);
     tok->type=((wl_module_ptr*)module)->update_symbol(str); /*  RM: Feb  3 1993  */
     tok->value_3=NULL;
     TOKEN_ERROR(tok); /*  RM: Feb  1 1993  */
     /* PVR 4.2.94 for correct level incrementing */
     if (tok->type->type_def==(def_type)global_it) {
+      dbg_note("read_name","B000015");
       var_occurred=TRUE;
     }
   }
-  else	
+  else {	
+    dbg_note("read_name","B000016");
     tok->value_3=(GENERIC)heap_copy_string(str);
+  }
+  dbg_bot("read_name");
 }
 
 /******** READ_NUMBER(c)
@@ -905,34 +930,43 @@ void read_token_main(ptr_psi_term tok, long long for_parser)
   ptr_node n;
   char p[2];
 
+  dbg_top("read_token_mail");
   if (for_parser && (saved_psi_term!=NULL)) {
+    dbg_note("read_token_mail", "AA00001");
     *tok= *saved_psi_term;
     saved_psi_term=old_saved_psi_term;
     old_saved_psi_term=NULL;
   }
   else {
+    dbg_note("read_token_mail", "AA00002");
     tok->type=nothing;
     do {
+    dbg_note("read_token_mail", "AA00003");
       c=read_char();
     } while(c!=EOF && (c<=32));
     if (for_parser) psi_term_line_number=line_count;
     switch(c) {
     case EOF:
+    dbg_note("read_token_mail", "AA00004");
       tok->type=eof;
       tok->value_3=NULL;
       break;
     case '%':
+    dbg_note("read_token_mail", "AA00005");
       read_comment(tok);
       break;
     case '"':
+    dbg_note("read_token_mail", "AA00006");
       read_string(tok,c);
       tok->type=quoted_string;
       break;
     case 39: /* The quote symbol "'" */
+    dbg_note("read_token_mail", "AA00007");
       read_string(tok,c);
       break;
     default:
       if(c=='.' || c=='?') { /*  RM: Jul  7 1993  */
+    dbg_note("read_token_mail", "AA00008");
 	c2=read_char();
 	put_back_char(c2);
 	if(c2<=' ' || c2==EOF) {
@@ -943,66 +977,87 @@ void read_token_main(ptr_psi_term tok, long long for_parser)
 	  
 	  tok->value_3=NULL;
 	}
-	else
+	else {
+	  dbg_note("read_token_mail", "AA00009");
 	  read_name(tok,c,symbolic,constant);
+	}
       }
       else
-	if DIGIT(c)
-		  read_number(tok,c);
+	if DIGIT(c) {
+	    dbg_note("read_token_mail", "AA00010");
+	    read_number(tok,c);
+	  }
 	else
 	  if UPPER(c) {
+	      dbg_note("read_token_mail", "AA00011");
               read_name(tok,c,legal_in_name,variable);
             }
 	  else
 	    if LOWER(c) {
+    dbg_note("read_token_mail", "AA00012");
                 read_name(tok,c,legal_in_name,constant);
               }
 	    else
 	      if SYMBOL(c) {
+    dbg_note("read_token_mail", "AA00013");
                   read_name(tok,c,symbolic,constant);
                 }
 	      else /*  RM: Jul  7 1993  Moved this */
 		if SINGLE(c) {
+    dbg_note("read_token_mail", "AA00014");
 		    p[0]=c; p[1]=0;
 		    tok->type=((wl_module_ptr*)current_module)->update_symbol(p);
 		    tok->value_3=NULL;
 		    TOKEN_ERROR(tok); /*  RM: Feb  1 1993  */
 		  }
 		else {
+    dbg_note("read_token_mail", "AA00015");
 		  Errorline("illegal character %d in input (%E).\n",c);
 		}
     }
     if (tok->type==variable) {
+    dbg_note("read_token_mail", "AA00016");
       if (tok->value_3) {
+    dbg_note("read_token_mail", "AA00017");
         /* If the variable read in has name "_", then it becomes 'top' */
         /* and is no long longer a variable whose name must be remembered.  */
         /* As a result, '@' and '_' are synonyms in the program input. */
         if (!strcmp((char *)tok->value_3,"_")) {
+    dbg_note("read_token_mail", "AA00018");
 	  p[0]='@'; p[1]=0;
           tok->type=((wl_module_ptr*)current_module)->update_symbol(p);
           tok->value_3=NULL;
 	  TOKEN_ERROR(tok); /*  RM: Feb  1 1993  */
         }
         else {
+    dbg_note("read_token_mail", "AA00019");
           /* Insert into variable tree, create 'top' value if need be. */
           var_occurred=TRUE;
-	  if (var_tree)
+	  if (var_tree) {
+    dbg_note("read_token_mail", "AA00020");
 	    n=((wl_node_ptr*)var_tree)->find(STRCMP,(char *)tok->value_3); // REV401PLUS cast
-	  else
+	  }
+	  else {
+    dbg_note("read_token_mail", "AA00021");
 	    n = NULL;
+	  }
           if (n==NULL) {
+    dbg_note("read_token_mail", "AA00022");
             ptr_psi_term t=stack_psi_term(0);
             /* The change is always trailed. */
             ((wl_node_ptr_ptr*)&var_tree)->bk2_stack_insert(STRCMP,(char *)tok->value_3,(GENERIC)t); /* 17.8 */ // REV401PLUS casts
             tok->coref=t;
           }
-          else
+          else {
+    dbg_note("read_token_mail", "AA00023");
   	    tok->coref=(ptr_psi_term)n->data;
+	  }
         }
       }
       /* else do nothing */
     }
   }
+    dbg_note("read_token_mail", "AA00024");
   if (tok->type==comment)
     read_token(tok);
   if (tok->type!=variable)
@@ -1012,18 +1067,26 @@ void read_token_main(ptr_psi_term tok, long long for_parser)
   tok->flags=FALSE; /* 14.9 */
   tok->resid=NULL;
   if (tok->type==cut) /* 12.7 */
+    {
+    dbg_note("read_token_mail", "AA00025");
     tok->value_3=(GENERIC)choice_stack;
+    }
   do {
+    dbg_note("read_token_mail", "AA00026");
     c=read_char();
     if (c==EOLN) {
+    dbg_note("read_token_mail", "AA00027");
       if (for_parser) put_back_char(c);
       c=0;
     }
     else if (c<0 || c>32) {
+    dbg_note("read_token_mail", "AA00028");
       put_back_char(c);
       c=0;
     }
+    dbg_note("read_token_mail", "AA00029");
   } while(c && c!=EOF);
   if (for_parser) prompt="|    ";
+  dbg_bot("read_token_mail");
 }
 /****************************************************************************/

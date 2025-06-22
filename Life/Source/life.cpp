@@ -232,3 +232,28 @@ void dbg_note(char *fun, char *note)
   }
 }
 
+void dbg_ptr(char *fun, GENERIC p)
+{
+  if (djd) {
+    fprintf(dbg,"NOTE fun = %s -- %p\n",fun,p);
+    fflush(dbg);
+  }
+}
+
+void dbg_str(char *fun, char *s)
+{
+  if (djd) {
+    fprintf(dbg,"NOTE fun = %s -- %s\n",fun,s);
+    fflush(dbg);
+  }
+}
+
+
+void dbg_ll(char *fun, long long ll)
+{
+  if (djd) {
+    fprintf(dbg,"NOTE fun = %s -- %lld\n",fun,ll);
+    fflush(dbg);
+  }
+}
+

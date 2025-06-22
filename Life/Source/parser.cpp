@@ -344,60 +344,92 @@ psi_term read_psi_term()
   long long count=0,f=TRUE,f2,v;
   ptr_psi_term module;
 
+  dbg_top("read_psi_term");
   if(parse_ok) {
+    dbg_note("read_psi_term", "00001");
     read_token(&t);
-    if(equ_tokch(t,'['))
+    dbg_note("read_psi_term", "00002");
+    if(equ_tokch(t,'[')) {
+    dbg_note("read_psi_term", "00003");
       t=parse_list(alist,']',','); /*** RICHARD Nov_4 ***/
-    else
-      if(equ_tokch(t,'{')) 
+    dbg_note("read_psi_term", "00004");
+    }
+    else {
+    dbg_note("read_psi_term", "00005");
+      if(equ_tokch(t,'{')) {
+    dbg_note("read_psi_term", "00006");
 	t=parse_list(disjunction,'}',';'); /*** RICHARD Nov_4 ***/
+    dbg_note("read_psi_term", "00007");
+      }
+    }
     if(parse_ok 
        && t.type!=eof
        && !bad_psi_term(&t)
        ) {
+    dbg_note("read_psi_term", "00008");
       read_token(&t2);
+    dbg_note("read_psi_term", "00009");
       if(equ_tokch(t2,'(')) {
 	do {
+    dbg_note("read_psi_term", "00010");
 	  f2=TRUE;
 	  read_token(&t2);
 	  if(wl_const_3(t2) && !bad_psi_term(&t2)) {  // REV401PLUS for value_3
 	    read_token(&t3);
 	    if(equ_tok(t3,"=>")) {
+    dbg_note("read_psi_term", "00011");
+	      
 	      t3=read_life_form(',',')');
 	      if(t2.type->keyword->private_feature) /*  RM: Mar 11 1993  */
-		feature_insert(t2.type->keyword->combined_name,
+		{
+		      dbg_note("read_psi_term", "00012");
+
+		  feature_insert(t2.type->keyword->combined_name,
 			       /*  RM: Jan 13 1993  */
 			       &(t.attr_list),
 			       &t3);
+    dbg_note("read_psi_term", "00013");
+		}
 	      else
+		{
+    dbg_note("read_psi_term", "00014");
 		feature_insert(t2.type->keyword->symbol,
 			       /*  RM: Jan 13 1993  */
 			       &(t.attr_list),
 			       &t3);
-	      
+		}
+    dbg_note("read_psi_term", "00015");
 	      f2=FALSE;
 	    }
-	    else 
+	    else
+	      {
 	      put_back_token(t3);
+	      }
 	  }
 	  if(parse_ok && equal_types(t2.type,integer)) {
+    dbg_note("read_psi_term", "00016");
 	    read_token(&t3);
+    dbg_note("read_psi_term", "00017");
 	    if(equ_tok(t3,"=>")) {
+    dbg_note("read_psi_term", "00018");
 	      t3=read_life_form(',',')');
 	      v= *(REAL *)t2.value_3;   // REV401PLUS
 	      sprintf(s,"%lld",v);  // REV401PLUS remove extra 0
               feature_insert(s,&(t.attr_list),&t3);
 	      f2=FALSE;
+    dbg_note("read_psi_term", "00019");
 	    }
 	    else 
 	      put_back_token(t3);
 	  }
 	  if(f2) {
+    dbg_note("read_psi_term", "00020");
 	    put_back_token(t2);
 	    t2=read_life_form(',',')');
 	    ++count;
 	    sprintf(s,"%lld",count); // REV401PLUS remove extra 0
             feature_insert(s,&(t.attr_list),&t2);
+    dbg_note("read_psi_term", "00021");
 	  }
 	  read_token(&t2);
 	  if(equ_tokch(t2,')'))
@@ -411,6 +443,7 @@ psi_term read_psi_term()
 	        f=FALSE;
               }
 	    }
+    dbg_note("read_psi_term", "00022");
 	} while(f && parse_ok);
       }
       else
@@ -435,6 +468,7 @@ psi_term read_psi_term()
     module->value_3=(GENERIC)heap_copy_string(current_module->module_name);
     ((wl_node_ptr_ptr*)&(t.attr_list))-> stack_insert(FEATCMP,two,(GENERIC)module); // REV401PLUS cast
   }
+  dbg_bot("read_psi_term");
   return t;
 }
 /******** MAKE_LIFE_FORM(tok,arg1,arg2)
@@ -582,48 +616,65 @@ psi_term read_life_form(char ch1,char ch2)
   long long prec=0;
   
   wl_operator op;
+  dbg_top("read_life_form");
   limit=parser_stack_index+1;
   if(parse_ok)
     do {
-      if(state)
+      dbg_note("read_life_form","00002");
+      if(state) {
+      dbg_note("read_life_form","00003");
 	read_token(&t);
-      else
+      }
+      else {
+      dbg_note("read_life_form","00004");
 	t=read_psi_term();
-      if(!start)
+      }
+      if(!start) {
+      dbg_note("read_life_form","00005");
 	start=line_count;
+      }
       if(!fin)
 	if(state) {
+      dbg_note("read_life_form","00006");
 	  if(equ_tokc(t,ch1) || equ_tokc(t,ch2)) {
+      dbg_note("read_life_form","00007");
 	    fin=TRUE;
 	    put_back_token(t);
 	  }
 	  else {
+      dbg_note("read_life_form","00008");
 	    pr_op=precedence(t,xf);
 	    pr_1=pr_op-1;
 	    if(pr_op==NOP) {
+      dbg_note("read_life_form","00009");
 	      pr_op=precedence(t,yf);
 	      pr_1=pr_op;
 	    }
 	    if(pr_op==NOP) {
+      dbg_note("read_life_form","00010");
 	      pr_op=precedence(t,xfx);
 	      pr_1=pr_op-1;
 	      pr_2=pr_op-1;
 	      if(pr_op==NOP) {
+      dbg_note("read_life_form","00011");
 		pr_op=precedence(t,xfy);
 		pr_1=pr_op-1;
 		pr_2=pr_op;
 	      }
 	      if(pr_op==NOP) {
+      dbg_note("read_life_form","00012");
 		pr_op=precedence(t,yfx);
 		pr_1=pr_op;
 		pr_2=pr_op-1;
 	      }
 	      if(pr_op==NOP) {
+      dbg_note("read_life_form","00013");
 		fin=TRUE;
 		put_back_token(t);
 	      }
 	      else
 		{
+      dbg_note("read_life_form","00014");
 		  crunch(pr_1,limit);
 		  push(t,pr_2,xfx);
 		  prec=pr_2;
@@ -631,6 +682,7 @@ psi_term read_life_form(char ch1,char ch2)
 		}
 	    }
 	    else {
+      dbg_note("read_life_form","00015");
 	      crunch(pr_1,limit);
 	      push(t,pr_1,xf);
 	      prec=pr_1;
@@ -638,9 +690,11 @@ psi_term read_life_form(char ch1,char ch2)
 	  }
 	}
 	else {
+      dbg_note("read_life_form","00016");
 	  if(t.attr_list)
 	    pr_op=NOP;
 	  else {
+      dbg_note("read_life_form","00017");
 	    pr_op=precedence(t,fx);
 	    pr_2=pr_op-1;
 	    if(pr_op==NOP) {
@@ -649,12 +703,16 @@ psi_term read_life_form(char ch1,char ch2)
 	    }
 	  }
 	  if(pr_op==NOP) {
+      dbg_note("read_life_form","00018");
 	    if(equ_tokch(t,'(')) {
+      dbg_note("read_life_form","00019");
 	      t2=read_life_form(')',0);
 	      if(parse_ok) {
+      dbg_note("read_life_form","00020");
 		push(t2,prec,nop);
 		read_token(&t2);
 		if(!equ_tokch(t2,')')) {
+      dbg_note("read_life_form","00021");
                   if (stringparse) parse_ok=FALSE;
                   else {
 		    /*  RM: Feb  1 1993  */
@@ -696,6 +754,7 @@ psi_term read_life_form(char ch1,char ch2)
   if (!parse_ok)
     t= *error_psi_term;
   parser_stack_index=limit-1;
+  dbg_bot("read_life_form");
   return t;
 }
 /******** PARSE(is_it_a_clause)
@@ -714,29 +773,46 @@ psi_term parse(long long *q)
   psi_term s,t,u;
   long long c;
 
+  dbg_top("parse");
   parser_stack_index=0;
   parse_ok=TRUE;
+  dbg_note("parse", "00001");
   s=read_life_form(0,0);
+  dbg_note("parse", "00002");
 
   if (parse_ok) {
+  dbg_note("parse", "00003");
     if (s.type!=eof) {
+  dbg_note("parse", "00004");
       read_token(&t);
+  dbg_note("parse", "00005");
       /*  RM: Jul  7 1993  */
-      if (t.type==final_question)
+  if (t.type==final_question) {
+  dbg_note("parse", "00006");
 	*q=QUERY;
-      else if (t.type==final_dot)
+  }
+  else if (t.type==final_dot) {
+  dbg_note("parse", "00007");
 	*q=FACT;
+  }
       else {
-        if (stringparse) parse_ok=FALSE;
+  dbg_note("parse", "00008");
+  if (stringparse) {
+  dbg_note("parse", "00009");
+    parse_ok=FALSE;
+  }
         else {
+  dbg_note("parse", "00010");
 	  /*  RM: Feb  1 1993  */
 	  Syntaxerrorline("'%P' (%E)\n",&t);
         }
+  dbg_note("parse", "00011");
 	*q=ERROR;
       }
     }
   }
   if (!parse_ok) {
+  dbg_note("parse", "00012");
 
     while (saved_psi_term!=NULL) read_token(&u);
     prompt="error>";
@@ -745,6 +821,7 @@ psi_term parse(long long *q)
   }
   else if (saved_char)
     do {
+  dbg_note("parse", "00013");
       c=read_char();
       if (c==EOLN)
         c=0;
@@ -752,6 +829,7 @@ psi_term parse(long long *q)
         put_back_char(c);
         c=0;
       }
+  dbg_note("parse", "00014");
     } while(c && c!=EOF);
   /* Make sure arguments of nonstrict terms are marked quoted. */
   if (parse_ok) mark_nonstrict(&s); /* 25.8 */
@@ -762,6 +840,7 @@ psi_term parse(long long *q)
   /* that occur in an increment of a query are marked to be evaluated again! */
   /* mark_quote_tree(var_tree); 24.8 XXX */
 
+  dbg_bot("parse");
   
   return s;
 }

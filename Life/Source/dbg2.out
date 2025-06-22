@@ -33,4 +33,4174 @@ built_ins#sset_module((((((((((((((((((""built_ins"))))????
 
 %trace_input?  % Uncommented DJD 2.13
 
-non_strict(
+non_strict((((((((((ppublic)))??????  %%%%% BD June 10 1993
+
+public((((ppublic)))??????
+
+
+
+public(((sstr2psi)))??????
+
+
+
+public(((cc_op)))??????
+
+
+
+public(((xxfy)))??????
+
+
+
+public(((xxfx)))??????
+
+
+
+
+public(((yyfx)))??????   %%%%% BD June 10 1993
+public((((ffx)))??????
+
+
+
+public(((ffy)))??????
+
+
+
+public(((xxf)))??????
+
+
+
+public(((yyf)))??????
+
+
+
+
+public(((sset_module)))??????
+
+
+
+public(((oopen_module)))??????
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% S Y N T A X
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+set_module((((((""syntax"))))????
+
+
+
+built_ins#oopen_module(((""built_ins"))))????
+
+
+
+
+% The problem guys:
+c_op((((11000,,,,xxxxxxfy,,,'''''',')))??????
+
+
+
+c_op(((7700,,,,xxxxxxfx,,,======)))??????
+
+
+
+
+
+A===sssstr2psi(((""{")))),,,,ppublic(((AA))))????
+
+
+
+A===sssstr2psi(((""}")))),,,,ppublic(((AA))))????
+
+
+
+A===sssstr2psi(((""[")))),,,,ppublic(((AA))))????
+
+
+
+A===sssstr2psi(((""]")))),,,,ppublic(((AA))))????
+
+
+
+
+% A=str2psi("("),public(A)?
+% A=str2psi(")"),public(A)?
+% A=str2psi("?"),public(A)?
+
+A======sssstr2psi((("".")))),,,,ppublic(((AA))))????
+
+
+
+A===sssstr2psi((("",")))),,,,ppublic(((AA))))????
+
+
+
+A===sssstr2psi(((""{}")))),,,,ppublic(((AA))))????
+
+
+
+
+
+public(((
+
+
+'!',,, ''''''#',,, ''''''$<',,, ''''''$>',,, ''''''$>=',,, ''''''$\==',,, ''''''&',,, ''''''*',,, ''''''+',,, '''''',',,, ''''''-',,, ''''''->',,, ''''''/',,,
+
+
+
+
+
+'//',,, ''''''/\',,, '''''':',,, '''''':-',,, ''''''::',,, '''''':<',,, '''''':=',,, '''''':=<',,, '''''':==',,, '''''':>',,, '''''':><',,, '''''':>=',,,
+
+
+
+
+
+':\<',,, '''''':\=<',,, '''''':\==',,, '''''':\>',,, '''''':\><',,, '''''':\>=',,, '''''';',,, ''''''<',,, ''''''<-',,, ''''''<<',,, ''''''<<-',,,
+
+
+
+
+
+'<|',,, ''''''=',,, ''''''=:=',,, ''''''=<',,, ''''''===',,, ''''''\===',,, ''''''=>',,, ''''''=\=',,, ''''''>',,, ''''''>=',,, ''''''>>',,, ''''''@',,,
+
+
+
+
+
+'\/',,, ''''''^',,, ''''''`',,, ''''''and',,, ''''''end_of_file',,, '''''or',,, ''''''not',,, ''''''xor',,, ''''''mod',,, ''''''|',,, ''''''\'
+
+
+
+% , '<<<-'   Obsolete % RM: Feb 24 1993 
+
+)???????
+
+
+
+
+public(((''\+',,,''''''$==',,,''''''$=<'))) ??????     %%%%% BD June 10 1993
+
+
+% Operator declarations.
+% Insofar as possible, these correspond with ISO standard Prolog.
+
+% Declarations of sorts, functions, and predicates.
+c_op(((((((11200,,,,xxxxxxfx,,,::::::-)))??????
+
+
+
+c_op(((11200,,,,xxxxxxfx,,,------>)))??????
+
+
+
+c_op(((11200,,,,xxxxxxfx,,,<<<<<<|)))??????
+
+
+
+c_op(((11200,,,,ffffffx,,,:::::::)))??????
+
+
+
+c_op(((11200,,,,xxxxxxfx,,,::::::=)))??????
+
+
+
+
+% Control flow inside of predicates.
+c_op((((11150,,,,xxxxxxfx,,,||||||)))??????
+
+
+
+c_op(((11100,,,,xxxxxxfy,,,;;;;;;))??????  
+
+
+c_op(((9900,,,,ffffffy,,,''''''\+')))??????
+
+
+
+
+% Unification predicate and lookalikes.
+c_op((((7700,,,,xxxxxxfx,,,<<<<<<-)))??????
+
+
+
+c_op(((7700,,,,xxxxxxfx,,,<<<<<<<-)))??????
+
+
+
+
+% Functions.
+% All expressions have precedence < 700.
+% PVR 24.2.94: changed according to Bruno's suggestion
+c_op((((((6675,,,,yyyyyyfx,,,oooooor)))??????
+
+
+
+c_op(((6675,,,,yyyyyyfx,,,xxxxxxor)))??????  %%%% PVR 10.2.94
+c_op((((6650,,,,yyyyyyfx,,,aaaaaand)))??????  
+
+
+c_op(((6625,,,,ffffffy,,,nnnnnnot)))??????  %%%% PVR 10.2.94
+
+c_op((((6600,,,,xxxxxxfx,,,========)))??????
+
+
+
+c_op(((6600,,,,xxxxxxfx,,,\\\\\\===)))??????
+
+
+
+
+% Arithmetic comparisons 
+c_op((((6600,,,,xxxxxxfx,,,<<<<<<)))??????
+
+
+
+c_op(((6600,,,,xxxxxxfx,,,>>>>>>)))??????
+
+
+
+c_op(((6600,,,,xxxxxxfx,,,======<)))??????
+
+
+
+c_op(((6600,,,,xxxxxxfx,,,>>>>>>=)))??????
+
+
+
+c_op(((6600,,,,xxxxxxfx,,,======:=)))??????
+
+
+
+c_op(((6600,,,,xxxxxxfx,,,======\=)))??????
+
+
+
+
+% String comparisons
+c_op((((6600,,,,xxxxxxfx,,,$$$$$$<)))??????
+
+
+
+c_op(((6600,,,,xxxxxxfx,,,$$$$$$>)))??????
+
+
+
+c_op(((6600,,,,xxxxxxfx,,,$$$$$$=<)))??????
+
+
+
+c_op(((6600,,,,xxxxxxfx,,,$$$$$$>=)))??????
+
+
+
+c_op(((6600,,,,xxxxxxfx,,,$$$$$$==)))??????
+
+
+
+c_op(((6600,,,,xxxxxxfx,,,$$$$$$\==)))??????
+
+
+
+
+% Sort comparisons
+c_op((((6600,,,,xxxxxxfx,,,::::::<)))??????
+
+
+
+c_op(((6600,,,,xxxxxxfx,,,::::::>)))??????
+
+
+
+c_op(((6600,,,,xxxxxxfx,,,::::::=<)))??????
+
+
+
+c_op(((6600,,,,xxxxxxfx,,,::::::>=)))??????
+
+
+
+c_op(((6600,,,,xxxxxxfx,,,::::::==)))??????
+
+
+
+c_op(((6600,,,,xxxxxxfx,,,::::::><)))??????
+
+
+
+c_op(((6600,,,,xxxxxxfx,,,::::::\<)))??????
+
+
+
+c_op(((6600,,,,xxxxxxfx,,,::::::\>)))??????
+
+
+
+c_op(((6600,,,,xxxxxxfx,,,::::::\=<)))??????
+
+
+
+c_op(((6600,,,,xxxxxxfx,,,::::::\>=)))??????
+
+
+
+c_op(((6600,,,,xxxxxxfx,,,::::::\==)))??????
+
+
+
+c_op(((6600,,,,xxxxxxfx,,,::::::\><)))??????
+
+
+
+
+% Arithmetic operations
+c_op((((5500,,,,yyyyyyfx,,,++++++)))??????
+
+
+
+c_op(((5500,,,,yyyyyyfx,,,------)))??????
+
+
+
+c_op(((5500,,,,yyyyyyfx,,,//////\)))??????
+
+
+
+c_op(((5500,,,,yyyyyyfx,,,\\\\\\/)))??????
+
+
+
+
+c_op(((4400,,,,yyyyyyfx,,,******)))??????
+
+
+
+c_op(((4400,,,,yyyyyyfx,,,///////)))??????
+
+
+
+c_op(((4400,,,,yyyyyyfx,,,//////)))??????
+
+
+
+c_op(((4400,,,,yyyyyyfx,,,>>>>>>>)))??????
+
+
+
+c_op(((4400,,,,yyyyyyfx,,,<<<<<<<)))??????
+
+
+
+c_op(((4400,,,,yyyyyyfx,,,mmmmmmod)))??????  %%%% PVR 24.2.94
+c_op((((2200,,,,ffffffy,,,------)))??????  %%%% PVR 24.2.94
+c_op((((2200,,,,xxxxxxfy,,,^^^^^^)))??????
+
+
+
+c_op(((2200,,,,ffffffy,,,\\\\\\)))??????
+
+
+
+
+% Unify function and coreference tag
+c_op((((1150,,,,yyyyyyfx,,,......))))??????  %%%% PVR 24.2.94
+c_op((((1100,,,,xxxxxxfy,,,&&&&&&)))??????    %%%% RM: Feb  1 1993  % PVR 24.2.94
+c_op((((775,,,,ffffffy,,,``````))??????   %%%% RM: Feb  1 1993 % PVR 24.2.94
+c_op((((550,,,,xxxxxxfy,,,::::::)))??????  %%%% PVR 24.2.94
+
+%%% Old stuff:
+
+% c_op(700,xfx,<<<-) ?  % RM: Feb  8 1993    Obsolete % RM: Feb 24 1993 
+% c_op(695,fx,`)?  % Quote is loosest of the functions
+% c_op(500,xfy,\)?
+% c_op(500,fx,+)? PVR 24.2.94
+% c_op(500,fx,-)? PVR 24.2.94
+
+% Project operator
+% c_op(400,yfx,##)?   % RM: Jan  7 1993
+
+%% c_op(300,yfx,mod)? BD June 10 1993
+
+% Module operator
+% c_op(130,xfy,#)?   % RM: Jan  7 1993 
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% B U I L T _ I N 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+built_ins#sset_module((((((((((((((((((""built_ins"))))????
+
+
+
+
+open_module(((""syntax"))))????  %%%% This module contains symbols init. in built_ins.c
+% open_module("x")?
+
+%% BD June 11 1993
+global((((((ttools_dir<<<-""""""~/life_local/Tools/"))) ????
+
+
+
+
+global(((eexamples_dir<<<-""""""~/life_local/Examples/"))) ????
+
+
+
+global(((ssuperlint_dir<<<-""""""~/life_local/Examples/SuperLint/"))) ????
+
+
+
+global(((ddemo_dir<<<-""""""~/life_local/Demo/"))) ????  %%%%% MJV January 16 1996
+global((((llib_dir<<<-""""""~/life_local/Lib/"))) ????
+
+
+
+
+simple_load(((""~/life_local/Source/built_ins.lf")))) ????        %%%% Copyright 1991 Digital Equipment Corporation.
+% All Rights Reserved.
+%
+% The BUILT_IN module
+%
+% This file should not be modified by the user.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%	$Id: built_ins.lf.in,v 1.2 1996/01/17 00:47:28 vorbeck Exp $	
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Declarations
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%% public built_ins
+
+public((((((((((((((((((ttrace_input,,, qqqqqquery,,, ddddddeclaration,,, eeeeeerror,,, aaaaaabort,,, aaaaaaborthook,,,aaaaaabs,,, aaaaaappend,,,
+
+
+
+
+
+       apply,,, aaaaaasc,,, aaaaaassert,,, aaaaaasserta,,, bbbbbbagof,,, bbbbbbeep,,, bbbbbbegin_raw,,, bbbbbbool,,,
+
+
+
+
+
+       bool_pred,,,bbbbbbi_load_path,,, ccccccall_once,,,
+
+
+
+
+
+       call_handler,,, cccccceiling,,, cccccchildren,,, cccccchr,,, cccccclause,,,
+
+
+
+
+
+       close,,, ccccccond,,, ccccccons,,, ccccccopy_pointer,,, ccccccopy_rules,,, ccccccopy_term,,, ccccccos,,, ccccccpu_time,,,
+
+
+
+
+
+       current_module,,, ddddddelay_check,,, ddddddisj,,, ddddddisplay_module_status,,,
+
+
+
+
+
+       display_modules,,, ddddddynamic,,, eeeeeend_raw,,, eeeeeeval,,, eeeeeevalin,,, eeeeeexists_file,,,
+
+
+
+
+
+       exists_choice,,, eeeeeexp,,, ffffffail,,, ffffffalse,,, ffffffeatures,,, ffffffloor,,, ffffffx,,, ffffffy,,, ggggggc,,, ggggggenint,,,
+
+
+
+
+
+       get,,, gggggget_choice,,, gggggget_raw,,, gggggglb,,, hhhhhhalt,,, hhhhhhas_feature,,, iiiiiimplies,,, iiiiiin_raw,,,
+
+
+
+
+
+       inherited_modules,,, iiiiiinit,,, iiiiiinitrandom,,, iiiiiinput_file,,, iiiiiint,,, iiiiiiint2str,,,
+
+
+
+
+
+       is_function,,, iiiiiis_number,,, iiiiiis_predicate,,, iiiiiis_sort,,, iiiiiis_value,,, lllllleast_sorts,,,
+
+
+
+
+
+       length,,,llllllife_ext,,, llllllist,,, llllllisting,,, lllllload,,, lllllload_module,,,
+
+
+
+
+
+       load_path,,,lllllload_suffixes,,, lllllloaded_file,,, llllllocal_time,,, llllllog,,, llllllub,,, mmmmmmap,,, mmmmmmaprel,,,
+
+
+
+
+
+       max,,, mmmmmmaxint,,, mmmmmmember,,, mmmmmmin,,, mmmmmmodule,,, mmmmmmresiduate,,, nnnnnnil,,, nnnnnnl,,, nnnnnnl_err,,,
+
+
+
+
+
+       non_strict,,, nnnnnnonvar,,, oooooop,,, oooooopen,,, oooooopen_in,,, oooooopen_modules,,, oooooopen_out,,, oooooops,,,
+
+
+
+
+
+       % not, PVR 10.2.94
+       page_width,,,, pppppparents,,, pppppparse,,, ppppppause,,, ppppppretty_write,,, ppppppretty_writeq,,,
+
+
+
+
+
+       print_codes,,, pppppprint_depth,,, pppppprint_variables,,, pppppprivate,,, pppppproject,,,
+
+
+
+
+
+       psi2str,,, ppppppublic,,, pppppput,,, pppppput_err,,, pppppput_raw,,, rrrrrrandom,,, rrrrrread,,, rrrrrread_token,,, rrrrrreal,,,
+
+
+
+
+
+       real_time,,, rrrrrreduce,,, rrrrrrepeat,,, rrrrrreset_window_flag,,, rrrrrresiduate,,, rrrrrretract,,, rrrrrrlist,,,
+
+
+
+
+
+       root_sort,,, rrrrrrun,,, sssssset_choice,,, sssssset_input,,, sssssset_output,,, ssssssetq,,, ssssssimple_load,,,
+
+
+
+
+
+       sin,,, ssssssqrt,,, sssssstatic,,, sssssstatistics,,, sssssstep,,, sssssstr,,, sssssstr2psi,,, sssssstrcon,,, sssssstring,,,
+
+
+
+
+
+       strip,,, sssssstrlen,,, sssssstrval,,, ssssssubsort,,, ssssssubstr,,, ssssssucceed,,,ssssssystem,,, ttttttan,,,
+
+
+
+
+
+       time,,, ttttttprove,,, ttttttrace,,, ttttttrue,,, uuuuuundo,,, vvvvvvar,,, vvvvvverbose,,, wwwwwwindow_flag,,,
+
+
+
+
+
+       write,,, wwwwwwrite_canonical,,, wwwwwwrite_err,,, wwwwwwriteq,,, wwwwwwriteq_err,,, iiiiiimport,,,
+
+
+
+
+
+       % xor, PVR 10.2.94
+       substitute,,,,iiiiiis_persistent,,, gggggglobal,,, ppppppersistent,,, ddddddisplay_persistent,,, aaaaaalias,,,
+
+
+
+
+
+       bestof,,, %%%%%% RM: Apr 15 1993
+       private_feature,,,, %%%%%% RM: Mar 11 1993
+       split_double,,,, 	%%%%%% RM: Jun 29 1993
+       string_address,,,,	%%%%%% RM: Jul 6 1993
+       deref_length,,,, 	%%%%%% RM: Jul 15 1993
+       argv,,,,         	%%%%%% RM: Sep 20 1993  PVR 11.2.94
+       public_symbols,,,,	%%%%%% RM: Jan 28 1994
+       chdir,,,, 		%%%%%% RM: Feb 10 1994
+       getenv,,,, 		%%%%%% RM: Feb 10 1994
+       module_name,,,,	%%%%%% RM: Feb 16 1994
+       combined_name,,,,	%%%%%% RM: Feb 16 1994
+       quiet,,,,           %%%%%% BD: Feb 17 1994
+       feature_values))))??????
+
+
+
+
+%%% These are considered private:
+%%% '*** ERROR ***', '<NULL PSI TERM>',
+%%% bottom,comment,constant,variable,init
+
+private((((((cc_op)))??????  %%%% RM: Feb 24 1993
+
+
+%%% Operators
+
+% c_op(300,yfx,mod)? PVR 24.2.94
+
+
+%%% Built-in sorts.
+
+cons  <<<<<<|  lllist...
+
+
+
+
+nil  <<|  lllist...
+
+
+
+
+list  <<|  bbbuilt_in...
+
+
+
+
+
+string  <<|  bbbuilt_in...
+
+
+
+
+
+real  <<|  bbbuilt_in...
+
+
+
+
+int  <<|  rrreal...
+
+
+
+
+
+bool  <<|  bbbuilt_in...
+
+
+
+
+true  <<|  bbbool...
+
+
+
+
+false  <<|  bbbool...
+
+
+
+
+
+%%% non strict declarations
+
+non_strict((((nnon_strict)))??????
+
+
+
+non_strict(((ddynamic)))??????
+
+
+
+non_strict(((sstatic)))??????
+
+
+
+non_strict(((ddelay_check)))??????
+
+
+
+non_strict(((llisting)))??????
+
+
+
+non_strict(((eevalin)))??????
+
+
+
+non_strict(((eeval)))??????
+
+
+
+non_strict(((gglobal))) ??????            %%%%% BD 3.3.94
+non_strict((((ppersistent))) ??????        %%%%% BD 3.3.94
+
+%%% SYSTEM MODULE
+
+built_ins#sset_module(((((""sys"))))????
+
+
+
+built_ins#oopen_module(((""syntax"))))????
+
+
+
+
+built_ins#ppublic
+
+
+	(bbitvector,,,rrrrrregexp,,,sssssstream,,,ffffffile_stream,,,ssssssocket_stream,,,
+
+
+
+
+
+	 make_bitvector,,,bbbbbbitvector_and,,,bbbbbbitvector_or,,,bbbbbbitvector_xor,,,
+
+
+
+
+
+	 bitvector_not,,,bbbbbbitvector_count,,,bbbbbbitvector_get,,,bbbbbbitvector_set,,,
+
+
+
+
+
+	 bitvector_clear,,,
+
+
+
+
+
+	 regexp_compile,,,rrrrrregexp_execute,,,
+
+
+
+
+
+	 fopen,,,ffffffclose,,,gggggget_buffer,,,gggggget_record,,,gggggget_code,,,fffffftell,,,ffffffseek,,,
+
+
+
+
+
+	 socket,,,bbbbbbind,,,cccccconnect,,,ffffffwrite,,,ffffffflush,,,llllllisten,,,aaaaaaccept,,,
+
+
+
+
+
+	 errno,,,eeeeeerrmsg,,,
+
+
+
+
+
+	 import_symbol,,,
+
+
+
+
+
+	 process_no_children,,,pppppprocess_exited,,,pppppprocess_signaled,,,
+
+
+
+
+
+	 process_stopped,,,pppppprocess_continued,,,
+
+
+
+
+
+	 fork,,,wwwwwwait,,,wwwwwwaitpid,,,kkkkkkill,,,iiiiiint2stream,,,sssssstdin,,,sssssstdout,,,sssssstderr,,,
+
+
+
+
+
+	 cuserid,,,ggggggethostname,,,llllllazy_project,,,wwwwwwait_on_feature,,,mmmmmmy_wait_on_feature,,,
+
+
+
+
+
+	 apply1,,,ggggggetpid,,,fffffftruncate,,,sssssstream2sys_stream,,,ssssssys_stream2stream
+
+
+%% 	 @DBM_LF@  Commented 2.13 DJD
+)???????
+
+
+
+
+%%% built_ins#non_strict(wait_on_feature)?
+
+bytedata   <<<|  bbbuilt_ins#bbuilt_in...  %%%%% DENYS: BYTEDATA
+bitvector  <<<|  bbbytedata...
+
+
+
+
+regexp     <<|  bbbytedata...
+
+
+
+
+stream     <<|  bbbytedata...
+
+
+
+
+file_stream    <<|  ssstream...
+
+
+
+
+socket_stream  <<|  ssstream...
+
+
+
+
+
+built_ins#gglobal(((sstdin   <<-  iiiiint2stream(((00,,,,""""""r"))))&&&&fffile_stream)))????
+
+
+
+built_ins#gglobal(((sstdout  <<-  iiiiint2stream(((11,,,,""""""w"))))&&&&fffile_stream)))????
+
+
+
+built_ins#gglobal(((sstderr  <<-  iiiiint2stream(((22,,,,""""""w"))))&&&&fffile_stream)))????
+
+
+
+
+built_ins#ppersistent(((sstring_out)))??????
+
+
+
+string_out  <<<-
+
+
+
+	S:::ffffopen(((PPath::::bbbbuilt_ins#sstrcon(((""/tmp/.life",,,,
+
+
+
+				      built_ins#ppsi2str(((ggggetpid))))))))),,,"""w+"))))
+
+
+
+    |
+
+
+	0====bbbbuilt_ins#ssystem(((bbuilt_ins#sstrcon(((""""rm ",,,,PPPPath)))))))),,,%%unlink was non portable
+	S....ssssstream  ==  sssys_stream2stream(((SS)))),,,,
+
+	S...ssssstdout  ==  (((OO|||bbbbuilt_ins#oopen_out(((""stdout",,,,OOOO))))))))???
+
+
+
+
+psi2string(((XX)))) ---->  SS  ||  pppsi2stringX(((XX,,,,SSSS))))....
+
+
+
+
+psi2stringX(((XX,,,,SSSS)))) ::::-
+
+
+	fseek(((OO::::sssstring_out,,,0000)))),,,,,,
+
+	built_ins#sset_output(((OO....ssssstream))),,,,
+
+	built_ins#wwriteq(((XX)))),,,,
+
+	fflush(((OO)))),,,,
+
+	built_ins#sset_output(((OO....ssssstdout))),,,,
+
+	N===fffftell(((OO)))),,,,
+
+	fseek(((OO,,,,0000)))),,,,,,
+
+	S===gggget_buffer(((OO,,,,NNNN))))....
+
+
+
+
+built_ins#ppublic(((ppsi2string)))??????
+
+
+
+
+built_ins#sset_module(((""built_ins"))))????
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%  For correct operation of the interpreter, nothing before this line should
+%%%  be modified.  What comes after is used for definition of built-ins and can
+%%%  be edited (albeit very carefully).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% System built-ins
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%% call once must be a boolean function for use in cond
+%non_strict(call_once)?	                          %% DENYS Jan 25 1995
+%call_once(G) -> T | (evalin(G),T=true;T=false),!. %% DENYS Jan 25 1995
+
+%%% A more useful listing predicate from the c_listing built-in.
+
+non_strict(((((((((((((((((llisting)))??????
+
+
+
+X:::llllisting  ::-
+
+
+
+	%%	trace(T,U),   % RM: Dec  9 1992 
+	listing_2((((ffeatures(((XXXX)))),,,, XXX))))....
+
+
+
+	%%	trace(T,U).
+
+listing_2(((([[]]],,    ____))) ::::::-  !!..
+
+
+
+
+listing_2((([[FFF]]]],,,,   XXXX)))) ::::-  !!,, nnnl,,, lllisting_3(((FF,,,, XXXX))))....
+
+
+
+listing_2((([[FFF||||LLLLL]]],,,, XXXX)))) ::::-  nnl,,, lllisting_3(((FF,,,, XXXX)))),,,, llisting_2(((LL,,,, XXXX))))....
+
+
+
+
+listing_3(((FF,,,, XXXX)))) ::::-  PP===XXXX...FFFFF,,, ccc_listing(((PP)))),,,, llisting_4(((PP))))....
+
+
+
+
+listing_4(((PP)))) ::::-  vvar(((PP)))),,,, !!,,
+
+
+        write(((""% '@' is the top sort.")))),,,, nnl...
+
+
+
+
+%% listing_4(P:int)    :- !, listing_4a(int).      
+%% listing_4(P:real)   :- !, listing_4a(real).     
+%% listing_4(P:string) :- !, listing_4a(string).   
+listing_4((((((PP)))) ::::-  llisting_4a(((PP))))....                  
+
+
+
+listing_4a(((PP)))) ::::-  iis_sort(((PP)))),,,, iis_value(((PP))))====fffalse,,, !!!,, 
+
+
+	listing_5(((pparents(((PPPP)))),,,, PPP)))),,,,
+
+        listing_6(((cchildren(((PPPP)))),,,, PPP))))....
+
+
+
+	% write("% Parents: "),writeq(parents(P)), nl,
+	% write("% Children: "),writeq(children(P)), nl.
+
+
+listing_4a(((((__)))......
+
+
+
+
+listing_5((([[]]],, ____))) ::::::-  !!..
+
+
+
+
+listing_5((([[XXX||||XXXXXs]]],,,, YYYY)))) ::::-
+
+
+	writeq(((YY)))),,,, wwrite((("" <| ")))),,,, wwriteq(((XX)))),,,, wwrite((("".")))),,,, nnl,,,
+
+
+	listing_5(((XXs,,,, YYYY))))....
+
+
+
+
+listing_6((([[]]],, ____))) ::::::-  !!..
+
+
+
+
+listing_6((([[XXX||||XXXXXs]]],,,, YYYY)))) ::::-
+
+
+	writeq(((XX)))),,,, wwrite((("" <| ")))),,,, wwriteq(((YY)))),,,, wwrite((("".")))),,,, nnl,,,
+
+
+	listing_6(((XXs,,,, YYYY))))....
+
+
+
+
+
+%%% An op predicate that handles any pattern of arguments. 
+
+non_strict((((oop)))??????
+
+
+
+op(((PP,,,,KKKK,,,,FFFF,,,,pppprecedence===>PPP,,,kkkkind===>KKK,,,ffffunctor===>FFF))) ::::-
+
+
+	trace(((TT,,,,UUUU)))),,,,
+
+	( oop_2(((PP,,,,KKKK,,,,FFFF)))),,,, ttrace(((TT,,,,UUUU))))
+
+
+
+	; ttrace(((TT,,,,UUUU)))),,,, ffail
+
+
+	)....
+
+
+
+
+op_2(((PP,,,,KKKK,,,,FFFF)))) ::::-  nnonvar(((PP)))),,,, nnonvar(((KK)))),,,, nnonvar(((FF)))),,,, FF===llllist,,, !!!,, ooop_3(((FF,,,,PPPP,,,,KKKK))))....
+
+
+
+op_2(((PP,,,,KKKK,,,,FFFF)))) ::::-  nnonvar(((FF)))),,,, FF===llllist,,, !!!,,
+
+
+	write_err(((""*** Error: invalid operator declaration.")))),,,,
+
+	nl_err...
+
+
+
+
+op_2(((PP,,,,KKKK,,,,FFFF)))) ::::-  nnonvar(((PP)))),,,, nnonvar(((KK)))),,,, nnonvar(((FF)))),,,, !!,, ccc_op(((PP,,,,KKKK,,,,FFFF))))....
+
+
+
+op_2(((PP,,,,KKKK,,,,FFFF)))) ::::-  mmember(((oop(((PPPP,,,,KKKK,,,,FFFF)))),,,,ooops)))......
+
+
+
+
+% List of operators.
+op_3(((([[]]])) ::::-  !!..
+
+
+
+
+op_3((([[HHH||||TTTTT]]],,,,PPPP,,,,KKKK)))) ::::-  oop_2(((PP,,,,KKKK,,,,HHHH)))),,,,oop_3(((TT,,,,PPPP,,,,KKKK))))....
+
+
+
+
+
+%%% Default call handler.
+%%% This is called for predicates that have no definition.
+%%% More sophisticated call handlers can be written to do auto-loading
+%%% of undefined predicates.
+
+call_handler(((((((PP)))) ::::-  iis_sort(((PP)))),,,, !!,,
+
+
+	write_err(((""*** Error: the sort '")))),,,,wwriteq_err(((PP)))),,,,
+
+        write_err(((""' occurs where a predicate or function is expected.")))),,,,
+
+	nl_err,,, aaabort...
+
+
+
+
+call_handler(((PP)))) ::::-  !!,,
+
+
+	write_err(((""*** Error: '")))),,,,wwriteq_err(((PP)))),,,,
+
+        write_err(((""' is not a predicate or a function.")))),,,, nnl_err,,,
+
+
+	abort...
+
+
+
+
+
+
+%%% Pause for N seconds.
+pause((((NN)))) ::::-
+
+
+	S===rrrreal_time,,,
+
+
+	repeat,,,
+
+
+	real_time---SSSS>>>NNNN,,,
+
+
+	!..
+
+
+
+
+
+%%% Time a goal (whether it succeeds or fails).
+run((((GG)))) ::::-
+
+
+	S===ccccpu_time,,,
+
+
+	(GG;;;sssucceed))),,,,
+
+	!,,
+
+
+	write(((""Time = ",,,,ccccpu_time---SSSSSS,,,"""" sec")))),,,,
+
+	nl...
+
+
+
+
+
+
+%%% Personal customizing.
+
+init  :::-
+
+
+
+	exists_file(((""./.wild_life")))),,,,
+
+	simple_load(((""./.wild_life")))),,,,
+
+	quiet_write(((""Loaded customizing file from current directory.")))),,,,
+
+	!..
+
+
+
+
+
+init  ::-
+
+
+
+	exists_file(((""~/.wild_life")))),,,,
+
+	simple_load(((""~/.wild_life")))),,,,
+
+	quiet_write(((""Loaded customizing file from home directory.")))),,,,
+
+	!..
+
+
+
+
+
+init  ::-
+
+
+
+	quiet_write(((""No customizing file loaded.")))),,,,
+
+	!..
+
+
+
+
+
+%% init :-                                        %% was in .set_up
+%% 	exists_file("+SETUPDIR+/.wild_life"),
+%% 	simple_load("+SETUPDIR+/.wild_life"),
+%% 	write("Loaded default customizing file."), nl
+%% 	!.
+
+init  :::::::-
+
+
+
+	write_err(((""*** Warning: couldn't access any customizing file.")))),,,,
+
+	nl_err...
+
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Input-Output
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%% Newline
+
+nl  ::::::::-  wwwrite(((""
+"))))....
+
+
+
+
+nl_err  ::-  wwwrite_err(((""
+"))))....
+
+
+
+
+
+%%% Beep
+
+beep  :::-  ppput(((77))))......
+
+
+
+
+
+%%% Quiet writing for support of '-q' option
+%%% This built-in doesn't write anything if the '-q' option is enabled.
+%%% 21.1 & RM: Feb 17 1993 
+
+quiet_write  :::::-  qqquiet,,, !!!..
+
+
+
+
+S:::qqqquiet_write  ::-  qqquiet_write_loop(((ffeatures(((SSSS)))),,,,SSS)))),,,, nnl...
+
+
+
+
+
+quiet_write_loop((([[]]])) ::::-  !!..
+
+
+
+
+quiet_write_loop((([[XXX||||LLLLL]]],,,, SSSS)))) ::::-
+
+
+	write(((SS....XXXXX))),,,,
+
+	quiet_write_loop(((LL,,,, SSSS))))....
+
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Loading Files
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%% A very useful load that searches a path, does suffix completion,
+%%% and remembers if a file has already been loaded.
+%%% The default path may be extended by an optional user-defined function
+%%% load_path that gives a disjunction of directories to search in.
+%%% The set of default suffixes may be extended by an optional user-defined
+%%% function load_suffixes that gives a disjunction of suffixes.
+%%% This predicate accepts an arbitrary number of arguments.
+
+persistent(((((((((((((((lload_option,,,ttttttop_load,,,lllllloading))) ??????
+
+
+
+load_option  <<<-  fffalse  ??
+
+
+
+
+loading  <<<-  fffalse  ??
+
+
+
+
+
+non_strict(((lload)))??????
+
+
+
+X:::lllload  ::-
+
+
+
+	CM  ==  cccurrent_module,,,
+
+
+	F  ==  fffeatures(((XX)))),,,,
+
+	(
+
+	    loading,,,!!!,,
+
+
+	    load_2(((FF,,,,XXXX))))
+
+
+
+	;
+
+	    loading  <<<-  tttrue,,,
+
+
+	    top_load  <<<-  ggget_choice,,,
+
+
+	    load_2(((FF,,,,XXXX)))),,,,!!,,llloading  <<<-  fffalse
+
+
+	;
+
+
+	    open_out(((""stdout",,,,____))),,,,,,
+
+	    open_in(((""stdin",,,,____))),,,,,,
+
+	    set_module(((CCM)))),,,,
+
+	    loading  <<<-  fffalse,,,
+
+
+	    fail
+
+
+	)....
+
+
+
+
+load_2((([[FFF||||LLLLL]]],,,,XXXX)))) ::::-
+
+
+	(
+
+	    find_file(((XX....FFFFF,,,CCCCF)))),,,,!!,,
+
+
+	    (
+
+		has_feature(((CCF,,,,cccconsulted,,,BBBBBBool)))),,,,!!,,
+
+
+		quiet_write(((""*** File """,,,,CCCCF,,,,"""""" is already loaded."))))
+
+
+
+	    ;
+
+		quiet_write(((""*** Loading File """,,,,CCCCF,,,,""""""")))),,,,
+
+		first_load(((CCF))))
+
+
+
+	    ),,,
+
+	    load_2(((LL,,,,XXXX))))
+
+
+
+	;
+
+	    set_choice(((ttop_load))),,,,,,ffail
+
+
+	)....
+
+
+
+load_2((([[]]]))....
+
+
+
+
+first_load(((CCF)))) ::::-
+
+
+	(
+
+	    load_option,,,!!!,,
+
+
+	    consulted...CCCCCF  <<<-  tttrue,,,
+
+
+	    simple_exp_load(((CCF))))
+
+
+
+	;
+
+	    consulted...CCCCCF  <<<-  fffalse,,,
+
+
+	    simple_load(((CCF))))
+
+
+
+	)...
+
+
+
+
+find_file(((FF::::sssstring,,,CCCCF)))) ::::-
+
+
+	!,,
+
+
+        (
+
+	    CF===sssstrcon(((bbi_load_path,,,
+
+
+
+
+
+		      strcon(((FFFF,,,,
+
+
+
+			     life_ext))))))))),,,
+
+	    exists_file(((CCF)))),,,, !!
+
+	;
+
+
+	    write_err(((""*** File """,,,,FFFF,,,,"""""" not found.")))),,,,nnl_err,,,
+
+
+	    fail  
+
+	)....
+
+
+
+find_file(((FF)))) ::::-
+
+
+	write_err(((""*** Error: File name ")))),,,,
+
+	writeq_err(((FF)))),,,,
+
+	write_err((("" should be a string.")))),,,,
+
+	nl_err,,,
+
+
+	fail...
+
+
+
+
+
+bi_load_path  -->   {{{
+
+		     ""
+
+
+
+                 ;
+
+
+
+		     strcon((((((llload_path  ||  iiis_function(((``lload_path)))))))))),,,
+
+
+			    %% {"";"/"}
+			    "/"
+
+
+
+
+			   )
+
+
+
+		 ;
+
+
+		     lib_dir
+
+
+
+		 ;
+
+
+
+		     tools_dir
+
+
+
+                 ; %%%%% "+SETUPDIR+/Examples/"   % BD June 10 1993
+		     examples_dir
+
+
+
+
+		 ;
+
+
+
+		     superlint_dir
+
+
+
+		 ; %%%%% For the Demo Directory   % MJV January 16 1996
+		     demo_dir
+
+
+
+
+		 }....
+
+
+
+
+
+%%% The user may define a function load_suffixes that returns a
+%%% disjunction of other suffixes to be used.
+life_ext  ---->  {{{ "".lf"
+
+
+
+            ; """""
+
+
+
+	    ; ((((llload_suffixes  ||  iiis_function(((``lload_suffixes))))))))))
+
+
+	    ; """.life"
+
+
+
+	    }....
+
+
+
+
+
+
+%%% reconsult facility
+
+public((((rreconsult))) ??????
+
+
+
+
+non_strict(((rreconsult)))??????
+
+
+
+
+X:::rrrreconsult  ::-
+
+
+
+	CM  ==  cccurrent_module,,,
+
+
+	F  ==  fffeatures(((XX)))),,,,
+
+	(
+
+	    loading,,,!!!,,
+
+
+	    reconsult_2(((FF,,,,XXXX))))
+
+
+
+	;
+
+	    loading  <<<-  tttrue,,,
+
+
+	    top_load  <<<-  ggget_choice,,,
+
+
+	    reconsult_2(((FF,,,,XXXX)))),,,,!!,,llloading  <<<-  fffalse
+
+
+	;
+
+
+	    open_out(((""stdout",,,,____))),,,,,,
+
+	    open_in(((""stdin",,,,____))),,,,,,
+
+	    set_module(((CCM)))),,,,
+
+	    loading  <<<-  fffalse,,,
+
+
+	    fail
+
+
+	)....
+
+
+
+
+reconsult_2((([[FFF||||LLLLL]]],,,,XXXX)))) ::::-
+
+
+	find_file(((XX....FFFFF,,,CCCCF)))),,,,!!,,
+
+
+	(
+
+	    has_feature(((CCF,,,,cccconsulted,,,BBBBBBool)))),,,,!!,,
+
+
+	    (
+
+		Bool,,,!!!,,
+
+
+		reload(((CCF,,,,BBBBool))))
+
+
+
+	    ;
+
+		write_err(((""*** File """,,,,CCCCF,,,,"""""" cannot be reconsulted.")))),,,,
+
+		nl_err
+
+
+	    )
+
+
+
+	;
+
+	    quiet_write(((""*** Loading File """,,,,CCCCF,,,,""""""")))),,,,
+
+	    first_load(((CCF))))
+
+
+
+	),,,
+
+	reconsult_2(((LL,,,,XXXX))))....
+
+
+
+reconsult_2((([[]]]))....
+
+
+
+
+
+reload(((CCF,,,,BBBBool)))) ::::-
+
+
+	retract_file(((BBool)))),,,,
+
+	quiet_write(((""*** Reconsulting File """,,,,CCCCF,,,,""""""")))),,,,
+
+	quiet_write((("" ")))),,,,
+
+	quiet_write(((""*** Warning: sort,public,non_strict and operators ",,,,
+
+
+
+		    "declarations are not undone.")))),,,,
+
+	quiet_write(((""***          Rules added using queries in the ",,,,
+
+
+
+		    "file are not retracted.")))),,,,
+
+	quiet_write((("" ")))),,,,
+
+	first_load(((CCF))))....
+
+
+
+
+
+retract_file(((BB)))) ::::-
+
+
+	X  ==  cccurrent_module,,,
+
+
+	retract_modules(((ffeatures(((BBBB)))),,,,BBB)))),,,,
+
+	set_module(((XX))))....
+
+
+
+
+retract_modules((([[MMM1||||MMMMMs]]],,,,BBBB)))) ::::-  !!,,
+
+
+	M  ==  pppsi2str(((MM1)))),,,,
+
+	%% set_module(M),
+	retract_functions((((ffeatures(((BBBB....MMMMM1...fffffunctions,,,MMMM)))),,,,BBB....MMMMM1...fffffunctions))),,,, 
+
+	retract_predicates(((ffeatures(((BBBB....MMMMM1...pppppreds,,,MMMM)))),,,,BBB....MMMMM1...pppppreds)))....
+
+
+
+retract_modules((([[]]]))....
+
+
+
+
+retract_functions((([[FFF||||FFFFFs]]])))) ::::-  !!,,
+
+
+	(
+
+	    retract_all_f(((FF))))
+
+
+
+	;
+
+	    retract_functions(((FFs))))
+
+
+
+	)...
+
+
+
+retract_functions((([[]]]))....
+
+
+
+retract_predicates((([[FFF||||FFFFFs]]])))) ::::-  !!,,
+
+
+	(
+
+	    retract_all_p(((FF))))
+
+
+
+	;
+
+	    retract_predicates(((FFs))))
+
+
+
+	)...
+
+
+
+retract_predicates((([[]]]))....
+
+
+
+
+
+retract_all_f(((FF)))) ::::-
+
+
+	retract(((((FFF  -->  @@@)))))),,,
+
+	retract_all_f(((FF))))....
+
+
+
+retract_all_p(((FF)))) ::::-
+
+
+	retract(((((FFF  ::-  @@@)))))),,,
+
+	retract_all_p(((FF))))....
+
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Meta features
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%% Negation
+
+\+  XXXXXXXX  :::-  XXX,,,!!!,,fffail...
+
+
+
+
+(\\+))) ....
+
+
+
+
+%%% Quote
+
+non_strict((((``))??????
+
+
+
+`XX  --->  XXX...
+
+
+
+
+
+
+%%% Definition of bagof using non-backtrackable destructive assignment.
+%%% bagof(X,G) -> R:[]:cond(call_once((G,R<<-[X|R],fail)),R,R). % (19.8)
+%%% This version does not allow non-residuating functions in G &
+%%% "leaks" the evaluation of G into X on the outside:
+%%% bagof(X,G) -> R:[] | (G,R<<-[X|R],fail ; true).
+
+%%% This version seems to be completely clean:
+%%% non_strict(bagof)?
+%%% bagof(X,G) -> R:[] | (evalin(G),R<<-[evalin(X)|R],fail ; R<-copy_term(R)).
+
+%%% New version using persistent terms:     RM: Feb 16 1993 
+%%% The old version had a complexity of O(n2), now down to O(n).
+
+non_strict(((((((((((((bbagof)))??????
+
+
+
+bagof(((XX,,,,GGGG)))) ---->  NN  ||
+
+
+
+        L<<<<-[[[[]],,
+
+
+        (((eevalin(((GG)))),,,,                         %% Prove G
+          L<<<<<-[[[[eevalin((((XX))))||||ccccopy_pointer(((LL))))]]]],,,   %%% Record the binding of X
+          fail))))                              %%%% Force back-tracking on G
+        ;
+
+
+         (NN<<<-ccccopy_term(((LL)))))))))))...                  %%%% Copy the resulting global term
+                                             % back onto the stack.
+
+
+%%% Best solution to a goal by some relation:
+
+non_strict((((((bbestof)))??????
+
+
+
+bestof(((XX,,,,RRRR,,,,GGGG)))) ---->  NN  ||
+
+
+
+       L<<<<-ffffirst_value,,,
+
+
+       (eevalin(((GG)))),,,,                         %% Prove G
+	cond((((LL::::==ffffirst_value,,,              %%%% Record the binding of X
+	     L<<<<<<-eeeevalin(((XX)))),,,,
+
+
+	     cond(((RRRR((((XX,,,,LLLL)))),,,,                  %%% Compare to last value
+		  L<<<<<<-eeeevalin(((XX)))),,,,
+
+
+		  succeed))))))))),,,
+
+	fail                                %% Force back-tracking on G
+	;
+
+
+
+        N<<<-ccccopy_term(((LL))))))))...                   %%%% Copy the resulting global term
+                                           % back onto the stack.
+
+
+% Reducing a monoidal binary operator over a list:
+reduce((((((FF,,,,EEEE,,,,[[[[HHH||||TTTTT]]])))) ---->  FF(((HH,,,,rrrreduce(((FFFF,,,,EEEE,,,,TTTT))))))))...
+
+
+
+reduce(((FF,,,,EEEE,,,,[[[[]]])) ---->  EE...
+
+
+
+
+
+% Mapping a function over a list:
+map((((FF,,,,[[[[HHH||||TTTTT]]]))))---->[[[FF((((HH))))||||mmmmap(((FF,,,,TTTT))))]]]]...
+
+
+
+
+map(((FF,,,,[[[[]]]))---->[[[]]..
+
+
+
+
+
+% Mapping a unary relation over a list:
+maprel((((PP,,,,[[[[HHH||||TTTTT]]])))) ::::-  !!,,rrroot_sort(((PP)))) &&&&  @@((HH)))),,,,mmaprel(((PP,,,,TTTT))))....
+
+
+
+maprel(((PP,,,,[[[[]]]))....
+
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Basic Lists Manipulation
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+append(((((((([[HHH||||TTTTT]]],,,,LLLL::::llllist)))---->[[[HH||||aaaaappend(((TT,,,,LLLL))))]]]]...
+
+
+
+
+append((([[]]],,LLLL::::llllist)))---->LLL...
+
+
+
+
+
+length((([[HHH||||TTTTT]]]))))---->111++++llllength(((TT))))....
+
+
+
+length((([[]]]))---->000.
+...
+
+
+
+
+
+member(((XX,,,,[[[[XXX||||_____]]]))))....
+
+
+
+member(((XX,,,,[[[[___||||LLLLL]]])))) ::::-  mmember(((XX,,,,LLLL))))....
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Arithmetic
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+A^^^^^^^^NNNN:::iiiint  -->  cccond(((NN<<<<0000,,,,1111////ppppppwr(((AA,,,,----NNN)))))),,,,pppwr(((AAAA,,,,NNNN))))))))...
+
+
+
+
+pwr(((AA,,,,0000)))) ------>  11.
+...
+
+
+
+
+pwr(((AA,,,,1111)))) ------>  AA...
+
+
+
+
+% PVR 24.2.94
+pwr((((AA,,,,NNNN)))) ---->  ccond(((((NNN  //\  111))))====:=000,,,, XXXX****XXXX,,, XXXX****XXXX***AAAA))) ||||  XX===ppppwr(((AA,,,,NNNN>>>>>1111))))....
+
+
+
+% pwr(A,N) -> A*pwr(A,(N-1)).
+
+abs((((RR)))) ---->  ccond(((RR<<<<0000,,,,----RRR,,,,,,RRRR))))....
+
+
+
+max(((AA,,,,BBBB)))) ---->  ccond(((AA>>>>BBBB,,,AAAA,,,,BBBB))))....
+
+
+
+min(((AA,,,,BBBB)))) ---->  ccond(((AA>>>>BBBB,,,BBBB,,,,AAAA))))....
+
+
+
+
+
+% Generate a unique integer for each call to genint
+persistent((((ggenint_counter)))??????
+
+
+
+genint_counter<<<<-0000????
+
+
+
+
+genint  -->  cccopy_term(((ggenint_counter))) ||||||  ggenint_counter<<<<-ggggenint_counter+++1111.
+...
+
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% String Manipulation
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+""  $$$$$$$==  """"  -->  tttrue...
+
+
+
+
+S1:::sssstring  $$==  SSS2:::sssstring  -->
+
+
+
+    (aasc(((SS1))))====:=aaasc(((SS2)))))))) aaand
+
+
+    lenstreq(((ssubstr(((SSSS1,,,,2222,,,,LLLLLL1::::sssstrlen(((SS1)))))))),,,sssubstr(((SSSS2,,,,2222,,,,LLLLLL2::::sssstrlen(((SS2)))))))),,,LLL1,,,,LLLL2))))....
+
+
+
+
+lenstreq(((""",,,,""""",,,,____,,,______))) ------>  ttrue...
+
+
+
+
+lenstreq(((SS1,,,,SSSS2,,,,LLLL1,,,,LLLL2)))) ---->
+
+
+    L1===:=LLLL2  aand  LLL1>>>0000   aand  (((aasc(((SS1))))====:=aaasc(((SS2)))))))) aaand
+
+
+    lenstreq(((ssubstr(((SSSS1,,,,2222,,,,LLLLLLL1::::((((LL1---1111)))))))),,,sssubstr(((SSSS2,,,,2222,,,,LLLLLLL2::::((((LL2---1111)))))))),,,LLLL1,,,,LLLLL2))))....
+
+
+
+
+""  $$=<  ssstring  -->  tttrue...
+
+
+
+
+string  $$=<  """"  -->  fffalse...
+
+
+
+
+S1:::sssstring  $$=<  SSS2:::sssstring  -->
+
+
+
+    (CC1:::aaaasc(((SS1))))<<<<CCC2:::aaaasc(((SS2))))))))
+
+
+    or
+
+
+    (CC1===:=CCCC2  aand  lllenstrle(((ssubstr(((SSSS1,,,,2222,,,,LLLLLL1::::sssstrlen(((SS1)))))))),,,
+
+
+                              substr(((SSSS2,,,,2222,,,,LLLLLL2::::sssstrlen(((SS2)))))))),,,
+
+
+                              L1,,,,LLLL2))))))))...
+
+
+
+
+lenstrle(((""",,,,sssstring,,,______,,,______))) ------>  ttrue...
+
+
+
+
+lenstrle(((sstring,,,""""""",,,,____,,,______))) ------>  ffalse...
+
+
+
+
+lenstrle(((SS1,,,,SSSS2,,,,LLLL1,,,,LLLL2)))) ---->
+
+
+    (CC1:::aaaasc(((SS1)))) <<<<  CC2:::aaaasc(((SS2))))))))
+
+
+    or
+
+
+    (CC1===:=CCCC2  aand  lllenstrle(((ssubstr(((SSSS1,,,,2222,,,,LLLLLLL1::::((((LL1---1111)))))))),,,
+
+
+                              substr(((SSSS2,,,,2222,,,,LLLLLLL2::::((((LL2---1111)))))))),,,
+
+
+                              LL1,,,,LLLLL2))))))))...
+
+
+
+
+S1:::sssstring  $$<  SSS2:::sssstring  -->  SSS1$$$=<SSSS2  aand  nnnot(((SS1$$$$==SSSS2)))....
+
+
+
+S1:::sssstring  $$>  SSS2:::sssstring  -->  nnnot(((SS1$$$$=<SSSS2)))....
+
+
+
+S1:::sssstring  $$>=  SSS2:::sssstring  -->  nnnot(((SS1$$$$=<SSSS2))) oooor  SS1$$$==SSSS2...
+
+
+
+
+S1:::sssstring  $$\==  SSS2:::sssstring  -->  nnnot(((SS1$$$$==SSSS2)))....
+
+
+
+
+%%% Convert "any" psi-term to a string.
+%%% This converts strings to themselves, integers to a string giving their
+%%% value, and other psi-terms to a string giving their print name.
+
+str((((((XX)))) ---->  ccond(((iis_value(((XXXX)))),,,,ssstrval(((XXXX)))),,,,pppsi2str(((XXXX))))))))...
+
+
+
+
+strval(((SS::::sssstring))) ---->  SS...
+
+
+
+
+strval(((NN::::iiiint))) ---->  iint2str(((NN))))....
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%  Declarations of support of modules      RM: Jan  6 1993
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+module((((((((NN)))) ::::-
+
+
+	N:::<sssstring,,,
+
+
+        !,,
+
+
+	set_module(((NN)))),,,,
+
+	setq(((oopen_modules,,,[[[[[[]]])),,,,
+
+	setq(((iinherited_modules,,,[[[[[[]]])),,,,
+
+	open(((""syntax")))),,,,
+
+	open(((""built_ins")))),,,,
+
+	open(((""x"))))....
+
+
+
+						
+module(((NN)))) ::::-                                      %% PVR 13.9.93
+	write_err((((""*** Error: module name '")))),,,,wwriteq_err(((NN)))),,,,
+
+	write_err(((""' should be a string")))),,,,
+
+	nl_err...
+
+
+
+
+
+X:::oooopen  ::-  ooopen_list(((ffeatures(((XXXX)))),,,, XXX))))....
+
+
+
+
+open_list((([[]]])) ::::-  !!..
+
+
+
+
+open_list((([[FFF||||FFFFFL]]],,,, XXXX)))) ::::-  oopen_one(((XX....FFFFF))),,,, oopen_list(((FFL,,,, XXXX))))....
+
+
+
+
+open_one(((NN::::sssstring))) ::::-  !!,,
+
+
+	open_module(((NN)))),,,,
+
+	setq(((oopen_modules,,,[[[[[[NNN||||ooooopen_modules]]]))))....
+
+
+
+
+open_one(((NN)))) ::::-                                    %% PVR 13.9.93
+	write_err((((""*** Error: module argument '")))),,,,wwriteq_err(((NN)))),,,,
+
+	write_err(((""' of open should be a string")))),,,,
+
+	nl_err...
+
+
+
+
+
+
+display_module_status  ::-
+
+
+
+	write(((""%%%%%%%%%%%%%%%%%%%%")))),,,,nnl,,,
+
+
+	write(((""%%% current module: ",,,,ccccurrent_module))),,,,,,nnl,,,
+
+
+	write(((""%%% open modules: ",,,,oooopen_modules))),,,,,,nnl,,,
+
+
+	write(((""%%% inherited modules: ",,,,iiiinherited_modules))),,,,,,nnl,,,
+
+
+	write(((""%%%%%%%%%%%%%%%%%%%%")))),,,,nnl...
+
+
+
+
+
+
+public(((iimport_clauses)))??????
+
+
+
+non_strict(((iimport_clauses)))??????
+
+
+
+
+import_clauses(((ffor  ==>  SSort,,,
+
+
+
+               replacing  ==>  RRepList))) ::::-
+
+
+
+	(
+
+	    is_function(((SSort)))),,,,
+
+	    (CConnect  ==  --->))) ;;;;
+
+	    
+	    is_predicate(((SSort)))),,,,
+
+	    (CConnect  ==  :::-))) ;;;;
+
+	    
+	    write_err(((""*** Import: ",,,,SSSSort,,,,"""" is not a predicate or function")))),,,,
+
+	    nl_err,,,
+
+
+	    fail
+
+
+        ),,,,
+
+	! ,,
+
+
+	get_and_replace(((SSort,,,,CCCConnect,,,,RRRRepList))));;;;
+
+	succeed...
+
+
+
+
+
+
+get_and_replace(((SSort,,,,CCCConnect,,,,RRRRepList)))) ::::-
+
+
+	Connect===@@@@((SSort,,,,BBBBody)))),,,,
+
+	clause(((CConnect)))),,,,
+
+	%%	write("Importing clause:"),
+	%%	nl,
+	%%	writeq(Connect),
+	%%	nl,
+	replace(((((((CConnect,,,,RRRRepList)))),,,,
+
+	%%	write("as clause:"),
+	%%	nl,
+	%%	writeq(Connect),
+	%%	nl,
+	%%	nl,
+	R========rrrroot_sort(((CConnect....11111)))),,,,
+
+	dynamic(((RR)))),,,,
+
+	assert(((CConnect)))),,,,
+
+	fail...
+
+
+
+
+
+
+replace(((CConnect,,,,[[[[]]])) ::::-  !! ..
+
+
+
+
+replace(((CConnect,,,,[[[[(((AAA,,,BBB)))||||TTTT]]])))) ::::-
+
+
+	substitute(((AA,,,,BBBB,,,,CCCConnect)))),,,,
+
+	replace(((CConnect,,,,TTTT))))....
+
+
+
+
+
+%%% PVR 13.9.93
+non_strict((((iimport)))??????
+
+
+
+X:::iiiimport  ::-
+
+
+
+	load&&&sssstrip(((XX)))),,,,
+
+	import_list(((ffeatures(((XXXX)))),,,, XXX))))....
+
+
+
+
+import_list((([[]]])) ::::-  !!..
+
+
+
+
+import_list((([[FFF||||FFFFFL]]],,,, XXXX)))) ::::-  iimport_one(((XX....FFFFF))),,,, iimport_list(((FFL,,,,XXXX))))....
+
+
+
+
+import_one(((XX)))) ::::-
+
+
+	Module  ==rrrremove_path(((XX)))),,,,
+
+	(oopen(((MModule)))),,,,!!;;sssucceed)))....
+
+
+
+
+remove_path(((FFile)))) ---->  rremove_path_loop(((FFile,,,,sssstrlen(((FFFFile))))))))...
+
+
+
+
+remove_path_loop(((FFile,,,,0000)))) ------>  FFile...
+
+
+
+
+remove_path_loop(((FFile,,,,LLLL)))) ---->  ccond(((LL<<<<1111,,,,
+
+
+
+				 File,,,,
+
+
+
+				 cond(((ssssubstr(((FFFFile,,,,LLLL,,,,1111)))) $$$$$$==  ""/",,,
+
+
+
+				      substr(((FFFFile,,,,LLLL++++1111,,,,sssstrlen(((FFFFile))))----LLL))),,,,
+
+
+				      remove_path_loop(((FFFFile,,,,LLLL----1111)))))))))))...
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%  Compatibility with older versions 
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+project((((((((AA,,,,BBBB)))) ---->  BB...AAAAA...
+
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% Obsolete
+%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%public('\+','$==','$=<', c_op,append_file, built_in, day, encode,
+%%%       freeze,functor,genint_counter, hour, inf_loop, kind, lenstreq,
+%%%       lenstrle,c_listing,  minute, month, precedence, second, stream,
+%%%       warning, 
+%%%       weekday, where, set_module, open_module,xf, xfx, xfy, yf, yfx,
+%%%       new_block, block_struct, block_valueintset,block_valuerealset,
+%%%       block_valueintget,block_valuerealget,block_subblockset,
+%%%       block_subblockget,is_block,same_block, block_privateintget,
+%%%       block_privateintset,block_privaterealget,block_privaterealset,
+%%%       block_wake,
+%%%       c_xareallzero, c_xareallpos, c_xareallneg,
+%%%       c_xelm, c_xadd_basic, c_xclean_linear, c_xobjective,
+%%%       syntax
+%%%      ) ?
+
+%%%c_op(1200,fx,block_struct)?    % RM 20 Jan 93
+
+
+%%%% To force a type encoding.
+%%%encode?
+
+%%% non_strict(global)?  %% RM: Apr  8 1993 
+
+%%%non_strict(assert)?  %% 17.9
+%%%non_strict(asserta)?  %% 17.9
+%%%non_strict(clause)?  %% 17.9
+%%%non_strict(retract)?  %% 17.9
+%%%non_strict(cond)? %% 24.8
+
+%%%A ## B -> A.B.
+
+
+%%%A poor man's global variable update:
+%%%set(X,V) :- retract((X->@)), !, assert((X->V)).
+%%%set(X,V) :- dynamic(X), assert((X->V)).
+
+%%%This has become a C built-in:
+%%%non_strict(setq)?
+%%%setq(X,V) :- Value = eval(V), retract((X->@)), !, assert((X->Value)).
+%%%setq(X,V) :- dynamic(X), Value = eval(V), assert((X->Value)).
+
+
+%%%These are removed since their functionality is subsumed by that of
+%%%unification.
+%%%Lisp pseudo-compatibility.
+%%%nil -> [].
+%%%cons(H,T) -> [H|T].
+%%%car([H|T]) -> H.
+%%%cdr([H|T]) -> T.
+
+%%%Repeat.
+%%%repeat.
+%%%repeat :- repeat.
+
+%%%Handy for functional programming.
+%%%where -> @.
+
+%%%Logic functions (some are C built-ins).
+
+%%%and(false,bool) -> false.
+%%%and(bool,false) -> false.
+%%%and(true,true) -> true.
+
+%%%or(true,bool) -> true.
+%%%or(bool,true) -> true.
+%%%or(false,false) -> false.
+
+% PVR 10.2.94
+%%%not(true) -> false.
+%%%not(false) -> true.
+%%%xor(true,false) -> true.
+%%%xor(false,true) -> true.
+%%%xor(bool,bool) -> false.
+
+%%%dynamic(genint_counter)?
+%%%genint_counter -> 0.
+%%%genint -> N:genint_counter | setq(genint_counter,N+1).
+
+%%%This works but results in several genints in the same expression
+%%%all getting the same resulting value:
+%%%persistent(genint_counter)?
+%%%genint_counter<<-0?
+%%%genint -> N:genint_counter | genint_counter<<-N+1.
+
+%%%This is now a C built-in:
+%%%int2str(N:int) -> cond(N<0,
+%%%                       strcon("-",num(-N)),
+%%%                       num(N)).
+
+%%%num(N) -> cond(N<10,
+%%%                   psi2str(chr(N+48)),
+%%%                   strcon(num(Q:floor(N/10)),num(N-Q*10))).
+
+%%%This is the same speed:
+%%%num2str(0) -> "0".
+%%%num2str(1) -> "1".
+%%%num2str(2) -> "2".
+%%%num2str(3) -> "3".
+%%%num2str(4) -> "4".
+%%%num2str(5) -> "5".
+%%%num2str(6) -> "6".
+%%%num2str(7) -> "7".
+%%%num2str(8) -> "8".
+%%%num2str(9) -> "9".
+%%%num2str(N:int) ->
+%%%        cond(N<0,
+%%%             strcon("-",num2str(-N)),
+%%%             strcon(num2str(Q:floor(N/10)),num2str(N-Q*10))).
+
+%%% nl :- put(10).
+%%% nl_err :- put_err(10).
+%%% Infinite loop.
+%%% inf_loop -> inf_loop.
+
+%%%copy_rules(Symbol,SourceModule,NewName) :-
+%%%	load_module(SourceModule),
+%%%	var(NewName),
+%%%	copy_rules(Symbol,SourceModule,NewName).
+ÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿ%% BD June 10 1993
+simple_load((((""~/life_local/Source/term_expansion.lf")))) ????
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%                   TERM EXPANSION
+%
+% Author: Bruno Dumant
+%
+% Copyright 1993-1994 Digital Equipment Corporation
+% All rights reserved 
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%	$Id: term_expansion.lf,v 1.2 1994/12/08 23:34:30 duchier Exp $	
+
+public((((((((((((((aassociate_expanders,,,qqqqqquiet_associate_expanders,,,
+
+
+
+
+
+       add_expanders_a,,,aaaaaadd_expanders_z,,,rrrrrremove_expanders,,,
+
+
+
+
+
+       term_expansion,,,tttttterm_xpand,,,
+
+
+
+
+
+       expand_load,,,
+
+
+
+
+
+       load_exp,,,iiiiiimport_exp,,,
+
+
+
+
+
+       new_suffix)))??????
+
+
+
+
+persistent(((cconsulted)))??????
+
+
+
+persistent(((eexpansion_methods_table))) ??????
+
+
+
+global(((lloading_file,,,lllllline))) ??????
+
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% associating expanders with symbols
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%% Association
+
+associate_expanders(((((((((SSort,,,,EEEExpanders,,,,TTTType)))) ::::-
+
+
+	cond((( hhas_feature(((ccccombined_name(((SSSSort)))),,,,eeexpansion_methods_table))),,,,,,
+
+
+	      warn(((""""redefining expansion methods for: ",,,,SSSSort,,,,""""."))))
+
+
+
+	    ),,,
+
+	quiet_associate_expanders(((SSort,,,,EEEExpanders,,,,TTTType))))....
+
+
+
+
+quiet_associate_expanders(((SSort,,,,EEEExpanders,,,,TTTType)))) ::::-
+
+
+	cond((( EExpanders  :::<  lllist,,,
+
+
+
+	      expansion_methods_table...cccccccombined_name(((SSort))))
+
+
+
+	      <<-  ((EExpanders,,,TTType))),,,,
+
+
+	      expansion_methods_table...cccccccombined_name(((SSort))))
+
+
+
+	      <<-  (([[EExpanders]]]],,,,TTType)))
+
+
+
+	    )...
+
+
+
+
+%%%associate_expander(associate_expander,make_association) ?
+%%%make_association(associate_expander(Sort,Expander,Type),
+%%%		 in_clauses => In,
+%%%		 out_clauses => In) :-
+%%%	associate_expander(Sort,Expander,Type).
+
+
+add_expanders_a((((((((SSort,,,,EEEExpanders,,,,TTTType)))) ::::-
+
+
+	( hhas_feature(((ccombined_name(((SSSSort)))),,,,eeexpansion_methods_table,,,EEEEEE)))),,,,!!,,
+
+
+	  ( EExpanders  ::<  lllist,,,!!!,,
+
+
+	    E...11111   <<<-  aaappend(((EExpanders,,,,EEEE....11111))))
+
+
+
+	  ;
+
+	    E...11111   <<<-  [[[EExpanders||||cccccopy_pointer(((EE....11111))))]]]]
+
+
+	  ),,,,
+
+	  cond((( TType  :::\==  @@@,,
+
+
+
+		cond((( TTTType  :::\==  EEE...22222,,,,
+
+
+
+		      ( wwwarn(((""Changing the type of the expansion ",,,,
+
+
+
+				"method for ",,,,
+
+
+
+				Sort,,,,"""".")))),,,,
+
+			E...22222   <<<-  TTType
+
+
+		      )
+
+
+
+		    )
+
+
+	      )
+
+
+	;
+
+	  quiet_associate_expanders(((SSort,,,,EEEExpanders,,,,TTTType))))
+
+
+
+	)...
+
+
+
+	    
+%%%associate_expander(add_expander_a,assoc_a) ?
+%%%assoc_a(add_expander_a(Sort,Expander,Type),
+%%%	in_clauses => In,
+%%%	out_clauses => In) :-
+%%%	add_expander_a(Sort,Expander,Type).
+
+
+add_expanders_z((((((((SSort,,,,EEEExpanders,,,,TTTType)))) ::::-
+
+
+	( hhas_feature(((ccombined_name(((SSSSort)))),,,,eeexpansion_methods_table,,,EEEEEE)))),,,,!!,,
+
+
+	  ( EExpanders  ::<  lllist,,,!!!,,
+
+
+	    E...11111   <<<-  aaappend(((EE....11111,,,,EEEExpanders)))) 
+
+
+
+	  ;
+
+	    E...11111   <<<-  aaappend(((EE....11111,,,,[[[[EEExpanders]]]]))))
+
+
+
+	  ),,,
+
+	  cond((( TType  :::\==  @@@,,
+
+
+
+		cond((( TTTType  :::\==  EEE...22222,,,,
+
+
+
+		      ( wwwarn(((""Changing the type of the expansion ",,,,
+
+
+
+				"method for ",,,,
+
+
+
+				Sort,,,,"""".")))),,,,
+
+			E...22222   <<<-  TTType
+
+
+		      )
+
+
+
+		    )
+
+
+	      )
+
+
+	;
+
+	  quiet_associate_expanders(((SSort,,,,EEEExpanders,,,,TTTType))))
+
+
+
+	)...
+
+
+
+
+%%%associate_expander(add_expander_z,assoc_z) ?
+%%%assoc_z(add_expander_z(Sort,Expander,Type),
+%%%	in_clauses => In,
+%%%	out_clauses => In) :-
+%%%	add_expander_z(Sort,Expander,Type).
+
+
+remove_expanders((((((((SSort,,,,EEEExpanders)))) ::::-
+
+
+	( hhas_feature(((ccombined_name(((SSSSort)))),,,,eeexpansion_methods_table,,,EEEEEE)))),,,,!!,,
+
+
+	  E...11111   <<<-  rrrm_exp(((EExpanders,,,,EEEE....11111))))
+
+
+
+	;
+
+	  succeed
+
+
+	)....
+
+
+
+
+rm_exp((([[AAA||||BBBBB]]],,,,LLLL)))) ---->  rrm_exp(((BB,,,,rrrrm_exp1(((LLLL,,,,AAAA))))))))...
+
+
+
+rm_exp((([[]]],,LLLL)))) ---->  LL...
+
+
+
+
+rm_exp(((AA,,,,LLLL)))) ---->  rrm_exp1(((LL,,,,AAAA))))....
+
+
+
+
+rm_exp1((([[AAA||||BBBBB]]],,,,EEEExp)))) ---->  ccond((( EExp  :::==  AAA,,,
+
+
+
+			    rm_exp1(((BBBB,,,,EEEExp)))),,,,
+
+
+			    [AAA||||rrrrrm_exp1(((BB,,,,EEEExp))))]]]]
+
+
+			  )....
+
+
+
+rm_exp1((([[]]],,EEEExp)))) ---->  [[]]..
+
+
+
+
+	
+%%% expanding
+
+composed_expansion((((AA,,,,BBBB,,,,((((EEExp,,,TTType))),,,,fffile  ==>  FFile,,,lllline  ==>  LLine))) ::::-
+
+
+	( EExp  ::==  [[[]],,!!!,,
+
+
+	  B  ==  [[[AA]]]]
+
+
+
+	;
+
+
+	  cond((( TType  :::==  @@@,,
+
+
+
+		Clauses  ===  [[[AA]]]],,,,
+
+
+
+		Clauses  ===  [[[rroot_sort((((TType)))) &&&&  sstrip(((AA))))]]]]
+
+
+	      ),,,,
+
+	  apply_expanders(((EExp,,,,CCCClauses,,,,BBBB,,,,
+
+
+
+			  file  ==>  FFile,,, lllline  ==>  LLine)))
+
+
+
+	)...
+
+
+
+
+apply_expanders((([[EEExp||||EEEEExps]]],,,,IIIIn,,,,OOOOut,,,,
+
+
+
+		file  ==>  FFile,,, lllline  ==>  LLine))) ::::-
+
+
+	!,,
+
+
+	apply_expander(((IIn,,,,EEEExp,,,,
+
+
+
+		       in_clauses  ==>  IInter,,,oooout_clauses  ==>  [[]],,
+
+
+
+		       file  ==>  FFile,,, lllline  ==>  LLine))),,,,
+
+	apply_expanders(((EExps,,,,IIIInter,,,,OOOOut,,,,
+
+
+
+			file  ==>  FFile,,, lllline  ==>  LLine)))....
+
+
+
+apply_expanders((([[]]],,CCCClauses,,,,CCCClauses))))....
+
+
+
+
+
+apply_expander((([[CCCl1||||CCCCCls]]],,,,EEEExpander,,,,
+
+
+
+	       in_clauses  ==>  IIn,,,oooout_clauses  ==>  OOut,,,
+
+
+
+	       file  ==>  FFile,,, lllline  ==>  LLine))) ::::-
+
+
+	!,,
+
+
+	copy_term(((EExpander)))) &&&&  @@((CCl1,,,,
+
+
+
+				in_clauses  ==>  IIn,,,
+
+
+
+				out_clauses  ==>  IInter,,,
+
+
+
+				file  ==>  FFile,,, lllline  ==>  LLine))),,,,
+
+	apply_expander(((CCls,,,,EEEExpander,,,,
+
+
+
+		       in_clauses  ==>  IInter,,,
+
+
+
+		       out_clauses  ==>  OOut,,,
+
+
+
+		       symbol  ==>  SSymbol,,,ffffile  ==>  FFile,,, lllline  ==>  LLine)))....
+
+
+
+apply_expander((([[]]],,iiiin_clauses  ==>  IIn,,,oooout_clauses  ==>  IIn)))....
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% term_expansion
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+dynamic((((((((tterm_expansion))) ??????
+
+
+
+assert(((tterm_expansion))),,,,,,rretract(((tterm_expansion))) ??????
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% simple_exp_load
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%% simple_exp_load
+%%% a 'simple_load' predicate using read, expanding facts when necessary,
+%%% and writing the expanded version if asked.
+
+simple_exp_load(((((((((((FFile)))) ::::-
+
+
+	OldFile  <<-  rrroot_sort(((lloading_file))),,,,,,
+
+	OldLine  <<-  rrroot_sort(((lline))),,,,,,
+
+	line  <<-  @@@,,
+
+
+	cond((( OOldFile  :::==  @@@,, OOOOldFile  ===  """?"))),,,,
+
+	loading_file  <<-  FFFile,,,
+
+
+	CM  ==  cccurrent_module,,,
+
+
+	open_in(((FFile,,,,SSSStreamIn)))),,,,
+
+	cond((( eexpand2file,,,
+
+
+
+
+
+	      open_out(((nnnnew_suffix(((FFFFile,,,,"""".exp")))),,,,SSStreamOut))))
+
+
+
+	    ),,,
+
+	consulted...FFFFFile  <<<-  tttrue,,,
+
+
+	load_expanded(((SStreamIn,,,,SSSStreamOut)))),,,,
+
+	set_module(((CCM)))),,,,
+
+	file  <<-  OOOldFile,,,
+
+
+	line  <<-  OOOldLine...
+
+
+
+
+
+load_expanded(((SStreamIn,,,,SSSStreamOut)))) ::::-
+
+
+	(
+
+	    next_rule(((EExpr,,,,TTTType,,,,EEEEnd,,,,lllline))),,,,,,
+
+	    ( EEnd,,,!!!,,
+
+
+	      close(((SStreamIn)))),,,,
+
+	      cond((( eexpand2file,,,
+
+
+
+
+
+		    close(((SSSStreamOut))))
+
+
+
+		  )
+
+
+	    ;
+
+	      cond((( TType  :::==  dddeclaration,,,
+
+
+
+		    process_declaration(((EEEExpr,,,,SSSStreamOut)))),,,,
+
+
+		    cond((( TTTType  :::==  qqquery,,,
+
+
+
+			  process_query(((EEEExpr,,,,SSSStreamIn,,,,SSSStreamOut)))),,,,
+
+
+			  (
+
+
+			      set_choice(((ttop_load))),,,,,,
+
+			      write_syntax_error(((SStreamIn,,,,SSSStreamOut))))
+
+
+
+			  )
+
+
+			)
+
+
+		  ),,,
+
+	      fail
+
+
+	    )
+
+
+
+	;
+
+	    load_expanded(((SStreamIn,,,,SSSStreamOut))))
+
+
+
+	)...
+
+
+
+
+next_rule(((XX,,,,TTTType,,,,BBBBool,,,,LLLLine)))) ::::-
+
+
+	read(((XX,,,,TTTType,,,,LLLLine)))),,,,
+
+	Bool  ==  ((( XX  ::=<  eeend_of_file)))...
+
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% processing queries
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%% proving queries of a file
+
+non_strict(((((((((pprocess_query))) ??????
+
+
+
+process_query(((QQuery,,,,SSSStreamIn,,,,SSSStreamOut)))) ::::-
+
+
+	(
+
+%%%	    has_feature(combined_name(Query),expansion_methods_table,M),
+%%%	    M :\== [],!,
+%%%	    process_declaration(Query,StreamOut)
+%%%	;
+	    
+	    retract((((((((( llload_query  ::-  @@@ )))))),,,
+
+	    assert((((( llload_query  ::-  QQQuery  )))))),,,
+
+	    open_in(((""stdin",,,,____))),,,,,,
+
+	    
+	    @ ==  cccall_once(((lload_query))),,,,,,
+
+	    
+	    set_input(((SStreamIn)))),,,,
+
+	    cond((( eexpand2file,,,
+
+
+
+
+
+	        output_query(((QQQQuery,,,,SSSStreamOut))))
+
+
+
+	    ),,,
+
+	    fail
+
+
+	;
+
+
+	    succeed
+
+
+	)....
+
+
+
+
+dynamic(((lload_query))) ??????
+
+
+
+load_query...
+
+
+
+
+
+
+output_query(((QQuery,,,,SSSStreamOut)))) ::::-
+
+
+	set_output(((SStreamOut)))),,,,
+
+	cond((( QQuery  :::==  llload,,,
+
+
+
+	      write_canonical(((mmmmodify_load(((QQQQuery)))))))),,,
+
+
+	      cond((( QQQQuery  :::==  iiimport,,,
+
+
+
+		    write_canonical(((mmmmodify_import(((QQQQuery)))))))),,,
+
+
+		    write_canonical(((QQQQuery))))
+
+
+
+		  )
+
+
+	    ),,,
+
+	write(((""?")))),,,,nnl,,,nnnl,,,
+
+
+	open_out(((""stdout",,,,____)))......
+
+
+
+
+modify_load(((XX)))) ---->
+
+
+	load_exp  &&  ssstrip(((XX))))....
+
+
+
+modify_import(((XX)))) ---->
+
+
+	import_exp&&&sssstrip(((XX))))....
+
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Processing declarations
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%% asserting declarations of a file
+
+process_declaration(((((((((DDeclaration,,,,SSSStreamOut)))) ::::-
+
+
+	(
+
+	    term_xpand(((DDeclaration,,,,NNNNewDefs)))),,,,!!,,
+
+
+	    process_defs(((NNewDefs,,,,SSSStreamOut))))
+
+
+
+	;
+
+	    nl_err,,,
+
+
+	    write_err(((""*** Error: ")))),,,,nnl_err,,,wwwrite_err(((""    ")))),,,,
+
+	    writeq_err(((DDeclaration)))),,,,wwrite_err((("".")))),,,,nnl_err,,,
+
+
+	    write_err(((""    could not be expanded in file """,,,,
+
+
+
+	                   loading_file,,,""""""""",,,,"""" near line ",,,,lllline,,,"""""".")))),,,,
+
+	    nl_err
+
+
+	)....
+
+
+
+
+
+term_xpand(((AA,,,,BBBB)))) ::::-
+
+
+	(
+
+	    has_feature(((ccombined_name(((AAAA)))),,,,eeexpansion_methods_table,,,MMMMMM)))),,,,!!,,
+
+
+	    composed_expansion(((AA,,,,BBBB,,,,MMMM,,,,ffffile  ==>  lloading_file,,,lllline  ==>  lline))),,,,!! 
+
+	;
+
+
+	    (
+
+		clause((((( ttterm_expansion(((AA)))) ::::-  @@ ))))))
+
+
+	    ;
+
+	        clause((((( ttterm_expansion(((AA)))) )))))))
+
+
+	    ),,,!!,,
+
+
+	    term_expansion(((AA,,,,BBBB,,,,
+
+
+
+			   file  ==>  lloading_file,,,
+
+
+
+			   line  ==>  lline))),,,,!!
+
+	;
+
+
+	    A  ==  BBB
+
+
+	)....
+
+
+
+
+
+process_defs(((NNewDefs,,,,SSSStreamOut)))) ::::-
+
+
+	(
+
+	    expand2file,,,
+
+
+	    set_output(((SStreamOut)))),,,,
+
+	    cond((( NNewDefs  :::=<  lllist,,,
+
+
+
+		  maprel(((wwwwrite_def,,, NNNNNNewDefs)))),,,,
+
+
+		  write_def(((NNNNewDefs))))
+
+
+
+		),,,
+
+	    open_out(((""stdout",,,,____))),,,,,,
+
+	    fail
+
+
+	;
+
+
+	    assert_rules,,,
+
+
+	    cond((( NNewDefs  :::=<  lllist,,,
+
+
+
+		  maprel(((aaaassert_def,,, NNNNNNewDefs)))),,,,
+
+
+		  assert_def(((NNNNewDefs))))
+
+
+
+		),,,
+
+	    fail
+
+
+	;
+
+
+	    succeed
+
+
+	)....
+
+
+
+
+assert_def(((XX)))) ::::-
+
+
+	cond((( BBool::::((((cconsulted...llllloading_file))),,,,
+
+
+	      cond((( XXXX  :::==  (((-->))),,,,
+
+
+		    Bool....cccccurrent_module...fffffunctions...(((((XX...11111)))) <<<<<-  ttrue,,,
+
+
+
+		    cond((( XXXX  :::==  (((::-))),,,,
+
+
+			  Bool....cccccurrent_module...pppppreds...(((((XX...11111)))) <<<<<-  ttrue,,,
+
+
+
+			  cond((( XXXX  :::==  (((<<|))) oooor  XX  ::==  (((:::))) oooor  XX  ::==  (((::=))),,,,
+
+
+				succeed,,,
+
+
+
+
+
+				Bool....cccccurrent_module...pppppreds...XXXXX  <<<-  tttrue  
+
+			      )
+
+
+
+			)
+
+
+		  )
+
+
+	    ),,,
+
+	assert(((XX))))....
+
+
+
+
+write_def(((XX)))) ::::-
+
+
+	write_canonical(((XX)))),,,,
+
+	write((("".")))),,,,
+
+	nl,,,nnnl...
+
+
+
+
+
+
+
+%%% writing syntax errors
+
+write_syntax_error((((SStreamIn,,,,SSSStreamOut)))) ::::-
+
+
+	close(((SStreamIn)))),,,,
+
+	cond((( eexpand2file,,,
+
+
+
+
+
+	    close(((SSSStreamOut))))
+
+
+
+	),,,
+
+	fail...		
+
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% load options
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%% setting options
+
+persistent(((((((((aassert_rules)))??????    %%%%% will expanded rules be asserted ?
+assert_rules  <<<<-  fffalse  ??     
+
+
+
+
+persistent(((eexpand2file))) ??????    %%%%% will expanded rules be written in a file ?
+expand2file  <<<<-  fffalse  ??
+
+
+
+
+
+
+%%% load_option is defined in built_ins.lf. It is used to decide whether term
+%%% expansion is used or not.
+
+expand_load(((((AAssert,,,,EEEExpand2File)))) ::::-
+
+
+	cond((( vvar(((AAAAssert)))),,,,
+
+
+	      Assert  ===  cccopy_term(((aassert_rules))),,,,,,
+
+
+	      (
+
+
+		  Assert  ::<  bbbool,,,
+
+
+		  assert_rules  <<<-  AAAssert
+
+
+	      )
+
+
+
+	    ),,,
+
+	cond((( vvar(((EEEExpand2File)))),,,,
+
+
+	      Expand2File  ===  cccopy_term(((eexpand2file))),,,,,,
+
+
+	      (
+
+
+		  Expand2File  ::<  bbbool,,,
+
+
+		  expand2file  <<<-  EEExpand2File
+
+
+	      )
+
+
+
+	    ),,,
+
+	load_option  <<<-  aaassert_rules  oor  eeexpand2file...  
+
+
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Loading expanded files
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+non_strict((((((((lload_exp)))??????
+
+
+
+X:::lllload_exp  ::-
+
+
+
+	CM  ==  cccurrent_module,,,
+
+
+	F  ==  fffeatures(((XX)))),,,,
+
+	(
+
+	    loading,,,!!!,,
+
+
+	    load_exp_2(((FF,,,,XXXX))))
+
+
+
+	;
+
+	    loading  <<<-  tttrue,,,
+
+
+	    top_load  <<<-  ggget_choice,,,
+
+
+	    load_exp_2(((FF,,,,XXXX)))),,,,!!,,llloading  <<<-  fffalse
+
+
+	;
+
+
+	    open_out(((""stdout",,,,____))),,,,,,
+
+	    open_in(((""stdin",,,,____))),,,,,,
+
+	    set_module(((CCM)))),,,,
+
+	    loading  <<<-  fffalse,,,
+
+
+	    fail
+
+
+	)....
+
+
+
+
+load_exp_2((([[FFF||||LLLLL]]],,,,XXXX)))) ::::-
+
+
+	(
+
+	    find_file(((nnew_suffix(((XXXX....FFFFF,,,"""".exp")))),,,,CCCF)))),,,,!!,,
+
+
+	    (
+
+		has_feature(((CCF,,,,cccconsulted,,,BBBBBBool)))),,,,!!,,
+
+
+		quiet_write_err(((""*** File """,,,,CCCCF,,,,"""""" is already loaded."))))
+
+
+
+	    ;
+
+		consulted...CCCCCF  <<<-  fffalse,,,
+
+
+		quiet_write_err(((""*** Loading File """,,,,CCCCF,,,,""""""")))),,,,
+
+		simple_load(((CCF))))
+
+
+
+	    ),,,
+
+	    load_exp_2(((LL,,,,XXXX))))
+
+
+
+	;
+
+	    set_choice(((ttop_load))),,,,,,ffail
+
+
+	)....
+
+
+
+load_exp_2((([[]]]))....
+
+
+
+
+X:::iiiimport_exp  ::-
+
+
+
+	load_exp&&&sssstrip(((XX)))),,,,
+
+	open&&&sssstrip(((XX))))....
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% utilities
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+new_suffix((((((((FF,,,,SSSS)))) ---->  sstrcon(((pprefix(((FFFF)))),,,,SSS))))....
+
+
+
+
+prefix(((FF)))) ---->  pprefix2(((FF,,,,1111,,,,sssssstrlen(((FFFF))))))))...
+
+
+
+ 
+
+prefix2(((FF,,,,NNNN,,,,LLLLength)))) ---->
+
+
+	cond(((aasc(((ssssubstr(((FFFF,,,,NNNN,,,,1111)))))))))) ===:=  aasc((("".")))),,,,
+
+
+	     substr(((FFFF,,,,1111,,,,NNNNNN----1111)))),,,,
+
+
+	     cond((( NNNN  ===:=  LLLength,,,
+
+
+
+	         F,,,,
+
+
+
+		 prefix2(((FFFF,,,,NNNN++++1111,,,,LLLLength))))
+
+
+
+	     )
+
+
+	 )...
+
+
+
+
+warn  ::-  qqquiet,,,!!!..
+
+
+
+
+X:::wwwwarn  ::-
+
+
+
+	write_err(((""*** Warning: ")))),,,,
+
+	write_err&&&sssstrip(((XX)))),,,,
+
+	nl_err...
+
+
+
+
+
+quiet_write_err  ::-  qqquiet,,,!!!..
+
+
+
+
+C:::qqqquiet_write_err  ::-
+
+
+
+	write_err&&&sssstrip(((CC)))),,,,
+
+	nl_err...
+
+
+
+
+ÿÿÿÿÿsimple_load(((""~/life_local/Source/onlinedoc.lf"))))????
+
+
+
+%	$Id: onlinedoc.lf,v 1.2 1994/12/08 23:31:40 duchier Exp $	
+%%% routine to give information on symbols online
+
+%module("built_in") ?
+
+public((((((aadd_man,,,mmmmmman))) ??????
+
+
+
+
+persistent(((oonline_info))) ??????
+
+
+
+
+non_strict(((aadd_man))) ??????
+
+
+
+
+add_man(((XX,,,,SSSS)))) ::::-
+
+
+	S  ::<  ssstring,,,
+
+
+	cond((( XX  :::<  lllist,,,
+
+
+
+	      ( tttrue  ||
+
+
+
+		S1  <<<-  SSS,,,
+
+
+		info_list(((XX,,,,SSSS1))))
+
+
+
+	      ),,,
+
+
+	      one_info(((XXXX,,,,SSSS))))
+
+
+
+	    )...
+
+
+
+
+info_list((([[XXX||||LLLLL]]],,,,SSSS)))) ::::-
+
+
+	!,,
+
+
+	one_info(((XX,,,,SSSS)))),,,,
+
+	info_list(((LL,,,,SSSS))))....
+
+
+
+info_list((([[]]]))::::-  !!..
+
+
+
+
+
+one_info(((XX,,,,SSSS)))) ::::-
+
+
+	Module  ==  cccurrent_module,,,
+
+
+	online_info...cccccurrent_module...XXXXX  <<<-  SSS...
+
+
+
+
+
+
+non_strict(((mman))) ??????
+
+
+
+persistent(((eexits_entry))) ??????
+
+
+
+op(((11200,,,,ffffffy,,,mmmmmman))) ??????
+
+
+
+
+man(((XX)))) ::::-
+
+
+	man2(((ffeatures(((oooonline_info))),,,,,,pppsi2str(((XXXX)))),,,,fffalse)))......
+
+
+
+
+man2((([[AAA||||BBBBB]]],,,,SSSS,,,,EEEEntry)))) ::::-
+
+
+	!,,
+
+
+	(
+
+	    has_feature(((SS,,,,oooonline_info...AAAAAAA,,,IIIInfo)))),,,,!!,,
+
+
+	    write(((""In module: ",,,,AAAA,,,,"""",")))),,,,nnl,,,nnnl,,,
+
+
+	    write(((IInfo)))),,,,
+
+	    nl,,,
+
+
+	    nl,,,
+
+
+	    man2(((BB,,,,SSSS,,,,ttttrue)))
+
+
+
+
+
+	;
+
+	    man2(((BB,,,,SSSS,,,,EEEEntry))))
+
+
+
+	)...
+
+
+
+man2((([[]]],,SSSS,,,,EEEEntry)))) ::::-
+
+
+	cond((( EEntry,,,,
+
+
+
+	      succeed,,,
+
+
+
+
+
+	      (wwwrite((("" No manual entry for ",,,,SSSS)))),,,,nnl)))
+
+
+
+	    )...
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Built-ins documentation
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+add_man((((((((((aadd_man,,,
+
+
+
+
+
+	" add_man(X,S) ?
+
+  input: X is a symbol name, or a list of symbol names;
+         S is a string containing the information describing X. 
+
+  add_man stores the information describing its first argument. 
+  ")))) ????
+
+
+
+
+add_man(((((mmman))),,,,
+
+
+	" man X ?
+
+  input: X is a symbol name.
+
+  ""man"" reads information about X stored by ""add_man"",
+  and writes it on the standard output. 
+  ")))) ????  
+
+
+
+add_man(((rreconsult,,,
+
+
+
+
+
+	" reconsult(File1,File2,...) ?
+
+  input: File1, File2,... : strings (file names)
+
+  reconsult(File1,File2,...) is a facility offered to avoid restarting 
+  Wild_Life each time you make a minor modification to a file. It works 
+  properly in 90% of the cases, but there are some limitations. 
+
+  1) reconsult may only be used with expand_load(true).
+  2) reconsult retracts the definitions of the functions and predicates 
+     occurring in the previous version of the file, then reloads the 
+     file, reexecuting the queries and directives. 
+
+  3) Warnings:
+
+     - if a function or predicate was defined across multiple files,
+       the whole definition is retracted, not only the rules that 
+       appeared in the reconsulted file.
+     - Sort declarations are never retracted. It means that the sort 
+       hierarchy can be only be extended.
+     - Some directives have non-retractable side-effects: 
+       public,private,private_feature,dynamic,static,non_strict,
+       strict,op,global,persistent.
+     - If a query in the file asserts rules, these rules are not 
+       retracted when reconsulting the file. This should anyway never 
+       occur: use expanders, and end your rules with a dot.
+
+  4) Files are identified by the complete name (path included) used 
+     to load them. It means that you may have problems if you don't 
+     use the same name to load and reconsult the file.
+  ")))) ????
+
+
+
+ÿÿÿÿÿ
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% X start up.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% PVR 13.10.93
+
+% persistent(x_loaded), x_loaded<<-false?
+
+% public(x_loaded)?
+% persistent(x_loaded)?
+% x_loaded<<-false?
+
+% public(load_x)?
+% dynamic(load_x)?
+ 
+% load_x :-
+% 	retract(load_x :- G),
+% 	assert((load_x :- write_err("*** X library already loaded."),nl)),
+% 	quiet_write("Loading X library..."),
+% 	simple_load("~/life_local/xpublic.lf"),      % RM: Jan 13 1993 
+% 	simple_load("~/life_local/xconstants.lf"),
+% 	simple_load("~/life_local/xtables.lf"),
+% 	simple_load("~/life_local/xgetset.lf"),
+% 	simple_load("~/life_local/xpred.lf").
+% 
+%  simple_load("~/life_local/xfunctions.lf"),  % RM: Mar 11 1993 
+% 
+  
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Get ready for user input
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% The 'user' module:
+
+display_modules(((((((((((((((((((((((((((((ffalse))) ??????
+
+
+
+
+module(((""user"))))????
+
+
+
+open_module(((""built_ins"))))????
+
+
+
+open_module(((""syntax"))))????
+
+
+
+% PVR 13.10.93 open_module("x")?
+init,,,,
+
+
+initrandom(((rreal_time)))??????
+
+
+
+
+% display_modules(false)?   % BD June 10 1993
+% display_module_status?
+ÿÿÿÿÿÿÿÿ

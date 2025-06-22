@@ -718,3 +718,6 @@ void init_globals();
 void dbg_top(char*);
 void dbg_bot(char*);
 void dbg_note(char*,char*);
+void dbg_ptr(char*,GENERIC);
+void dbg_str(char*,char*);
+void dbg_ll(char*,long long);
