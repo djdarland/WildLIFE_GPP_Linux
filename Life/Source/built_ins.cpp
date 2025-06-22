@@ -117,6 +117,7 @@ long long psi_to_string(ptr_psi_term t, char **fn)
     return TRUE;
   }
 }
+#if FALSE
 /***  RM: Dec  9 1992  (START) ***/
 ptr_psi_term make_feature_list(ptr_node tree,ptr_psi_term tail,
 			       ptr_module module,int val)
@@ -163,6 +164,7 @@ ptr_psi_term make_feature_list(ptr_node tree,ptr_psi_term tail,
   }
   return tail;
 }
+#endif
 /***  RM: Dec  9 1992  (END) ***/
 /******** CHECK_REAL(t,v,n)
 	  Like get_real_value, but does not force the type of T to be real.
@@ -2952,10 +2954,21 @@ static long long c_features()
     save_current=current_module;
     if(module)
       current_module=module;
-    push_goal(unify,
+    if (arg1->attr_list)
+      {
+	push_goal(unify,
 	      result,
-	      make_feature_list(arg1->attr_list,stack_nil(),module,0),
+	      ((wl_node_ptr*)arg1->attr_list)->make_feature_list(stack_nil(),module,0),
 	      NULL);
+      }
+    else
+      {
+	push_goal(unify,
+	      result,
+	      stack_nil(),
+	      NULL);
+	
+      }
     current_module=save_current;
   }
   else
@@ -2993,10 +3006,21 @@ static long long c_feature_values()
     save_current=current_module;
     if(module)
       current_module=module;
-    push_goal(unify,
+    if (arg1->attr_list)
+      {
+	push_goal(unify,
 	      result,
-	      make_feature_list(arg1->attr_list,stack_nil(),module,1),
+	      ((wl_node_ptr*)arg1->attr_list)->make_feature_list(stack_nil(),module,1),
 	      NULL);
+      }
+    else
+      {
+	push_goal(unify,
+	      result,
+	      stack_nil(),
+	      NULL);
+
+      }
     current_module=save_current;
   }
   else

@@ -63,3 +63,51 @@ ptr_node wl_node_ptr::find_data(GENERIC p)
   return r;
 }
 
+ptr_psi_term wl_node_ptr::make_feature_list(ptr_psi_term tail,
+			       ptr_module module,int val)
+//     ptr_node tree;
+//     ptr_psi_term tail;
+//     ptr_module module;
+//     int val;
+     
+{
+  ptr_psi_term wl_new;
+  ptr_definition def;
+  double d; // , strtod();
+  ptr_node tree;
+
+  tree = (ptr_node) this;
+  
+  if(tree) {
+    if(tree->right)
+      tail=((wl_node_ptr*)(tree->right))->make_feature_list(tail,module,val);
+    /* Insert the feature name into the list */
+    d=str_to_int(tree->key);
+    if (d== -1) { /* Feature is not a number */
+      def=((wl_module_ptr*)module)->update_feature(tree->key); /* Extract module RM: Feb 3 1993 */
+      if(def) {
+	if(val) /* RM: Mar  3 1994 Distinguish between features & values */
+	  tail=stack_cons((ptr_psi_term)tree->data,tail); // REV401PLUS cast
+	else {
+	  wl_new=stack_psi_term(4);      
+	  wl_new->type=def;
+	  tail=stack_cons(wl_new,tail);
+	}
+      }
+    }
+    else { /* Feature is a number */
+      if(val) /* RM: Mar  3 1994 Distinguish between features & values */
+	tail=stack_cons((ptr_psi_term)tree->data,tail); // REV401PLUS cast
+      else {
+	wl_new=stack_psi_term(4);      
+	wl_new->type=(d==floor(d))?integer:real;
+	wl_new->value_3=wl_mem->heap_alloc(sizeof(REAL));
+	*(REAL *)wl_new->value_3=(REAL)d;
+	tail=stack_cons(wl_new,tail);
+      }
+    }
+    if(tree->left)
+      tail=((wl_node_ptr*)tree->left)->make_feature_list(tail,module,val);
+  }
+  return tail;
+}

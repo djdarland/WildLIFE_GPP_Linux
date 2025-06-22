@@ -64,6 +64,8 @@
 #include <sys/types.h>
 #endif
 
+typedef unsigned long long *GENERIC;
+
 typedef struct wl_node *ptr_node;
 typedef struct wl_node node;
 typedef struct wl_module *ptr_module;
@@ -72,6 +74,7 @@ typedef struct wl_module module;
 typedef struct wl_int_list *ptr_int_list;
 typedef struct wl_hash_table *ptr_hash_table;
 typedef struct wl_definition *ptr_definition;
+typedef struct wl_psi_term *ptr_psi_term;
 
 #include "wl_module.h"
 #include "wl_module_ptr.h"
