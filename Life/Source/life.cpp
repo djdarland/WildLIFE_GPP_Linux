@@ -148,6 +148,7 @@ int main(int argc, char *argv[])  // REV401PLUS correct main proto
 }
 void init_globals()
 {
+  built_in_index=0;
   first_definition=NULL;
   interrupted=TRUE;
   warningflag=TRUE;

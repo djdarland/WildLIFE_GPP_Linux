@@ -1196,24 +1196,24 @@ static long long c_exp()
 }
 void insert_math_builtins()
 {
-  new_built_in(syntax_module,"*",(def_type)function_it,c_mult);
-  new_built_in(syntax_module,"+",(def_type)function_it,c_add);
-  new_built_in(syntax_module,"-",(def_type)function_it,c_sub);
-  new_built_in(syntax_module,"/",(def_type)function_it,c_div);  
-  new_built_in(syntax_module,"//",(def_type)function_it,c_intdiv);  
-  new_built_in(syntax_module,"mod",(def_type)function_it,c_mod); /* PVR 24.2.94 */
-  new_built_in(syntax_module,"/\\",(def_type)function_it,c_bit_and);
-  new_built_in(syntax_module,"\\/",(def_type)function_it,c_bit_or);
-  new_built_in(syntax_module,"\\",(def_type)function_it,c_bit_not);
-  new_built_in(syntax_module,">>",(def_type)function_it,c_shift_right);
-  new_built_in(syntax_module,"<<",(def_type)function_it,c_shift_left);
-  new_built_in(bi_module,"floor",(def_type)function_it,c_floor);
-  new_built_in(bi_module,"ceiling",(def_type)function_it,c_ceiling);
-  new_built_in(bi_module,"exp",(def_type)function_it,c_exp);
-  new_built_in(bi_module,"log",(def_type)function_it,c_log);
-  new_built_in(bi_module,"cos",(def_type)function_it,c_cos);
-  new_built_in(bi_module,"sin",(def_type)function_it,c_sin);
-  new_built_in(bi_module,"tan",(def_type)function_it,c_tan);
-  new_built_in(bi_module,"sqrt",(def_type)function_it,c_sqrt);
+  ((wl_module_ptr*)syntax_module)->new_built_in("*",(def_type)function_it,c_mult);
+  ((wl_module_ptr*)syntax_module)->new_built_in("+",(def_type)function_it,c_add);
+  ((wl_module_ptr*)syntax_module)->new_built_in("-",(def_type)function_it,c_sub);
+  ((wl_module_ptr*)syntax_module)->new_built_in("/",(def_type)function_it,c_div);  
+  ((wl_module_ptr*)syntax_module)->new_built_in("//",(def_type)function_it,c_intdiv);  
+  ((wl_module_ptr*)syntax_module)->new_built_in("mod",(def_type)function_it,c_mod); /* PVR 24.2.94 */
+  ((wl_module_ptr*)syntax_module)->new_built_in("/\\",(def_type)function_it,c_bit_and);
+  ((wl_module_ptr*)syntax_module)->new_built_in("\\/",(def_type)function_it,c_bit_or);
+  ((wl_module_ptr*)syntax_module)->new_built_in("\\",(def_type)function_it,c_bit_not);
+  ((wl_module_ptr*)syntax_module)->new_built_in(">>",(def_type)function_it,c_shift_right);
+  ((wl_module_ptr*)syntax_module)->new_built_in("<<",(def_type)function_it,c_shift_left);
+  ((wl_module_ptr*)bi_module)->new_built_in("floor",(def_type)function_it,c_floor);
+  ((wl_module_ptr*)bi_module)->new_built_in("ceiling",(def_type)function_it,c_ceiling);
+  ((wl_module_ptr*)bi_module)->new_built_in("exp",(def_type)function_it,c_exp);
+  ((wl_module_ptr*)bi_module)->new_built_in("log",(def_type)function_it,c_log);
+  ((wl_module_ptr*)bi_module)->new_built_in("cos",(def_type)function_it,c_cos);
+  ((wl_module_ptr*)bi_module)->new_built_in("sin",(def_type)function_it,c_sin);
+  ((wl_module_ptr*)bi_module)->new_built_in("tan",(def_type)function_it,c_tan);
+  ((wl_module_ptr*)bi_module)->new_built_in("sqrt",(def_type)function_it,c_sqrt);
 }
 

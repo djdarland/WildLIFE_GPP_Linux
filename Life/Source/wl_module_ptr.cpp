@@ -134,3 +134,45 @@ ptr_definition wl_module_ptr::update_feature(char *feature)
   else
     return ((wl_module_ptr*)module)->update_symbol(feature);
 }
+
+
+/******************************************************************************
+  
+  Here are the routines which allow a new built_in type, predicate or function
+  to be declared.
+  
+****************************************************************************/
+/******** NEW_BUILT_IN(m,s,t,r)
+	  Add a new built-in predicate or function.
+	  Used also in x_pred.c
+
+	  M=module.
+	  S=string.
+	  T=type (function or predicate).
+	  R=address of C routine to call.
+*/
+void wl_module_ptr::new_built_in(char *s,def_type t,long long (*r)())
+//     ptr_module m;
+//     char *s;
+//     def_type t;
+//     long long (*r)();
+{
+  ptr_definition d;
+  ptr_module m;
+
+  m = (ptr_module) this;
+  
+  if (built_in_index >= MAX_BUILT_INS) {
+    fprintf(stderr,"Too many primitives, increase MAX_BUILT_INS in extern.h\n");
+    exit(-1);
+  }
+
+  if(m!=current_module)  /*  RM: Jan 13 1993  */
+    set_current_module(m);
+  d=((wl_module_ptr*)m)->update_symbol(s); /* RM: Jan  8 1993 */
+  d->type_def=t;
+  built_in_index++;
+  d->rule=(ptr_pair_list )built_in_index;
+  c_rule[built_in_index]=r;
+}
+

@@ -632,22 +632,22 @@ static long long c_mresiduate()
 
 void insert_system_builtins()
 {
-  new_built_in(bi_module,"trace",(def_type)predicate_it,c_trace);
-  new_built_in(bi_module,"step",(def_type)predicate_it,c_step);
-  new_built_in(bi_module,"verbose",(def_type)predicate_it,c_verbose);
-  new_built_in(bi_module,"warning",(def_type)predicate_it,c_warning);
-  new_built_in(bi_module,"maxint",(def_type)function_it,c_maxint);
-  new_built_in(bi_module,"cpu_time",(def_type)function_it,c_cputime);
-  new_built_in(bi_module,"quiet",(def_type)function_it,c_quiet); /* 21.1 */
-  new_built_in(bi_module,"real_time",(def_type)function_it,c_realtime);
-  new_built_in(bi_module,"local_time",(def_type)function_it,c_localtime);
-  new_built_in(bi_module,"statistics",(def_type)predicate_it,c_statistics);
-  new_built_in(bi_module,"gc",(def_type)predicate_it,c_garbage);
-  new_built_in(bi_module,"system",(def_type)function_it,c_system);
-  new_built_in(bi_module,"getenv",(def_type)function_it,c_getenv);
-  new_built_in(bi_module,"encode",(def_type)predicate_it,c_encode);
-  new_built_in(bi_module,"rlist",(def_type)function_it,c_residList);
-  new_built_in(bi_module,"residuate",(def_type)predicate_it,c_residuate);
-  new_built_in(bi_module,"mresiduate",(def_type)predicate_it,c_mresiduate);
-  new_built_in(bi_module,"tprove",(def_type)predicate_it,c_tprove);
+  ((wl_module_ptr*)bi_module)->new_built_in("trace",(def_type)predicate_it,c_trace);
+  ((wl_module_ptr*)bi_module)->new_built_in("step",(def_type)predicate_it,c_step);
+  ((wl_module_ptr*)bi_module)->new_built_in("verbose",(def_type)predicate_it,c_verbose);
+  ((wl_module_ptr*)bi_module)->new_built_in("warning",(def_type)predicate_it,c_warning);
+  ((wl_module_ptr*)bi_module)->new_built_in("maxint",(def_type)function_it,c_maxint);
+  ((wl_module_ptr*)bi_module)->new_built_in("cpu_time",(def_type)function_it,c_cputime);
+  ((wl_module_ptr*)bi_module)->new_built_in("quiet",(def_type)function_it,c_quiet); /* 21.1 */
+  ((wl_module_ptr*)bi_module)->new_built_in("real_time",(def_type)function_it,c_realtime);
+  ((wl_module_ptr*)bi_module)->new_built_in("local_time",(def_type)function_it,c_localtime);
+  ((wl_module_ptr*)bi_module)->new_built_in("statistics",(def_type)predicate_it,c_statistics);
+  ((wl_module_ptr*)bi_module)->new_built_in("gc",(def_type)predicate_it,c_garbage);
+  ((wl_module_ptr*)bi_module)->new_built_in("system",(def_type)function_it,c_system);
+  ((wl_module_ptr*)bi_module)->new_built_in("getenv",(def_type)function_it,c_getenv);
+  ((wl_module_ptr*)bi_module)->new_built_in("encode",(def_type)predicate_it,c_encode);
+  ((wl_module_ptr*)bi_module)->new_built_in("rlist",(def_type)function_it,c_residList);
+  ((wl_module_ptr*)bi_module)->new_built_in("residuate",(def_type)predicate_it,c_residuate);
+  ((wl_module_ptr*)bi_module)->new_built_in("mresiduate",(def_type)predicate_it,c_mresiduate);
+  ((wl_module_ptr*)bi_module)->new_built_in("tprove",(def_type)predicate_it,c_tprove);
 }

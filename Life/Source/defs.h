@@ -65,6 +65,7 @@
 #endif
 
 typedef unsigned long long *GENERIC;
+typedef struct wl_definition *      def_type;
 
 typedef struct wl_node *ptr_node;
 typedef struct wl_node node;

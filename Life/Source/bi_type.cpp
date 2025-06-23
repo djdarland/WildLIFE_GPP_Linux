@@ -575,30 +575,30 @@ long long c_lub()  // REV401PLUS long long
 void insert_type_builtins() /*  RM: Jan 29 1993  */
 {
   /* Sort comparisons */
-  new_built_in(syntax_module,":=<",(def_type)function_it,c_isa_le);
-  new_built_in(syntax_module,":<",(def_type)function_it,c_isa_lt);
-  new_built_in(syntax_module,":>=",(def_type)function_it,c_isa_ge);
-  new_built_in(syntax_module,":>",(def_type)function_it,c_isa_gt);
-  new_built_in(syntax_module,":==",(def_type)function_it,c_isa_eq);
-  new_built_in(syntax_module,":><",(def_type)function_it,c_isa_cmp);
-  new_built_in(syntax_module,":\\=<",(def_type)function_it,c_isa_nle);
-  new_built_in(syntax_module,":\\<",(def_type)function_it,c_isa_nlt);
-  new_built_in(syntax_module,":\\>=",(def_type)function_it,c_isa_nge);
-  new_built_in(syntax_module,":\\>",(def_type)function_it,c_isa_ngt);
-  new_built_in(syntax_module,":\\==",(def_type)function_it,c_isa_neq);
-  new_built_in(syntax_module,":\\><",(def_type)function_it,c_isa_ncmp);
+  ((wl_module_ptr*)syntax_module)->new_built_in(":=<",(def_type)function_it,c_isa_le);
+  ((wl_module_ptr*)syntax_module)->new_built_in(":<",(def_type)function_it,c_isa_lt);
+  ((wl_module_ptr*)syntax_module)->new_built_in(":>=",(def_type)function_it,c_isa_ge);
+  ((wl_module_ptr*)syntax_module)->new_built_in(":>",(def_type)function_it,c_isa_gt);
+  ((wl_module_ptr*)syntax_module)->new_built_in(":==",(def_type)function_it,c_isa_eq);
+  ((wl_module_ptr*)syntax_module)->new_built_in(":><",(def_type)function_it,c_isa_cmp);
+  ((wl_module_ptr*)syntax_module)->new_built_in(":\\=<",(def_type)function_it,c_isa_nle);
+  ((wl_module_ptr*)syntax_module)->new_built_in(":\\<",(def_type)function_it,c_isa_nlt);
+  ((wl_module_ptr*)syntax_module)->new_built_in(":\\>=",(def_type)function_it,c_isa_nge);
+  ((wl_module_ptr*)syntax_module)->new_built_in(":\\>",(def_type)function_it,c_isa_ngt);
+  ((wl_module_ptr*)syntax_module)->new_built_in(":\\==",(def_type)function_it,c_isa_neq);
+  ((wl_module_ptr*)syntax_module)->new_built_in(":\\><",(def_type)function_it,c_isa_ncmp);
   /* Type checks */
-  new_built_in(bi_module,"is_value",(def_type)function_it,c_is_value);
-  new_built_in(bi_module,"is_number",(def_type)function_it,c_is_number);
-  new_built_in(bi_module,"is_function",(def_type)function_it,c_is_function);
-  new_built_in(bi_module,"is_predicate",(def_type)function_it,c_is_predicate);
-  new_built_in(bi_module,"is_sort",(def_type)function_it,c_is_sort);
-  new_built_in(bi_module,"is_persistent",(def_type)function_it,c_is_persistent);
+  ((wl_module_ptr*)bi_module)->new_built_in("is_value",(def_type)function_it,c_is_value);
+  ((wl_module_ptr*)bi_module)->new_built_in("is_number",(def_type)function_it,c_is_number);
+  ((wl_module_ptr*)bi_module)->new_built_in("is_function",(def_type)function_it,c_is_function);
+  ((wl_module_ptr*)bi_module)->new_built_in("is_predicate",(def_type)function_it,c_is_predicate);
+  ((wl_module_ptr*)bi_module)->new_built_in("is_sort",(def_type)function_it,c_is_sort);
+  ((wl_module_ptr*)bi_module)->new_built_in("is_persistent",(def_type)function_it,c_is_persistent);
   /* Sort hierarchy maneuvering */
-  new_built_in(bi_module,"children",(def_type)function_it,c_children);
-  new_built_in(bi_module,"parents",(def_type)function_it,c_parents);
-  new_built_in(bi_module,"least_sorts",(def_type)function_it,c_smallest);
-  new_built_in(bi_module,"subsort",(def_type)predicate_it,c_isa_subsort);
-  new_built_in(bi_module,"glb",(def_type)function_it,c_glb);
-  new_built_in(bi_module,"lub",(def_type)function_it,c_lub);
+  ((wl_module_ptr*)bi_module)->new_built_in("children",(def_type)function_it,c_children);
+  ((wl_module_ptr*)bi_module)->new_built_in("parents",(def_type)function_it,c_parents);
+  ((wl_module_ptr*)bi_module)->new_built_in("least_sorts",(def_type)function_it,c_smallest);
+  ((wl_module_ptr*)bi_module)->new_built_in("subsort",(def_type)predicate_it,c_isa_subsort);
+  ((wl_module_ptr*)bi_module)->new_built_in("glb",(def_type)function_it,c_glb);
+  ((wl_module_ptr*)bi_module)->new_built_in("lub",(def_type)function_it,c_lub);
 }

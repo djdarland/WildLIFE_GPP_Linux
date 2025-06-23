@@ -60,7 +60,9 @@ typedef struct wl_operator_data *   ptr_operator_data;
 typedef struct wl_int_list *        ptr_int_list;
 typedef struct wl_resid_list *      ptr_resid_list; /* 21.9 */
 typedef struct wl_definition *      ptr_definition;
+#if FALSE
 typedef struct wl_definition *      def_type;
+#endif
 typedef struct wl_residuation *     ptr_residuation;
 typedef struct wl_psi_term *        ptr_psi_term;
 

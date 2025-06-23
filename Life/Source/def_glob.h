@@ -880,6 +880,7 @@ EXTERN long long djd;  // 21.1
 
 EXTERN FILE *dbg;
 EXTERN FILE *dbg2;
+EXTERN long long built_in_index;
 
 EXTERN long long trace;
 EXTERN long long verbose; // 21.1 

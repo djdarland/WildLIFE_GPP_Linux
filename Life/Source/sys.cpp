@@ -1715,64 +1715,64 @@ void insert_sys_builtins()
 #endif
   /* DENYS: BYTEDATA */
   /* purely for illustration
-     new_built_in(sys_module,"string_to_bytedata",function,c_string_to_bytedata);
-     new_built_in(sys_module,"bytedata_to_string",function,c_bytedata_to_string);
+     ((wl_module_ptr*)sys_module)->new_built_in("string_to_bytedata",function,c_string_to_bytedata);
+     ((wl_module_ptr*)sys_module)->new_built_in("bytedata_to_string",function,c_bytedata_to_string);
   */
-  new_built_in(sys_module,"make_bitvector"	,(def_type)function_it ,c_make_bitvector);
-  new_built_in(sys_module,"bitvector_and"	,(def_type)function_it ,c_bitvector_and);
-  new_built_in(sys_module,"bitvector_or"	,(def_type)function_it ,c_bitvector_or);
-  new_built_in(sys_module,"bitvector_xor"	,(def_type)function_it ,c_bitvector_xor);
-  new_built_in(sys_module,"bitvector_not"	,(def_type)function_it ,c_bitvector_not);
-  new_built_in(sys_module,"bitvector_count"	,(def_type)function_it ,c_bitvector_count);
-  new_built_in(sys_module,"bitvector_get"	,(def_type)function_it ,c_bitvector_get);
-  new_built_in(sys_module,"bitvector_set"	,(def_type)function_it ,c_bitvector_set);
-  new_built_in(sys_module,"bitvector_clear"	,(def_type)function_it ,c_bitvector_clear);
-  new_built_in(sys_module,"regexp_compile"	,(def_type)function_it ,c_regexp_compile);
-  new_built_in(sys_module,"regexp_execute"	,(def_type)function_it ,c_regexp_execute);
-  new_built_in(sys_module,"int2stream"		,(def_type)function_it ,c_int2stream);
-  new_built_in(sys_module,"fopen"		,(def_type)function_it ,c_fopen);
-  new_built_in(sys_module,"fclose"		,(def_type)function_it ,c_fclose);
-  new_built_in(sys_module,"get_buffer"		,(def_type)function_it ,c_get_buffer);
-  new_built_in(sys_module,"get_record"		,(def_type)function_it ,c_get_record);
-  new_built_in(sys_module,"get_code"		,(def_type)function_it ,c_get_code);
-  new_built_in(sys_module,"ftell"		,(def_type)function_it ,c_ftell);
-  new_built_in(sys_module,"fseek"		,(def_type)predicate_it,c_fseek);
+  ((wl_module_ptr*)sys_module)->new_built_in("make_bitvector"	,(def_type)function_it ,c_make_bitvector);
+  ((wl_module_ptr*)sys_module)->new_built_in("bitvector_and"	,(def_type)function_it ,c_bitvector_and);
+  ((wl_module_ptr*)sys_module)->new_built_in("bitvector_or"	,(def_type)function_it ,c_bitvector_or);
+  ((wl_module_ptr*)sys_module)->new_built_in("bitvector_xor"	,(def_type)function_it ,c_bitvector_xor);
+  ((wl_module_ptr*)sys_module)->new_built_in("bitvector_not"	,(def_type)function_it ,c_bitvector_not);
+  ((wl_module_ptr*)sys_module)->new_built_in("bitvector_count"	,(def_type)function_it ,c_bitvector_count);
+  ((wl_module_ptr*)sys_module)->new_built_in("bitvector_get"	,(def_type)function_it ,c_bitvector_get);
+  ((wl_module_ptr*)sys_module)->new_built_in("bitvector_set"	,(def_type)function_it ,c_bitvector_set);
+  ((wl_module_ptr*)sys_module)->new_built_in("bitvector_clear"	,(def_type)function_it ,c_bitvector_clear);
+  ((wl_module_ptr*)sys_module)->new_built_in("regexp_compile"	,(def_type)function_it ,c_regexp_compile);
+  ((wl_module_ptr*)sys_module)->new_built_in("regexp_execute"	,(def_type)function_it ,c_regexp_execute);
+  ((wl_module_ptr*)sys_module)->new_built_in("int2stream"		,(def_type)function_it ,c_int2stream);
+  ((wl_module_ptr*)sys_module)->new_built_in("fopen"		,(def_type)function_it ,c_fopen);
+  ((wl_module_ptr*)sys_module)->new_built_in("fclose"		,(def_type)function_it ,c_fclose);
+  ((wl_module_ptr*)sys_module)->new_built_in("get_buffer"		,(def_type)function_it ,c_get_buffer);
+  ((wl_module_ptr*)sys_module)->new_built_in("get_record"		,(def_type)function_it ,c_get_record);
+  ((wl_module_ptr*)sys_module)->new_built_in("get_code"		,(def_type)function_it ,c_get_code);
+  ((wl_module_ptr*)sys_module)->new_built_in("ftell"		,(def_type)function_it ,c_ftell);
+  ((wl_module_ptr*)sys_module)->new_built_in("fseek"		,(def_type)predicate_it,c_fseek);
 #ifdef __unix__
-  new_built_in(sys_module,"socket"		,(def_type)function_it ,c_socket);
-  new_built_in(sys_module,"bind"		,(def_type)predicate_it,c_bind);
-  new_built_in(sys_module,"connect"		,(def_type)predicate_it,c_connect);
+  ((wl_module_ptr*)sys_module)->new_built_in("socket"		,(def_type)function_it ,c_socket);
+  ((wl_module_ptr*)sys_module)->new_built_in("bind"		,(def_type)predicate_it,c_bind);
+  ((wl_module_ptr*)sys_module)->new_built_in("connect"		,(def_type)predicate_it,c_connect);
 #endif
-  new_built_in(sys_module,"fwrite"		,(def_type)predicate_it,c_fwrite);
-  new_built_in(sys_module,"fflush"		,(def_type)predicate_it,c_fflush);
+  ((wl_module_ptr*)sys_module)->new_built_in("fwrite"		,(def_type)predicate_it,c_fwrite);
+  ((wl_module_ptr*)sys_module)->new_built_in("fflush"		,(def_type)predicate_it,c_fflush);
 #ifdef __unix__
-  new_built_in(sys_module,"listen"		,(def_type)predicate_it,c_listen);
-  new_built_in(sys_module,"accept"		,(def_type)function_it ,c_accept);
+  ((wl_module_ptr*)sys_module)->new_built_in("listen"		,(def_type)predicate_it,c_listen);
+  ((wl_module_ptr*)sys_module)->new_built_in("accept"		,(def_type)function_it ,c_accept);
 #endif
-  new_built_in(sys_module,"errno"		,(def_type)function_it ,c_errno);
-  new_built_in(sys_module,"errmsg"		,(def_type)function_it ,c_errmsg);
-  new_built_in(sys_module,"import_symbol"	,(def_type)predicate_it,c_import_symbol);
+  ((wl_module_ptr*)sys_module)->new_built_in("errno"		,(def_type)function_it ,c_errno);
+  ((wl_module_ptr*)sys_module)->new_built_in("errmsg"		,(def_type)function_it ,c_errmsg);
+  ((wl_module_ptr*)sys_module)->new_built_in("import_symbol"	,(def_type)predicate_it,c_import_symbol);
 #ifdef __unix
-  new_built_in(sys_module,"fork"		,(def_type)function_it ,c_fork);
-  new_built_in(sys_module,"wait"		,(def_type)function_it ,c_wait);
-  new_built_in(sys_module,"waitpid"		,(def_type)function_it ,c_waitpid);
-  new_built_in(sys_module,"kill"		,(def_type)predicate_it,c_kill);
-  new_built_in(sys_module,"cuserid"		,(def_type)function_it ,c_cuserid);
-  new_built_in(sys_module,"gethostname"		,(def_type)function_it ,c_gethostname);
-  new_built_in(sys_module,"lazy_project"	,(def_type)function_it ,c_lazy_project);
-  new_built_in(sys_module,"wait_on_feature"	,(def_type)predicate_it,c_wait_on_feature);
-  new_built_in(sys_module,"my_wait_on_feature"	,(def_type)function_it ,c_my_wait_on_feature);
-  new_built_in(sys_module,"apply1"		,(def_type)function_it ,c_apply1);
-  new_built_in(sys_module,"getpid"		,(def_type)function_it ,c_getpid);
+  ((wl_module_ptr*)sys_module)->new_built_in("fork"		,(def_type)function_it ,c_fork);
+  ((wl_module_ptr*)sys_module)->new_built_in("wait"		,(def_type)function_it ,c_wait);
+  ((wl_module_ptr*)sys_module)->new_built_in("waitpid"		,(def_type)function_it ,c_waitpid);
+  ((wl_module_ptr*)sys_module)->new_built_in("kill"		,(def_type)predicate_it,c_kill);
+  ((wl_module_ptr*)sys_module)->new_built_in("cuserid"		,(def_type)function_it ,c_cuserid);
+  ((wl_module_ptr*)sys_module)->new_built_in("gethostname"		,(def_type)function_it ,c_gethostname);
+  ((wl_module_ptr*)sys_module)->new_built_in("lazy_project"	,(def_type)function_it ,c_lazy_project);
+  ((wl_module_ptr*)sys_module)->new_built_in("wait_on_feature"	,(def_type)predicate_it,c_wait_on_feature);
+  ((wl_module_ptr*)sys_module)->new_built_in("my_wait_on_feature"	,(def_type)function_it ,c_my_wait_on_feature);
+  ((wl_module_ptr*)sys_module)->new_built_in("apply1"		,(def_type)function_it ,c_apply1);
+  ((wl_module_ptr*)sys_module)->new_built_in("getpid"		,(def_type)function_it ,c_getpid);
 #endif
-  new_built_in(sys_module,"stream2sys_stream"	,(def_type)function_it ,c_stream2sys_stream);
-  new_built_in(sys_module,"sys_stream2stream"	,(def_type)function_it ,c_sys_stream2stream);
-#ifdef LIFE_DBM
+  ((wl_module_ptr*)sys_module)->new_built_in("stream2sys_stream"	,(def_type)function_it ,c_stream2sys_stream);
+  ((wl_module_ptr*)sys_module)->new_built_in("sys_stream2stream"	,(def_type)function_it ,c_sys_stream2stream);
+#ifdef LIFE_DBM 
   insert_dbm_builtins();
 #endif
 #ifdef LIFE_NDBM
   insert_ndbm_builtins();
 #endif
   set_current_module(bi_module);
-  new_built_in(bi_module ,"call_once"		,(def_type)function_it ,c_call_once);
+  ((wl_module_ptr*)bi_module)->new_built_in("call_once"		,(def_type)function_it ,c_call_once);
   set_current_module(curmod);
 }
