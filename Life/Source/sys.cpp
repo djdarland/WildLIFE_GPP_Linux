@@ -1235,7 +1235,7 @@ static long long import_symbol_internal(ptr_psi_term args[],
     /* use same name */
     key->symbol=args[0]->type->keyword->symbol;
     key->combined_name=
-      heap_copy_string(make_module_token(current_module,key->symbol));
+      heap_copy_string(((wl_module_ptr*)current_module)->make_module_token(key->symbol));
     key->wl_public=FALSE;
     key->private_feature=FALSE;
     key->definition=args[0]->type; /* use given definition */

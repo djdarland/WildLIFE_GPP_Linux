@@ -125,6 +125,7 @@ char *string_val(ptr_psi_term term)
   else
     return term->type->keyword->symbol;
 }
+#if FALSE
 /******** MAKE_MODULE_TOKEN(module,string)
 Write 'module#string' in module_buffer.
 If string is a qualified reference to a given module, then modify the calling
@@ -152,6 +153,9 @@ char *make_module_token(ptr_module module,char *str)
       strcpy(module_buffer,str);
   return module_buffer;
 }
+
+#endif
+
 /******** NEW_DEFINITION(key)
 	  Create a definition for a key.
 */

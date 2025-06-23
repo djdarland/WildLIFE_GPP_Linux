@@ -55,7 +55,7 @@ ptr_definition wl_module_ptr::update_symbol(char *symbol)   /*  RM: Jan  8 1993 
 	key=HEAP_ALLOC(struct wl_keyword);
 	key->module=module;
 	key->symbol=heap_copy_string(symbol);
-	key->combined_name=heap_copy_string(make_module_token(module,symbol));
+	key->combined_name=heap_copy_string(((wl_module_ptr*)module)->make_module_token(symbol));
 	key->wl_public=FALSE;
 	key->private_feature=FALSE; /*  RM: Mar 11 1993  */
 	key->definition=NULL;
@@ -174,5 +174,36 @@ void wl_module_ptr::new_built_in(char *s,def_type t,long long (*r)())
   built_in_index++;
   d->rule=(ptr_pair_list )built_in_index;
   c_rule[built_in_index]=r;
+}
+
+/******** MAKE_MODULE_TOKEN(module,string)
+Write 'module#string' in module_buffer.
+If string is a qualified reference to a given module, then modify the calling
+module variable to reflect this.
+
+The result must be immediately stored in a newly allocated string.
+*/
+char *wl_module_ptr::make_module_token(char *str)
+//     ptr_module module;
+//     char *str;
+{
+  ptr_module wl_explicit;
+  ptr_module module;
+
+  module = (ptr_module) this;
+  
+  /* Check if the string already contains a module */
+  wl_explicit=extract_module_from_name(str);
+  if(wl_explicit)
+    strcpy(module_buffer,str);
+  else
+    if(module!=no_module) {
+      strcpy(module_buffer,module->module_name);
+      strcat(module_buffer,"#");
+      strcat(module_buffer,str);
+    }
+    else
+      strcpy(module_buffer,str);
+  return module_buffer;
 }
 
