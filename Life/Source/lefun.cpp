@@ -496,7 +496,8 @@ long long eval_aim()
       ptr_psi_term t;
       match_attr1(u,v->right,rb);
       t = (ptr_psi_term) v->data;
-      deref2_rec_eval(t);
+      //      deref2_rec_eval(t);
+      ((wl_psi_term_ptr*)t)->deref2_rec_eval();
       match_attr1(u,v->left,rb);
     }
     else {
@@ -528,7 +529,9 @@ long long eval_aim()
     /* Create a new psi-term to put the (useless) result: */
     /* This is needed so that *all* arguments of a function call */
     /* are evaluated, which avoids incorrect 'Yes' answers.      */
-    deref2_rec_eval(t); /* Assumes goal_stack is already restored. */
+    
+    //    deref2_rec_eval(t); /* Assumes goal_stack is already restored. */
+    ((wl_psi_term_ptr*)t)->deref2_rec_eval(); /* Assumes goal_stack is already restored. */
     match_attr1(&((*u)->left),v,rb);
   }
 }
@@ -548,8 +551,10 @@ long long eval_aim()
   	/* RESID */ match_attr3(&((*u)->right),v->right,rb);
         t1 = (ptr_psi_term) (*u)->data;
         t2 = (ptr_psi_term) v->data;
-        deref2_eval(t1); /* Assumes goal_stack is already restored. */
-        deref2_eval(t2); /* PVR 12.03 */
+	//        deref2_eval(t1); /* Assumes goal_stack is already restored. */
+        //        deref2_eval(t2); /* PVR 12.03 */
+        ((wl_psi_term_ptr*)t1)->deref2_eval(); /* Assumes goal_stack is already restored. */
+        ((wl_psi_term_ptr*)t2)->deref2_eval(); /* PVR 12.03 */
   	/* RESID */ match_attr3(&((*u)->left),v->left,rb);
       }
       else if (cmp>0) {
@@ -860,6 +865,7 @@ long long check_out(ptr_psi_term t)
   }
   return flag;	
 }
+#if FALSE
 /********************************************************************/
 /*                                                                  */
 /* New dereference routines for Wild_Life                           */
@@ -966,6 +972,7 @@ void deref_rec_body(ptr_psi_term t)
       }
   }
 }
+#endif
 void deref_rec_args(ptr_node n)
 // ptr_node n;
 {
@@ -975,10 +982,12 @@ void deref_rec_args(ptr_node n)
     deref_rec_args(n->right);
     t1 = (ptr_psi_term) (n->data);
     deref_ptr(t1);
-    deref_rec_body(t1);
+    //    deref_rec_body(t1);
+    ((wl_psi_term_ptr*)t1)->deref_rec_body();
     deref_rec_args(n->left);
   }
 }
+#if FALSE
 /* Same as deref_rec_eval, but doesn't look at either the top level or */
 /* the arguments in the set. */
 long long deref_args_eval(ptr_psi_term t,long long set)
@@ -994,6 +1003,7 @@ long long deref_args_eval(ptr_psi_term t,long long set)
   if (!deref_flag) goal_stack = save;
   return (deref_flag);
 }
+#endif
 /* Return TRUE iff string (considered as number) is in the set */
 /* This routine only recognizes the strings "1", "2", "3",     */
 /* represented as numbers 1, 2, 4.                             */
@@ -1018,11 +1028,13 @@ void deref_rec_args_exc(ptr_node n,long long set)
     if (!in_set(n->key,set)) {
       t = (ptr_psi_term) (n->data);
       deref_ptr(t);
-      deref_rec_body(t);
+      //      deref_rec_body(t);
+      ((wl_psi_term_ptr*)t)->deref_rec_body();
     }
     deref_rec_args_exc(n->left,set);
   }
 }
+#if FALSE
 /* These two needed only for match_aim and match_attr: */
 /* Same as deref_eval, but assumes goal_stack already restored. */
 void deref2_eval(ptr_psi_term t)
@@ -1051,6 +1063,7 @@ void deref2_rec_eval(ptr_psi_term t)
   deref_ptr(t);
   deref_rec_body(t);
 }
+#endif
 /********************************************************************/
 /* Saving & restoring residuation information */
 void save_resid(ptr_resid_block rb,ptr_psi_term match_date)

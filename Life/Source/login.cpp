@@ -745,7 +745,8 @@ void merge2(ptr_node *u,ptr_node v)
       ptr_psi_term t;
       merge2(u,v->right);
       t = (ptr_psi_term) v->data;
-      deref2_rec_eval(t); /* Assumes goal_stack is already restored. */
+      //      deref2_rec_eval(t); /* Assumes goal_stack is already restored. */
+      ((wl_psi_term_ptr*)t)->deref2_rec_eval(); /* Assumes goal_stack is already restored. */
       merge2(u,v->left);
     }
     else {
@@ -777,7 +778,8 @@ void merge2(ptr_node *u,ptr_node v)
     ptr_psi_term t;
     merge2(&((*u)->right),v);
     t = (ptr_psi_term) (*u)->data;
-    deref2_rec_eval(t); /* Assumes goal_stack is already restored. */
+    //    deref2_rec_eval(t); /* Assumes goal_stack is already restored. */
+    ((wl_psi_term_ptr*)t)->deref2_rec_eval(); /* Assumes goal_stack is already restored. */
     merge2(&((*u)->left),v);
   }
 }
@@ -803,7 +805,8 @@ void merge3(ptr_node *u,ptr_node v)
 	if (v->right)
 	  merge3(&((*u)->right),v->right);
         t1 = (ptr_psi_term) (*u)->data;
-        deref2_eval(t1);
+	//        deref2_eval(t1);
+        ((wl_psi_term_ptr*)t1)->deref2_eval();
 	if (v->left)
 	  merge3(&((*u)->left),v->left);
       }

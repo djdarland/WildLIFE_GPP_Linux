@@ -3,6 +3,15 @@
   \brief macros
 
 */
+/* The basic dereference operation. */
+/* P must be a pointer to a psi_term.  */
+/* (For the other dereference routines, see lefun.c) */
+#define deref_ptr(P) while(P->coref) P=P->coref
+#define deref(P)         {deref_ptr(P);if (((wl_psi_term_ptr*)P)->deref_eval()) return TRUE;}
+#define deref_void(P)    {deref_ptr(P);((wl_psi_term_ptr*)P)->deref_eval();}
+#define deref_rec(P)     {deref_ptr(P);if (((wl_psi_term_ptr*)P)->deref_rec_eval()) return TRUE;}
+#define deref_args(P,S)  {deref_ptr(P);if (((wl_psi_term_ptr*)P)->deref_args_eval(S)) return TRUE;}
+#define deref_args_void(P)  {deref_ptr(P);((wl_psi_term_ptr*)P)->deref_args_eval();}
 
 // from c_life.h
 
@@ -105,8 +114,9 @@
 /* The basic dereference operation. */
 /* P must be a pointer to a psi_term.  */
 /* (For the other dereference routines, see lefun.c) */
+#if FALSE
 #define deref_ptr(P) while(P->coref) P=P->coref
-
+#endif
 /* Predicates defined in Life whose args should not be evaluated. */
 #define noneval(T) (T->type==quote || T->type==listingsym || T->type==loadsym)
 
@@ -142,13 +152,13 @@
 /* extern ptr_psi_term stack_empty_list(); */
 
 // from lefun.h
-
+#if FALSE
 #define deref(P)         {deref_ptr(P);if (deref_eval(P)) return TRUE;}
 #define deref_void(P)    {deref_ptr(P);deref_eval(P);}
 #define deref_rec(P)     {deref_ptr(P);if (deref_rec_eval(P)) return TRUE;}
 #define deref_args(P,S)  {deref_ptr(P);if (deref_args_eval(P,S)) return TRUE;}
 #define deref_args_void(P)  {deref_ptr(P);deref_args_eval(P);}
-
+#endif
 // from list.h
 
 /*=============================================================================*/

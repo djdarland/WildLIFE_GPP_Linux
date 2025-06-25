@@ -2170,7 +2170,8 @@ void global_error_check(ptr_node n, long long *error_2, long long *eval_2)
 	deref_ptr(a1);
 	deref_ptr(a2);
 	t=a1;
-        if (deref_eval(a2)) *eval_2=TRUE;
+	//        if (deref_eval(a2)) *eval_2=TRUE;
+        if (((wl_psi_term_ptr*)a2)->deref_eval()) *eval_2=TRUE;
       }
     }
     if (!bad_init && t->type->type_def!=(def_type)undef_it && t->type->type_def!=(def_type)global_it) {
