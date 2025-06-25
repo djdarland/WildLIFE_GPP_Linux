@@ -76,6 +76,9 @@ typedef struct wl_int_list *ptr_int_list;
 typedef struct wl_hash_table *ptr_hash_table;
 typedef struct wl_definition *ptr_definition;
 typedef struct wl_psi_term *ptr_psi_term;
+typedef struct wl_psi_term psi_term;
+typedef struct wl_definition definition;
+
 
 #include "wl_module.h"
 #include "wl_module_ptr.h"
@@ -89,6 +92,8 @@ typedef struct wl_psi_term *ptr_psi_term;
 #include "def_macro.h"
 #include "def_struct.h"
 #include "wl_memory.h"
+#include "wl_psi_term.h"
+#include "wl_psi_term_ptr.h"
 #include "def_glob.h"
 #include "def_proto.h"
 

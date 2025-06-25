@@ -64,8 +64,9 @@ typedef struct wl_definition *      ptr_definition;
 typedef struct wl_definition *      def_type;
 #endif
 typedef struct wl_residuation *     ptr_residuation;
+#if FALSE
 typedef struct wl_psi_term *        ptr_psi_term;
-
+#endif
 // typedef struct wl_node *            ptr_node;
 
 typedef struct wl_pair_list *       ptr_pair_list;
@@ -182,6 +183,7 @@ typedef struct wl_residuation {
   ptr_residuation next;
 } residuation;
 
+#if FALSE
 /* PSI_TERM */
 typedef struct wl_psi_term {
 #ifdef TS
@@ -197,6 +199,7 @@ typedef struct wl_psi_term {
   ptr_psi_term coref;
   ptr_residuation resid; /* List of goals to prove if type is narrowed. */
 } psi_term;
+#endif
 
 /* Binary tree node. */
 /* KEY can be either an integer (a pointer) or a pointer to a string. */
