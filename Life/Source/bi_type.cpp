@@ -479,11 +479,13 @@ long long c_isa_subsort() // changed to long long REV401PLUS
     }
   return FALSE;
 }
+#if FALSE 
 long long isValue(ptr_psi_term p)  // REV401PLUS to long long
 // ptr_psi_term p;
 {
   return (p->value_3 != NULL);
 }
+#endif
 /******** C_GLB(A,B)
 	  Return glb(A,B).  Continued calls will return each following type in
 	  the disjunction of the glb of A,B.
@@ -513,7 +515,8 @@ long long c_glb()  // REV401PLUS long long
   if ((ret=glb(arg1->type, arg2->type, &ans, &complexType)) == 0)
     return FALSE;
 
-  if ((ret != 4)&&(isValue(arg1)||isValue(arg2))) {
+  if ((ret != 4)&&(((wl_psi_term_ptr*)arg1)->isValue()) ||
+      ((wl_psi_term_ptr*)arg2)->isValue()) {
     /* glb is one of arg1->type or arg2->type AND at least one is a value */
     if (!isSubTypeValue(arg1, arg2) && !isSubTypeValue(arg2, arg1))
       return FALSE;
@@ -524,9 +527,10 @@ long long c_glb()  // REV401PLUS long long
     decodedType = decodedType->next;
   }
   other=makePsiTerm(ans);
-  if (isValue(arg1)) other->value_3=arg1->value_3;
-  if (isValue(arg2)) other->value_3=arg2->value_3;
-  if (isValue(arg1) || isValue(arg2)) {
+  if (((wl_psi_term_ptr*)arg1)->isValue()) other->value_3=arg1->value_3;
+  if (((wl_psi_term_ptr*)arg2)->isValue()) other->value_3=arg2->value_3;
+  if (((wl_psi_term_ptr*)arg1)->isValue() ||
+      ((wl_psi_term_ptr*)arg2)->isValue()) {
     if (decodedType) {
       Errorline("glb of multiple-inheritance value sorts not yet implemented.\n");
       return FALSE;

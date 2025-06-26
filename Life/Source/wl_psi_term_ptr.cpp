@@ -259,3 +259,10 @@ long long wl_psi_term_ptr::isa_select(ptr_psi_term arg2, long long sel)
   }
   return ans;
 }
+long long wl_psi_term_ptr::isValue()  // REV401PLUS to long long
+// ptr_psi_term p;
+{
+  ptr_psi_term p;
+  p = (ptr_psi_term) this;
+  return (p->value_3 != NULL);
+}

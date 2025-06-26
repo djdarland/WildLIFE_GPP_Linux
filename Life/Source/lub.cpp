@@ -152,7 +152,8 @@ ptr_int_list lub(ptr_psi_term a,ptr_psi_term b,ptr_psi_term *pp)
   ta = a->type;
   tb = b->type;
   /* special cases first */
-  if (isValue(a) && isValue(b) && sub_type(ta,tb) && sub_type(tb,ta))
+  if (((wl_psi_term_ptr*)a)->isValue() &&
+      ((wl_psi_term_ptr*)b)->isValue() && sub_type(ta,tb) && sub_type(tb,ta))
     {
       /* special case of two values being of same type.  Check that they
        * might actually be same value before returning the type
