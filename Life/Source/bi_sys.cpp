@@ -550,7 +550,7 @@ static long long c_residList()
   push_goal(unify,result,other,NULL);
   return TRUE;
 }
-
+#if FALSE
 ptr_goal makeGoal(ptr_psi_term p)
 // ptr_psi_term p;
 {
@@ -563,6 +563,7 @@ ptr_goal makeGoal(ptr_psi_term p)
   goal_stack = old;
   return g;
 }
+#endif
 /******** C_residuate
 	  residuate(A,B) ->  residuate goal B on variable A, non_strict in both args
 */
@@ -583,7 +584,7 @@ static long long c_residuate()
   deref_ptr(arg1);
   deref_ptr(arg2);
   deref_args(pred, set_1_2);
-  g = makeGoal(arg2);
+  g = ((wl_psi_term_ptr*)arg2)->makeGoal();
   residuateGoalOnVar(g, arg1, NULL);
   return TRUE;
 }
@@ -611,7 +612,7 @@ static long long c_mresiduate()
   deref_ptr(arg1);
   deref_ptr(arg2);
   deref_args(pred, set_1_2);
-  g = makeGoal(arg2);
+  g = ((wl_psi_term_ptr*)arg2)->makeGoal();
   /* Then residuate on all the list variables: */
   tmp=arg1;
   while(tmp && tmp->type==alist) { /*  RM: Dec 14 1992  */

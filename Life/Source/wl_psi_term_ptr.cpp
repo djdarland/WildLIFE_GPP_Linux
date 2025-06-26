@@ -161,3 +161,18 @@ void wl_psi_term_ptr::deref2_rec_eval()
   deref_ptr(t);
   ((wl_psi_term_ptr*)t)->deref_rec_body();
 }
+
+ptr_goal wl_psi_term_ptr::makeGoal()
+// ptr_psi_term p;
+{
+  ptr_psi_term p;
+  ptr_goal old = goal_stack;
+  ptr_goal g;
+  p = (ptr_psi_term) this;
+  
+  push_goal(prove, p, (ptr_psi_term)DEFRULES, NULL);
+  g = goal_stack;
+  g->next=NULL;
+  goal_stack = old;
+  return g;
+}

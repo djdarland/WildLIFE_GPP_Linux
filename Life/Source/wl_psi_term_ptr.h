@@ -8,4 +8,6 @@ public:
   long long deref_args_eval(long long set);
   void deref2_eval();
   void deref2_rec_eval();
+  ptr_goal makeGoal();
+
 };
