@@ -12,5 +12,6 @@ public:
   long long isa(ptr_psi_term arg2);
   long long isa_select(ptr_psi_term arg2, long long sel);
   long long isValue();
+  ptr_psi_term stack_cons(ptr_psi_term tail);
 
 };

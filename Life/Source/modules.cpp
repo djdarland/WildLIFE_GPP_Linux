@@ -1014,7 +1014,7 @@ long long all_public_symbols()   // REV401PLUS change to long long
     if(d->keyword->wl_public && (!module || d->keyword->module==module)) {
       car=stack_psi_term(4);
       car->type=d;
-      list=stack_cons(car,list);
+      list=((wl_psi_term_ptr*)car)->stack_cons(list);
     }
   push_goal(unify,result,list,NULL);
   return TRUE;

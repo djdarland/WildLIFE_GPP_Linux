@@ -266,3 +266,19 @@ long long wl_psi_term_ptr::isValue()  // REV401PLUS to long long
   p = (ptr_psi_term) this;
   return (p->value_3 != NULL);
 }
+ptr_psi_term wl_psi_term_ptr::stack_cons(ptr_psi_term tail)
+//     ptr_psi_term head;
+//     ptr_psi_term tail;
+{
+  ptr_psi_term cons;
+  ptr_psi_term head;
+  head = (ptr_psi_term)this;
+
+  cons=stack_psi_term(4);
+  cons->type=alist;
+  if(head)
+    ((wl_node_ptr_ptr*)&(cons->attr_list))->stack_insert(FEATCMP,one,(GENERIC)head); //cast REV401PLUS
+  if(tail)
+    ((wl_node_ptr_ptr*)&(cons->attr_list))->stack_insert(FEATCMP,two,(GENERIC)tail); // cast REV401PLUS
+  return cons;
+}

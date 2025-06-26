@@ -515,7 +515,7 @@ ptr_psi_term makePsiList(GENERIC head, ptr_psi_term (*valueFunc)(GENERIC), GENER
   result=stack_nil();
   
   while (head) {
-    result=stack_cons((*valueFunc)(head),result);
+    result=((wl_psi_term_ptr*)(*valueFunc)(head))->stack_cons(result);
     head=(*nextFunc)(head);
   }
   return result;

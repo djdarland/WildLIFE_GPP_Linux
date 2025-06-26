@@ -25,6 +25,7 @@ ptr_psi_term stack_nil()
 /******** STACK_CONS(head,tail)
 	  Create a CONS object.
 */
+#if FALSE
 ptr_psi_term stack_cons(ptr_psi_term head, ptr_psi_term tail)
 //     ptr_psi_term head;
 //     ptr_psi_term tail;
@@ -39,6 +40,7 @@ ptr_psi_term stack_cons(ptr_psi_term head, ptr_psi_term tail)
     ((wl_node_ptr_ptr*)&(cons->attr_list))->stack_insert(FEATCMP,two,(GENERIC)tail); // cast REV401PLUS
   return cons;
 }
+#endif
 /********* STACK_PAIR(left,right)
 	   create a PAIR object.
 */
@@ -3070,7 +3072,7 @@ ptr_psi_term collect_symbols(long long sel) /*  RM: Feb  3 1993  */
         /* Create the node that will be inserted */
         wl_new=stack_psi_term(4);
         wl_new->type=def;
-	result=stack_cons(wl_new,result);
+	result=((wl_psi_term_ptr*)wl_new)->stack_cons(result);
       }
     }
     else if (sel==op_sel) {
@@ -3079,7 +3081,7 @@ ptr_psi_term collect_symbols(long long sel) /*  RM: Feb  3 1993  */
         ptr_psi_term name,type;
 	wl_new=stack_psi_term(4);
         wl_new->type=opsym;
-	result=stack_cons(wl_new,result);
+	result=((wl_psi_term_ptr*)wl_new)->stack_cons(result);
         stack_add_int_attr(wl_new,one,od->precedence);
         type=stack_psi_term(4);
         switch (od->type) {
@@ -5041,7 +5043,7 @@ long long c_args()
     str=stack_psi_term(0);
     str->type=quoted_string;
     str->value_3=(GENERIC)heap_copy_string(arg_v[i]);
-    list=stack_cons(str,list);
+    list=((wl_psi_term_ptr*)str)->stack_cons(list);
   }
   push_goal(unify,result,list,NULL);
   return success;

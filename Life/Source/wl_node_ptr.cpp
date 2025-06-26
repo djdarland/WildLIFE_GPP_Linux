@@ -87,23 +87,23 @@ ptr_psi_term wl_node_ptr::make_feature_list(ptr_psi_term tail,
       def=((wl_module_ptr*)module)->update_feature(tree->key); /* Extract module RM: Feb 3 1993 */
       if(def) {
 	if(val) /* RM: Mar  3 1994 Distinguish between features & values */
-	  tail=stack_cons((ptr_psi_term)tree->data,tail); // REV401PLUS cast
+	  tail=((wl_psi_term_ptr*)(ptr_psi_term)tree->data)->stack_cons(tail); // REV401PLUS cast
 	else {
 	  wl_new=stack_psi_term(4);      
 	  wl_new->type=def;
-	  tail=stack_cons(wl_new,tail);
+	  tail = ((wl_psi_term_ptr*)wl_new)->stack_cons(tail);
 	}
       }
     }
     else { /* Feature is a number */
       if(val) /* RM: Mar  3 1994 Distinguish between features & values */
-	tail=stack_cons((ptr_psi_term)tree->data,tail); // REV401PLUS cast
+	tail= ((wl_psi_term_ptr*)((ptr_psi_term)tree->data))->stack_cons(tail); // REV401PLUS cast
       else {
 	wl_new=stack_psi_term(4);      
 	wl_new->type=(d==floor(d))?integer:real;
 	wl_new->value_3=wl_mem->heap_alloc(sizeof(REAL));
 	*(REAL *)wl_new->value_3=(REAL)d;
-	tail=stack_cons(wl_new,tail);
+	tail=((wl_psi_term_ptr*)wl_new)->stack_cons(tail);
       }
     }
     if(tree->left)

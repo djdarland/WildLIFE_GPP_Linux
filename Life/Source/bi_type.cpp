@@ -61,7 +61,7 @@ static long long c_children()   /*  RM: Dec 14 1992  Re-wrote most of the routin
         if (hidden_type(ptype)) { p=p->next; continue; }
         p1 = stack_psi_term(0);
         p1->type = ptype;
-        t=stack_cons(p1,t);
+        t=((wl_psi_term_ptr*)p1)->stack_cons(t);
         p = p->next;
       }
   }
@@ -92,7 +92,7 @@ static long long c_parents()
       /* Top is the only parent */
       p1 = stack_psi_term(4);
       p1->type = (ptr_definition) top;
-      t=stack_cons(p1,t); /*  RM: Dec 14 1992  */
+      t=((wl_psi_term_ptr*)p1)->stack_cons(t); /*  RM: Dec 14 1992  */
     }
     else {
       if ((arg1->type==quoted_string || arg1->type==integer ||
@@ -101,7 +101,7 @@ static long long c_parents()
            argument, where arg1->value = NULL, MH */
         p1 = stack_psi_term(4);
         p1->type = arg1->type;
-        t=stack_cons(p1,t); /*  RM: Dec 14 1992  */
+        t=((wl_psi_term_ptr*)p1)->stack_cons(t); /*  RM: Dec 14 1992  */
       }
       else {
         /* Look at the parents list */
@@ -111,7 +111,7 @@ static long long c_parents()
           if (hidden_type(ptype)) { p=p->next; continue; }
           p1 = stack_psi_term(4);
           p1->type = ptype;
-	  t=stack_cons(p1,t); /*  RM: Dec 14 1992  */
+	  t=((wl_psi_term_ptr*)p1)->stack_cons(t); /*  RM: Dec 14 1992  */
           p = p->next;
         }
       }
