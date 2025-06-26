@@ -276,9 +276,29 @@ ptr_psi_term wl_psi_term_ptr::stack_cons(ptr_psi_term tail)
 
   cons=stack_psi_term(4);
   cons->type=alist;
-  if(head)
-    ((wl_node_ptr_ptr*)&(cons->attr_list))->stack_insert(FEATCMP,one,(GENERIC)head); //cast REV401PLUS
+  //  if(head)
+  ((wl_node_ptr_ptr*)&(cons->attr_list))->stack_insert(FEATCMP,one,(GENERIC)head); //cast REV401PLUS
   if(tail)
     ((wl_node_ptr_ptr*)&(cons->attr_list))->stack_insert(FEATCMP,two,(GENERIC)tail); // cast REV401PLUS
   return cons;
+}
+/********* STACK_PAIR(left,right)
+	   create a PAIR object.
+*/
+ptr_psi_term wl_psi_term_ptr::stack_pair(ptr_psi_term right)
+//     ptr_psi_term left;
+//     ptr_psi_term right;
+{
+  ptr_psi_term pair;
+  ptr_psi_term left;
+  
+  left = (ptr_psi_term) this;
+  
+  pair=stack_psi_term(4);
+  pair->type=wl_and;
+  //  if(left)
+  ((wl_node_ptr_ptr*)&(pair->attr_list))->stack_insert(FEATCMP,one,(GENERIC)left);  // cast REV401PLUS
+  if(right)
+    ((wl_node_ptr_ptr*)&(pair->attr_list))->stack_insert(FEATCMP,two,(GENERIC)right);  // cast REV401PLUS
+  return pair;
 }

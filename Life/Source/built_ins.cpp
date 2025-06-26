@@ -40,7 +40,6 @@ ptr_psi_term stack_cons(ptr_psi_term head, ptr_psi_term tail)
     ((wl_node_ptr_ptr*)&(cons->attr_list))->stack_insert(FEATCMP,two,(GENERIC)tail); // cast REV401PLUS
   return cons;
 }
-#endif
 /********* STACK_PAIR(left,right)
 	   create a PAIR object.
 */
@@ -54,10 +53,12 @@ ptr_psi_term stack_pair(ptr_psi_term left, ptr_psi_term right)
   pair->type=wl_and;
   if(left)
     ((wl_node_ptr_ptr*)&(pair->attr_list))->stack_insert(FEATCMP,one,(GENERIC)left);  // cast REV401PLUS
-  if(right)
+    if(right)
     ((wl_node_ptr_ptr*)&(pair->attr_list))->stack_insert(FEATCMP,two,(GENERIC)right);  // cast REV401PLUS
   return pair;
 }
+#endif
+
 /********* STACK_INT(n)
 	   create an INT object
 */

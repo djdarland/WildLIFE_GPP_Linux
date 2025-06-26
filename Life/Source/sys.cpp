@@ -494,8 +494,7 @@ static long long regexp_execute_internal(ptr_psi_term args[],
 	  /* need to add 1 to these offsets because somehow life strings
 	     are 1-based rather than 0-based.  Who is the moron who made
 	     that decision?  This isn't Pascal! */
-	  ptr_psi_term bounds = stack_pair(stack_int(*sp - (char *)args[1]->value_3 + 1),
-					   stack_int(*ep - (char *)args[1]->value_3 + 1));
+	  ptr_psi_term bounds = ((wl_psi_term_ptr*)stack_int(*sp - (char *)args[1]->value_3 + 1))->stack_pair(stack_int(*ep - (char *)args[1]->value_3 + 1));
 	  push_goal(unify,psi,bounds,NULL);
 	}
       }
@@ -509,8 +508,8 @@ static long long regexp_execute_internal(ptr_psi_term args[],
       for (i=0;i<NSUBEXP;i++,sp++,ep++) {
 	if (*sp==NULL) break;
 	sprintf(buffer,"%d",i);
-	{ ptr_psi_term bounds = stack_pair(stack_int(*sp - (char *)args[1]->value_3 + 1),
-					   stack_int(*ep - (char *)args[1]->value_3 + 1));
+	{ ptr_psi_term bounds = ((wl_psi_term_ptr*)stack_int(*sp - (char *)args[1]->value_3 + 1))->stack_pair(stack_int(*ep - (char *)args[1]->value_3 + 1));
+	  
 	  ((wl_node_ptr_ptr*)&(psi->attr_list))->stack_insert_copystr(buffer,(GENERIC)bounds); }
       }
       /* return the new term */
