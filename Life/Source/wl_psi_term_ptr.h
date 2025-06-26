@@ -9,5 +9,7 @@ public:
   void deref2_eval();
   void deref2_rec_eval();
   ptr_goal makeGoal();
+  long long isa(ptr_psi_term arg2);
+  long long isa_select(ptr_psi_term arg2, long long sel);
 
 };

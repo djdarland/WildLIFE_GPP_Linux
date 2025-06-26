@@ -171,6 +171,7 @@ long long isSubTypeValue(ptr_psi_term arg1, ptr_psi_term arg2)  // REV401PLUS ch
   return ans;
 }
 
+#if FALSE
 /* Boolean utility function that implements isa */
 static long long isa(ptr_psi_term arg1, ptr_psi_term arg2)
 // ptr_psi_term arg1, arg2;
@@ -193,6 +194,7 @@ static long long isa(ptr_psi_term arg1, ptr_psi_term arg2)
   }
   return ans;
 }
+
 #define isa_le_sel 0
 #define isa_lt_sel 1
 #define isa_ge_sel 2
@@ -240,6 +242,7 @@ static long long isa_select(ptr_psi_term arg1, ptr_psi_term arg2, long long sel)
   }
   return ans;
 }
+#endif
 
 /******** C_ISA_MAIN
 	  Main routine to handle all the isa built-in functions.
@@ -258,7 +261,7 @@ static long long c_isa_main(long long sel)
     deref(arg1);
     deref(arg2);
     deref_args(funct,set_1_2);
-    ans=isa_select(arg1,arg2,sel);
+    ans=((wl_psi_term_ptr*)arg1)->isa_select(arg2,sel);
     unify_bool_result(result,ans);
   }
   else curry();
@@ -469,7 +472,7 @@ long long c_isa_subsort() // changed to long long REV401PLUS
   if (!arg2) reportAndAbort(pred,"no second argument");
   deref(arg2);
   deref_args(pred, set_1_2);
-  if (isa(arg1, arg2))
+  if (((wl_psi_term_ptr*)arg1)->isa(arg2))
     {
       residuate(arg2);
       return TRUE;

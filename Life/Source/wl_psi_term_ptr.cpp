@@ -176,3 +176,86 @@ ptr_goal wl_psi_term_ptr::makeGoal()
   goal_stack = old;
   return g;
 }
+/* Boolean utility function that implements isa */
+long long wl_psi_term_ptr::isa(ptr_psi_term arg2)
+// ptr_psi_term arg1, arg2;
+{
+  long long ans;
+  ptr_psi_term arg1;
+
+  arg1 = (ptr_psi_term) this;
+  
+  if (  arg1->type==arg2->type
+	|| (  (arg1->type==real || arg1->type==integer)
+	      && (arg2->type==real || arg2->type==integer)
+	      && (arg1->value_3 || arg2->value_3)
+	      )
+	) {
+    if(arg1->type==cut) /*  RM: Jan 21 1993  */
+      ans=TRUE;
+    else
+      ans=isSubTypeValue(arg1, arg2);
+  }
+  else {
+    matches(arg1->type, arg2->type, &ans);
+  }
+  return ans;
+}
+#define isa_le_sel 0
+#define isa_lt_sel 1
+#define isa_ge_sel 2
+#define isa_gt_sel 3
+#define isa_eq_sel 4
+#define isa_nle_sel 5
+#define isa_nlt_sel 6
+#define isa_nge_sel 7
+#define isa_ngt_sel 8
+#define isa_neq_sel 9
+#define isa_cmp_sel 10
+#define isa_ncmp_sel 11
+/* Utility that selects one of several isa functions */
+long long wl_psi_term_ptr::isa_select(ptr_psi_term arg2, long long sel)
+// ptr_psi_term arg1,arg2;
+// long long sel;
+{
+  long long ans;
+  ptr_psi_term arg1;
+
+  arg1 = (ptr_psi_term) this;
+
+  switch (sel) {
+  case isa_le_sel: ans = ((wl_psi_term_ptr*)arg1)->isa(arg2);
+    break;
+  case isa_lt_sel: ans = ((wl_psi_term_ptr*)arg1)->isa(arg2) &&
+      !((wl_psi_term_ptr*)arg2)->isa(arg1);
+    break;
+  case isa_ge_sel: ans = ((wl_psi_term_ptr*)arg2)->isa(arg1);
+    break;
+  case isa_gt_sel: ans = ((wl_psi_term_ptr*)arg2)->isa(arg1) &&
+      !((wl_psi_term_ptr*)arg1)->isa(arg2);
+    break;
+  case isa_eq_sel: ans=((wl_psi_term_ptr*)arg1)->isa(arg2) &&
+      ((wl_psi_term_ptr*)arg2)->isa(arg1);
+    break;
+  case isa_nle_sel: ans= !((wl_psi_term_ptr*)arg1)->isa(arg2);
+    break;
+  case isa_nlt_sel: ans= !(((wl_psi_term_ptr*)arg1)->isa(arg2) &&
+			   !((wl_psi_term_ptr*)arg2)->isa(arg1));
+    break;
+  case isa_nge_sel: ans= !((wl_psi_term_ptr*)arg2)->isa(arg1);
+    break;
+  case isa_ngt_sel: ans= !(((wl_psi_term_ptr*)arg2)->isa(arg1) &&
+			   !((wl_psi_term_ptr*)arg1)->isa(arg2));
+    break;
+  case isa_neq_sel: ans= !(((wl_psi_term_ptr*)arg1)->isa(arg2) &&
+			   ((wl_psi_term_ptr*)arg2)->isa(arg1));
+    break;
+  case isa_cmp_sel: ans=((wl_psi_term_ptr*)arg1)->isa(arg1) ||
+      ((wl_psi_term_ptr*)arg2)->isa(arg1);
+    break;
+  case isa_ncmp_sel: ans= !(((wl_psi_term_ptr*)arg1)->isa(arg2) ||
+			    ((wl_psi_term_ptr*)arg2)->isa(arg1));
+    break;
+  }
+  return ans;
+}
