@@ -419,3 +419,181 @@ void wl_psi_term_ptr::mark_quote_c(long long heap_flag)
     }
   }
 }
+///////////////////////////
+
+
+/******** COPY(t)
+This is the workhorse of the interpreter (alas!).
+All copy-related routines are non-interruptible by the garbage collector.
+  
+Make a copy in the STACK or in the HEAP of psi_term t, which is located in
+the HEAP.  A copy is done whenever invoking a rule, so it had better be fast.
+This routine uses hash tables with buckets and partial inlining for speed.
+
+The following three versions of copy all rename their variables and return
+a completely dereferenced object:
+
+u=exact_copy(t,hf)  u is an exact copy of t.
+u=quote_copy(t,hf)  u is a copy of t that is recursively marked evaluated.
+u=eval_copy(t,hf)   u is a copy of t that is recursively marked unevaluated.
+
+This version of copy is an incremental copy to the heap.  It copies only
+those parts of a psi_term that are on the stack, leaving the others
+unchanged:
+
+u=inc_heap_copy(t)  u is an exact copy of t, on the heap.  This is like
+hf==HEAP, except that objects already on the heap are
+untouched.  Relies on no pointers from heap to stack.
+
+hf = heap_flag.  hf = HEAP or STACK means allocate in the HEAP or STACK.
+Marking eval/uneval is done by modifying the STATUS field of the copied
+psi_term.
+In eval_copy, a term's status is set to 0 if the term or any subterm needs
+evaluation.
+Terms are dereferenced when copying them to the heap.
+*/
+#define EXACT_FLAG 0
+#define QUOTE_FLAG 1
+#define EVAL_FLAG  2
+/* See mark_quote_c: */ /* 15.9 */
+#define QUOTE_STUB 3
+ptr_psi_term wl_psi_term_ptr::exact_copy(long long heap_flag)
+// ptr_psi_term t;
+// long long heap_flag;
+{
+  ptr_psi_term t;
+  t = (ptr_psi_term) this;
+  
+  to_heap=FALSE;
+  return (((wl_psi_term_ptr*)t)->copy(EXACT_FLAG, heap_flag));
+}
+
+ptr_psi_term wl_psi_term_ptr::quote_copy(long long heap_flag)
+// ptr_psi_term t;
+// long long heap_flag;
+{
+  ptr_psi_term t;
+  t = (ptr_psi_term) this;
+  to_heap=FALSE;
+  return (((wl_psi_term_ptr*)t)->copy(QUOTE_FLAG, heap_flag));
+}
+
+ptr_psi_term wl_psi_term_ptr::eval_copy(long long heap_flag)
+// ptr_psi_term t;
+// long long heap_flag;
+{
+  ptr_psi_term t;
+  t = (ptr_psi_term) this;
+  to_heap=FALSE;
+  return (((wl_psi_term_ptr*)t)->copy(EVAL_FLAG, heap_flag));
+}
+
+/* There is a bug in inc_heap_copy */
+ptr_psi_term wl_psi_term_ptr::inc_heap_copy()
+// ptr_psi_term t;
+{
+  ptr_psi_term t;
+  t = (ptr_psi_term) this;
+  
+  to_heap=TRUE;
+  return (((wl_psi_term_ptr*)t)->copy(EXACT_FLAG, TRUE));
+}
+
+// static long long curr_status;
+ptr_psi_term wl_psi_term_ptr::copy(long long copy_flag, long long heap_flag)
+//     ptr_psi_term t;
+//     long long copy_flag,heap_flag;
+{
+  ptr_psi_term u;
+  long long old_status;
+  long long local_copy_flag;
+  long long *infoptr;
+  ptr_psi_term t;
+  t = (ptr_psi_term) this;
+  
+  if (u=t) {    
+    deref_ptr(t); /* Always dereference when copying */
+    if (HEAPDONE(t)) return t;
+    u = ((wl_psi_term_ptr*)t)->translate(&infoptr);
+    if (u && *infoptr!=QUOTE_STUB) { /* 24.8 */
+      /* If it was eval-copied before, then quote it now. */
+      if (*infoptr==EVAL_FLAG && copy_flag==QUOTE_FLAG) { /* 24.8 25.8 */
+	if (t) ((wl_psi_term_ptr*)t)->mark_quote_c(heap_flag);
+	*infoptr=QUOTE_FLAG; /* I.e. don't touch this term any more */
+      }
+      if (copy_flag==EVAL_FLAG) { /* PVR 14.2.94 */
+	/* If any subterm has zero curr_status (i.e., if u->status==0),
+	   then so does the whole term: */
+	old_status=curr_status;
+	curr_status=u->status;
+	if (curr_status) curr_status=old_status;
+      }
+    }
+    else {
+      if (wl_mem->heap_pointer_val()-wl_mem->stack_pointer_val() < COPY_THRESHOLD) {
+	Errorline("psi-term too large -- get a bigger Life!\n");
+	abort_life(TRUE);
+	longjmp(env,FALSE); /* Back to main loop */ /*  RM: Feb 15 1993  */
+      }
+      if (copy_flag==EVAL_FLAG && !t->type->evaluate_args) /* 24.8 25.8 */
+	local_copy_flag=QUOTE_FLAG; /* All arguments will be quoted 24.8 */
+      else /* 24.8 */
+	local_copy_flag=copy_flag;
+      if (copy_flag==EVAL_FLAG) {
+	old_status = curr_status;
+	curr_status = 4;
+      }
+      if (u) { /* 15.9 */
+	*infoptr=QUOTE_FLAG;
+	local_copy_flag=QUOTE_FLAG;
+	copy_flag=QUOTE_FLAG;
+      }
+      else {
+	u=NEW(t,psi_term);
+	((wl_psi_term_ptr*)t)->insert_translation(u,local_copy_flag); /* 24.8 */
+      }
+      *u = *t;
+      u->resid=NULL; /* 24.8 Don't copy residuations */
+#ifdef TS
+      u->time_stamp=global_time_stamp; /* 9.6 */
+#endif
+      if (t->attr_list)
+	u->attr_list=((wl_node_ptr*)t->attr_list)->copy_tree(local_copy_flag, heap_flag);
+      if (copy_flag==EVAL_FLAG) {
+	switch((long long)t->type->type_def) {
+	case type_it:
+	  if (t->type->properties)
+	    curr_status=0;
+	  break;
+	case function_it:
+	  curr_status=0;
+	  break;
+	case global_it: /*  RM: Feb  8 1993  */
+	  curr_status=0;
+	  break;
+	default:
+	  break;
+	}
+	u->status=curr_status;
+	u->flags=curr_status?QUOTED_TRUE:FALSE; /* 14.9 */
+	/* If any subterm has zero curr_status,
+	   then so does the whole term: */
+	if (curr_status) curr_status=old_status;
+      } else if (copy_flag==QUOTE_FLAG) {
+	u->status=4;
+	u->flags=QUOTED_TRUE; /* 14.9 */
+      }
+      /* else copy_flag==EXACT_FLAG & u->status=t->status */
+      if (heap_flag==HEAP) {
+	if (t->type==cut) u->value_3=NULL;
+      }	else {
+	if (t->type==cut) {
+	  u->value_3=(GENERIC)choice_stack;
+	  Traceline("current choice point is %x\n",choice_stack);
+	}
+      }
+    }
+  }
+  return u;
+}
+

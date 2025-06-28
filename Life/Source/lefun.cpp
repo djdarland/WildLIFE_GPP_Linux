@@ -428,8 +428,8 @@ long long eval_aim()
         /* RESID */ /* resid_aim = NULL; */
         wl_bucks->clear_copy();
 	/*  RM: Jun 18 1993: no functions in head */
-	head=quote_copy(rule->aaaa_2,STACK);
-        body=eval_copy(rule->bbbb_2,STACK);
+	if (rule->aaaa_2)head=((wl_psi_term_ptr*)rule->aaaa_2)->quote_copy(STACK); else head = NULL;
+        if (rule->bbbb_2)body=((wl_psi_term_ptr*)rule->bbbb_2)->eval_copy(STACK); else body = NULL;
 	head->status=4;
         if (rule->next) /* 17.6 */
           push_choice_point(eval,funct,result,(GENERIC)rule->next); // REV401PLUS cast
@@ -1115,7 +1115,7 @@ void eval_global_var(ptr_psi_term t)     /*  RM: Feb 10 1993  */
       undo_stack=n;
     }
     wl_bucks->clear_copy();
-    t->type->global_value=eval_copy(t->type->init_value,STACK);
+    if (t->type->init_value)  t->type->global_value=((wl_psi_term_ptr*)t->type->init_value)->eval_copy(STACK); else t->type->global_value = NULL;
   }
   if(t->type->type_def==(def_type) global_it && t!=t->type->global_value) {
     push_psi_ptr_value(t,(GENERIC *)&(t->coref)); // REV401PLUS cast

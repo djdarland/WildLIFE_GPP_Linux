@@ -3,6 +3,8 @@
   \brief globals
   
 */
+EXTERN long long curr_status; // for wl_node_ptr class - better way?
+
 #ifdef __unix__
 EXTERN struct tms life_start;
 EXTERN struct tms life_end;

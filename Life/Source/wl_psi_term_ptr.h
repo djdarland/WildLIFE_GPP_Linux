@@ -17,5 +17,11 @@ public:
   void insert_translation(ptr_psi_term b,long long info);
   ptr_psi_term translate(long long **infoptr);
   void mark_quote_c(long long heap_flag);
+  ptr_psi_term exact_copy(long long heap_flag);
+  ptr_psi_term quote_copy(long long heap_flag);
+  ptr_psi_term eval_copy(long long heap_flag);
+  ptr_psi_term inc_heap_copy();
+  ptr_psi_term copy(long long copy_flag, long long heap_flag);
+
 
 };

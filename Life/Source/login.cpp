@@ -175,8 +175,8 @@ void add_rule(ptr_psi_term head,ptr_psi_term body,def_type typ)
 	  /* PVR single allocation in source */
 	  p=HEAP_ALLOC(pair_list);
 	  wl_bucks->clear_copy();
-	  p->aaaa_2=quote_copy(head2,HEAP); /* 24.8 25.8 */
-	  p->bbbb_2=quote_copy(body,HEAP); /* 24.8 25.8 */
+	  if (head2) p->aaaa_2=((wl_psi_term_ptr*)head2)->quote_copy(HEAP); else p->aaaa_2 = NULL;
+	  if (body) p->bbbb_2=((wl_psi_term_ptr*)body)->quote_copy(HEAP); else p->bbbb_2=NULL;
 	  if (assert_first) {
 	    p->next=def->rule;
 	    def->rule=p;
@@ -918,8 +918,8 @@ void fetch_def(ptr_psi_term u, long long allflag)
     while (prop) {
       if (allflag || prop->cccc_4==utype) {
         wl_bucks->clear_copy();
-        v=eval_copy(prop->aaaa_4,STACK);
-        w=eval_copy(prop->bbbb_4,STACK);
+        if (prop->aaaa_4)v=((wl_psi_term_ptr*)prop->aaaa_4)->eval_copy(STACK); else v = NULL;
+        if (prop->bbbb_4)w=((wl_psi_term_ptr*)prop->bbbb_4)->eval_copy(STACK); else w = NULL;
         
         if (w) push_goal(prove,w,(ptr_psi_term)DEFRULES,NULL); // REV401PLUS add cast
         deref_ptr(v);
@@ -984,8 +984,8 @@ void fetch_def_lazy(ptr_psi_term u, ptr_definition old1, ptr_definition old2,
 	/* At this point, prop->c is an attribute that has not yet */
 	/* been checked. */
 	wl_bucks->clear_copy();
-	v=eval_copy(prop->aaaa_4,STACK);
-	w=eval_copy(prop->bbbb_4,STACK);
+	if (prop->aaaa_4) v=((wl_psi_term_ptr*)prop->aaaa_4)->eval_copy(STACK); else v = NULL;
+	if (prop->bbbb_4) w=((wl_psi_term_ptr*)prop->bbbb_4)->eval_copy(STACK); else w = NULL;
 	if (w) push_goal(prove,w,(ptr_psi_term)DEFRULES,NULL);
 	deref_ptr(v);
 	v->status=4;
@@ -1333,8 +1333,8 @@ long long prove_aim()
 		}
 		if (rule) {
 		  wl_bucks->clear_copy();
-		  head=eval_copy(rule->aaaa_2,STACK);
-		  body=eval_copy(rule->bbbb_2,STACK);
+		  if (rule->aaaa_2) head=((wl_psi_term_ptr*)rule->aaaa_2)->eval_copy(STACK); else head = NULL;
+		  if (rule->bbbb_2) body=((wl_psi_term_ptr*)rule->bbbb_2)->eval_copy(STACK); else body = NULL;
 		  if (rule->next)
 		    push_choice_point(prove,thegoal,(ptr_psi_term)rule->next,NULL); // REV401PLUS cast
 		  if (body->type!=succeed)
@@ -1439,8 +1439,8 @@ long long clause_aim(long long r)
       push_goal(retract,(ptr_psi_term)p,NULL,NULL);  // REV401PLUS cast
     if ((*p)->aaaa_2) {
       wl_bucks->clear_copy();
-      rule_head=quote_copy((*p)->aaaa_2,STACK);
-      rule_body=quote_copy((*p)->bbbb_2,STACK);
+      if ((*p)->aaaa_2) rule_head=((wl_psi_term_ptr*)(*p)->aaaa_2)->quote_copy(STACK); else rule_head = NULL;
+      if ((*p)->bbbb_2) rule_body=((wl_psi_term_ptr*)(*p)->bbbb_2)->quote_copy(STACK); else rule_body = NULL;
       push_goal(unify,body,rule_body,NULL);
       push_goal(unify,head,rule_head,NULL);
       rule_head->status=4;

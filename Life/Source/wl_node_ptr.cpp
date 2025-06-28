@@ -125,3 +125,27 @@ void wl_node_ptr::mark_quote_tree_c(long long heap_flag)
     if (n->right) ((wl_node_ptr*)n->right)->mark_quote_tree_c(heap_flag);
   }
 }
+
+/////////////////////////////
+
+ptr_node wl_node_ptr::copy_tree(long long copy_flag, long long heap_flag)
+//ptr_node t;
+//long long copy_flag, heap_flag;
+{
+  ptr_node r;
+  ptr_psi_term t1,t2;
+  ptr_node t;
+
+  t = (ptr_node) this;
+  
+  if (HEAPDONE(t)) return t;
+  r=NEW(t,node);
+  r->key = t->key;
+  r->left  = (t->left)  ? ((wl_node_ptr*)t->left)->copy_tree(copy_flag,heap_flag)  : NULL;
+  t1 = (ptr_psi_term)(t->data);
+  t2 = ((wl_psi_term_ptr*)t1)->copy(copy_flag,heap_flag);
+  r->data = (GENERIC) t2;
+  r->right = (t->right) ? ((wl_node_ptr*)t->right)->copy_tree(copy_flag,heap_flag) : NULL;
+  return r;
+}
+

@@ -145,7 +145,9 @@ void clear_copy()
 #define HEAPDONE(R) (to_heap && ONHEAP(R))
 ptr_psi_term copy(); /* Forward declarations */
 
-void mark_quote_c();
+#if FALSE
+
+// void mark_quote_c();
 static ptr_node copy_tree(ptr_node t, long long copy_flag, long long heap_flag)
 //ptr_node t;
 //long long copy_flag, heap_flag;
@@ -163,6 +165,7 @@ static ptr_node copy_tree(ptr_node t, long long copy_flag, long long heap_flag)
   r->right = (t->right) ? copy_tree(t->right,copy_flag,heap_flag) : NULL;
   return r;
 }
+
 
 /******** COPY(t)
 This is the workhorse of the interpreter (alas!).
@@ -314,6 +317,9 @@ ptr_psi_term copy(ptr_psi_term t, long long copy_flag, long long heap_flag)
   }
   return u;
 }
+
+#endif
+
 /****************************************************************************/
 /******** DISTINCT_TREE(t)
 Return an exact copy of an attribute tree.

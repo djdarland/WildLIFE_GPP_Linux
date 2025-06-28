@@ -1052,7 +1052,7 @@ static long long c_project()
 	  if((GENERIC)result<wl_mem->heap_pointer_val())
 	    push_psi_ptr_value(result,(GENERIC *)&(result->coref)); //REV401PLUS cast
 	  wl_bucks->clear_copy();
-	  result->coref=inc_heap_copy(result);
+	  if (result) result->coref=((wl_psi_term_ptr*)result)->inc_heap_copy(); else result->coref = NULL;
 	  ((wl_node_ptr_ptr*)&(arg1->attr_list))->heap_insert(FEATCMP,label,(GENERIC)result->coref);//REV401PLUS cast
 	}
 	else {
@@ -1967,7 +1967,7 @@ static long long c_setq()
           p->aaaa_2=heap_psi_term(4);
           p->aaaa_2->type=d;
           wl_bucks->clear_copy();
-          p->bbbb_2=quote_copy(arg2,HEAP);
+          if (arg2) p->bbbb_2=((wl_psi_term_ptr*)arg2)->quote_copy(HEAP); else p->bbbb_2 = NULL;
           p->next=NULL;
           d->rule=p;
           success=TRUE;
@@ -2216,7 +2216,7 @@ void global_one(ptr_psi_term t)
     u=stack_psi_term(4);
   wl_bucks->clear_copy();
   t->type->type_def=(def_type)global_it;
-  t->type->init_value=quote_copy(u,HEAP); /*  RM: Mar 23 1993  */
+  if (u) t->type->init_value=((wl_psi_term_ptr*)u)->quote_copy(HEAP); else t->type->init_value = NULL;
 }
 /******** C_PERSISTENT
 	  Declare that a symbol is a persistent variable.
@@ -3265,7 +3265,7 @@ static long long c_eval()
     deref_args(funct,set_1);
     assert((unsigned long long)(arg1->type)!=4);
     wl_bucks->clear_copy();
-    copy_arg1 = eval_copy(arg1,STACK);
+    if (arg1) copy_arg1 = ((wl_psi_term_ptr*)arg1)->eval_copy(STACK); else copy_arg1 = NULL;
     resid_aim = NULL;
     push_goal(unify,copy_arg1,result,NULL);
     i_check_out(copy_arg1);
@@ -3580,7 +3580,7 @@ static long long c_global_assign()
     deref_args(g,set_1_2);
     if (arg1!=arg2) {
       wl_bucks->clear_copy();
-      wl_new=inc_heap_copy(arg2);
+      if (arg2) wl_new=((wl_psi_term_ptr*)arg2)->inc_heap_copy(); else wl_new = NULL;
       if((GENERIC)arg1<wl_mem->heap_pointer_val()) {
 	push_psi_ptr_value(arg1,(GENERIC *)&(arg1->coref)); // REV401PLUS cast
 	arg1->coref= wl_new;
@@ -3682,7 +3682,7 @@ static long long c_copy_term()
     deref_args(funct,set_1);
     result=aim->bbbb_1;
     wl_bucks->clear_copy();
-    copy_arg1=exact_copy(arg1,STACK);
+    if (arg1) copy_arg1=((wl_psi_term_ptr*)arg1)->exact_copy(STACK); else copy_arg1 = NULL;
     push_goal(unify,copy_arg1,result,NULL);
   }
   else
@@ -3793,10 +3793,10 @@ static long long c_freeze_inner(long long freeze_flag)
 
 	  wl_bucks->clear_copy();
           if (TRUE /*arg1->type->evaluate_args 8.9 */)
-	    head=eval_copy(rule->aaaa_2,STACK);
+	    if (rule->aaaa_2) head=((wl_psi_term_ptr*)rule->aaaa_2)->eval_copy(STACK); else head = NULL;
           else
 	    head=quote_copy(rule->aaaa_2,STACK);
-	  body=eval_copy(rule->bbbb_2,STACK);
+	  if (rule->bbbb_2) body=((wl_psi_term_ptr*)rule->bbbb_2)->eval_copy(STACK); else body = NULL;
 	  head->status=4;
 
 	  if (rule->next)
