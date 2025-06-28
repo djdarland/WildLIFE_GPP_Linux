@@ -409,7 +409,7 @@ void wl_psi_term_ptr::mark_quote_c(long long heap_flag)
         *infoptr=QUOTE_FLAG;
         u->status=4;
         u->flags=QUOTED_TRUE; /* 14.9 */
-        mark_quote_tree_c(t->attr_list,heap_flag);
+        if (t->attr_list) ((wl_node_ptr*)t->attr_list)->mark_quote_tree_c(heap_flag);
       }
     }
     else { /* u does not exist yet */ /* 15.9 */

@@ -6,5 +6,7 @@ public:
   ptr_node find_data(GENERIC p);
   ptr_psi_term make_feature_list(ptr_psi_term tail,
 				 ptr_module module,int val);
+  void mark_quote_tree_c(long long heap_flag);
+
 
 };

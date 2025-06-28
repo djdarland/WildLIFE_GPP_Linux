@@ -111,3 +111,17 @@ ptr_psi_term wl_node_ptr::make_feature_list(ptr_psi_term tail,
   }
   return tail;
 }
+
+void wl_node_ptr::mark_quote_tree_c(long long heap_flag)
+// ptr_node n;
+// long long heap_flag;
+{
+  ptr_node n;
+
+  n = (ptr_node) this;
+  if (n) {
+    if (n->left) ((wl_node_ptr*)n->left)->mark_quote_tree_c(heap_flag);
+    if (n->data) ((wl_psi_term_ptr*)(n->data))->mark_quote_c(heap_flag);
+    if (n->right) ((wl_node_ptr*)n->right)->mark_quote_tree_c(heap_flag);
+  }
+}

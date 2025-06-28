@@ -236,7 +236,7 @@ ptr_psi_term copy(ptr_psi_term t, long long copy_flag, long long heap_flag)
     if (u && *infoptr!=QUOTE_STUB) { /* 24.8 */
       /* If it was eval-copied before, then quote it now. */
       if (*infoptr==EVAL_FLAG && copy_flag==QUOTE_FLAG) { /* 24.8 25.8 */
-	((wl_psi_term_ptr*)t)->mark_quote_c(heap_flag);
+	if (t) ((wl_psi_term_ptr*)t)->mark_quote_c(heap_flag);
 	*infoptr=QUOTE_FLAG; /* I.e. don't touch this term any more */
       }
       if (copy_flag==EVAL_FLAG) { /* PVR 14.2.94 */
@@ -400,7 +400,7 @@ void mark_quote_c(ptr_psi_term t, long long heap_flag)
     }
   }
 }
-#endif
+
 void mark_quote_tree_c(ptr_node n,long long heap_flag)
 // ptr_node n;
 // long long heap_flag;
@@ -411,6 +411,8 @@ void mark_quote_tree_c(ptr_node n,long long heap_flag)
     mark_quote_tree_c(n->right,heap_flag);
   }
 }
+#endif
+
 /****************************************************************************/
 /* A (possibly) correct mark_eval and its companion mark_quote. */
 /* The translation table is used to record whether a subgraph has already */
