@@ -1617,7 +1617,7 @@ static long long apply1_internal(ptr_psi_term args[],
       feat = (char*)args[1]->value_3;
     else
       feat = heap_copy_string(args[1]->type->keyword->symbol);
-    clear_copy();
+    wl_bucks->clear_copy();
     fun=distinct_copy(args[0]);
     ((wl_node_ptr_ptr*)&(fun->attr_list))->stack_insert(FEATCMP,feat,(GENERIC)args[2]);
     push_goal(eval,fun,result,(GENERIC)fun->type->rule);

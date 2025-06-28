@@ -16,6 +16,7 @@ EXTERN clock_t start_time;
 EXTERN clock_t end_time;
 #endif
 EXTERN class wl_memory *wl_mem;
+EXTERN class wl_buckets *wl_bucks;
 
 // from extern.h
 

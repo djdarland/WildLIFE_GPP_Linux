@@ -20,12 +20,15 @@
 /* Size of hash table; must be a power of 2 */
 /* A big hash table means it is sparse and therefore fast */
 
+#if FALSE
 static struct hashentry hashtable[HASHSIZE];
 static struct hashbucket *hashbuckets; /* Array of buckets */
 static long long hashtime; /* Currently valid timestamp */
 static long long hashfree; /* Index into array of buckets */
 static long long numbuckets; /* Total number of buckets; initially=NUMBUCKETS */
+#endif
 
+#if FALSE
 /******** INIT_COPY()
 	  Execute once upon startup of Wild_Life.
 */
@@ -39,6 +42,8 @@ void init_copy()
   hashbuckets = (struct hashbucket *)
     malloc(NUMBUCKETS * sizeof(struct hashbucket));
 }
+
+
 /******** CLEAR_COPY()
 	  Erase the hash table.
 	  This must be done as a prelude to any copying operation.
@@ -48,6 +53,7 @@ void clear_copy()
   hashtime++;
   hashfree=0;
 }
+
 /******** INSERT_TRANSLATION(a,b,info)
 	  Add the translation of address A to address B in the translation table.
 	  Also add an info field.
@@ -111,6 +117,7 @@ void clear_copy()
   else
     return NULL;
 }
+#endif
 /****************************************************************************/
 /******** COPY_TREE(t)
 	  Return a pointer to a copy of the binary tree t.
@@ -137,6 +144,7 @@ void clear_copy()
 /* TRUE iff to_heap is TRUE & work is done, i.e. the term is on the heap. */
 #define HEAPDONE(R) (to_heap && ONHEAP(R))
 ptr_psi_term copy(); /* Forward declarations */
+
 void mark_quote_c();
 static ptr_node copy_tree(ptr_node t, long long copy_flag, long long heap_flag)
 //ptr_node t;
@@ -155,6 +163,7 @@ static ptr_node copy_tree(ptr_node t, long long copy_flag, long long heap_flag)
   r->right = (t->right) ? copy_tree(t->right,copy_flag,heap_flag) : NULL;
   return r;
 }
+
 /******** COPY(t)
 This is the workhorse of the interpreter (alas!).
 All copy-related routines are non-interruptible by the garbage collector.
@@ -223,11 +232,11 @@ ptr_psi_term copy(ptr_psi_term t, long long copy_flag, long long heap_flag)
   if (u=t) {    
     deref_ptr(t); /* Always dereference when copying */
     if (HEAPDONE(t)) return t;
-    u = translate(t,&infoptr);
+    u = ((wl_psi_term_ptr*)t)->translate(&infoptr);
     if (u && *infoptr!=QUOTE_STUB) { /* 24.8 */
       /* If it was eval-copied before, then quote it now. */
       if (*infoptr==EVAL_FLAG && copy_flag==QUOTE_FLAG) { /* 24.8 25.8 */
-	mark_quote_c(t,heap_flag);
+	((wl_psi_term_ptr*)t)->mark_quote_c(heap_flag);
 	*infoptr=QUOTE_FLAG; /* I.e. don't touch this term any more */
       }
       if (copy_flag==EVAL_FLAG) { /* PVR 14.2.94 */
@@ -259,7 +268,7 @@ ptr_psi_term copy(ptr_psi_term t, long long copy_flag, long long heap_flag)
       }
       else {
 	u=NEW(t,psi_term);
-	insert_translation(t,u,local_copy_flag); /* 24.8 */
+	((wl_psi_term_ptr*)t)->insert_translation(u,local_copy_flag); /* 24.8 */
       }
       *u = *t;
       u->resid=NULL; /* 24.8 Don't copy residuations */
@@ -345,6 +354,7 @@ ptr_psi_term distinct_copy(ptr_psi_term t)
   res->attr_list=distinct_tree(t->attr_list);
   return res;
 }
+#if FALSE
 /****************************************************************************/
 /* Meaning of the info field in the translation table: */
 /* With u=translate(t,&infoptr): */
@@ -390,13 +400,14 @@ void mark_quote_c(ptr_psi_term t, long long heap_flag)
     }
   }
 }
+#endif
 void mark_quote_tree_c(ptr_node n,long long heap_flag)
 // ptr_node n;
 // long long heap_flag;
 {
   if (n) {
     mark_quote_tree_c(n->left,heap_flag);
-    mark_quote_c((ptr_psi_term) (n->data),heap_flag);
+    ((wl_psi_term_ptr*)(n->data))->mark_quote_c(heap_flag);
     mark_quote_tree_c(n->right,heap_flag);
   }
 }
@@ -421,7 +432,7 @@ static long long mark_nonstrict_flag;
 void mark_eval(ptr_psi_term t) /* 24.8 25.8 */
 // ptr_psi_term t;
 {
-  clear_copy();
+  wl_bucks->clear_copy();
   mark_nonstrict_flag=FALSE;
   mark_eval_new(t);
 }
@@ -430,7 +441,7 @@ void mark_eval(ptr_psi_term t) /* 24.8 25.8 */
 void mark_nonstrict(ptr_psi_term t)
 // ptr_psi_term t;
 {
-  clear_copy();
+  wl_bucks->clear_copy();
   mark_nonstrict_flag=TRUE;
   mark_eval_new(t);
 }
@@ -438,7 +449,7 @@ void mark_nonstrict(ptr_psi_term t)
 void mark_quote_new2(ptr_psi_term t)
 // ptr_psi_term t;
 {
-  clear_copy();
+  wl_bucks->clear_copy();
   mark_nonstrict_flag=FALSE;
   mark_quote_new(t);
 }
@@ -453,7 +464,7 @@ void mark_eval_new(ptr_psi_term t)
   if (t) {
     deref_ptr(t);
     flag = t->type->evaluate_args;
-    u=translate(t,&infoptr);
+    u=((wl_psi_term_ptr*)t)->translate(&infoptr);
     if (u) {
       /* Quote the subgraph if it was already copied as to be evaluated. */
       if (!flag && *infoptr) {
@@ -467,7 +478,7 @@ void mark_eval_new(ptr_psi_term t)
       if (curr_status) curr_status=old_status;
     }
     else {
-      insert_translation(t,(ptr_psi_term)TRUE,flag);
+      ((wl_psi_term_ptr*)t)->insert_translation((ptr_psi_term)TRUE,flag);
       old_status=curr_status;
       curr_status=4;
       if (flag) /* 16.9 */
@@ -521,11 +532,11 @@ void mark_quote_new(ptr_psi_term t)
 
   if (t) {
     deref_ptr(t);
-    u=translate(t,&infoptr);
+    u=((wl_psi_term_ptr*)t)->translate(&infoptr);
     /* Return if the subgraph is already quoted. */
     if (u && !*infoptr) return;
     /* Otherwise quote the subgraph */
-    if (!u) insert_translation(t,(ptr_psi_term)TRUE,FALSE);
+    if (!u) ((wl_psi_term_ptr*)t)->insert_translation((ptr_psi_term)TRUE,FALSE);
     else *infoptr = FALSE;	/* sanjay */
     t->status=4;
     t->flags=QUOTED_TRUE; /* 14.9 */

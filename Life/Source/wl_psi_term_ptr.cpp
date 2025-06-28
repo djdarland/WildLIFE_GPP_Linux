@@ -302,3 +302,120 @@ ptr_psi_term wl_psi_term_ptr::stack_pair(ptr_psi_term right)
     ((wl_node_ptr_ptr*)&(pair->attr_list))->stack_insert(FEATCMP,two,(GENERIC)right);  // cast REV401PLUS
   return pair;
 }
+/******** INSERT_TRANSLATION(a,b,info)
+	  Add the translation of address A to address B in the translation table.
+	  Also add an info field.
+*/
+/* static */ void wl_psi_term_ptr::insert_translation(ptr_psi_term b,long long info)
+	     // ptr_psi_term a;
+	     // ptr_psi_term b;
+	     // long long info;
+{
+  long long index;
+  long long lastbucket;
+  ptr_psi_term a;
+
+  a = (ptr_psi_term) this;
+  
+  /* Ensure there are free buckets by doubling their number if necessary */
+  if (wl_bucks->hashfree >= wl_bucks->numbuckets) {
+    wl_bucks->numbuckets *= 2;
+    wl_bucks->hashbuckets = (struct hashbucket *) 
+      realloc((void *) wl_bucks->hashbuckets, wl_bucks->numbuckets * sizeof(struct hashbucket));
+    /* *** Do error handling here *** */
+    Traceline("doubled the number of hashbuckets to %d\n", wl_bucks->numbuckets);
+  }
+  /* Add a bucket to the beginning of the list */
+  index = HASH(a);
+  if (wl_bucks->hashtable[index].timestamp == wl_bucks->hashtime)
+    lastbucket = wl_bucks->hashtable[index].bucketindex;
+  else {
+    lastbucket = HASHEND;
+    wl_bucks->hashtable[index].timestamp = wl_bucks->hashtime;
+  }
+  wl_bucks->hashtable[index].bucketindex = wl_bucks->hashfree;
+  wl_bucks->hashbuckets[wl_bucks->hashfree].old_value = a;
+  wl_bucks->hashbuckets[wl_bucks->hashfree].new_value = b;
+  wl_bucks->hashbuckets[wl_bucks->hashfree].info = info;
+  wl_bucks->hashbuckets[wl_bucks->hashfree].next = lastbucket;
+  wl_bucks->hashfree++;
+}
+
+/******** TRANSLATE(a,info)
+	  Get the translation of address A and the info field stored with it.
+	  Return NULL if none is found.
+*/
+/* static */ ptr_psi_term wl_psi_term_ptr::translate(long long **infoptr)   /*  RM: Jan 27 1993  */
+	     //  ptr_psi_term a;
+	     //long long **infoptr;
+{
+  long long index;
+  /* long long i; 20.8 */
+  long long bucket;
+  ptr_psi_term a;
+  a = (ptr_psi_term) this;
+
+  index = HASH(a);
+  if (wl_bucks->hashtable[index].timestamp != wl_bucks->hashtime) return NULL;
+  bucket = wl_bucks->hashtable[index].bucketindex;
+  /* i=0; 20.8 */
+  while (bucket != HASHEND && wl_bucks->hashbuckets[bucket].old_value != a) {
+    /* i++; 20.8 */
+    bucket = wl_bucks->hashbuckets[bucket].next;
+  }
+  /* hashstats[i]++; 20.8 */
+  if (bucket != HASHEND) {
+    *infoptr = &wl_bucks->hashbuckets[bucket].info;
+    return (wl_bucks->hashbuckets[bucket].new_value);
+  }
+  else
+    return NULL;
+}
+
+/****************************************************************************/
+/* Meaning of the info field in the translation table: */
+/* With u=translate(t,&infoptr): */
+/* If infoptr==QUOTE_FLAG then the whole subgraph from u is quoted. */
+/* If infoptr==EVAL_FLAG then anything is possible. */
+/* If infoptr==QUOTE_STUB then the term does not exist yet, e.g., there  */
+/* is a cycle in the term & copy(...) has not created it yet, for  */
+/* example X:s(L,t(X),R), where non_strict(t), in which R does not */
+/* exist when the call to mark_quote_c is done.  When the term is  */
+/* later created, it must be created as quoted. */
+
+/* Mark a psi-term u (which is a copy of t) as completely evaluated. */
+/* Only t is given as the argument. */
+/* Assumes the psi-term is a copy of another psi-term t, which is made through */
+/* eval_copy.  Therefore the copy is accessible through the translation table. */
+/* Assumes all translation table entries already exist. */
+/* The infoptr field is updated so that each subgraph is only traversed once. */
+/* This routine is called only from the main copy routine. */
+void wl_psi_term_ptr::mark_quote_c(long long heap_flag)
+// ptr_psi_term t;
+// long long heap_flag;
+{
+  ptr_list l;
+  long long *infoptr;
+  ptr_psi_term u;
+  ptr_psi_term t;
+  t = (ptr_psi_term) this;
+
+  if (t) {
+    deref_ptr(t);
+    u=((wl_psi_term_ptr*)t)->translate(&infoptr);
+    /* assert(u!=NULL); 15.9 */
+    if (u) {
+      if (*infoptr==EVAL_FLAG) {
+        *infoptr=QUOTE_FLAG;
+        u->status=4;
+        u->flags=QUOTED_TRUE; /* 14.9 */
+        mark_quote_tree_c(t->attr_list,heap_flag);
+      }
+    }
+    else { /* u does not exist yet */ /* 15.9 */
+      /* Create a stub & mark it as to-be-quoted. */
+      u=NEW(t,psi_term);
+      ((wl_psi_term_ptr*)t)->insert_translation(u,QUOTE_STUB);
+    }
+  }
+}

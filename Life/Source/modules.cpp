@@ -625,7 +625,7 @@ void replace(ptr_definition old,ptr_definition wl_new,ptr_psi_term term)  // REV
 //     ptr_definition new;
 //     ptr_psi_term term;
 {
-  clear_copy();
+  wl_bucks->clear_copy();
   rec_replace(old,wl_new,term);
 }
 void rec_replace(ptr_definition old,ptr_definition wl_new,ptr_psi_term term)
@@ -639,9 +639,9 @@ void rec_replace(ptr_definition old,ptr_definition wl_new,ptr_psi_term term)
   ptr_node old_attr;
   
   deref_ptr(term);
-  done=translate(term,(long long **)&info); // REV401PLUS cast
+  done=((wl_psi_term_ptr*)term)->translate((long long **)&info); // REV401PLUS cast
   if(!done) {
-    insert_translation(term,term,0);
+    ((wl_psi_term_ptr*)term)->insert_translation(term,0);
     if(term->type==old && !term->value_3) {
       push_ptr_value(def_ptr,(GENERIC *)&(term->type)); // REV401PLUS cast
       term->type=wl_new;

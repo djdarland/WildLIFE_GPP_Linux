@@ -1119,7 +1119,7 @@ void wl_memory::garbage()
 #ifdef GCVERBOSE
   fprintf(stderr,"- Done pass 2\n");
 #endif
-  clear_copy();
+  wl_bucks->clear_copy();
   printed_pointers=NULL;
   pointer_names=NULL;
 #ifdef __unix__

@@ -972,7 +972,7 @@ static long long c_apply()
       else {
         /* What we really want here is to merge all attributes in       */
         /* funct->attr_list, except '*functor*', into other->attr_list. */
-	clear_copy();
+	wl_bucks->clear_copy();
 	other=distinct_copy(other);
         fattr=distinct_tree(funct->attr_list); /* Make distinct copy: PVR */
 	push_goal(eval,other,aim->bbbb_1,(GENERIC)other->type->rule); // REV401PLUS cast
@@ -1051,7 +1051,7 @@ static long long c_project()
 	if((GENERIC)arg1>=wl_mem->heap_pointer_val()) { /*  RM: Feb  9 1993  */
 	  if((GENERIC)result<wl_mem->heap_pointer_val())
 	    push_psi_ptr_value(result,(GENERIC *)&(result->coref)); //REV401PLUS cast
-	  clear_copy();
+	  wl_bucks->clear_copy();
 	  result->coref=inc_heap_copy(result);
 	  ((wl_node_ptr_ptr*)&(arg1->attr_list))->heap_insert(FEATCMP,label,(GENERIC)result->coref);//REV401PLUS cast
 	}
@@ -1966,7 +1966,7 @@ static long long c_setq()
           p=HEAP_ALLOC(pair_list);
           p->aaaa_2=heap_psi_term(4);
           p->aaaa_2->type=d;
-          clear_copy();
+          wl_bucks->clear_copy();
           p->bbbb_2=quote_copy(arg2,HEAP);
           p->next=NULL;
           d->rule=p;
@@ -2214,7 +2214,7 @@ void global_one(ptr_psi_term t)
   }
   else
     u=stack_psi_term(4);
-  clear_copy();
+  wl_bucks->clear_copy();
   t->type->type_def=(def_type)global_it;
   t->type->init_value=quote_copy(u,HEAP); /*  RM: Mar 23 1993  */
 }
@@ -3264,7 +3264,7 @@ static long long c_eval()
     deref(arg1);
     deref_args(funct,set_1);
     assert((unsigned long long)(arg1->type)!=4);
-    clear_copy();
+    wl_bucks->clear_copy();
     copy_arg1 = eval_copy(arg1,STACK);
     resid_aim = NULL;
     push_goal(unify,copy_arg1,result,NULL);
@@ -3550,7 +3550,7 @@ static long long c_assign()
     deref_rec(arg2); /* 17.9 */
     deref_args(g,set_1_2);
     if ((GENERIC)arg1<wl_mem->heap_pointer_val() || arg1!=arg2) {
-      clear_copy();
+      wl_bucks->clear_copy();
       *arg1 = *exact_copy(arg2,HEAP);
     }
   }
@@ -3579,7 +3579,7 @@ static long long c_global_assign()
     deref_rec(arg2);
     deref_args(g,set_1_2);
     if (arg1!=arg2) {
-      clear_copy();
+      wl_bucks->clear_copy();
       wl_new=inc_heap_copy(arg2);
       if((GENERIC)arg1<wl_mem->heap_pointer_val()) {
 	push_psi_ptr_value(arg1,(GENERIC *)&(arg1->coref)); // REV401PLUS cast
@@ -3681,7 +3681,7 @@ static long long c_copy_term()
     deref(arg1);
     deref_args(funct,set_1);
     result=aim->bbbb_1;
-    clear_copy();
+    wl_bucks->clear_copy();
     copy_arg1=exact_copy(arg1,STACK);
     push_goal(unify,copy_arg1,result,NULL);
   }
@@ -3791,7 +3791,7 @@ static long long c_freeze_inner(long long freeze_flag)
           /* RESID */ save_resid(rb,match_date);
           /* RESID */ /* resid_aim = NULL; */
 
-	  clear_copy();
+	  wl_bucks->clear_copy();
           if (TRUE /*arg1->type->evaluate_args 8.9 */)
 	    head=eval_copy(rule->aaaa_2,STACK);
           else

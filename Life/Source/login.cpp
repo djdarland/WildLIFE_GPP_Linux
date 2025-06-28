@@ -174,7 +174,7 @@ void add_rule(ptr_psi_term head,ptr_psi_term body,def_type typ)
 	  def->type_def=typ;
 	  /* PVR single allocation in source */
 	  p=HEAP_ALLOC(pair_list);
-	  clear_copy();
+	  wl_bucks->clear_copy();
 	  p->aaaa_2=quote_copy(head2,HEAP); /* 24.8 25.8 */
 	  p->bbbb_2=quote_copy(body,HEAP); /* 24.8 25.8 */
 	  if (assert_first) {
@@ -917,7 +917,7 @@ void fetch_def(ptr_psi_term u, long long allflag)
     Traceline("fetching definition of %P\n",u);
     while (prop) {
       if (allflag || prop->cccc_4==utype) {
-        clear_copy();
+        wl_bucks->clear_copy();
         v=eval_copy(prop->aaaa_4,STACK);
         w=eval_copy(prop->bbbb_4,STACK);
         
@@ -983,7 +983,7 @@ void fetch_def_lazy(ptr_psi_term u, ptr_definition old1, ptr_definition old2,
       if (!m1 && !m2) {
 	/* At this point, prop->c is an attribute that has not yet */
 	/* been checked. */
-	clear_copy();
+	wl_bucks->clear_copy();
 	v=eval_copy(prop->aaaa_4,STACK);
 	w=eval_copy(prop->bbbb_4,STACK);
 	if (w) push_goal(prove,w,(ptr_psi_term)DEFRULES,NULL);
@@ -1332,7 +1332,7 @@ long long prove_aim()
 		  Traceline("alternative clause has been retracted\n");
 		}
 		if (rule) {
-		  clear_copy();
+		  wl_bucks->clear_copy();
 		  head=eval_copy(rule->aaaa_2,STACK);
 		  body=eval_copy(rule->bbbb_2,STACK);
 		  if (rule->next)
@@ -1438,7 +1438,7 @@ long long clause_aim(long long r)
     if (r)
       push_goal(retract,(ptr_psi_term)p,NULL,NULL);  // REV401PLUS cast
     if ((*p)->aaaa_2) {
-      clear_copy();
+      wl_bucks->clear_copy();
       rule_head=quote_copy((*p)->aaaa_2,STACK);
       rule_body=quote_copy((*p)->bbbb_2,STACK);
       push_goal(unify,body,rule_body,NULL);

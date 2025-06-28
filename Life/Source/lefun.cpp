@@ -426,7 +426,7 @@ long long eval_aim()
         /* RESID */ rb = STACK_ALLOC(resid_block);
         /* RESID */ save_resid(rb,match_date);
         /* RESID */ /* resid_aim = NULL; */
-        clear_copy();
+        wl_bucks->clear_copy();
 	/*  RM: Jun 18 1993: no functions in head */
 	head=quote_copy(rule->aaaa_2,STACK);
         body=eval_copy(rule->bbbb_2,STACK);
@@ -1114,7 +1114,7 @@ void eval_global_var(ptr_psi_term t)     /*  RM: Feb 10 1993  */
       n->next=undo_stack;
       undo_stack=n;
     }
-    clear_copy();
+    wl_bucks->clear_copy();
     t->type->global_value=eval_copy(t->type->init_value,STACK);
   }
   if(t->type->type_def==(def_type) global_it && t!=t->type->global_value) {

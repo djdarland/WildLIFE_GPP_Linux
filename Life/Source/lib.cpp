@@ -110,7 +110,7 @@ void WFInit(long long argc, char *argv[])
   wl_mem = new wl_memory();
   wl_mem->exit_mem_err_1();
   wl_mem->exit_mem_err_2();
-  init_copy();
+  wl_bucks = new wl_buckets(); // init_copy();
   wl_mem->exit_mem_err_2();
   init_print();
   wl_mem->exit_mem_err_2();

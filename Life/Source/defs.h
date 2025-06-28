@@ -92,6 +92,7 @@ typedef struct wl_definition definition;
 #include "def_macro.h"
 #include "def_struct.h"
 #include "wl_memory.h"
+#include "wl_buckets.h"
 #include "wl_psi_term.h"
 #include "wl_psi_term_ptr.h"
 #include "def_glob.h"

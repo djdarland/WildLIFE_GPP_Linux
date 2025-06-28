@@ -104,7 +104,7 @@ XOBJ = xpred.o xdisplaylist.o
 XINC = xpred.h xdisplaylist.h
 
 LIBSOURCE = \
-	wl_psi_term.cpp wl_psi_term_ptr.cpp \
+	wl_buckets.cpp wl_psi_term.cpp wl_psi_term_ptr.cpp \
 	wl_module.cpp wl_module_ptr.cpp \
 	wl_node.cpp wl_node_ptr.cpp wl_node_ptr_ptr.cpp \
 	arity.cpp bi_math.cpp bi_sys.cpp bi_type.cpp built_ins.cpp copy.cpp error.cpp \
@@ -119,7 +119,7 @@ LIBOBJECT_X = \
 	print_x.o raw_x.o sys_x.o templates_x.o \
 	token_x.o trees_x.o types_x.o xpred.o xdisplaylist.o
 
-LIBOBJECT = wl_psi_term.o wl_psi_term_ptr.o \
+LIBOBJECT = wl_buckets.o wl_psi_term.o wl_psi_term_ptr.o \
 	wl_module.o wl_module_ptr.o \
 	wl_node.o wl_node_ptr.o wl_node_ptr_ptr.o \
 	arity.o bi_math.o bi_sys.o bi_type.o built_ins.o copy.o error.o \
@@ -129,7 +129,7 @@ LIBOBJECT = wl_psi_term.o wl_psi_term_ptr.o \
 
 # $(XOBJECT) $(DBMOBJECT)
 
-LIBINCLUDE = 	wl_psi_term.h wl_psi_term_ptr.h \
+LIBINCLUDE = 	wl_buckets.h wl_psi_term.h wl_psi_term_ptr.h \
 	wl_module.h wl_module_ptr.h \
 	wl_node.h wl_node_ptr.h wl_node_ptr_ptr.h \
 	def_const.h def_glob.h def_macro.h def_proto.h \
@@ -261,6 +261,10 @@ wl_psi_term.o : wl_psi_term.cpp  $(LIBINCLUDE)
 
 wl_psi_term_ptr.o : wl_psi_term_ptr.cpp  $(LIBINCLUDE)
 	$(CC) wl_psi_term_ptr.cpp -o wl_psi_term_ptr.o $(CFLAGS) $(CPPFLAGS) $(DEFS_EXT_MINT) -c
+
+
+wl_buckets.o : wl_buckets.cpp  $(LIBINCLUDE)
+	$(CC) wl_buckets.cpp -o wl_buckets.o $(CFLAGS) $(CPPFLAGS) $(DEFS_EXT_MINT) -c
 
 
 
