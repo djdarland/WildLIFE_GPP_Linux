@@ -149,3 +149,32 @@ ptr_node wl_node_ptr::copy_tree(long long copy_flag, long long heap_flag)
   return r;
 }
 
+/****************************************************************************/
+/******** DISTINCT_TREE(t)
+Return an exact copy of an attribute tree.
+This is used by APPLY in order to build the calling psi-term which is used
+for matching.
+*/
+
+ptr_node wl_node_ptr::distinct_tree()
+// ptr_node t;
+{
+  ptr_node n;
+  ptr_node t;
+
+  t = (ptr_node) this;
+  
+  //  n=NULL;
+  //  if (t) {
+    n=STACK_ALLOC(node);
+    n->key=t->key;
+    n->data=t->data;
+    if (t->left)
+    n->left=((wl_node_ptr*)t->left)->distinct_tree();
+    else n->left = NULL;
+    if (t->right)
+    n->right=((wl_node_ptr*)t->right)->distinct_tree();
+    else n->right = NULL;
+    //  }
+  return n;
+}

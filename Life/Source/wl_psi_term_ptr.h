@@ -22,6 +22,7 @@ public:
   ptr_psi_term eval_copy(long long heap_flag);
   ptr_psi_term inc_heap_copy();
   ptr_psi_term copy(long long copy_flag, long long heap_flag);
+  ptr_psi_term distinct_copy();
 
 
 };

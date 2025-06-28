@@ -8,5 +8,6 @@ public:
 				 ptr_module module,int val);
   void mark_quote_tree_c(long long heap_flag);
   ptr_node copy_tree(long long copy_flag, long long heap_flag);
+  ptr_node distinct_tree();
 
 };

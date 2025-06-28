@@ -318,7 +318,6 @@ ptr_psi_term copy(ptr_psi_term t, long long copy_flag, long long heap_flag)
   return u;
 }
 
-#endif
 
 /****************************************************************************/
 /******** DISTINCT_TREE(t)
@@ -357,9 +356,13 @@ ptr_psi_term distinct_copy(ptr_psi_term t)
   res->time_stamp=global_time_stamp; /* 9.6 */
 #endif
   /* res->coref=distinct_copy(t->coref); */
-  res->attr_list=distinct_tree(t->attr_list);
+  if (t->attr_list)
+    res->attr_list=((wl_node_ptr*)t->attr_list)->distinct_tree();
+  else
+    res->attr_list=NULL;
   return res;
 }
+#endif
 #if FALSE
 /****************************************************************************/
 /* Meaning of the info field in the translation table: */

@@ -973,8 +973,10 @@ static long long c_apply()
         /* What we really want here is to merge all attributes in       */
         /* funct->attr_list, except '*functor*', into other->attr_list. */
 	wl_bucks->clear_copy();
-	other=distinct_copy(other);
-        fattr=distinct_tree(funct->attr_list); /* Make distinct copy: PVR */
+	if (other) other=((wl_psi_term_ptr*)other)->distinct_copy();
+	if (funct->attr_list)
+	  fattr=((wl_node_ptr*)funct->attr_list)->distinct_tree();
+	else fattr = NULL; /* Make distinct copy: PVR */
 	push_goal(eval,other,aim->bbbb_1,(GENERIC)other->type->rule); // REV401PLUS cast
 	merge_unify(&(other->attr_list),fattr);
         /* We don't want to remove anything from funct->attr_list here. */

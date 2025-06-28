@@ -597,3 +597,29 @@ ptr_psi_term wl_psi_term_ptr::copy(long long copy_flag, long long heap_flag)
   return u;
 }
 
+/******** DISTINCT_COPY(t)
+Make a distinct copy of T and T's attribute tree, which are identical to T,
+only located elsewhere in memory. This is used by apply to build the calling
+psi-term which is used for matching.  Note that this routine is not
+recursive, i.e. it only copies the main functor & the attribute tree.
+*/
+ptr_psi_term wl_psi_term_ptr::distinct_copy()
+// ptr_psi_term t;
+{
+  ptr_psi_term res;
+  ptr_psi_term t;
+
+  t = (ptr_psi_term) this;
+  
+  res=STACK_ALLOC(psi_term);
+  *res= *t;
+#ifdef TS
+  res->time_stamp=global_time_stamp; /* 9.6 */
+#endif
+  /* res->coref=distinct_copy(t->coref); */
+  if (t->attr_list)
+    res->attr_list=((wl_node_ptr*)t->attr_list)->distinct_tree();
+  else
+    res->attr_list=NULL;
+  return res;
+}
