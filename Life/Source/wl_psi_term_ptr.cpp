@@ -623,3 +623,172 @@ ptr_psi_term wl_psi_term_ptr::distinct_copy()
     res->attr_list=NULL;
   return res;
 }
+////////////////////////////////
+/* Mark a psi-term as to be evaluated (i.e. strict), except for arguments   */
+/* of a nonstrict term, which are marked quoted.  Set status correctly and  */
+/* propagate zero status upwards.  Avoid doing superfluous work: non-shared */
+/* terms are traversed once; shared terms are traversed at most twice (this */
+/* only occurs if the first occurrence encountered is strict and a later    */
+/* occurrence is nonstrict).  The translation table is used to indicate (1) */
+/* whether a term has already been traversed, and if so, (2) whether there  */
+/* was a nonstrict traversal (in that case, the info field is FALSE). */
+void wl_psi_term_ptr::mark_eval() /* 24.8 25.8 */
+// ptr_psi_term t;
+{
+  ptr_psi_term t;
+
+  t = (ptr_psi_term) this;
+  wl_bucks->clear_copy();
+  mark_nonstrict_flag=FALSE;
+  ((wl_psi_term_ptr*)t)->mark_eval_new();
+}
+/* Same as above, except that the status is only changed from 0 to 4 when */
+/* needed; it is never changed from 4 to 0. */
+void wl_psi_term_ptr::mark_nonstrict()
+// ptr_psi_term t;
+{
+  ptr_psi_term t;
+
+  t = (ptr_psi_term) this;
+  wl_bucks->clear_copy();
+  mark_nonstrict_flag=TRUE;
+  ((wl_psi_term_ptr*)t)->mark_eval_new();
+}
+/* Mark a term as quoted. */
+void wl_psi_term_ptr::mark_quote_new2()
+// ptr_psi_term t;
+{
+  ptr_psi_term t;
+
+  t = (ptr_psi_term) this;
+  wl_bucks->clear_copy();
+  mark_nonstrict_flag=FALSE;
+  ((wl_psi_term_ptr*)t)->mark_quote_new();
+}
+void wl_psi_term_ptr::mark_eval_new()
+// ptr_psi_term t;
+{
+  ptr_list l;
+  long long *infoptr,flag;
+  ptr_psi_term u;
+  long long old_status;
+  ptr_psi_term t;
+
+  t = (ptr_psi_term) this;
+
+  if (t) {
+    deref_ptr(t);
+    flag = t->type->evaluate_args;
+    u=((wl_psi_term_ptr*)t)->translate(&infoptr);
+    if (u) {
+      /* Quote the subgraph if it was already copied as to be evaluated. */
+      if (!flag && *infoptr) {
+        ((wl_psi_term_ptr*)t)->mark_quote_new();
+        *infoptr=FALSE;
+      }
+      /* If any subterm has zero curr_status (i.e., if t->status==0),
+	 then so does the whole term: PVR 14.2.94 */
+      old_status=curr_status;
+      curr_status=t->status;
+      if (curr_status) curr_status=old_status;
+    }
+    else {
+      ((wl_psi_term_ptr*)t)->insert_translation((ptr_psi_term)TRUE,flag);
+      old_status=curr_status;
+      curr_status=4;
+      if (flag) /* 16.9 */
+        {if (t->attr_list) ((wl_node_ptr*)t->attr_list)->mark_eval_tree_new();}
+      else
+	{if (t->attr_list) ((wl_node_ptr*)t->attr_list)->mark_quote_tree_new();}
+      switch((long long)t->type->type_def) {
+      case type_it:
+        if (t->type->properties)
+          curr_status=0;
+        break;
+      case function_it:
+        curr_status=0;
+        break;
+      case global_it: /*  RM: Feb  8 1993  */
+        curr_status=0;
+        break;
+      default:
+	break;
+      }
+      if (mark_nonstrict_flag) { /* 25.8 */
+        if (curr_status) {
+          /* Only increase the status, never decrease it: */
+          t->status=curr_status;
+        }
+      }
+      else {
+        t->status=curr_status;
+        t->flags=curr_status?QUOTED_TRUE:FALSE; /* 14.9 */
+      }
+      /* If any subterm has zero curr_status, then so does the whole term: */
+      if (curr_status) curr_status=old_status;
+    }
+  }
+}
+///////////////////////////
+void wl_psi_term_ptr::mark_quote_new()
+// ptr_psi_term t;
+{
+  ptr_list l;
+  long long *infoptr;
+  ptr_psi_term u;
+  ptr_psi_term t;
+
+  t = (ptr_psi_term) this;
+
+  //  if (t) {
+    deref_ptr(t);
+    u=((wl_psi_term_ptr*)t)->translate(&infoptr);
+    /* Return if the subgraph is already quoted. */
+    if (u && !*infoptr) return;
+    /* Otherwise quote the subgraph */
+    if (!u) ((wl_psi_term_ptr*)t)->insert_translation((ptr_psi_term)TRUE,FALSE);
+    else *infoptr = FALSE;	/* sanjay */
+    t->status=4;
+    t->flags=QUOTED_TRUE; /* 14.9 */
+    if (t->attr_list) ((wl_node_ptr*)t->attr_list)->mark_quote_tree_new();
+    //  }
+}
+///////////////////
+void wl_psi_term_ptr::mark_quote()
+// ptr_psi_term t;
+{
+  ptr_list l;
+  ptr_psi_term t;
+
+  t = (ptr_psi_term) this;
+
+  if (t && !(t->status&RMASK)) {
+    t->status = 4;
+    t->flags=QUOTED_TRUE; /* 14.9 */
+    t->status |= RMASK;
+    if (t->coref)
+      ((wl_psi_term_ptr*)t->coref)->mark_quote();
+    if (t->attr_list)
+      ((wl_node_ptr*)t->attr_list)->mark_quote_tree();
+    t->status &= ~RMASK;
+  }
+}
+void wl_psi_term_ptr::bk_mark_quote()
+// ptr_psi_term t;
+{
+  ptr_list l;
+  ptr_psi_term t;
+
+  t = (ptr_psi_term) this;
+  if (t && !(t->status&RMASK)) {
+    if(t->status!=4 && (GENERIC)t<wl_mem->heap_pointer_val())/*  RM: Jul 16 1993  */
+      push_ptr_value(int_ptr,(GENERIC *)&(t->status)); // REV401PLUS cast
+    t->status = 4;
+    t->flags=QUOTED_TRUE; /* 14.9 */
+    t->status |= RMASK;
+    if (t->coref)
+      ((wl_psi_term_ptr*)t->coref)->bk_mark_quote();
+    if (t->attr_list) ((wl_node_ptr*)t->attr_list)->bk_mark_quote_tree();
+    t->status &= ~RMASK;
+  }
+}

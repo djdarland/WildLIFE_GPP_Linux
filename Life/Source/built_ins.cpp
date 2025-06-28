@@ -1724,7 +1724,7 @@ static long long c_parse()
         restore_parse_state(&pb);
         /* parse_ok flag says whether there was a syntax error. */
         if (TRUE /*parse_ok*/) {
-          mark_quote(t);
+          if (t) ((wl_psi_term_ptr*)t)->mark_quote();
           push_goal(unify,t,result,NULL);
         }
         else
@@ -1813,7 +1813,7 @@ static long long c_read(long long psi_flag)
       var_tree=old_var_tree;
     }
     if (success) {
-      mark_quote(t);
+      if(t) ((wl_psi_term_ptr*)t)->mark_quote();
       push_goal(unify,t,arg1,NULL);
       /* i_check_out(t); */
     }
@@ -1997,7 +1997,7 @@ static long long c_assert_first()
   ptr_psi_term arg1,g;
   
   g=aim->aaaa_1;
-  bk_mark_quote(g); /*  RM: Apr  7 1993  */
+  if (g) ((wl_psi_term_ptr*)g)->bk_mark_quote(); /*  RM: Apr  7 1993  */
   get_one_arg(g->attr_list,&arg1);
   assert_first=TRUE;
   if (arg1) {
@@ -2022,7 +2022,7 @@ static long long c_assert_last()
   ptr_psi_term arg1,g;
   
   g=aim->aaaa_1;
-  bk_mark_quote(g); /*  RM: Apr  7 1993  */
+  if (g) ((wl_psi_term_ptr*)g)->bk_mark_quote(); /*  RM: Apr  7 1993  */
   get_one_arg(g->attr_list,&arg1);
   assert_first=FALSE;
   if (arg1) {
@@ -2049,7 +2049,7 @@ long long pred_clause(ptr_psi_term t,long long r,ptr_psi_term g)
   long long success=FALSE;
   ptr_psi_term head,body;
   
-  bk_mark_quote(g); /*  RM: Apr  7 1993  */
+  if (g) ((wl_psi_term_ptr*)g)->bk_mark_quote(); /*  RM: Apr  7 1993  */
   if (t) {
     deref_ptr(t);
     if (!strcmp(t->type->keyword->symbol,"->")) {
@@ -3292,7 +3292,7 @@ static long long c_eval_inplace()
     deref(arg1);
     deref_args(funct,set_1);
     resid_aim = NULL;
-    mark_eval(arg1);
+    if (arg1) ((wl_psi_term_ptr*)arg1)->mark_eval();
     push_goal(unify,arg1,result,NULL);
     i_check_out(arg1);
   } else

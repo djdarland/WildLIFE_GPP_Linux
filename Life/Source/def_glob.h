@@ -4,6 +4,7 @@
   
 */
 EXTERN long long curr_status; // for wl_node_ptr class - better way?
+EXTERN long long mark_nonstrict_flag;
 
 #ifdef __unix__
 EXTERN struct tms life_start;

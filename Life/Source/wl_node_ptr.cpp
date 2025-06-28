@@ -178,3 +178,61 @@ ptr_node wl_node_ptr::distinct_tree()
     //  }
   return n;
 }
+
+void wl_node_ptr::mark_eval_tree_new()
+// ptr_node n;
+{
+  ptr_node n;
+
+  n = (ptr_node) this;
+  //  if (n) {
+  if (n->left)
+    ((wl_node_ptr*)n->left)->mark_eval_tree_new();
+  if (n->data) ((wl_psi_term_ptr*)n->data)->mark_eval_new();
+  if (n->right)
+    ((wl_node_ptr*)n->right)->mark_eval_tree_new();
+  //  }
+}
+///////////////
+
+void wl_node_ptr::mark_quote_tree_new()
+// ptr_node n;
+{
+  ptr_node n;
+
+  n = (ptr_node) this;
+  //  if (n) {
+    if (n->left)
+      ((wl_node_ptr*)n->left)->mark_quote_tree_new();
+    if (n->data) ((wl_psi_term_ptr*)n->data)->mark_quote_new();
+    if (n->right)
+      ((wl_node_ptr*)n->right)->mark_quote_tree_new();
+    // }
+}
+
+void wl_node_ptr::mark_quote_tree()
+// ptr_node t;
+{
+  ptr_node t;
+
+  t = (ptr_node) this;
+  //  if (t) {
+  if (t->left)
+    ((wl_node_ptr*)t->left)->mark_quote_tree();
+  if(t->data) ((wl_psi_term_ptr*)t->data)->mark_quote();
+  if (t->right)
+    ((wl_node_ptr*)t->right)->mark_quote_tree();
+  // }
+}
+void wl_node_ptr::bk_mark_quote_tree()
+// ptr_node t;
+{
+  ptr_node t;
+
+  t = (ptr_node) this;
+  //  if (t) {
+  if (t->left) ((wl_node_ptr*)t->left)->bk_mark_quote_tree();
+  if (t->data) ((wl_psi_term_ptr*)t->data)->bk_mark_quote();
+  if (t->right) ((wl_node_ptr*)t->right)->bk_mark_quote_tree();
+  //}
+}

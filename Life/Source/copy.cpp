@@ -9,6 +9,8 @@
 #include "defs.h"
 #endif
 
+#if FALSE
+
 /****************************************************************************/
 
 /* New translation routines for Wild_Life                     */
@@ -422,6 +424,8 @@ void mark_quote_tree_c(ptr_node n,long long heap_flag)
 }
 #endif
 
+
+#if FALSE
 /****************************************************************************/
 /* A (possibly) correct mark_eval and its companion mark_quote. */
 /* The translation table is used to record whether a subgraph has already */
@@ -431,7 +435,10 @@ void mark_eval_new();
 void mark_quote_new();
 void mark_eval_tree_new();
 void mark_quote_tree_new();
+
 static long long mark_nonstrict_flag;
+#endif
+#if FALSE
 /* Mark a psi-term as to be evaluated (i.e. strict), except for arguments   */
 /* of a nonstrict term, which are marked quoted.  Set status correctly and  */
 /* propagate zero status upwards.  Avoid doing superfluous work: non-shared */
@@ -525,6 +532,7 @@ void mark_eval_new(ptr_psi_term t)
     }
   }
 }
+////////////////////////////////
 void mark_eval_tree_new(ptr_node n)
 // ptr_node n;
 {
@@ -534,6 +542,7 @@ void mark_eval_tree_new(ptr_node n)
     mark_eval_tree_new(n->right);
   }
 }
+/////////////////////////////
 void mark_quote_new(ptr_psi_term t)
 // ptr_psi_term t;
 {
@@ -554,6 +563,7 @@ void mark_quote_new(ptr_psi_term t)
     mark_quote_tree_new(t->attr_list);
   }
 }
+//////////////
 void mark_quote_tree_new(ptr_node n)
 // ptr_node n;
 {
@@ -563,12 +573,14 @@ void mark_quote_tree_new(ptr_node n)
     mark_quote_tree_new(n->right);
   }
 }
+/////////////////
 /****************************************************************************/
 /* A more efficient version of mark_quote */
 /* This version avoids using the translation table by setting a 'visited' */
 /* in the status field. */
 extern void mark_quote_tree(); /* A forward declaration */
 /* Mark a psi-term as completely evaluated. */
+////////////////
 void mark_quote(ptr_psi_term t)
 // ptr_psi_term t;
 {
@@ -583,6 +595,7 @@ void mark_quote(ptr_psi_term t)
     t->status &= ~RMASK;
   }
 }
+////////////
 void mark_quote_tree(ptr_node t)
 // ptr_node t;
 {
@@ -592,6 +605,7 @@ void mark_quote_tree(ptr_node t)
     mark_quote_tree(t->right);
   }
 }
+//////////////////
 /* Back-trackably mark a psi-term as completely evaluated. */
 void bk_mark_quote_tree();
 void bk_mark_quote(ptr_psi_term t)
@@ -610,6 +624,8 @@ void bk_mark_quote(ptr_psi_term t)
     t->status &= ~RMASK;
   }
 }
+//////////////////
+
 void bk_mark_quote_tree(ptr_node t)
 // ptr_node t;
 {
@@ -619,3 +635,5 @@ void bk_mark_quote_tree(ptr_node t)
     bk_mark_quote_tree(t->right);
   }
 }
+#endif
+#endif

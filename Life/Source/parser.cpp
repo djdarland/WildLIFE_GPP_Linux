@@ -832,7 +832,7 @@ psi_term parse(long long *q)
   dbg_note("parse", "00014");
     } while(c && c!=EOF);
   /* Make sure arguments of nonstrict terms are marked quoted. */
-  if (parse_ok) mark_nonstrict(&s); /* 25.8 */
+  if (parse_ok) ((wl_psi_term_ptr*)&s)->mark_nonstrict(); /* 25.8 */
   /* mark_eval(&s); 24.8 XXX */
 
   /* Mark all the psi-terms corresponding to variables in the var_tree as    */

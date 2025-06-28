@@ -23,6 +23,14 @@ public:
   ptr_psi_term inc_heap_copy();
   ptr_psi_term copy(long long copy_flag, long long heap_flag);
   ptr_psi_term distinct_copy();
+  //////////
+  void mark_eval();
+  void mark_nonstrict();
+  void mark_quote_new2();
+  void mark_eval_new();
+  void mark_quote_new();
+  void mark_quote();
+  void bk_mark_quote();
 
 
 };
