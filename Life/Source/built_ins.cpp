@@ -5066,7 +5066,9 @@ void init_built_in_types()
   /*  RM: Jan 13 1993  */
   /* Initialize the minimum syntactic symbols */
   set_current_module(syntax_module); /*  RM: Feb  3 1993  */
+  dbg_note("built_ins", "before update symbol ,");
   wl_and=((wl_module_ptr*)syntax_module)->update_symbol(",");  
+  dbg_note("built_ins", "after update symbol ,");
   ((wl_module_ptr*)syntax_module)->update_symbol("[");
   ((wl_module_ptr*)syntax_module)->update_symbol("]");
   ((wl_module_ptr*)syntax_module)->update_symbol("(");
@@ -5309,8 +5311,11 @@ void init_built_in_types()
   ((wl_module_ptr*)bi_module)->new_built_in("combined_name",(def_type)function_it,c_combined_name);
   /* Hack so '.set_up' doesn't issue a Warning message */
   /*  RM: Feb  3 1993  */
-  hash_lookup(bi_module->symbol_table,"set_module")->wl_public=TRUE;
-  hash_lookup(bi_module->symbol_table,"built_in")->wl_public=TRUE;
+  if (bi_module->symbol_table) {
+    (((wl_hash_table_ptr*)bi_module->symbol_table)->hash_lookup("set_module"))->wl_public=TRUE;
+    (((wl_hash_table_ptr*)bi_module->symbol_table)->hash_lookup("built_in"))->wl_public=TRUE;
+  }
+  else dbg_note("built ins", "bi_module->symbol_table NULL setting set module public");
   /*  RM: Jan 29 1993  */
   abortsym=((wl_module_ptr*)bi_module)->update_symbol("abort"); /* 26.1 */
   aborthooksym=((wl_module_ptr*)bi_module)->update_symbol("aborthook"); /* 26.1 */

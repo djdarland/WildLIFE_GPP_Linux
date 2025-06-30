@@ -1216,10 +1216,10 @@ static long long import_symbol_internal(ptr_psi_term args[],
   ptr_keyword key;
   if (args[1])
     key=args[1]->type->keyword;
-  else
-    key=hash_lookup(current_module->symbol_table,
+  else if (current_module->symbol_table)
+    key=((wl_hash_table_ptr*)current_module->symbol_table)->hash_lookup(
 		    args[0]->type->keyword->symbol);
-
+  else key = NULL;
   if (key)
     if (key->definition->type_def != (def_type)undef_it) {
       Errorline("symbol %s already defined in %P.",key->combined_name,funct);
@@ -1238,8 +1238,11 @@ static long long import_symbol_internal(ptr_psi_term args[],
     key->wl_public=FALSE;
     key->private_feature=FALSE;
     key->definition=args[0]->type; /* use given definition */
-	
-    hash_insert(current_module->symbol_table,key->symbol,key);
+
+    if (current_module->symbol_table)
+    ((wl_hash_table_ptr*)current_module->symbol_table)->hash_insert(key->symbol,key);
+    else
+      dbg_note("sys", "current_module->symbol_table null");
   }
   return TRUE;
 }

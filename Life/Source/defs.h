@@ -78,6 +78,8 @@ typedef struct wl_definition *ptr_definition;
 typedef struct wl_psi_term *ptr_psi_term;
 typedef struct wl_psi_term psi_term;
 typedef struct wl_definition definition;
+typedef struct wl_hash_table * ptr_hash_table;
+typedef struct wl_keyword * ptr_keyword;
 
 
 #include "wl_module.h"
@@ -86,6 +88,8 @@ typedef struct wl_definition definition;
 #include "wl_node.h"
 #include "wl_node_ptr.h"
 #include "wl_node_ptr_ptr.h"
+#include "wl_hash_table.h"
+#include "wl_hash_table_ptr.h"
 
 #include "def_config.h"
 #include "def_const.h"

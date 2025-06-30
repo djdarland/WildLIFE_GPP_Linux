@@ -34,7 +34,9 @@ ptr_definition wl_module_ptr::update_symbol(char *symbol)   /*  RM: Jan  8 1993 
     symbol=strip_module_name(symbol);
   }
   /* Now look up 'module#symbol' in the symbol table */
-  key=hash_lookup(module->symbol_table,symbol);
+  if (module->symbol_table)
+    key=((wl_hash_table_ptr*)module->symbol_table)->hash_lookup(symbol);
+  else key = NULL;
   if(key)
     if(key->wl_public || module==current_module)
       result=key->definition;
@@ -59,14 +61,17 @@ ptr_definition wl_module_ptr::update_symbol(char *symbol)   /*  RM: Jan  8 1993 
 	key->wl_public=FALSE;
 	key->private_feature=FALSE; /*  RM: Mar 11 1993  */
 	key->definition=NULL;
-	hash_insert(module->symbol_table,key->symbol,key);
+	if (module->symbol_table)
+	  ((wl_hash_table_ptr*)module->symbol_table)->hash_insert(key->symbol,key);
 	/* Search the open modules of 'module' for 'symbol' */
 	opens=module->open_modules;
 	openkey=NULL;
 	while(opens) {
 	  opened=(ptr_module)(opens->value_1);
 	  if(opened!=module) {
-	    tempkey=hash_lookup(opened->symbol_table,symbol);
+	    if (opened->symbol_table)
+	      tempkey=((wl_hash_table_ptr*)opened->symbol_table)->hash_lookup(symbol);
+	    else tempkey = NULL;
 	    if(tempkey)
 	      if(openkey && openkey->wl_public && tempkey->wl_public) {
 		if(openkey->definition==tempkey->definition) {
@@ -128,7 +133,9 @@ ptr_definition wl_module_ptr::update_feature(char *feature)
     else
       return ((wl_module_ptr*)nill_module)->update_symbol(feature);
   /* Now we have a simple feature to look up */
-  key=hash_lookup(module->symbol_table,feature);
+  if (module->symbol_table)
+    key=((wl_hash_table_ptr*)module->symbol_table)->hash_lookup(feature);
+  else key = NULL;
   if(key && key->private_feature)
     return key->definition;
   else

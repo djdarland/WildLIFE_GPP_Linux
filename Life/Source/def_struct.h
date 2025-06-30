@@ -105,8 +105,9 @@ typedef struct wl_resid_list {
   ptr_resid_list next;
 } resid_list;
 
+#if FALSE
 typedef struct wl_hash_table * ptr_hash_table;
-
+#endif 
 /************ MODULES **************/
 /*        RM: Jan  7 1993          */
 #if FALSE
@@ -132,8 +133,9 @@ struct wl_keyword {
   ptr_definition definition;
 };
 
+#if FALSE
 typedef struct wl_keyword * ptr_keyword;
-
+#endif
 /********* END MODULES *************/
 
 
@@ -142,13 +144,13 @@ typedef struct wl_keyword * ptr_keyword;
 /*                RM: Feb  3 1993                  */
 
 /* Hash tables for keywords */
-
+#if FALSE
 struct wl_hash_table {
   int size;
   int used;
   ptr_keyword *data;
 };
-
+#endif
 /****************************/
 /* Definition of a keyword. */
 /* This includes the rules associated to the symbol and how old they are.  */

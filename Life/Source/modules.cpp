@@ -416,9 +416,11 @@ void open_module_one(ptr_psi_term t, int *onefailed)  // REV401PLUS void
       current_module->open_modules=opens;
       /* Check for name conflicts */
       /*  RM: Feb 23 1993  */
-      for (i=0;i<open_module->symbol_table->size;i++)
+      for (i=0;i<open_module->symbol_table->size;i++) 
 	if ((key1=open_module->symbol_table->data[i]) && key1->wl_public) {
-	  key2=hash_lookup(current_module->symbol_table,key1->symbol);
+	  if (current_module->symbol_table)
+	  key2=((wl_hash_table_ptr*)current_module->symbol_table)->hash_lookup(key1->symbol);
+	  else key2 = NULL;
 	  if (key2 && key1->definition!=key2->definition)
 	    Errorline("symbol clash '%s' and '%s'\n",
 		      key1->combined_name,
@@ -443,7 +445,9 @@ long long make_public(ptr_psi_term term,long long wl_bool)   /*  RM: Feb 22 1993
   ptr_definition def;
   
   deref_ptr(term);
-  key=hash_lookup(current_module->symbol_table,term->type->keyword->symbol);
+  if (current_module->symbol_table)
+    key=((wl_hash_table_ptr*)current_module->symbol_table)->hash_lookup(term->type->keyword->symbol);
+  else key = NULL;
   if(key) {
     if(key->definition->keyword->module!=current_module && !wl_bool) {
       Warningline("local definition of '%s' overrides '%s'\n",
@@ -865,7 +869,9 @@ long long c_alias()
   if (arg1 && arg2) {
     deref_ptr(arg1);
     deref_ptr(arg2);
-    key=hash_lookup(current_module->symbol_table,arg1->type->keyword->symbol);
+    if (current_module->symbol_table)
+      key=((wl_hash_table_ptr*)current_module->symbol_table)->hash_lookup(arg1->type->keyword->symbol);
+    else key = NULL;
     if(key) {
       if(key->definition!=arg2->type) {
 	Warningline("alias: '%s' has now been overwritten by '%s'\n",
@@ -922,7 +928,9 @@ int make_feature_private(ptr_psi_term term)  /*  RM: Mar 11 1993  */
   ptr_definition def;
 
   deref_ptr(term);
-  key=hash_lookup(current_module->symbol_table,term->type->keyword->symbol);
+  if (current_module->symbol_table)
+    key=((wl_hash_table_ptr*)current_module->symbol_table)->hash_lookup(term->type->keyword->symbol);
+  else key = NULL;
   if(key) {
     key->private_feature=TRUE;
     def=key->definition;

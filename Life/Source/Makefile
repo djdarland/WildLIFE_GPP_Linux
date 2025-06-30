@@ -104,6 +104,7 @@ XOBJ = xpred.o xdisplaylist.o
 XINC = xpred.h xdisplaylist.h
 
 LIBSOURCE = \
+	wl_hash_table.cpp wl_hash_table_ptr.cpp \
 	wl_buckets.cpp wl_psi_term.cpp wl_psi_term_ptr.cpp \
 	wl_module.cpp wl_module_ptr.cpp \
 	wl_node.cpp wl_node_ptr.cpp wl_node_ptr_ptr.cpp \
@@ -119,7 +120,8 @@ LIBOBJECT_X = \
 	print_x.o raw_x.o sys_x.o templates_x.o \
 	token_x.o trees_x.o types_x.o xpred.o xdisplaylist.o
 
-LIBOBJECT = wl_buckets.o wl_psi_term.o wl_psi_term_ptr.o \
+LIBOBJECT = 	wl_hash_table.o wl_hash_table_ptr.o \
+	wl_buckets.o wl_psi_term.o wl_psi_term_ptr.o \
 	wl_module.o wl_module_ptr.o \
 	wl_node.o wl_node_ptr.o wl_node_ptr_ptr.o \
 	arity.o bi_math.o bi_sys.o bi_type.o built_ins.o copy.o error.o \
@@ -265,6 +267,12 @@ wl_psi_term_ptr.o : wl_psi_term_ptr.cpp  $(LIBINCLUDE)
 
 wl_buckets.o : wl_buckets.cpp  $(LIBINCLUDE)
 	$(CC) wl_buckets.cpp -o wl_buckets.o $(CFLAGS) $(CPPFLAGS) $(DEFS_EXT_MINT) -c
+
+wl_hash_table.o : wl_hash_table.cpp  $(LIBINCLUDE)
+	$(CC) wl_hash_table.cpp -o wl_hash_table.o $(CFLAGS) $(CPPFLAGS) $(DEFS_EXT_MINT) -c
+
+wl_hash_table_ptr.o : wl_hash_table_ptr.cpp  $(LIBINCLUDE)
+	$(CC) wl_hash_table_ptr.cpp -o wl_hash_table_ptr.o $(CFLAGS) $(CPPFLAGS) $(DEFS_EXT_MINT) -c
 
 
 

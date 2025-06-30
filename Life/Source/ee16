@@ -16,6 +16,8 @@ echo "6 module_ptr"
 echo "7 psi_term"
 echo "8 psi_term_ptr"
 echo "9 buckets"
+echo "10 hash_table"
+echo "11 hash_table_ptr"
 echo "777 NOTES_DJD.txt"
 
 echo "999 quit"
@@ -32,6 +34,8 @@ case $select in
 7) ./eewl psi_term ;;
 8) ./eewl psi_term_ptr ;;
 9) ./eewl buckets ;;
+10) ./eewl hash_table ;;
+11) ./eewl hash_table_ptr ;;
 
 777) $EDITOR NOTES_DJD.txt ;;
 esac

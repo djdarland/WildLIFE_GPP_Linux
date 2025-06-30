@@ -53,13 +53,17 @@ int main(int argc, char *argv[])  // REV401PLUS correct main proto
       dbg_note("life - main", "start dbg");
     }
   init_io();
+  dbg_note("life - main", "after init_io");
   wl_mem = new wl_memory();
+  dbg_note("life - main", "after new wl_memory");
   wl_mem->exit_mem_err_1();
   wl_mem->exit_mem_err_2();
   wl_bucks = new wl_buckets();
+  dbg_note("life - main", "after new wl_buckets");
   //  init_copy();
   wl_mem->exit_mem_err_2();
   init_print();
+  dbg_note("life - main", "after init print");
   wl_mem->exit_mem_err_2();
   /* Timekeeping initialization */
 #ifdef __unix__
@@ -71,8 +75,11 @@ int main(int argc, char *argv[])  // REV401PLUS correct main proto
   life_start = clock();
 #endif
   wl_mem->exit_mem_err_2();
+  dbg_note("life - main", "before init modules");
   init_modules(); /*  RM: Jan  8 1993  */
+  dbg_note("life - main", "after init modules");
   init_built_in_types();
+  dbg_note("life - main", "after init built in types");
   wl_mem->exit_mem_err_2();
 #ifdef X11
   x_setup_builtins();
