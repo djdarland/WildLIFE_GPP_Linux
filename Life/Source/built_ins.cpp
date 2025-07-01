@@ -318,7 +318,7 @@ long long unify_real_result(ptr_psi_term t,REAL v)
     if (success) {
       i_check_out(t);
       if (t->resid)
-	release_resid(t);
+	((wl_psi_term_ptr*)t)->release_resid();
     }
   }
   else {
@@ -1070,7 +1070,7 @@ static long long c_project()
 	    // WAS	    fetch_def_lazy(arg1, arg1->type,arg1->type,NULL,NULL);
 	  }
 	  if (arg1->resid)
-	    release_resid(arg1);
+	    ((wl_psi_term_ptr*)arg1)->release_resid();
 	}
       }	
     }
@@ -3515,7 +3515,7 @@ static long long c_bk_assign()
 #ifdef TS
       if (!TRAIL_CONDITION(arg1)) {
         /* If no trail, then can safely overwrite the psi-term */
-        release_resid_notrail(arg1);
+        ((wl_psi_term_ptr*)arg1)->release_resid_notrail();
         *arg1 = *arg2;
         push_psi_ptr_value(arg2,(GENERIC *)&(arg2->coref)); /* 14.12 */ // REV401PLUS added cast
         arg2->coref=arg1; /* 14.12 */
@@ -3523,7 +3523,7 @@ static long long c_bk_assign()
       else {
         push_psi_ptr_value(arg1,(GENERIC *)&(arg1->coref)); // REV401PLUS added cast
         arg1->coref=arg2;
-        release_resid(arg1);
+        ((wl_psi_term_ptr*)arg1)->release_resid();
       }
 #else
       push_psi_ptr_value(arg1,(GENERIC *)&(arg1->coref)); // REV401PLUS added cast

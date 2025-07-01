@@ -38,4 +38,13 @@ public:
   void residuate();
   void residuate2(ptr_psi_term v);
   void residuate3(ptr_psi_term v,ptr_psi_term w);
+  /////////////
+  void release_resid_main(long long trailflag);
+  void release_resid();
+  void release_resid_notrail();
+  void append_resid(ptr_psi_term v);
+
+
+
+  
 };

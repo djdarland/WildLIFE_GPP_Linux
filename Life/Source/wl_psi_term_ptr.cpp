@@ -859,3 +859,75 @@ void wl_psi_term_ptr::residuate3(ptr_psi_term v,ptr_psi_term w)
   if (w && u!=w && v!=w) ((wl_psi_term_ptr*)w)->residuate();
 }
 
+//////////////////////
+
+/******** RELEASE_RESID(t)
+Release the residuations pending on the Residuation Variable T.
+This is done by simply pushing the residuated goals onto the goal-stack.
+A goal is not added if already present on the stack.
+Two versions of this routine exist: one which trails t and one which never
+trails t.
+*/
+void wl_psi_term_ptr::release_resid_main(long long trailflag)
+// ptr_psi_term t;
+// long long trailflag;
+{
+  ptr_goal g;
+  ptr_residuation r;
+  ptr_psi_term t;
+  t = (ptr_psi_term) this;
+  
+  if (r=t->resid) {
+    if (trailflag) push_ptr_value(resid_ptr,(GENERIC *)&(t->resid)); // REV401PLUS cast
+    t->resid=NULL;
+      while (r) {
+      g=r->goal;
+      if (g->pending) {
+	push_ptr_value(int_ptr,(GENERIC *)&(g->pending)); // REV401PLUS cast
+	g->pending=FALSE;
+	push_ptr_value(goal_ptr,(GENERIC *)&(g->next)); // REV401PLUS cast
+	g->next=goal_stack;
+	goal_stack=g;
+        Traceline("releasing %P\n",g->aaaa_1);
+      }
+      r=r->next;
+    }
+  }
+}
+void wl_psi_term_ptr::release_resid()
+// ptr_psi_term t;
+{
+  ptr_psi_term t;
+
+  t = (ptr_psi_term) this;
+  
+  ((wl_psi_term_ptr*)t)->release_resid_main(TRUE);
+}
+void wl_psi_term_ptr::release_resid_notrail()
+// ptr_psi_term t;
+{
+  ptr_psi_term t;
+
+  t = (ptr_psi_term) this;
+  ((wl_psi_term_ptr*)t)->release_resid_main(FALSE);
+}
+/******** APPEND_RESID(u,v)
+Append the residuations pending on V to U. This routine does not check that
+the same constraint is not present twice in the end on U. This doesn't matter
+since RELEASE_RESID ensures that the same constraint is not released more
+than once.
+*/
+void wl_psi_term_ptr::append_resid(ptr_psi_term v)
+// ptr_psi_term u,v;
+{
+  ptr_residuation *g;
+
+  ptr_psi_term u;
+  u = (ptr_psi_term) this;
+  
+  g= &(u->resid);
+  while (*g)
+    g = &((*g)->next);
+  push_ptr_value(resid_ptr,(GENERIC *)g); // REV401PLUS cast
+  *g=v->resid;
+}

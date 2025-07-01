@@ -1188,9 +1188,9 @@ long long unify_body(long long eval_flag)
 	/**** RELEASE RESIDUATIONS ****/
 	/* This version implements the correct semantics. */
 	if (u->resid)
-	  release_resid(u);
+	  ((wl_psi_term_ptr*)u)->release_resid();
 	if (v->resid)
-	  release_resid(v);
+	  ((wl_psi_term_ptr*)v)->release_resid();
         /**** Alternatives in a type disjunction ****/
         if (d) {
           Traceline("pushing type disjunction choice point for %P\n",u);

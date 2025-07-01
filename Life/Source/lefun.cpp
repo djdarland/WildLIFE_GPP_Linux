@@ -318,6 +318,7 @@ void do_currying()
   push_goal(unify_noeval,funct,result,NULL);
   resid_aim=NULL;
 }
+#if FALSE
 /******** RELEASE_RESID(t)
 Release the residuations pending on the Residuation Variable T.
 This is done by simply pushing the residuated goals onto the goal-stack.
@@ -376,6 +377,7 @@ void append_resid(ptr_psi_term u,ptr_psi_term v)
   push_ptr_value(resid_ptr,(GENERIC *)g); // REV401PLUS cast
   *g=v->resid;
 }
+#endif
 /******** EVAL_AIM()
 Evaluate a function.
 This copies the current definition of the function and

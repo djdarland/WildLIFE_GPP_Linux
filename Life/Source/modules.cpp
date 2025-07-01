@@ -806,7 +806,7 @@ int global_unify(ptr_psi_term u,ptr_psi_term v)      /*  RM: Feb 11 1993  */
        /**** Match the attributes ****/
       success=global_unify_attr(u->attr_list,v->attr_list);
       if(success && u->resid)
-	release_resid(u);
+	((wl_psi_term_ptr*)u)->release_resid();
     }
   }
   else
