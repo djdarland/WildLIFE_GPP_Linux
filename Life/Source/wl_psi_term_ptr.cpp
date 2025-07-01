@@ -1,5 +1,8 @@
 #define EXTERN extern
 #include "defs.h"
+long long wl_psi_term_ptr::curr_status;
+long long wl_psi_term_ptr::mark_nonstrict_flag;
+
 /********************************************************************/
 /*                                                                  */
 /* New dereference routines for Wild_Life                           */
@@ -524,9 +527,9 @@ ptr_psi_term wl_psi_term_ptr::copy(long long copy_flag, long long heap_flag)
       if (copy_flag==EVAL_FLAG) { /* PVR 14.2.94 */
 	/* If any subterm has zero curr_status (i.e., if u->status==0),
 	   then so does the whole term: */
-	old_status=curr_status;
-	curr_status=u->status;
-	if (curr_status) curr_status=old_status;
+	old_status=wl_psi_term_ptr::curr_status;
+	wl_psi_term_ptr::curr_status=u->status;
+	if (wl_psi_term_ptr::curr_status) wl_psi_term_ptr::curr_status=old_status;
       }
     }
     else {

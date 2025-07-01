@@ -960,7 +960,7 @@ static long long c_apply()
   else
     n = NULL;
   if (n) {
-    other=(ptr_psi_term )n->data;
+    other=(ptr_psi_term )n->data_val();
     deref(other);
     if (other->type==top)
       residuate(other);
@@ -1042,7 +1042,7 @@ static long long c_project()
       else
 	n = NULL;
       if (n)
-	push_goal(unify,result,(ptr_psi_term)n->data,NULL); //REV401PLUS cast
+	push_goal(unify,result,(ptr_psi_term)n->data_val(),NULL); //REV401PLUS cast
       else if (arg1->type->type_def==(def_type)function_it && !(arg1->flags&QUOTED_TRUE)) { // _def & (def_type) & _it
 	Errorline("attempt to add a feature to curried function %P\n",
 		  arg1);
@@ -1330,8 +1330,8 @@ long long only_arg1(ptr_psi_term t, ptr_psi_term *arg1)
 {
   ptr_node n=t->attr_list;
 
-  if (n && n->left==NULL && n->right==NULL && !featcmp(n->key,one)) {
-    *arg1=(ptr_psi_term)n->data;
+  if (n && n->left_val()==NULL && n->right_val()==NULL && !featcmp(n->key_val(),one)) {
+    *arg1=(ptr_psi_term)n->data_val();
     return TRUE;
   }
   else
@@ -1435,7 +1435,7 @@ static long long c_exists()
     else
       n = NULL;
     if (n) {
-      arg1= (ptr_psi_term )n->data;
+      arg1= (ptr_psi_term )n->data_val();
       deref(arg1);
       deref_args(g,set_1);
       if (!psi_to_string(arg1,&c_arg1)) {
@@ -1648,7 +1648,7 @@ static void set_parse_queryflag(ptr_node thelist, long long sort)
     n = NULL;
   if (n) {
     /* there was a second argument */
-    arg=(ptr_psi_term)n->data;
+    arg=(ptr_psi_term)n->data_val();
     queryflag=stack_psi_term(4);
     queryflag->type =
       ((wl_module_ptr*)bi_module)->update_symbol(
@@ -1698,7 +1698,7 @@ static long long c_parse()
 	  n = NULL;
 	if (n) {
 	  ptr_psi_term queryflag;
-	  arg2=(ptr_psi_term)n->data;
+	  arg2=(ptr_psi_term)n->data_val();
 	  queryflag=stack_psi_term(4);
 	  queryflag->type=
 	    ((wl_module_ptr*)bi_module)->update_symbol(
@@ -1714,7 +1714,7 @@ static long long c_parse()
 	  n = NULL;
 	if (n) {
 	  ptr_psi_term varflag;
-	  arg3=(ptr_psi_term)n->data;
+	  arg3=(ptr_psi_term)n->data_val();
 	  varflag=stack_psi_term(4);
 	  varflag->type=var_occurred?lf_true:lf_false;
 	  push_goal(unify,varflag,arg3,NULL);
@@ -1781,7 +1781,7 @@ static long long c_read(long long psi_flag)
 	  n = NULL;
 	if (n) {
 	  ptr_psi_term queryflag;
-	  arg2=(ptr_psi_term)n->data;
+	  arg2=(ptr_psi_term)n->data_val();
 	  queryflag=stack_psi_term(4);
 	  queryflag->type=
 	    ((wl_module_ptr*)bi_module)->update_symbol(
@@ -1796,7 +1796,7 @@ static long long c_read(long long psi_flag)
 	else
 	  n = NULL;
 	if (n) {
-	  arg3=(ptr_psi_term)n->data;
+	  arg3=(ptr_psi_term)n->data_val();
 	  g=stack_psi_term(4);
 	  g->type=integer;
 	  g->value_3=wl_mem->heap_alloc(sizeof(REAL));
@@ -2162,8 +2162,8 @@ void global_error_check(ptr_node n, long long *error_2, long long *eval_2)
   if (n) {
     ptr_psi_term t,a1,a2;
     int bad_init=FALSE;
-    global_error_check(n->left, error_2, eval_2);
-    t=(ptr_psi_term)n->data;
+    global_error_check(n->left_val(), error_2, eval_2);
+    t=(ptr_psi_term)n->data_val();
     deref_ptr(t);
     if (t->type==leftarrowsym) {
       get_two_args(t->attr_list,&a1,&a2);
@@ -2187,7 +2187,7 @@ void global_error_check(ptr_node n, long long *error_2, long long *eval_2)
       t->value_3=NULL; /*  RM: Mar 23 1993  */
       *error_2=TRUE;
     }
-    global_error_check(n->right, error_2, eval_2);
+    global_error_check(n->right_val(), error_2, eval_2);
   }
 }
 void global_tree(ptr_node n)
@@ -2195,13 +2195,13 @@ void global_tree(ptr_node n)
 {
   if (n) {
     ptr_psi_term t;
-    global_tree(n->left);
+    global_tree(n->left_val());
 
-    t=(ptr_psi_term)n->data;
+    t=(ptr_psi_term)n->data_val();
     deref_ptr(t);
     global_one(t);
 
-    global_tree(n->right);
+    global_tree(n->right_val());
   }
 }
 void global_one(ptr_psi_term t)
@@ -2247,9 +2247,9 @@ void persistent_error_check(ptr_node n, long long *error) //REV401PLUS add void
 {
   if (n) {
     ptr_psi_term t;
-    persistent_error_check(n->left, error);
+    persistent_error_check(n->left_val(), error);
 
-    t=(ptr_psi_term)n->data;
+    t=(ptr_psi_term)n->data_val();
     deref_ptr(t);
     if (t->type->type_def!=(def_type)undef_it && t->type->type_def!=(def_type)global_it) {
       Errorline("%T %P cannot be redeclared persistent (%E).\n",
@@ -2258,7 +2258,7 @@ void persistent_error_check(ptr_node n, long long *error) //REV401PLUS add void
       t->type=error_psi_term->type;
       *error=TRUE;
     }
-    persistent_error_check(n->right, error);
+    persistent_error_check(n->right_val(), error);
   }
 }
 void persistent_tree(ptr_node n) // REV401PLUS add void
@@ -2266,11 +2266,11 @@ void persistent_tree(ptr_node n) // REV401PLUS add void
 {
   if (n) {
     ptr_psi_term t;
-    persistent_tree(n->left);
-    t=(ptr_psi_term)n->data;
+    persistent_tree(n->left_val());
+    t=(ptr_psi_term)n->data_val();
     deref_ptr(t);
     persistent_one(t);
-    persistent_tree(n->right);
+    persistent_tree(n->right_val());
   }
 }
 void persistent_one(ptr_psi_term t) // REV401PLUS add void
@@ -2442,7 +2442,7 @@ static long long c_close()
       else
 	n = NULL;
       if (n) {
-        arg1=(ptr_psi_term)n->data;
+        arg1=(ptr_psi_term)n->data_val();
         inclose=(arg1->value_3!=NULL);
       }
     }
@@ -2828,9 +2828,13 @@ static long long c_cond()
       call_once=stack_psi_term(0);
       call_once->type=calloncesym;
       call_once->attr_list=(ca=STACK_ALLOC(node));
-      ca->key=one;
-      ca->left=ca->right=NULL;
-      ca->data=(GENERIC)arg1;
+      //      ca->key=one;
+      ca->set_key(one);
+      //      ca->left=ca->right=NULL;
+      ca->set_left(NULL);
+      ca->set_right(NULL);
+      // ca->data=(GENERIC)arg1;
+      ca->set_data((GENERIC)arg1);
       push_ptr_value(psi_term_ptr,(GENERIC *)arg1addr); //cast REV401PLUS
       *arg1addr=call_once;
       return success;
@@ -2846,7 +2850,7 @@ static long long c_cond()
 	else
 	  n = NULL;
         if (n) {
-          arg2=(ptr_psi_term)n->data;
+          arg2=(ptr_psi_term)n->data_val();
 	  /* mark_eval(arg2); XXX 24.8 */
 	  push_goal(unify,result,arg2,NULL);
 	  i_check_out(arg2);
@@ -2893,7 +2897,7 @@ static long long c_exist_feature()  /*  PVR: Dec 17 1992  */  /* PVR 11.4.94 */
   else
     n = NULL;
   if(n)
-    arg3=(ptr_psi_term)n->data;
+    arg3=(ptr_psi_term)n->data_val();
   else
     arg3=NULL;
   if (arg1 && arg2) {
@@ -2920,7 +2924,7 @@ static long long c_exist_feature()  /*  PVR: Dec 17 1992  */  /* PVR 11.4.94 */
     ans=stack_psi_term(4);
     ans->type=(n!=NULL)?lf_true:lf_false;
     if(arg3 && n) /*  RM: Feb 10 1993  */
-      push_goal(unify,arg3,(ptr_psi_term)n->data,NULL);
+      push_goal(unify,arg3,(ptr_psi_term)n->data_val(),NULL);
     push_goal(unify,result,ans,NULL);
   }
   else
@@ -3146,10 +3150,10 @@ static ptr_node copy_attr_list(ptr_node n)
   if (n==NULL) return NULL;
 
   m = STACK_ALLOC(node);
-  m->key = n->key;
-  m->data = n->data;
-  m->left = copy_attr_list(n->left);
-  m->right = copy_attr_list(n->right);
+  m->set_key(n->key_val());
+  m->set_data(n->data_val());
+  m->set_left(copy_attr_list(n->left_val()));
+  m->set_right(copy_attr_list(n->right_val()));
   return m;
 }
 /******** C_STRIP
@@ -4104,10 +4108,10 @@ ptr_node one_attr()
   ptr_node n;
 
   n = STACK_ALLOC(node);
-  n->key = one;
-  n->data = NULL; /* To be filled in later */
-  n->left = NULL;
-  n->right = NULL;
+  n->set_key(one);
+  n->set_data(NULL); /* To be filled in later */
+  n->set_left(NULL);
+  n->set_right(NULL);
 
   return n;
 }
@@ -4123,18 +4127,19 @@ ptr_psi_term new_psi_term(long long numargs, ptr_definition typ,
 
   if (numargs==2) {
     n2 = STACK_ALLOC(node);
-    n2->key = two;
-    *a2 = (ptr_psi_term *) &(n2->data);
-    n2->left = NULL;
-    n2->right = NULL;
+    n2->set_key(two);
+    //    *a2 = (ptr_psi_term *) &(n2->data);
+    *a2 = (ptr_psi_term *) n2->data_addr();
+    n2->set_left(NULL);
+    n2->set_right(NULL);
   }
   else
     n2=NULL;
   n1 = STACK_ALLOC(node);
-  n1->key = one;
-  *a1 = (ptr_psi_term *) &(n1->data);
-  n1->left = NULL;
-  n1->right = n2;
+  n1->set_key(one);
+  *a1 = (ptr_psi_term *) n1->data_addr();
+  n1->set_left(NULL);
+  n1->set_right(n2);
   t=stack_psi_term(4);
   t->type = typ;
   t->attr_list = n1;
@@ -4271,7 +4276,7 @@ static long long c_listing()
           t = new_psi_term(1, typesym, &a3, &a2); /* a2 is a dummy */
           t2 = new_psi_term(2, such_that, &a1, &a2);
         }
-        n->data = (GENERIC) t;
+        n->set_data((GENERIC) t);
         while (r) {
           *a1 = r->aaaa_2; /* Func, pred, or type */
           *a2 = r->bbbb_2;
@@ -4438,7 +4443,7 @@ long long declare_operator(ptr_psi_term t)
   else
     n = NULL;
   if (n && prec && type) {
-    atom=(ptr_psi_term )n->data;
+    atom=(ptr_psi_term )n->data_val();
     deref_ptr(prec);
     deref_ptr(type);
     deref_ptr(atom);
@@ -4554,7 +4559,7 @@ long long c_concatenate()
   else
     n1 = NULL;
   if (n1) {
-    arg1= (ptr_psi_term )n1->data;
+    arg1= (ptr_psi_term )n1->data_val();
     deref(arg1);
   }
   if(funct->attr_list)
@@ -4562,7 +4567,7 @@ long long c_concatenate()
   else
     n2 = NULL;
   if (n2) {
-    arg2= (ptr_psi_term )n2->data;
+    arg2= (ptr_psi_term )n2->data_val();
     deref(arg2);
   }
   deref_args(funct,set_1_2);
@@ -4679,7 +4684,7 @@ long long c_string_length()
   else
     n1 = NULL;
   if (n1) {
-    arg1= (ptr_psi_term )n1->data;
+    arg1= (ptr_psi_term )n1->data_val();
     deref(arg1);
   }
   deref_args(funct,set_1);
@@ -4734,7 +4739,7 @@ long long c_sub_string()
   else
     n1 = NULL;
   if (n1) {
-    arg1= (ptr_psi_term )n1->data;
+    arg1= (ptr_psi_term )n1->data_val();
     deref(arg1);
   }
   if (funct->attr_list)
@@ -4742,7 +4747,7 @@ long long c_sub_string()
   else
     n2 = NULL;
   if (n2) {
-    arg2= (ptr_psi_term )n2->data;
+    arg2= (ptr_psi_term )n2->data_val();
     deref(arg2);
   }
   if (funct->attr_list)
@@ -4750,7 +4755,7 @@ long long c_sub_string()
   else
     n3 = NULL;
   if (n3) {
-    arg3= (ptr_psi_term )n3->data;
+    arg3= (ptr_psi_term )n3->data_val();
     deref(arg3);
   }
   deref_args(funct,set_1_2_3);
@@ -4836,7 +4841,7 @@ long long c_append_file()
     n1=((wl_node_ptr*)g->attr_list)->find(FEATCMP,one);
   else n1 =NULL;
   if (n1) {
-    arg1= (ptr_psi_term )n1->data;
+    arg1= (ptr_psi_term )n1->data_val();
     deref(arg1);
   }
   if (g->attr_list)
@@ -4844,7 +4849,7 @@ long long c_append_file()
   else
     n2 = NULL;
   if (n2) {
-    arg2= (ptr_psi_term )n2->data;
+    arg2= (ptr_psi_term )n2->data_val();
     deref(arg2);
   }
   deref_args(g,set_1_2);
@@ -4911,7 +4916,7 @@ long long c_random()
   else
     n1 = NULL;
   if (n1) {
-    arg1= (ptr_psi_term )n1->data;
+    arg1= (ptr_psi_term )n1->data_val();
     deref(arg1);
   }
   deref_args(funct,set_1);
@@ -4970,7 +4975,7 @@ long long c_initrandom()
   else
     n1 = NULL;
   if (n1) {
-    arg1= (ptr_psi_term )n1->data;
+    arg1= (ptr_psi_term )n1->data_val();
     deref(arg1);
   }
   deref_args(t,set_1);
@@ -5019,7 +5024,7 @@ long long c_deref_length()
     n1 = NULL;
   if (n1) {
     count=0;
-    arg1= (ptr_psi_term )n1->data;
+    arg1= (ptr_psi_term )n1->data_val();
     while(arg1->coref) {
       count++;
       arg1=arg1->coref;

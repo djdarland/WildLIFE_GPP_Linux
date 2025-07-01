@@ -175,7 +175,7 @@ void check_pointer(ptr_psi_term p)
       go_through(p);
     }
     else
-      n->data=(GENERIC)no_name;
+      n->set_data((GENERIC)no_name);
   }
 }
 /******** GO_THROUGH_TREE(t)
@@ -186,9 +186,9 @@ void go_through_tree(ptr_node t)
 // ptr_node t;
 {
   if (t) {
-    go_through_tree(t->left);
-    check_pointer((ptr_psi_term)t->data);
-    go_through_tree(t->right);
+    go_through_tree(t->left_val());
+    check_pointer((ptr_psi_term)t->data_val());
+    go_through_tree(t->right_val());
   }
 }
 /******** GO_THROUGH(t)
@@ -217,17 +217,17 @@ void insert_variables(ptr_node vars,long long force)
   ptr_node n;
   
   if(vars) {
-    insert_variables(vars->right,force);
-    p=(ptr_psi_term )vars->data;
+    insert_variables(vars->right_val(),force);
+    p=(ptr_psi_term )vars->data_val();
     deref_ptr(p);
     if (pointer_names)
       n=((wl_node_ptr*)pointer_names)->find(INTCMP,(char *)p); // REV401PLUS cast
     else
       n = NULL;
     if (n)
-      if (n->data || force)
-	n->data=(GENERIC)vars->key;
-    insert_variables(vars->left,force);
+      if (n->data_val() || force)
+	n->set_data((GENERIC)vars->key_val());
+    insert_variables(vars->left_val(),force);
   }
 }
 /******** FORBID_VARIABLES
@@ -242,11 +242,11 @@ void forbid_variables(ptr_node n)
   ptr_psi_term v;
   
   if(n) {
-    forbid_variables(n->right);
-    v=(ptr_psi_term )n->data;
+    forbid_variables(n->right_val());
+    v=(ptr_psi_term )n->data_val();
     deref_ptr(v);
-    ((wl_node_ptr_ptr*)&printed_pointers)->heap_insert(INTCMP,(char *)v,(GENERIC)n->key); // REV401PLUS casts
-    forbid_variables(n->left);
+    ((wl_node_ptr_ptr*)&printed_pointers)->heap_insert(INTCMP,(char *)v,(GENERIC)n->key_val()); // REV401PLUS casts
+    forbid_variables(n->left_val());
   }
 }
 /******************************************************************************
@@ -486,11 +486,11 @@ long long count_features(ptr_node t)
 {
   long long c=0;
   if(t) {
-    if(t->left)
-      c+=count_features(t->left);
+    if(t->left_val())
+      c+=count_features(t->left_val());
     c++;
-    if(t->right)
-      c+=count_features(t->right);
+    if(t->right_val())
+      c+=count_features(t->right_val());
   }
   return c;
 }
@@ -562,7 +562,7 @@ void pretty_list(ptr_psi_term t,long long depth)
       n=((wl_node_ptr*)pointer_names)->find(INTCMP,(char *)cdr); // REV401PLUS
     else
       n = NULL;
-    if(n && n->data) {
+    if(n && n->data_val()) {
       prettyf("|");
       pretty_tag_or_psi_term(cdr,MAX_PRECEDENCE+1,depth);
       done=TRUE;
@@ -613,24 +613,24 @@ void pretty_tag_or_psi_term(ptr_psi_term p, long long sprec, long long depth)
     n=((wl_node_ptr*)pointer_names)->find(INTCMP,(char *)p); // REV401PLUS cast
   else
     n = NULL;
-  if (n && n->data) {
-    if (n->data==(GENERIC)no_name) {
-      n->data=unique_name();
+  if (n && n->data_val()) {
+    if (n->data_val()==(GENERIC)no_name) {
+      n->set_data(unique_name());
     }
     if (printed_pointers)
       n2=((wl_node_ptr*)printed_pointers)->find(INTCMP,(char *)p);  // REV401PLUS cast
     else
       n2 = NULL;
     if(n2==NULL) {
-      prettyf((char *)n->data);   // REV401PLUS cast
-      ((wl_node_ptr_ptr*)&printed_pointers)->heap_insert(INTCMP,(char *)p,n->data);  // REV401PLUS cast
+      prettyf((char *)n->data_val());   // REV401PLUS cast
+      ((wl_node_ptr_ptr*)&printed_pointers)->heap_insert(INTCMP,(char *)p,n->data_val());  // REV401PLUS cast
       if (!is_top(p)) {
         prettyf(DOTDOT);
         pretty_psi_term(p,COLON_PREC,depth);
       }
     }
     else
-      prettyf((char *)n2->data);  // REV401PLUS cast
+      prettyf((char *)n2->data_val());  // REV401PLUS cast
   }
   else
     pretty_psi_term(p,sprec,depth);
@@ -649,9 +649,9 @@ long long check_opargs(ptr_node n)
 // ptr_node n;
 {
   if (n) {
-    long long f=check_opargs(n->left) | check_opargs(n->right);
-    if (!featcmp(n->key,"1")) return 1 | f;
-    if (!featcmp(n->key,"2")) return 2 | f;
+    long long f=check_opargs(n->left_val()) | check_opargs(n->right_val());
+    if (!featcmp(n->key_val(),"1")) return 1 | f;
+    if (!featcmp(n->key_val(),"2")) return 2 | f;
     return 4 | f;
   }
   else
@@ -930,23 +930,23 @@ void do_pretty_attr(ptr_node t,ptr_tab_brk tab,long long *cnt,long long two,long
   ptr_module module;
 
   if (t) {
-    if (t->left) {
-      do_pretty_attr(t->left,tab,cnt,two,depth);
+    if (t->left_val()) {
+      do_pretty_attr(t->left_val(),tab,cnt,two,depth);
       prettyf(",");
     }
     /* Don't start each argument on a new line, */
     /* unless printing a function body: */
     mark_tab(tab);
-    v=str_to_int(t->key);
+    v=str_to_int(t->key_val());
     if (v<0) {
       if(display_modules) { /*  RM: Jan 21 1993  */
-	module=extract_module_from_name(t->key);
+	module=extract_module_from_name(t->key_val());
 	if(module) {
 	  prettyf(module->module_name);
 	  prettyf("#");
 	}
       }
-      prettyf_quote(strip_module_name(t->key));
+      prettyf_quote(strip_module_name(t->key_val()));
       prettyf(" => ");
     }
     else if (v== *cnt)
@@ -956,10 +956,10 @@ void do_pretty_attr(ptr_node t,ptr_tab_brk tab,long long *cnt,long long two,long
       prettyf(s); /* 6.10 */
       prettyf(" => ");
     }
-    pretty_tag_or_psi_term((ptr_psi_term)t->data,COMMA_PREC,depth); // REV401PLUS cast
-    if (t->right) {
+    pretty_tag_or_psi_term((ptr_psi_term)t->data_val(),COMMA_PREC,depth); // REV401PLUS cast
+    if (t->right_val()) {
       prettyf(",");
-      do_pretty_attr(t->right,tab,cnt,two,depth);
+      do_pretty_attr(t->right_val(),tab,cnt,two,depth);
     }
   }
 }
@@ -968,7 +968,7 @@ long long two_or_more(ptr_node t)
 // ptr_node t;
 {
   if (t) {
-    if (t->left || t->right) return TRUE; else return FALSE;
+    if (t->left_val() || t->right_val()) return TRUE; else return FALSE;
   }
   else
     return FALSE;
@@ -1019,22 +1019,22 @@ void pretty_variables(ptr_node n,ptr_tab_brk tab)
   ptr_psi_term tok;
   ptr_node n2;
   
-  if(n->left) {
-    pretty_variables(n->left,tab);
+  if(n->left_val()) {
+    pretty_variables(n->left_val(),tab);
     prettyf(", ");
   }
   mark_tab(tab);
-  prettyf(n->key);
+  prettyf(n->key_val());
   prettyf(" = ");
-  tok=(ptr_psi_term )n->data;
+  tok=(ptr_psi_term )n->data_val();
   deref_ptr(tok);
   if (printed_pointers)
     n2=((wl_node_ptr*)printed_pointers)->find(INTCMP,(char *)tok); // REV401PLUS cast
   else
     n2 = NULL;
-  if(strcmp((char *)n2->data,n->key)<0)
+  if(strcmp((char *)n2->data_val(),n->key_val())<0)
     /* Reference to previously printed variable */
-    prettyf((char *)n2->data); // EV401PLUS cast
+    prettyf((char *)n2->data_val()); // EV401PLUS cast
   else {
     if (eqsym->op_data) {
       long long tkind, tprec, ttype, eqprec;
@@ -1047,9 +1047,9 @@ void pretty_variables(ptr_node n,ptr_tab_brk tab)
     else
       pretty_psi_term(tok,MAX_PRECEDENCE+1,0);
   }
-  if(n->right) {
+  if(n->right_val()) {
     prettyf(", ");
-    pretty_variables(n->right,tab);
+    pretty_variables(n->right_val(),tab);
   }
 }
 /******** PRINT_VARIABLES
@@ -1105,10 +1105,10 @@ void write_attributes(ptr_node n,ptr_tab_brk tab)
 // ptr_tab_brk tab;
 {
   if(n) {
-    write_attributes(n->left,tab);
+    write_attributes(n->left_val(),tab);
     mark_tab(tab);
-    pretty_tag_or_psi_term((ptr_psi_term)n->data,MAX_PRECEDENCE+1,0); // REV401PLUS cast
-    write_attributes(n->right,tab);
+    pretty_tag_or_psi_term((ptr_psi_term)n->data_val(),MAX_PRECEDENCE+1,0); // REV401PLUS cast
+    write_attributes(n->right_val(),tab);
   }
 }
 /******** PRED_WRITE(n)
@@ -1156,7 +1156,7 @@ void main_pred_write(ptr_node n)
     GENERIC old_heap_pointer;
     ptr_tab_brk wl_new;
  
-    if (!write_corefs) main_pred_write(n->left);
+    if (!write_corefs) main_pred_write(n->left_val());
     old_heap_pointer=wl_mem->heap_pointer_val();
     pointer_names=NULL;
     printed_pointers=NULL;
@@ -1164,7 +1164,7 @@ void main_pred_write(ptr_node n)
     if (write_corefs)
       go_through_tree(n);
     else
-      check_pointer((ptr_psi_term)n->data);
+      check_pointer((ptr_psi_term)n->data_val());
     insert_variables(var_tree,FALSE);
     *buffer=0;
     indx=pretty_things;
@@ -1174,7 +1174,7 @@ void main_pred_write(ptr_node n)
     }
     else {
       mark_tab(wl_new);
-      pretty_tag_or_psi_term((ptr_psi_term)n->data,MAX_PRECEDENCE+1,0); // REV401PLUS cast
+      pretty_tag_or_psi_term((ptr_psi_term)n->data_val(),MAX_PRECEDENCE+1,0); // REV401PLUS cast
     }
     end_tab();
     if (indent) {
@@ -1182,7 +1182,7 @@ void main_pred_write(ptr_node n)
       pretty_output();
     }
     wl_mem->set_heap_pointer(old_heap_pointer);
-    if (!write_corefs) main_pred_write(n->right);
+    if (!write_corefs) main_pred_write(n->right_val());
   }
 }
 void main_display_psi_term(); /* Forward declaration */

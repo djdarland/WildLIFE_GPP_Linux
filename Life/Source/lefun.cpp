@@ -457,28 +457,30 @@ long long eval_aim()
     if (*u==NULL)
       attr_missing=TRUE;
     else {
-      cmp=featcmp((*u)->key,v->key);
+      cmp=featcmp((*u)->key_val(),v->key_val());
       if(cmp==0) {
         ptr_psi_term t;
-  	/* RESID */ match_attr1(&((*u)->right),v->right,rb);
-        t = (ptr_psi_term) (*u)->data;
-  	/* RESID */ push_goal(match,(ptr_psi_term)(*u)->data,(ptr_psi_term)v->data,(GENERIC)rb); // REV401PLUS casts
+	//  	/* RESID */ match_attr1(&((*u)->right),v->right,rb);
+  	/* RESID */ match_attr1((*u)->right_addr(),v->right_val(),rb);
+
+        t = (ptr_psi_term) (*u)->data_val();
+  	/* RESID */ push_goal(match,(ptr_psi_term)(*u)->data_val(),(ptr_psi_term)v->data_val(),(GENERIC)rb); // REV401PLUS casts
         /* deref2_eval(t); */
-  	/* RESID */ match_attr1(&((*u)->left),v->left,rb);
+  	/* RESID */ match_attr1((*u)->left_addr(),v->left_val(),rb);
       }
       else if (cmp>0) {
-        temp=v->right;
-        v->right=NULL;
+        temp=v->right_val();
+        v->set_right(NULL);
   	/* RESID */ match_attr1(u,temp,rb);
-  	/* RESID */ match_attr1(&((*u)->left),v,rb);
-  	v->right=temp;
+  	/* RESID */ match_attr1((*u)->left_addr(),v,rb);
+	v->set_right(temp);
       }
       else {
-  	temp=v->left;
-  	v->left=NULL;
-  	/* RESID */ match_attr1(&((*u)->right),v,rb);
+	temp=v->left_val();
+	v->set_left(NULL);
+	/* RESID */ match_attr1((*u)->right_addr(),v,rb);
   	/* RESID */ match_attr1(u,temp,rb);
-  	v->left=temp;
+  	v->set_left(temp);
       }
     }
   }
@@ -494,45 +496,45 @@ long long eval_aim()
   if (v) {
     if (*u==NULL) { /* PVR 12.03 */
       ptr_psi_term t;
-      match_attr1(u,v->right,rb);
-      t = (ptr_psi_term) v->data;
+      match_attr1(u,v->right_val(),rb);
+      t = (ptr_psi_term) v->data_val();
       //      deref2_rec_eval(t);
       ((wl_psi_term_ptr*)t)->deref2_rec_eval();
-      match_attr1(u,v->left,rb);
+      match_attr1(u,v->left_val(),rb);
     }
     else {
-      cmp=featcmp((*u)->key,v->key);
+      cmp=featcmp((*u)->key_val(),v->key_val());
       if(cmp==0) {
-  	/* RESID */ match_attr2(&((*u)->right),v->right,rb);
-  	/* RESID */ match_attr2(&((*u)->left),v->left,rb);
+  	/* RESID */ match_attr2((*u)->right_addr(),v->right_val(),rb);
+  	/* RESID */ match_attr2((*u)->left_addr(),v->left_val(),rb);
       }
       else if (cmp>0) {
-        temp=v->right;
-        v->right=NULL;
+        temp=v->right_val();
+        v->set_right(NULL);
   	/* RESID */ match_attr2(u,temp,rb);
-  	/* RESID */ match_attr2(&((*u)->left),v,rb);
-  	v->right=temp;
+  	/* RESID */ match_attr2((*u)->left_addr(),v,rb);
+  	v->set_right(temp);
       }
       else {
-  	temp=v->left;
-  	v->left=NULL;
-  	/* RESID */ match_attr2(&((*u)->right),v,rb);
+  	temp=v->left_val();
+  	v->set_left(NULL);
+  	/* RESID */ match_attr2((*u)->right_addr(),v,rb);
   	/* RESID */ match_attr2(u,temp,rb);
-  	v->left=temp;
+  	v->set_left(temp);
       }
     }
   }
   else if (*u!=NULL) {
     ptr_psi_term t /* , empty */ ;
-    match_attr1(&((*u)->right),v,rb);
-    t = (ptr_psi_term) (*u)->data;
+    match_attr1((*u)->right_addr(),v,rb);
+    t = (ptr_psi_term) (*u)->data_val();
     /* Create a new psi-term to put the (useless) result: */
     /* This is needed so that *all* arguments of a function call */
     /* are evaluated, which avoids incorrect 'Yes' answers.      */
     
     //    deref2_rec_eval(t); /* Assumes goal_stack is already restored. */
     ((wl_psi_term_ptr*)t)->deref2_rec_eval(); /* Assumes goal_stack is already restored. */
-    match_attr1(&((*u)->left),v,rb);
+    match_attr1((*u)->left_addr(),v,rb);
   }
 }
 /* Evaluate the corresponding arguments */
@@ -545,31 +547,31 @@ long long eval_aim()
     if (*u==NULL)
       attr_missing=TRUE;
     else {
-      cmp=featcmp((*u)->key,v->key);
+      cmp=featcmp((*u)->key_val(),v->key_val());
       if(cmp==0) {
         ptr_psi_term t1,t2;
-  	/* RESID */ match_attr3(&((*u)->right),v->right,rb);
-        t1 = (ptr_psi_term) (*u)->data;
-        t2 = (ptr_psi_term) v->data;
+  	/* RESID */ match_attr3((*u)->right_addr(),v->right_val(),rb);
+      t1 = (ptr_psi_term) (*u)->data_val();
+      t2 = (ptr_psi_term) v->data_val();
 	//        deref2_eval(t1); /* Assumes goal_stack is already restored. */
         //        deref2_eval(t2); /* PVR 12.03 */
         ((wl_psi_term_ptr*)t1)->deref2_eval(); /* Assumes goal_stack is already restored. */
         ((wl_psi_term_ptr*)t2)->deref2_eval(); /* PVR 12.03 */
-  	/* RESID */ match_attr3(&((*u)->left),v->left,rb);
+  	/* RESID */ match_attr3((*u)->left_addr(),v->left_val(),rb);
       }
       else if (cmp>0) {
-        temp=v->right;
-        v->right=NULL;
+        temp=v->right_val();
+        v->set_right(NULL);
   	/* RESID */ match_attr3(u,temp,rb);
-  	/* RESID */ match_attr3(&((*u)->left),v,rb);
-  	v->right=temp;
+  	/* RESID */ match_attr3((*u)->left_addr(),v,rb);
+  	v->set_right(temp);
       }
       else {
-  	temp=v->left;
-  	v->left=NULL;
-  	/* RESID */ match_attr3(&((*u)->right),v,rb);
+  	temp=v->left_val();
+  	v->set_left(NULL);
+  	/* RESID */ match_attr3((*u)->right_addr(),v,rb);
   	/* RESID */ match_attr3(u,temp,rb);
-  	v->left=temp;
+  	v->set_left(temp);
       }
     }
   }
@@ -702,9 +704,9 @@ long long eval_args(ptr_node n)
   long long flag=TRUE;
   
   if (n) {
-    flag = eval_args(n->right);
-    flag = check_out((ptr_psi_term)n->data) && flag; // REV401PLUS cast
-    flag = eval_args(n->left) && flag;
+    flag = eval_args(n->right_val());
+    flag = check_out((ptr_psi_term)n->data_val()) && flag; // REV401PLUS cast
+    flag = eval_args(n->left_val()) && flag;
   }
   return flag;
 }
@@ -979,12 +981,12 @@ void deref_rec_args(ptr_node n)
   ptr_psi_term t1;
   
   if (n) {
-    deref_rec_args(n->right);
-    t1 = (ptr_psi_term) (n->data);
+    deref_rec_args(n->right_val());
+    t1 = (ptr_psi_term) (n->data_val());
     deref_ptr(t1);
     //    deref_rec_body(t1);
     ((wl_psi_term_ptr*)t1)->deref_rec_body();
-    deref_rec_args(n->left);
+    deref_rec_args(n->left_val());
   }
 }
 #if FALSE
@@ -1024,14 +1026,14 @@ void deref_rec_args_exc(ptr_node n,long long set)
   ptr_psi_term t;
   
   if (n) {
-    deref_rec_args_exc(n->right,set);
-    if (!in_set(n->key,set)) {
-      t = (ptr_psi_term) (n->data);
+    deref_rec_args_exc(n->right_val(),set);
+    if (!in_set(n->key_val(),set)) {
+      t = (ptr_psi_term) (n->data_val());
       deref_ptr(t);
       //      deref_rec_body(t);
       ((wl_psi_term_ptr*)t)->deref_rec_body();
     }
-    deref_rec_args_exc(n->left,set);
+    deref_rec_args_exc(n->left_val(),set);
   }
 }
 #if FALSE

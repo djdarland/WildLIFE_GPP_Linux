@@ -2,6 +2,8 @@
 #include "defs.h"
 class wl_psi_term_ptr {
 public:
+  static long long curr_status;
+  static long long mark_nonstrict_flag;
   long long deref_eval();
   long long deref_rec_eval();
   void deref_rec_body();

@@ -36,7 +36,7 @@ long long call_primitive(long long (*fun)(ptr_psi_term[],
       n = NULL;
     /* argument present */
     if (n) {
-      arg = (ptr_psi_term) n->data;
+      arg = (ptr_psi_term) n->data_val();
       /* in case we don't want to evaluate the argument
 	 just follow the chain of corefs and don't do
 	 any of the other checks: they'll have do be done
@@ -490,7 +490,7 @@ static long long regexp_execute_internal(ptr_psi_term args[],
 	else
 	  n3 = NULL;
 	if (n3) {
-	  ptr_psi_term psi = (ptr_psi_term) n3->data;
+	  ptr_psi_term psi = (ptr_psi_term) n3->data_val();
 	  /* need to add 1 to these offsets because somehow life strings
 	     are 1-based rather than 0-based.  Who is the moron who made
 	     that decision?  This isn't Pascal! */
@@ -1475,7 +1475,7 @@ static long long lazy_project_internal(ptr_psi_term args[],
     n=((wl_node_ptr*)args[0]->attr_list)->find(FEATCMP,buffer);
   else
     n = NULL;
-  if (n) push_goal(unify,(ptr_psi_term)n->data,result,NULL); // REV401PLUS add cast
+  if (n) push_goal(unify,(ptr_psi_term)n->data_val(),result,NULL); // REV401PLUS add cast
   /* this is all bullshit because projection should residuate
      on its 2nd arg until it becomes value.  In particular, think
      of using `int' as a feature when it is clear that `int' may

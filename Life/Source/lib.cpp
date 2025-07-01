@@ -18,12 +18,12 @@ char **group_features(char **f,ptr_node n)
 {
   *f=NULL;
   if(n) {
-    if(n->left)
-      f=group_features(f,n->left);
-    *f=n->key;
+    if(n->left_val())
+      f=group_features(f,n->left_val());
+    *f=n->key_val();
     f++;
-    if(n->right)
-      f=group_features(f,n->right);
+    if(n->right_val())
+      f=group_features(f,n->right_val());
   }
   return f;
 }
@@ -243,7 +243,7 @@ PsiTerm WFGetVar(char *name)
   else
     n = NULL;
   if(n) {
-    result=(ptr_psi_term)n->data;
+    result=(ptr_psi_term)n->data_val();
     if(result)
       deref_ptr(result);
   }
@@ -255,11 +255,11 @@ int WFfeature_count_loop(ptr_node n)
   int result=0;
 
   if(n) {
-    if(n->left)
-      result+=WFfeature_count_loop(n->left);
+    if(n->left_val())
+      result+=WFfeature_count_loop(n->left_val());
     result++;
-    if(n->right)
-      result+=WFfeature_count_loop(n->right);
+    if(n->right_val())
+      result+=WFfeature_count_loop(n->right_val());
   }
   return result;
 }
@@ -350,7 +350,7 @@ ptr_psi_term WFGetFeature(ptr_psi_term psi,char *feature)  // changed g++
     else
       n = NULL;
     if(n)
-      result=(ptr_psi_term)n->data;  // changed g++
+      result=(ptr_psi_term)n->data_val();  // changed g++
   }
   return result;
 }

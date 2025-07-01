@@ -33,12 +33,12 @@ void get_two_args(ptr_node t,ptr_psi_term *a,ptr_psi_term *b)
   *a=NULL;
   *b=NULL;
   if (t) {
-    if (t->key==one) {
-      *a=(ptr_psi_term )t->data;  // changed g++
-      n=t->right;
+    if (t->key_val()==one) {
+      *a=(ptr_psi_term )t->data_val();  // changed g++
+      n=t->right_val();
       if (n) 
-	if (n->key==two)
-	  *b=(ptr_psi_term )n->data;
+	if (n->key_val()==two)
+	  *b=(ptr_psi_term )n->data_val();
 	else {
 	  if (t)
 	    n=((wl_node_ptr*)t)->find(FEATCMP,two);
@@ -47,7 +47,7 @@ void get_two_args(ptr_node t,ptr_psi_term *a,ptr_psi_term *b)
 	  if(n==NULL)
 	    *b=NULL;  
 	  else
-	    *b=(ptr_psi_term )n->data; 
+	    *b=(ptr_psi_term )n->data_val(); 
 	}
       else
 	*b=NULL; 
@@ -60,7 +60,7 @@ void get_two_args(ptr_node t,ptr_psi_term *a,ptr_psi_term *b)
       if (n==NULL)
 	*a=NULL; 
       else
-	*a=(ptr_psi_term )n->data;
+	*a=(ptr_psi_term )n->data_val();
       if (t)
 	n=((wl_node_ptr*)t)->find(FEATCMP,two);
       else
@@ -68,7 +68,7 @@ void get_two_args(ptr_node t,ptr_psi_term *a,ptr_psi_term *b)
       if (n==NULL)
 	*b=NULL; 
       else
-	*b=(ptr_psi_term )n->data;
+	*b=(ptr_psi_term )n->data_val();
     }
   }
 }
@@ -85,8 +85,8 @@ void get_one_arg(ptr_node t,ptr_psi_term *a)
   
   *a=NULL;
   if (t) {
-    if (t->key==one) {
-      *a=(ptr_psi_term)t->data;
+    if (t->key_val()==one) {
+      *a=(ptr_psi_term)t->data_val();
     }
     else {
       if (t)
@@ -96,7 +96,7 @@ void get_one_arg(ptr_node t,ptr_psi_term *a)
       if (n==NULL)
 	*a=NULL;
       else
-	*a=(ptr_psi_term)n->data;
+	*a=(ptr_psi_term)n->data_val();
     }
   }
 }
@@ -114,8 +114,8 @@ void get_one_arg_addr(ptr_node t,ptr_psi_term **a)
   
   *a=NULL;
   if (t) {
-    if (t->key==one)
-      *a= (ptr_psi_term *)(&t->data);
+    if (t->key_val()==one)
+      *a= (ptr_psi_term *)(t->data_addr());
     else {
       if (t)
 	n=((wl_node_ptr*)t)->find(FEATCMP,one);
@@ -124,7 +124,7 @@ void get_one_arg_addr(ptr_node t,ptr_psi_term **a)
       if (n==NULL)
 	*a=NULL;
       else
-	*a= (ptr_psi_term *)(&n->data);
+	*a= (ptr_psi_term *)(n->data_addr());
     }
   }
 }
@@ -704,27 +704,27 @@ void merge1(ptr_node *u, ptr_node v)
       /* more_v_attr=TRUE; */
     }
     else {
-      cmp=featcmp((*u)->key,v->key);
+      cmp=featcmp((*u)->key_val(),v->key_val());
       if (cmp==0) {
-	if (v->right)
-	  merge1(&((*u)->right),v->right);
-	push_goal(unify,(ptr_psi_term)(*u)->data,(ptr_psi_term)v->data,NULL); // REV401PLUS add casts
-	if (v->left)
-	  merge1(&((*u)->left),v->left);
+	if (v->right_val())
+	  merge1((*u)->right_addr(),v->right_val());
+	push_goal(unify,(ptr_psi_term)(*u)->data_val(),(ptr_psi_term)v->data_val(),NULL); // REV401PLUS add casts
+	if (v->left_val())
+	  merge1((*u)->left_addr(),v->left_val());
       }
       else if (cmp>0) {
-	temp=v->right;
-	v->right=NULL;
-	merge1(&((*u)->left),v);
+	temp=v->right_val();
+	v->set_right(NULL);
+	merge1((*u)->left_addr(),v);
 	merge1(u,temp);
-	v->right=temp;
+	v->set_right(temp);
       }
       else {
-        temp=v->left;
-        v->left=NULL;
-        merge1(&((*u)->right),v);
+        temp=v->left_val();
+        v->set_left(NULL);
+        merge1((*u)->right_addr(),v);
         merge1(u,temp);
-        v->left=temp;
+        v->set_left(temp);
       }
     }
   }
@@ -743,44 +743,44 @@ void merge2(ptr_node *u,ptr_node v)
   if (v) {
     if (*u==NULL) {
       ptr_psi_term t;
-      merge2(u,v->right);
-      t = (ptr_psi_term) v->data;
+      merge2(u,v->right_val());
+      t = (ptr_psi_term) v->data_val();
       //      deref2_rec_eval(t); /* Assumes goal_stack is already restored. */
       ((wl_psi_term_ptr*)t)->deref2_rec_eval(); /* Assumes goal_stack is already restored. */
-      merge2(u,v->left);
+      merge2(u,v->left_val());
     }
     else {
-      cmp=featcmp((*u)->key,v->key);
+      cmp=featcmp((*u)->key_val(),v->key_val());
       if (cmp==0) {
 	/* if (v->right) */
-	merge2(&((*u)->right),v->right);
+	merge2((*u)->right_addr(),v->right_val());
 	
 	/* if (v->left) */
-	merge2(&((*u)->left),v->left);
+	merge2((*u)->left_addr(),v->left_val());
       }
       else if (cmp>0) {
-	temp=v->right;
-	v->right=NULL;
-	merge2(&((*u)->left),v);
+	temp=v->right_val();
+	v->set_right(NULL);
+	merge2((*u)->left_addr(),v);
 	merge2(u,temp);
-	v->right=temp;
+	v->set_right(temp);
       }
       else {
-        temp=v->left;
-        v->left=NULL;
-        merge2(&((*u)->right),v);
+        temp=v->left_val();
+        v->set_left(NULL);
+        merge2((*u)->right_addr(),v);
         merge2(u,temp);
-        v->left=temp;
+        v->set_left(temp);
       }
     }
   }
   else if (*u!=NULL) {
     ptr_psi_term t;
-    merge2(&((*u)->right),v);
-    t = (ptr_psi_term) (*u)->data;
+    merge2((*u)->right_addr(),v);
+    t = (ptr_psi_term) (*u)->data_val();
     //    deref2_rec_eval(t); /* Assumes goal_stack is already restored. */
     ((wl_psi_term_ptr*)t)->deref2_rec_eval(); /* Assumes goal_stack is already restored. */
-    merge2(&((*u)->left),v);
+    merge2((*u)->left_addr(),v);
   }
 }
 /* Merge v's loners into u and evaluate the corresponding arguments */
@@ -800,29 +800,29 @@ void merge3(ptr_node *u,ptr_node v)
     else {
       ptr_psi_term t1,t2;
       
-      cmp=featcmp((*u)->key,v->key);
+      cmp=featcmp((*u)->key_val(),v->key_val());
       if (cmp==0) {
-	if (v->right)
-	  merge3(&((*u)->right),v->right);
-        t1 = (ptr_psi_term) (*u)->data;
+	if (v->right_val())
+	  merge3((*u)->right_addr(),v->right_val());
+        t1 = (ptr_psi_term) (*u)->data_val();
 	//        deref2_eval(t1);
         ((wl_psi_term_ptr*)t1)->deref2_eval();
-	if (v->left)
-	  merge3(&((*u)->left),v->left);
+	if (v->left_val())
+	  merge3((*u)->left_addr(),v->left_val());
       }
       else if (cmp>0) {
-	temp=v->right;
-	v->right=NULL;
-	merge3(&((*u)->left),v);
+	temp=v->right_val();
+	v->set_right(NULL);
+	merge3((*u)->left_addr(),v);
 	merge3(u,temp);
-	v->right=temp;
+	v->set_right(temp);
       }
       else {
-        temp=v->left;
-        v->left=NULL;
-        merge3(&((*u)->right),v);
+        temp=v->left_val();
+        v->set_left(NULL);
+        merge3((*u)->right_addr(),v);
         merge3(u,temp);
-        v->left=temp;
+        v->set_left(temp);
       }
     }
   }
@@ -1275,9 +1275,10 @@ long long prove_aim()
 		  bool_pred=stack_psi_term(0);
 		  bool_pred->type=boolpredsym;
 		  bool_pred->attr_list=(a=STACK_ALLOC(node));
-		  a->key=one;
-		  a->left=a->right=NULL;
-		  a->data=(GENERIC) thegoal;
+		  a->set_key(one);
+		  a->set_left(NULL);
+		  a->set_right(NULL);
+		  a->set_data((GENERIC) thegoal);
 		  push_goal(prove,bool_pred,(ptr_psi_term)DEFRULES,NULL); // REV401PLUS cast
 		  return success; /* We're done! */
 		}
@@ -1488,7 +1489,7 @@ long long num_vars(ptr_node vt)
 {
   long long num;
   
-  return (vt?(num_vars(vt->left)+1+num_vars(vt->right)):0);
+  return (vt?(num_vars(vt->left_val())+1+num_vars(vt->right_val())):0);
 }
 /* Cut away up to and including the first 'what_next' choice point. */
 long long what_next_cut()

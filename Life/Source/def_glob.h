@@ -3,8 +3,11 @@
   \brief globals
   
 */
+
+#if FALSE
 EXTERN long long curr_status; // for wl_node_ptr class - better way?
-EXTERN long long mark_nonstrict_flag;
+EXTERN long long mark_nonstrict_flag;  // making static in classes
+#endif
 
 #ifdef __unix__
 EXTERN struct tms life_start;

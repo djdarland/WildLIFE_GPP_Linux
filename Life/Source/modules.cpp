@@ -37,7 +37,7 @@ ptr_module find_module(char *module)
   else
     nodule = NULL;
   if(nodule)
-    return (ptr_module)(nodule->data);
+    return (ptr_module)(nodule->data_val());
   else
     return NULL;
 }
@@ -387,10 +387,10 @@ void open_module_tree(ptr_node n, int *onefailed)  // REV401PLUS void
 {
   if (n) {
     ptr_psi_term t;
-    open_module_tree(n->left,onefailed);
-    t=(ptr_psi_term)n->data;
+    open_module_tree(n->left_val(),onefailed);
+    t=(ptr_psi_term)n->data_val();
     open_module_one(t,onefailed);
-    open_module_tree(n->right,onefailed);
+    open_module_tree(n->right_val(),onefailed);
   }
 }
 void open_module_one(ptr_psi_term t, int *onefailed)  // REV401PLUS void
@@ -476,8 +476,8 @@ void traverse_tree(ptr_node n,int flag)   // REV401PLUS void
 {
   if (n) {
     ptr_psi_term t;
-    traverse_tree(n->left,flag);
-    t=(ptr_psi_term)n->data;
+    traverse_tree(n->left_val(),flag);
+    t=(ptr_psi_term)n->data_val();
     deref_ptr(t);
     switch (flag) {
     case MAKE_PUBLIC:
@@ -490,7 +490,7 @@ void traverse_tree(ptr_node n,int flag)   // REV401PLUS void
       make_feature_private(t);
       break;
     }
-    traverse_tree(n->right,flag);
+    traverse_tree(n->right_val(),flag);
   }
 }
 /******** C_PUBLIC()
@@ -669,10 +669,10 @@ void replace_attr(ptr_node old_attr,ptr_psi_term term,
   char *oldlabel; /*  RM: Mar 12 1993  */
   char *newlabel;
   
-  if(old_attr->left)
-    replace_attr(old_attr->left,term,old,wl_new);
+  if(old_attr->left_val())
+    replace_attr(old_attr->left_val(),term,old,wl_new);
   
-  value=(ptr_psi_term)old_attr->data;
+  value=(ptr_psi_term)old_attr->data_val();
   rec_replace(old,wl_new,value);
   if(old->keyword->private_feature)  /*  RM: Mar 12 1993  */
     oldlabel=old->keyword->combined_name;
@@ -682,12 +682,12 @@ void replace_attr(ptr_node old_attr,ptr_psi_term term,
     newlabel=wl_new->keyword->combined_name;
   else
     newlabel=wl_new->keyword->symbol;
-  if(!strcmp(old_attr->key,oldlabel))
+  if(!strcmp(old_attr->key_val(),oldlabel))
     ((wl_node_ptr_ptr*)&(term->attr_list))->stack_insert(FEATCMP,newlabel,(GENERIC)value);
   else
-    ((wl_node_ptr_ptr*)&(term->attr_list))->stack_insert(FEATCMP,old_attr->key,(GENERIC)value);
-  if(old_attr->right)
-    replace_attr(old_attr->right,term,old,wl_new);
+    ((wl_node_ptr_ptr*)&(term->attr_list))->stack_insert(FEATCMP,old_attr->key_val(),(GENERIC)value);
+  if(old_attr->right_val())
+    replace_attr(old_attr->right_val(),term,old,wl_new);
 }
 /******** C_REPLACE()
 	  Replace all occurrences of type ARG1 with ARG2 in ARG3.
@@ -709,7 +709,7 @@ long long c_replace()
   else
     n = NULL;
   if (n)
-    arg3=(ptr_psi_term)n->data;
+    arg3=(ptr_psi_term)n->data_val();
   if(arg1 && arg2 && arg3) {
     deref_ptr(arg1);
     deref_ptr(arg2);
@@ -828,26 +828,26 @@ int global_unify_attr(ptr_node u,ptr_node v)    /*  RM: Feb  9 1993  */
   if(u)
     if(v) {
       /*  RM: Feb 16 1993  Avoid C optimiser bug */
-      dummy_printf("%s %s\n",u->key,v->key);
-      cmp=featcmp(u->key,v->key);
+      dummy_printf("%s %s\n",u->key_val(),v->key_val());
+      cmp=featcmp(u->key_val(),v->key_val());
       if(cmp<0) {
-	temp=u->right;
-	u->right=NULL;
-	success=global_unify_attr(u,v->left) && global_unify_attr(temp,v);
-	u->right=temp;
+	temp=u->right_val();
+	u->set_right(NULL);
+	success=global_unify_attr(u,v->left_val()) && global_unify_attr(temp,v);
+	u->set_right(temp);
       }
       else
 	if(cmp>0) {
-	  temp=u->left;
-	  u->left=NULL;
-	  success=global_unify_attr(u,v->right) && global_unify_attr(temp,v);
-	  u->left=temp;
+	  temp=u->left_val();
+	  u->set_left(NULL);
+	  success=global_unify_attr(u,v->right_val()) && global_unify_attr(temp,v);
+	  u->set_left(temp);
 	}
 	else {
 	  success=
-	    global_unify_attr(u->left,v->left) &&
-	    global_unify_attr(u->right,v->right) &&
-	    global_unify((ptr_psi_term)u->data,(ptr_psi_term)v->data); // REV401PLUS cast
+	    global_unify_attr(u->left_val(),v->left_val()) &&
+	    global_unify_attr(u->right_val(),v->right_val()) &&
+	    global_unify((ptr_psi_term)u->data_val(),(ptr_psi_term)v->data_val()); // REV401PLUS cast
 	}
     }
     else

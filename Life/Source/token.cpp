@@ -78,7 +78,7 @@ void heap_mod_int_attr(ptr_psi_term t, char *attrname, long long value)
     n=((wl_node_ptr*)t->attr_list)->find(FEATCMP,attrname);
   else
     n = NULL;
-  t1=(ptr_psi_term)n->data;
+  t1=(ptr_psi_term)n->data_val();
   *(REAL *)t1->value_3 = (REAL) value;
 }
 /* Add an attribute whose value is a string to a psi-term */
@@ -121,7 +121,7 @@ void heap_mod_str_attr(ptr_psi_term t, char *attrname, char *str)
     n=((wl_node_ptr*)t->attr_list)->find(FEATCMP,attrname);
   else
     n = NULL;
-  t1=(ptr_psi_term)n->data;
+  t1=(ptr_psi_term)n->data_val();
   t1->value_3=(GENERIC)heap_copy_string(str);
 }
 /* Attach a psi-term to another as an attribute. */
@@ -156,7 +156,7 @@ GENERIC get_attr(ptr_psi_term t, char *attrname)
     n=((wl_node_ptr*)t->attr_list)->find(FEATCMP,attrname);
   else
     n = NULL;
-  return (GENERIC) n->data;
+  return (GENERIC) n->data_val();
 }
 /* Get the psi-term's STREAM attribute */
 FILE *get_stream(ptr_psi_term t)
@@ -177,7 +177,7 @@ void save_state(ptr_psi_term t)
     n=((wl_node_ptr*)t->attr_list)->find(FEATCMP,STREAM);
   else
     n = NULL;
-  t1=(ptr_psi_term)n->data;
+  t1=(ptr_psi_term)n->data_val();
   t1->value_3=(GENERIC)input_stream;
   heap_mod_str_attr(t,INPUT_FILE_NAME,input_file_name);
   heap_mod_int_attr(t,LINE_COUNT,line_count);
@@ -1050,7 +1050,7 @@ void read_token_main(ptr_psi_term tok, long long for_parser)
           }
           else {
     dbg_note("read_token_mail", "AA00023");
-  	    tok->coref=(ptr_psi_term)n->data;
+    tok->coref=(ptr_psi_term)n->data_val();
 	  }
         }
       }

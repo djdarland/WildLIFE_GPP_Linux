@@ -204,8 +204,8 @@ void assert_protected(ptr_node n,long long prot)
   ptr_psi_term t;
 
   if (n) {
-    assert_protected(n->left,prot);
-    t=(ptr_psi_term)n->data;
+    assert_protected(n->left_val(),prot);
+    t=(ptr_psi_term)n->data_val();
     deref_ptr(t);
     if (t->type) {
       if (t->type->type_def==(def_type)type_it) {
@@ -222,7 +222,7 @@ void assert_protected(ptr_node n,long long prot)
         if (prot) t->type->date&=(~1); else t->type->date|=1;
       }
     }
-    assert_protected(n->right,prot);
+    assert_protected(n->right_val(),prot);
   }
 }
 /******** ASSERT_ARGS_NOT_EVAL(n)
@@ -235,8 +235,8 @@ void assert_args_not_eval(ptr_node n)
   ptr_psi_term t;
 
   if (n) {
-    assert_args_not_eval(n->left);
-    t=(ptr_psi_term)n->data;
+    assert_args_not_eval(n->left_val());
+    t=(ptr_psi_term)n->data_val();
     deref_ptr(t);
     if (t->type) {
       if (t->type->type_def==(def_type)type_it) {
@@ -246,7 +246,7 @@ void assert_args_not_eval(ptr_node n)
       else
         t->type->evaluate_args=FALSE;
     }
-    assert_args_not_eval(n->right);
+    assert_args_not_eval(n->right_val());
   }
 }
 /******** ASSERT_DELAY_CHECK(n)
@@ -259,13 +259,13 @@ void assert_delay_check(ptr_node n)
 {
   if (n) {
     ptr_psi_term t;
-    assert_delay_check(n->left);
-    t=(ptr_psi_term)n->data;
+    assert_delay_check(n->left_val());
+    t=(ptr_psi_term)n->data_val();
     deref_ptr(t);
     if (t->type) {
       t->type->always_check=FALSE;
     }
-    assert_delay_check(n->right);
+    assert_delay_check(n->right_val());
   }
 }
 /******** CLEAR_ALREADY_LOADED()
@@ -278,10 +278,10 @@ void clear_already_loaded(ptr_node n)
   ptr_definition d;
 
   if (n) {
-    d=((ptr_keyword)n->data)->definition;
+    d=((ptr_keyword)n->data_val())->definition;
     d->already_loaded=FALSE;
-    clear_already_loaded(n->left);
-    clear_already_loaded(n->right);
+    clear_already_loaded(n->left_val());
+    clear_already_loaded(n->right_val());
   }
 }
 /******** ASSERT_TYPE(t)
