@@ -70,6 +70,7 @@ ptr_psi_term heap_psi_term(long long stat)
 
   return result;
 }
+#if FALSE
 /* Create an empty list on the stack,  wiped out by RM: Dec 14 1992  */
 /* ptr_psi_term stack_empty_list()  is now aliased to stack_nil()    */
 /******** RESIDUATE_DOUBLE(t,u)
@@ -120,7 +121,9 @@ void residuate3(ptr_psi_term u,ptr_psi_term v,ptr_psi_term w)
   residuate(u);
   if (v && u!=v) residuate(v);
   if (w && u!=w && v!=w) residuate(w);
-} 
+}
+
+#endif
 /******** CURRY()
 Decide that the current function will have to be curried.
 This has become so simple it could be a MACRO.
@@ -631,7 +634,7 @@ long long match_aim()
 	      }
             }
             else
-              residuate_double(u,v);
+              ((wl_psi_term_ptr*)u)->residuate_double(v);
           }
         }
       }
@@ -646,18 +649,18 @@ long long match_aim()
           r= *((REAL *)u->value_3);
           success=(r==floor(r));
         }
-        if (success) residuate_double(u,v);
+        if (success) ((wl_psi_term_ptr*)u)->residuate_double(v);
       } 
       else
-        residuate_double(u,v);
+        ((wl_psi_term_ptr*)u)->residuate_double(v);
       if (success) {
         if (FUNC_ARG(u) && FUNC_ARG(v)) { /*  RM: Feb 10 1993  */
           /* residuate2(u,v); 21.9 */
-          residuate_double(u,v); /* 21.9 */
-          residuate_double(v,u); /* 21.9 */
+          ((wl_psi_term_ptr*)u)->residuate_double(v); /* 21.9 */
+          ((wl_psi_term_ptr*)v)->residuate_double(u); /* 21.9 */
 	}
         else if (FUNC_ARG(v)) {  /*  RM: Feb 10 1993  */
-          residuate_double(v,u); /* 21.9 */
+          ((wl_psi_term_ptr*)v)->residuate_double(u); /* 21.9 */
         }
         else {
           v->coref=u;
@@ -668,7 +671,7 @@ long long match_aim()
 	  if (can_curry)
 	    curried=TRUE;
 	  else
-	    residuate_double(u,v);
+	    ((wl_psi_term_ptr*)u)->residuate_double(v);
 	}
         /* } 21.9 */
       }

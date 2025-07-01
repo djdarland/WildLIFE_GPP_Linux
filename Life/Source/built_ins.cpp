@@ -357,25 +357,25 @@ static long long c_gt()
       if(success)
 	switch(num1+num2*2+num3*4) {
 	case 0:
-	  residuate2(arg1,arg2);
+	  ((wl_psi_term_ptr*)arg1)->residuate2(arg2);
 	  break;
 	case 1:
-	  residuate(arg2);
+	  ((wl_psi_term_ptr*)arg2)->residuate();
 	  break;
 	case 2:
-	  residuate(arg1);
+	  ((wl_psi_term_ptr*)arg1)->residuate();
 	  break;
 	case 3:
 	  unify_bool_result(arg3,(val1>val2));
 	  break;
 	case 4:
-	  residuate2(arg1,arg2);
+	  ((wl_psi_term_ptr*)arg1)->residuate2(arg2);
 	  break;
 	case 5:
-	  residuate(arg2);
+	  ((wl_psi_term_ptr*)arg2)->residuate();
 	  break;
 	case 6:
-	  residuate(arg1);
+	  ((wl_psi_term_ptr*)arg1)->residuate();
 	  break;
 	case 7:
 	  success=(val3==(REAL)(val1>val2));
@@ -420,13 +420,13 @@ static long long c_equal()
 	  if(arg1==arg2)
 	    unify_bool_result(arg3,TRUE);
 	  else
-	    residuate2(arg1,arg2);
+	    ((wl_psi_term_ptr*)arg1)->residuate2(arg2);
 	  break;
 	case 1:
-	  residuate2(arg2,arg3);
+	  ((wl_psi_term_ptr*)arg2)->residuate2(arg3);
 	  break;
 	case 2:
-	  residuate2(arg1,arg3);
+	  ((wl_psi_term_ptr*)arg1)->residuate2(arg3);
 	  break;
 	case 3:
 	  unify_bool_result(arg3,(val1==val2));
@@ -435,17 +435,17 @@ static long long c_equal()
 	  if(arg1==arg2 && !val3)
 	    success=FALSE;
 	  else
-	    residuate2(arg1,arg2);
+	    ((wl_psi_term_ptr*)arg1)->residuate2(arg2);
 	  break;
 	case 5:
 	  if(!val3)
-	    residuate(arg2);
+	    ((wl_psi_term_ptr*)arg2)->residuate();
 	  else
 	    success=unify_real_result(arg2,val1);
 	  break;
 	case 6:
 	  if(!val3)
-	    residuate(arg1);
+	    ((wl_psi_term_ptr*)arg1)->residuate();
 	  else
 	    success=unify_real_result(arg1,val2);
 	  break;
@@ -521,25 +521,25 @@ static long long c_lt()
       if(success)
 	switch(num1+num2*2+num3*4) {
 	case 0:
-	  residuate2(arg1,arg2);
+	  ((wl_psi_term_ptr*)arg1)->residuate2(arg2);
 	  break;
 	case 1:
-	  residuate(arg2);
+	  ((wl_psi_term_ptr*)arg2)->residuate();
 	  break;
 	case 2:
-	  residuate(arg1);
+	  ((wl_psi_term_ptr*)arg1)->residuate();
 	  break;
 	case 3:
 	  unify_bool_result(arg3,(val1<val2));
 	  break;
 	case 4:
-	  residuate2(arg1,arg2);
+	  ((wl_psi_term_ptr*)arg1)->residuate2(arg2);
 	  break;
 	case 5:
-	  residuate(arg2);
+	  ((wl_psi_term_ptr*)arg2)->residuate();
 	  break;
 	case 6:
-	  residuate(arg1);
+	  ((wl_psi_term_ptr*)arg1)->residuate();
 	  break;
 	case 7:
 	  success=(val3==(REAL)(val1<val2));
@@ -581,25 +581,25 @@ static long long c_gtoe()
       if(success)
 	switch(num1+num2*2+num3*4) {
 	case 0:
-	  residuate2(arg1,arg2);
+	  ((wl_psi_term_ptr*)arg1)->residuate2(arg2);
 	  break;
 	case 1:
-	  residuate(arg2);
+	  ((wl_psi_term_ptr*)arg2)->residuate();
 	  break;
 	case 2:
-	  residuate(arg1);
+	  ((wl_psi_term_ptr*)arg1)->residuate();
 	  break;
 	case 3:
 	  unify_bool_result(arg3,(val1>=val2));
 	  break;
 	case 4:
-	  residuate2(arg1,arg2);
+	  ((wl_psi_term_ptr*)arg1)->residuate2(arg2);
 	  break;
 	case 5:
-	  residuate(arg2);
+	  ((wl_psi_term_ptr*)arg2)->residuate();
 	  break;
 	case 6:
-	  residuate(arg1);
+	  ((wl_psi_term_ptr*)arg1)->residuate();
 	  break;
 	case 7:
 	  success=(val3==(REAL)(val1>=val2));
@@ -641,25 +641,25 @@ static long long c_ltoe()
       if(success)
 	switch(num1+num2*2+num3*4) {
 	case 0:
-	  residuate2(arg1,arg2);
+	  ((wl_psi_term_ptr*)arg1)->residuate2(arg2);
 	  break;
 	case 1:
-	  residuate(arg2);
+	  ((wl_psi_term_ptr*)arg2)->residuate();
 	  break;
 	case 2:
-	  residuate(arg1);
+	  ((wl_psi_term_ptr*)arg1)->residuate();
 	  break;
 	case 3:
 	  unify_bool_result(arg3,(val1<=val2));
 	  break;
 	case 4:
-	  residuate2(arg1,arg2);
+	  ((wl_psi_term_ptr*)arg1)->residuate2(arg2);
 	  break;
 	case 5:
-	  residuate(arg2);
+	  ((wl_psi_term_ptr*)arg2)->residuate();
 	  break;
 	case 6:
-	  residuate(arg1);
+	  ((wl_psi_term_ptr*)arg1)->residuate();
 	  break;
 	case 7:
 	  success=(val3==(REAL)(val1<=val2));
@@ -689,7 +689,7 @@ static long long c_boolpred()
     deref(arg1);
     deref_args(t,set_1);
     if (sub_type(boolean,arg1->type)) {
-      residuate(arg1);
+      ((wl_psi_term_ptr*)arg1)->residuate();
     }
     else {
       succ=matches(arg1->type,lf_true,&lesseq);
@@ -698,7 +698,7 @@ static long long c_boolpred()
           /* Function returns true: success. */
         }
         else
-          residuate(arg1);
+          ((wl_psi_term_ptr*)arg1)->residuate();
       }
       else {
         succ=matches(arg1->type,lf_false,&lesseq);
@@ -708,7 +708,7 @@ static long long c_boolpred()
             success=FALSE;
           }
           else
-            residuate(arg1);
+            ((wl_psi_term_ptr*)arg1)->residuate();
         }
         else {
           /* Both true and false are disentailed. */
@@ -795,9 +795,9 @@ static long long c_logical_main(long long sel)
 	/* push_goal(unify,tmp,arg3,NULL); */
 	push_goal(unify,arg1,arg3,NULL);
       } else {
-	if (a1==UNDEF) residuate(arg1);
-	if (a2==UNDEF) residuate(arg2);
-	if (a3==UNDEF) residuate(arg3);
+	if (a1==UNDEF) ((wl_psi_term_ptr*)arg1)->residuate();
+	if (a2==UNDEF) ((wl_psi_term_ptr*)arg2)->residuate();
+	if (a3==UNDEF) ((wl_psi_term_ptr*)arg3)->residuate();
       }
       if (!sm1) unify_bool(arg1);
       if (!sm2) unify_bool(arg2);
@@ -856,8 +856,8 @@ static long long c_not()
       } else if (arg1==arg2) {
 	success=FALSE;
       } else {
-	if (a1==UNDEF) residuate(arg1);
-	if (a2==UNDEF) residuate(arg2);
+	if (a1==UNDEF) ((wl_psi_term_ptr*)arg1)->residuate();
+	if (a2==UNDEF) ((wl_psi_term_ptr*)arg2)->residuate();
       }
       if (!sm1) unify_bool(arg1);
       if (!sm2) unify_bool(arg2);
@@ -925,9 +925,9 @@ static long long c_xor()
       } else if (arg3==arg2) {
 	unify_bool_result(arg1,FALSE);
       } else {
-	if (a1==UNDEF) residuate(arg1);
-	if (a2==UNDEF) residuate(arg2);
-	if (a3==UNDEF) residuate(arg3);
+	if (a1==UNDEF) ((wl_psi_term_ptr*)arg1)->residuate();
+	if (a2==UNDEF) ((wl_psi_term_ptr*)arg2)->residuate();
+	if (a3==UNDEF) ((wl_psi_term_ptr*)arg3)->residuate();
       }
       if (!sm1) unify_bool(arg1);
       if (!sm2) unify_bool(arg2);
@@ -963,7 +963,7 @@ static long long c_apply()
     other=(ptr_psi_term )n->data_val();
     deref(other);
     if (other->type==top)
-      residuate(other);
+      ((wl_psi_term_ptr*)other)->residuate();
     else
       if(other->type && other->type->type_def!=(def_type)function_it) {// REV401PLUS _type & (def_type) & _it
 	success=FALSE;
@@ -1075,7 +1075,7 @@ static long long c_project()
       }	
     }
     else
-      residuate(arg2);
+      ((wl_psi_term_ptr*)arg2)->residuate();
   }
   else
     curry();
@@ -1114,13 +1114,13 @@ static long long c_diff()
 	  if(arg1==arg2)
 	    unify_bool_result(arg3,FALSE);
 	  else
-	    residuate2(arg1,arg2);
+	    ((wl_psi_term_ptr*)arg1)->residuate2(arg2);
 	  break;
 	case 1:
-	  residuate2(arg2,arg3);
+	  ((wl_psi_term_ptr*)arg2)->residuate2(arg3);
 	  break;
 	case 2:
-	  residuate2(arg1,arg3);
+	  ((wl_psi_term_ptr*)arg1)->residuate2(arg3);
 	  break;
 	case 3:
 	  unify_bool_result(arg3,(val1!=val2));
@@ -1129,17 +1129,17 @@ static long long c_diff()
 	  if(arg1==arg2 && val3)
 	    success=FALSE;
 	  else
-	    residuate2(arg1,arg2);
+	    ((wl_psi_term_ptr*)arg1)->residuate2(arg2);
 	  break;
 	case 5:
 	  if(val3)
-	    residuate(arg2);
+	    ((wl_psi_term_ptr*)arg2)->residuate();
 	  else
 	    success=unify_real_result(arg2,val1);
 	  break;
 	case 6:
 	  if(val3)
-	    residuate(arg1);
+	    ((wl_psi_term_ptr*)arg1)->residuate();
 	  else
 	    success=unify_real_result(arg1,val2);
 	  break;
@@ -1731,7 +1731,7 @@ static long long c_parse()
           success=FALSE;
       }
       else
-        residuate(arg1);
+        ((wl_psi_term_ptr*)arg1)->residuate();
     }
     else
       success=FALSE;
@@ -2863,7 +2863,7 @@ static long long c_cond()
         }
       }
       else
-        residuate(arg1);
+        ((wl_psi_term_ptr*)arg1)->residuate();
     }
     else /*  RM: Apr 15 1993  */
       Errorline("argument to cond is not boolean in %P\n",g);
@@ -3366,8 +3366,8 @@ static long long c_split_double()
 	  success=TRUE;
 	}
 	else {
-	  residuate(result);
-	  residuate2(arg1,arg2);
+	  ((wl_psi_term_ptr*)result)->residuate();
+	  ((wl_psi_term_ptr*)arg1)->residuate2(arg2);
 	}
     }
     else
@@ -3409,7 +3409,7 @@ static long long c_string_address()
 	    push_goal(unify,t,arg1,NULL);
 	  }
 	  else
-	    residuate2(arg1,result);
+	    ((wl_psi_term_ptr*)arg1)->residuate2(result);
 	}
 	else
 	  Errorline("result is not a real in %P\n",funct);
@@ -3879,7 +3879,7 @@ static long long c_char()
         push_goal(unify,t,result,NULL);
       }
       else
-        residuate(arg1);
+        ((wl_psi_term_ptr*)arg1)->residuate();
     }
     else {
       Errorline("argument of %P must be an integer.\n",funct);
@@ -3916,7 +3916,7 @@ static long long c_ascii()
 	unify_real_result(result,(REAL)(*((unsigned char *)arg1->value_3)));
       }
       else
-	residuate(arg1);
+	((wl_psi_term_ptr*)arg1)->residuate();
     }
     else {/*  RM: Feb 18 1994  */
       success=FALSE;
@@ -3957,7 +3957,7 @@ static long long c_string2psi()
 	success=get_module(arg2,&mod);
       if (success) {
 	if(!arg1->value_3)
-	  residuate(arg1);
+	  ((wl_psi_term_ptr*)arg1)->residuate();
 	else {
 	  t=stack_psi_term(4);
 	  save_current=current_module;
@@ -4063,7 +4063,7 @@ static long long c_int2string()
         push_goal(unify,t,result,NULL);
       }
       else
-        residuate(arg1);
+        ((wl_psi_term_ptr*)arg1)->residuate();
     }
     else
       success=FALSE;
@@ -4577,7 +4577,7 @@ long long c_concatenate()
 	if (arg1->value_3)
 	  c_arg1= (char *)arg1->value_3;
 	else {
-	  residuate(arg1);
+	  ((wl_psi_term_ptr*)arg1)->residuate();
 	  all_args=FALSE;
 	}
       else
@@ -4594,7 +4594,7 @@ long long c_concatenate()
 	if (arg2->value_3)
 	  c_arg2= (char *)arg2->value_3;
 	else {
-	  residuate(arg2);
+	  ((wl_psi_term_ptr*)arg2)->residuate();
 	  all_args=FALSE;
 	}
       else
@@ -4694,7 +4694,7 @@ long long c_string_length()
 	if (arg1->value_3)
 	  c_arg1= (char *)arg1->value_3;
 	else {
-	  residuate(arg1);
+	  ((wl_psi_term_ptr*)arg1)->residuate();
 	  all_args=FALSE;
 	}
       else
@@ -4765,7 +4765,7 @@ long long c_sub_string()
 	if (arg1->value_3)
 	  c_arg1= (char *)arg1->value_3;
 	else {
-	  residuate(arg1);
+	  ((wl_psi_term_ptr*)arg1)->residuate();
 	  all_args=FALSE;
 	}
       else
@@ -4782,7 +4782,7 @@ long long c_sub_string()
 	if (arg2->value_3)
 	  c_arg2= (long long)(* (double *)(arg2->value_3));
 	else {
-	  residuate(arg2);
+	  ((wl_psi_term_ptr*)arg2)->residuate();
 	  all_args=FALSE;
 	}
       else
@@ -4799,7 +4799,7 @@ long long c_sub_string()
 	if (arg3->value_3)
 	  c_arg3= (long long)(* (double *)(arg3->value_3));
 	else {
-	  residuate(arg3);
+	  ((wl_psi_term_ptr*)arg3)->residuate();
 	  all_args=FALSE;
 	}
       else
@@ -4926,7 +4926,7 @@ long long c_random()
 	if (arg1->value_3)
 	  c_arg1= (long long)(* (double *)(arg1->value_3));
 	else {
-	  residuate(arg1);
+	  ((wl_psi_term_ptr*)arg1)->residuate();
 	  all_args=FALSE;
 	}
       else
@@ -4985,7 +4985,7 @@ long long c_initrandom()
 	if (arg1->value_3)
 	  c_arg1= (long long)(* (double *)(arg1->value_3));
 	else {
-	  residuate(arg1);
+	  ((wl_psi_term_ptr*)arg1)->residuate();
 	  all_args=FALSE;
 	}
       else

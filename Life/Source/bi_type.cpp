@@ -474,7 +474,7 @@ long long c_isa_subsort() // changed to long long REV401PLUS
   deref_args(pred, set_1_2);
   if (((wl_psi_term_ptr*)arg1)->isa(arg2))
     {
-      residuate(arg2);
+      ((wl_psi_term_ptr*)arg2)->residuate();
       return TRUE;
     }
   return FALSE;

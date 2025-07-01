@@ -795,3 +795,67 @@ void wl_psi_term_ptr::bk_mark_quote()
     t->status &= ~RMASK;
   }
 }
+//////////////////////
+
+/* Create an empty list on the stack,  wiped out by RM: Dec 14 1992  */
+/* ptr_psi_term stack_empty_list()  is now aliased to stack_nil()    */
+/******** RESIDUATE_DOUBLE(t,u)
+Residuate the current expression with T in the Residuation Variable set.
+Also store the other variable, so that its sort can be used in the
+'bestsort' calculation needed to implement disequality constraints.
+*/
+void wl_psi_term_ptr::residuate_double(ptr_psi_term u) /* 21.9 */
+// ptr_psi_term t,u;
+{
+  ptr_psi_term t;
+  ptr_resid_list curr;
+
+  t = (ptr_psi_term) this;
+  curr=STACK_ALLOC(resid_list);
+  curr->var=t;
+  curr->othervar=u;
+  curr->next=resid_vars;
+  resid_vars=curr;
+}
+/******** RESIDUATE(t)
+Residuate the current expression with T in the Residuation Variable set.
+*/
+void wl_psi_term_ptr::residuate()
+// ptr_psi_term t;
+{
+  ptr_resid_list curr;
+  ptr_psi_term t;
+
+  t = (ptr_psi_term) this;
+  curr=STACK_ALLOC(resid_list);
+  curr->var=t;
+  curr->othervar=NULL; /* 21.9 */
+  curr->next=resid_vars;
+  resid_vars=curr;
+}
+/******** RESIDUATE2(u,v)
+	  Residuate the current function on the two variables U and V.
+*/
+void wl_psi_term_ptr::residuate2(ptr_psi_term v)
+// /ptr_psi_term u,v;
+{
+  ptr_psi_term u;
+  
+  u = (ptr_psi_term) this;
+  ((wl_psi_term_ptr*)u)->residuate();
+  if (v && u!=v) ((wl_psi_term_ptr*)v)->residuate();
+}
+/******** RESIDUATE3(u,v,w)
+	  Residuate the current function on the three variables U, V, and W.
+*/
+void wl_psi_term_ptr::residuate3(ptr_psi_term v,ptr_psi_term w)
+// ptr_psi_term u,v,w;
+{
+  ptr_psi_term u;
+  
+  u = (ptr_psi_term) this;
+  ((wl_psi_term_ptr*)u)->residuate();
+  if (v && u!=v) ((wl_psi_term_ptr*)v)->residuate();
+  if (w && u!=w && v!=w) ((wl_psi_term_ptr*)w)->residuate();
+}
+

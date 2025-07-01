@@ -72,7 +72,7 @@ static long long c_mult()
       if(success)
 	switch(num1+num2*2+num3*4) {
 	case 0:
-          residuate3(arg1,arg2,arg3);
+          ((wl_psi_term_ptr*)arg1)->residuate3(arg2,arg3);
 	  break;
 	case 1:
 	  if (val1==1.0)
@@ -82,7 +82,7 @@ static long long c_mult()
           else if (val1!=1.0 && arg2==arg3) /* 9.9 */
 	    success=unify_real_result(arg3,(REAL)0);
 	  else
-	    residuate2(arg2,arg3);
+	    ((wl_psi_term_ptr*)arg2)->residuate2(arg3);
 	  break;
 	case 2:
 	  if (val2==1.0)
@@ -92,7 +92,7 @@ static long long c_mult()
           else if (val2!=1.0 && arg1==arg3) /* 9.9 */
 	    success=unify_real_result(arg3,(REAL)0);
 	  else
-	    residuate2(arg1,arg3);
+	    ((wl_psi_term_ptr*)arg1)->residuate2(arg3);
 	  break;
 	case 3:
 	  success=unify_real_result(arg3,val1*val2);
@@ -102,13 +102,13 @@ static long long c_mult()
             if (val3==0.0) /* 8.9 */
 	      success=unify_real_result(arg1,(REAL)0);
             else if (val3>0.0)
-	      residuate(arg1);
+	      ((wl_psi_term_ptr*)arg1)->residuate();
 	    else
 	      success=FALSE;
           }
 	  else {
             /* Case A*B=0 is not dealt with because it is nondeterministic */
-	    residuate2(arg1,arg2);
+	    ((wl_psi_term_ptr*)arg1)->residuate2(arg2);
           }
 	  break;
 	case 5:
@@ -166,23 +166,23 @@ static long long c_div()
       if (success)
 	switch(num1+num2*2+num3*4) {
 	case 0:
-	  residuate3(arg1,arg2,arg3);
+	  ((wl_psi_term_ptr*)arg1)->residuate3(arg2,arg3);
 	  break;
 	case 1:
 	  if (val1) {
 	    if (arg2==arg3) {
 	      if (val1>0.0)
-	        residuate(arg2);
+	        ((wl_psi_term_ptr*)arg2)->residuate();
 	      else
 		success=FALSE; /* A/B=B where A<0 */
             }
 	    else
-	      residuate2(arg2,arg3);
+	      ((wl_psi_term_ptr*)arg2)->residuate2(arg3);
           }
           else if (arg2==arg3) /* 9.9 */
             success=unify_real_result(arg2,(REAL)0);
           else
-            residuate2(arg2,arg3);
+            ((wl_psi_term_ptr*)arg2)->residuate2(arg3);
 	  break;
 	case 2:
 	  if (val2) {
@@ -191,7 +191,7 @@ static long long c_div()
             else if (arg1==arg3) /* 9.9 */
               success=unify_real_result(arg1,(REAL)0);
             else
-	      residuate2(arg1,arg3);
+	      ((wl_psi_term_ptr*)arg1)->residuate2(arg3);
           }
 	  else {
 	    success=FALSE;
@@ -214,7 +214,7 @@ static long long c_div()
             else if (val3!=1.0 && arg1==arg2) /* 9.9 */
               success=unify_real_result(arg1,(REAL)0);
             else
-	      residuate2(arg1,arg2);
+	      ((wl_psi_term_ptr*)arg1)->residuate2(arg2);
           }
           else
             success=unify_real_result(arg1,(REAL)0);
@@ -286,24 +286,24 @@ static long long c_intdiv()
       if (success)
 	switch(num1+num2*2+num3*4) {
 	case 0:
-	  residuate3(arg1,arg2,arg3);
+	  ((wl_psi_term_ptr*)arg1)->residuate3(arg2,arg3);
 	  break;
 	case 1:
 	  if (val1) {
 	    if (int_div_warning(arg1,val1)) return FALSE;
 	    if (arg2==arg3) {
 	      if (val1>0.0)
-	        residuate(arg2);
+	        ((wl_psi_term_ptr*)arg2)->residuate();
 	      else
 		success=FALSE; /* A/B=B where A<0 */
             }
 	    else
-	      residuate2(arg2,arg3);
+	      ((wl_psi_term_ptr*)arg2)->residuate2(arg3);
           }
           else if (arg2==arg3) /* 9.9 */
             success=unify_real_result(arg2,(REAL)0);
           else
-            residuate2(arg2,arg3);
+            ((wl_psi_term_ptr*)arg2)->residuate2(arg3);
 	  break;
 	case 2:
 	  if (val2) {
@@ -313,7 +313,7 @@ static long long c_intdiv()
             else if (arg1==arg3) /* 9.9 */
               success=unify_real_result(arg1,(REAL)0);
             else
-	      residuate2(arg1,arg3);
+	      ((wl_psi_term_ptr*)arg1)->residuate2(arg3);
           }
 	  else {
 	    success=FALSE;
@@ -340,7 +340,7 @@ static long long c_intdiv()
             else if (val3!=1.0 && arg1==arg2) /* 9.9 */
               success=unify_real_result(arg1,(REAL)0);
             else
-	      residuate2(arg1,arg2);
+	      ((wl_psi_term_ptr*)arg1)->residuate2(arg2);
           }
           else
             success=unify_real_result(arg1,(REAL)0);
@@ -366,7 +366,7 @@ static long long c_intdiv()
 		if ((tmp>  1 && val3==trunc(val1/(tmp-1))) ||
 		    (tmp< -1 && val3==trunc(val1/(tmp+1))))
 		  /* Solution is not unique */
-		  residuate(arg2);
+		  ((wl_psi_term_ptr*)arg2)->residuate();
 		else /* Solution is unique */
 		  success=unify_real_result(arg2,tmp);
 	      }
@@ -383,7 +383,7 @@ static long long c_intdiv()
 	  if (val3!=floor(val3)) return FALSE;
           if (val2) {
 	    if (val3) 
-	      residuate(arg1);
+	      ((wl_psi_term_ptr*)arg1)->residuate();
 	    else
 	      success=unify_real_result(arg1,(REAL)0);
 	  }
@@ -438,13 +438,13 @@ static long long c_floor_ceiling(long long floorflag)
       if(success)
 	switch(num1+num3*4) {
 	case 0:
-	  residuate(arg1);
+	  ((wl_psi_term_ptr*)arg1)->residuate();
 	  break;
 	case 1:
 	  success=unify_real_result(arg3,(floorflag?floor(val1):ceil(val1)));
 	  break;
 	case 4:
-	  residuate(arg1); 
+	  ((wl_psi_term_ptr*)arg1)->residuate(); 
 	  break;
 	case 5:
 	  success=(val3==(floorflag?floor(val1):ceil(val1)));
@@ -494,7 +494,7 @@ static long long c_sqrt()
       if (success)
 	switch(num1+num3*4) {
 	case 0:
-	  residuate2(arg1,arg3);
+	  ((wl_psi_term_ptr*)arg1)->residuate2(arg3);
 	  break;
 	case 1:
 	  if (val1>=0)
@@ -544,7 +544,7 @@ static long long c_trig(long long trigflag)
       if (success)
         switch(num1+num3*4) {
         case 0:
-          residuate2(arg1,arg3);
+          ((wl_psi_term_ptr*)arg1)->residuate2(arg3);
           break;
         case 1:
           ans=(trigflag==SINFLAG?sin(val1):
@@ -618,7 +618,7 @@ static long long c_bit_not()
         switch(num1+num3*4) {
         case 0:
 	  if (arg1==arg3) return FALSE;
-          residuate2(arg1,arg3);
+          ((wl_psi_term_ptr*)arg1)->residuate2(arg3);
           break;
         case 1:
 	  if (bit_not_warning(arg1,val1)) return FALSE;
@@ -671,19 +671,19 @@ static long long c_bit_and()
       if(success)
 	switch(num1+num2*2+num3*4) {
 	case 0:
-	  residuate2(arg1,arg2);
+	  ((wl_psi_term_ptr*)arg1)->residuate2(arg2);
 	  break;
 	case 1:
           if (bit_and_warning(arg1,val1)) return FALSE;
 	  if(val1)
-	    residuate(arg2);
+	    ((wl_psi_term_ptr*)arg2)->residuate();
 	  else
 	    success=unify_real_result(arg3,(REAL)0);
 	  break;
 	case 2:
           if (bit_and_warning(arg2,val2)) return FALSE;
 	  if(val2)
-	    residuate(arg1);
+	    ((wl_psi_term_ptr*)arg1)->residuate();
 	  else
 	    success=unify_real_result(arg3,(REAL)0);
 	  break;
@@ -693,15 +693,15 @@ static long long c_bit_and()
 	  success=unify_real_result(arg3,(REAL)(((unsigned long long)val1) & ((unsigned long long)val2)));
 	  break;
 	case 4:
-	  residuate2(arg1,arg2);
+	  ((wl_psi_term_ptr*)arg1)->residuate2(arg2);
 	  break;
 	case 5:
           if (bit_and_warning(arg1,val1)) return FALSE;
-	  residuate(arg2);
+	  ((wl_psi_term_ptr*)arg2)->residuate();
 	  break;
 	case 6:
           if (bit_and_warning(arg2,val2)) return FALSE;
-	  residuate(arg1);
+	  ((wl_psi_term_ptr*)arg1)->residuate();
 	  break;
 	case 7:
           if (bit_and_warning(arg1,val1)||bit_and_warning(arg2,val2))
@@ -746,17 +746,17 @@ static long long c_bit_or()
 	switch(num1+num2*2+num3*4) {
 	case 0:
         case 4:
-	  residuate2(arg1,arg2);
+	  ((wl_psi_term_ptr*)arg1)->residuate2(arg2);
 	  break;
 	case 1:
         case 5:
           if (bit_or_warning(arg1,val1)) return FALSE;
-	  residuate(arg2);
+	  ((wl_psi_term_ptr*)arg2)->residuate();
 	  break;
 	case 2:
         case 6:
           if (bit_or_warning(arg2,val2)) return FALSE;
-	  residuate(arg1);
+	  ((wl_psi_term_ptr*)arg1)->residuate();
 	  break;
 	case 3:
           if (bit_or_warning(arg1,val1)||bit_or_warning(arg2,val2))
@@ -816,17 +816,17 @@ static long long c_shift(long long dir)
 	switch(num1+num2*2+num3*4) {
 	case 0:
         case 4:
-	  residuate2(arg1,arg2);
+	  ((wl_psi_term_ptr*)arg1)->residuate2(arg2);
 	  break;
 	case 1:
         case 5:
           if (shift_warning(dir,arg1,val1)) return FALSE;
-	  residuate(arg2);
+	  ((wl_psi_term_ptr*)arg2)->residuate();
 	  break;
 	case 2:
         case 6:
           if (shift_warning(dir,arg2,val2)) return FALSE;
-	  residuate(arg1);
+	  ((wl_psi_term_ptr*)arg1)->residuate();
 	  break;
 	case 3:
           if (shift_warning(dir,arg1,val1)||shift_warning(dir,arg2,val2))
@@ -878,17 +878,17 @@ static long long c_mod()
 	switch(num1+num2*2+num3*4) {
 	case 0:
 	case 4:
-	  residuate2(arg1,arg2);
+	  ((wl_psi_term_ptr*)arg1)->residuate2(arg2);
 	  break;
 	case 1:
 	case 5:
           if (mod_warning(arg1,val1,0)) return FALSE;
-	  residuate(arg2);
+	  ((wl_psi_term_ptr*)arg2)->residuate();
 	  break;
 	case 2:
 	case 6:
           if (mod_warning(arg2,val2,1)) return FALSE;
-	  residuate(arg1);
+	  ((wl_psi_term_ptr*)arg1)->residuate();
 	  break;
 	case 3:
           if (mod_warning(arg1,val1,0)||mod_warning(arg2,val2,1))
@@ -949,14 +949,14 @@ static long long c_add()
           else if (arg2==arg3)
 	    success=unify_real_result(arg1,(REAL)0);
           else
-	    residuate3(arg1,arg2,arg3);
+	    ((wl_psi_term_ptr*)arg1)->residuate3(arg2,arg3);
 	  break;
 	case 1:
 	  if (val1) {
             if (arg2==arg3) /* 8.9 */
               success=FALSE;
             else
-	      residuate2(arg2,arg3);
+	      ((wl_psi_term_ptr*)arg2)->residuate2(arg3);
           }
           else
 	    push_goal(unify,arg2,arg3,NULL);
@@ -966,7 +966,7 @@ static long long c_add()
             if (arg1==arg3) /* 8.9 */
               success=FALSE;
             else
-	      residuate2(arg1,arg3);
+	      ((wl_psi_term_ptr*)arg1)->residuate2(arg3);
           }
           else
 	    push_goal(unify,arg1,arg3,NULL);
@@ -978,7 +978,7 @@ static long long c_add()
 	  if (arg1==arg2)
 	    success=unify_real_result(arg1,val3/2);
 	  else
-	    residuate2(arg1,arg2);
+	    ((wl_psi_term_ptr*)arg1)->residuate2(arg2);
 	  break;
 	case 5:
 	  success=unify_real_result(arg2,val3-val1);
@@ -1032,20 +1032,20 @@ static long long c_sub()
 	  else if (arg1==arg2)
 	    success=unify_real_result(arg3,(REAL)0);
 	  else
-	    residuate3(arg1,arg2,arg3);
+	    ((wl_psi_term_ptr*)arg1)->residuate3(arg2,arg3);
 	  break;
 	case 1:
 	  if (arg2==arg3)
 	    success=unify_real_result(arg3,val1/2);
           else
-	    residuate2(arg2,arg3);
+	    ((wl_psi_term_ptr*)arg2)->residuate2(arg3);
 	  break;
 	case 2:
 	  if (val2) {
             if (arg1==arg3) /* 9.9 */
               success=FALSE;
             else
-	      residuate2(arg1,arg3);
+	      ((wl_psi_term_ptr*)arg1)->residuate2(arg3);
           }
           else
 	    push_goal(unify,arg1,arg3,NULL);
@@ -1057,7 +1057,7 @@ static long long c_sub()
 	  if (arg1==arg2)
 	    success=(val3==0);
           else if (val3)
-	    residuate2(arg1,arg2);
+	    ((wl_psi_term_ptr*)arg1)->residuate2(arg2);
 	  else
 	    push_goal(unify,arg1,arg2,NULL);
 	  break;
@@ -1079,7 +1079,7 @@ static long long c_sub()
 	if(success)
 	  switch(num1+4*num3) {
 	  case 0:
-	    residuate2(arg1,arg3);
+	    ((wl_psi_term_ptr*)arg1)->residuate2(arg3);
 	    break;
 	  case 1:
 	    success=unify_real_result(arg3,-val1);
@@ -1120,7 +1120,7 @@ static long long c_log()
       if(success)
 	switch(num1+num3*4) {
 	case 0:
-	  residuate2(arg1,arg3);
+	  ((wl_psi_term_ptr*)arg1)->residuate2(arg3);
 	  break;
 	case 1:
 	  if (val1>0)
@@ -1172,7 +1172,7 @@ static long long c_exp()
       if(success)
 	switch(num1+num3*4) {
 	case 0:
-	  residuate2(arg1,arg3);
+	  ((wl_psi_term_ptr*)arg1)->residuate2(arg3);
 	  break;
 	case 1:
 	  success=unify_real_result(arg3,exp(val1));

@@ -33,6 +33,9 @@ public:
   void mark_quote_new();
   void mark_quote();
   void bk_mark_quote();
-
-
+  ////////////////
+  void residuate_double(ptr_psi_term u);
+  void residuate();
+  void residuate2(ptr_psi_term v);
+  void residuate3(ptr_psi_term v,ptr_psi_term w);
 };

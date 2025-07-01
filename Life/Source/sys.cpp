@@ -107,7 +107,7 @@ long long call_primitive(long long (*fun)(ptr_psi_term[],
       for (i=0;i<num;i++) {
 	/* if arg present and should be evaled but has no value */
 	if (argo[i] && !(argi[i].options&UNEVALED) && !argo[i]->value_3)
-	  residuate(argo[i]);
+	  ((wl_psi_term_ptr*)argo[i])->residuate();
       }
     }
   else curry();
@@ -1461,8 +1461,8 @@ static long long lazy_project_internal(ptr_psi_term args[],
   ptr_node n;
   char buffer[100];
   if (args[1]->type == top) {
-    residuate(args[0]);
-    residuate(args[1]);
+    ((wl_psi_term_ptr*)args[0])->residuate();
+    ((wl_psi_term_ptr*)args[1])->residuate();
     return TRUE;
   }
   if (sub_type(args[1]->type,integer) && args[1]->value_3)
@@ -1480,7 +1480,7 @@ static long long lazy_project_internal(ptr_psi_term args[],
      on its 2nd arg until it becomes value.  In particular, think
      of using `int' as a feature when it is clear that `int' may
      subsequently be refined to a particular integer. */
-  else residuate(args[0]);
+  else ((wl_psi_term_ptr*)args[0])->residuate();
   return TRUE;
 }
 static long long c_lazy_project()
@@ -1501,8 +1501,8 @@ static long long wait_on_feature_internal(ptr_psi_term args[],
 {
   char buffer[100];
   if (args[1]->type == top) {
-    residuate(args[0]);
-    residuate(args[1]);
+    ((wl_psi_term_ptr*)args[0])->residuate();
+    ((wl_psi_term_ptr*)args[1])->residuate();
     return TRUE;
   }
   if (sub_type(args[1]->type,integer) && args[1]->value_3)
@@ -1518,7 +1518,7 @@ static long long wait_on_feature_internal(ptr_psi_term args[],
      on its 2nd arg until it becomes value.  In particular, think
      of using `int' as a feature when it is clear that `int' may
      subsequently be refined to a particular integer. */
-  else residuate(args[0]);
+  else ((wl_psi_term_ptr*)args[0])->residuate();
   return TRUE;
 }
 static long long c_wait_on_feature()
@@ -1537,8 +1537,8 @@ static long long my_wait_on_feature_internal(ptr_psi_term args[],
 {
   char buffer[100];
   if (args[1]->type == top) {
-    residuate(args[0]);
-    residuate(args[1]);
+    ((wl_psi_term_ptr*)args[0])->residuate();
+    ((wl_psi_term_ptr*)args[1])->residuate();
     return TRUE;
   }
   if (sub_type(args[1]->type,integer) && args[1]->value_3)
@@ -1556,7 +1556,7 @@ static long long my_wait_on_feature_internal(ptr_psi_term args[],
      on its 2nd arg until it becomes value.  In particular, think
      of using `int' as a feature when it is clear that `int' may
      subsequently be refined to a particular integer. */
-  else residuate(args[0]);
+  else ((wl_psi_term_ptr*)args[0])->residuate();
   return TRUE;
 }
 static long long c_my_wait_on_feature()
@@ -1605,7 +1605,7 @@ static long long apply1_internal(ptr_psi_term args[],
 //     ptr_psi_term args[],result,funct;
 {
   long long success=TRUE;
-  if (args[0]->type==top) residuate(args[0]);
+  if (args[0]->type==top) ((wl_psi_term_ptr*)args[0])->residuate();
   else if (args[0]->type->type_def!=(def_type)function_it) {
     Errorline("1st arg not a function in %P.\n",funct);
     success=FALSE;
