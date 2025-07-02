@@ -863,7 +863,7 @@ long long check_out(ptr_psi_term t)
       flag=check_type(t);
       break;
     case global_it: /*  RM: Feb  8 1993  */
-      eval_global_var(t);
+      ((wl_psi_term_ptr*)t)->eval_global_var();
       check_out(t);
       flag=FALSE;
       break;
@@ -1102,6 +1102,7 @@ void restore_resid(ptr_resid_block rb,ptr_psi_term *match_date)
     *match_date = rb->md;
   }
 }
+#if FALSE
 /******** EVAL_GLOBAL_VAR(t)
 	  Dereference a global variable.
 */
@@ -1131,6 +1132,7 @@ void eval_global_var(ptr_psi_term t)     /*  RM: Feb 10 1993  */
     t->coref=t->type->global_value;
   }
 }
+#endif
 /******** INIT_GLOBAL_VARS()
 	  Initialize all non-persistent global variables.
 */

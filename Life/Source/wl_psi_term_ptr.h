@@ -43,8 +43,8 @@ public:
   void release_resid();
   void release_resid_notrail();
   void append_resid(ptr_psi_term v);
-
-
+  ///
+  void eval_global_var();
 
   
 };

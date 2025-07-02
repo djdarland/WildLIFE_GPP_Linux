@@ -59,7 +59,7 @@ long long wl_psi_term_ptr::deref_eval()
     }
     else
       if(t->type->type_def==(def_type)global_it) { /*  RM: Feb 10 1993  */
-	eval_global_var(t);
+	((wl_psi_term_ptr*)t)->eval_global_var();
 	deref_ptr(t);/*  RM: Jun 25 1993  */
 	deref_flag=((wl_psi_term_ptr*)t)->deref_eval();
       }
@@ -103,7 +103,7 @@ void wl_psi_term_ptr::deref_rec_body()
     }
     else
       if(t->type->type_def==(def_type)global_it) { /*  RM: Feb 10 1993  */
-	eval_global_var(t);
+	((wl_psi_term_ptr*)t)->eval_global_var();
 	deref_ptr(t);/*  RM: Jun 25 1993  */
 	((wl_psi_term_ptr*)t)->deref_rec_body();
       }
@@ -146,7 +146,7 @@ void wl_psi_term_ptr::deref2_eval()
     }
     else 
       if(t->type->type_def==(def_type)global_it) { /*  RM: Feb 10 1993  */
-      	eval_global_var(t);
+      	((wl_psi_term_ptr*)t)->eval_global_var();
 	deref_ptr(t);/*  RM: Jun 25 1993  */
 	((wl_psi_term_ptr*)t)->deref2_eval();
       }
@@ -930,4 +930,38 @@ void wl_psi_term_ptr::append_resid(ptr_psi_term v)
     g = &((*g)->next);
   push_ptr_value(resid_ptr,(GENERIC *)g); // REV401PLUS cast
   *g=v->resid;
+}
+//////////
+/******** EVAL_GLOBAL_VAR(t)
+	  Dereference a global variable.
+*/
+void wl_psi_term_ptr::eval_global_var()     /*  RM: Feb 10 1993  */
+//     ptr_psi_term t;
+{
+  ptr_psi_term t;
+
+  t = (ptr_psi_term) this;
+  
+  deref_ptr(t);
+  /* Global variable (not persistent) */
+  Traceline("dereferencing variable %P\n",t);
+  /* Trails the heap RM: Nov 10 1993  */
+  if(!t->type->global_value) {
+    /* Trail the heap !! */
+    {
+      ptr_stack n;
+      n=STACK_ALLOC(stack);
+      n->type=psi_term_ptr;
+      n->aaaa_3= (GENERIC *) &(t->type->global_value);
+      n->bbbb_3= NULL;
+      n->next=undo_stack;
+      undo_stack=n;
+    }
+    wl_bucks->clear_copy();
+    if (t->type->init_value)  t->type->global_value=((wl_psi_term_ptr*)t->type->init_value)->eval_copy(STACK); else t->type->global_value = NULL;
+  }
+  if(t->type->type_def==(def_type) global_it && t!=t->type->global_value) {
+    push_psi_ptr_value(t,(GENERIC *)&(t->coref)); // REV401PLUS cast
+    t->coref=t->type->global_value;
+  }
 }
