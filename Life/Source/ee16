@@ -18,6 +18,8 @@ echo "8 psi_term_ptr"
 echo "9 buckets"
 echo "10 hash_table"
 echo "11 hash_table_ptr"
+echo "12 ListHeader"
+echo "13 RefListHeader"
 echo "777 NOTES_DJD.txt"
 
 echo "999 quit"
@@ -36,6 +38,8 @@ case $select in
 9) ./eewl buckets ;;
 10) ./eewl hash_table ;;
 11) ./eewl hash_table_ptr ;;
+12) ./eewl ListHeader ;;
+13) ./eewl2 RefListHeader ;;
 
 777) $EDITOR NOTES_DJD.txt ;;
 esac

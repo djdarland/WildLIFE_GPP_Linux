@@ -104,6 +104,7 @@ XOBJ = xpred.o xdisplaylist.o
 XINC = xpred.h xdisplaylist.h
 
 LIBSOURCE = \
+	wl_ListHeader.cpp RefListHeader.cpp \
 	wl_hash_table.cpp wl_hash_table_ptr.cpp \
 	wl_buckets.cpp wl_psi_term.cpp wl_psi_term_ptr.cpp \
 	wl_module.cpp wl_module_ptr.cpp \
@@ -120,7 +121,9 @@ LIBOBJECT_X = \
 	print_x.o raw_x.o sys_x.o templates_x.o \
 	token_x.o trees_x.o types_x.o xpred.o xdisplaylist.o
 
-LIBOBJECT = 	wl_hash_table.o wl_hash_table_ptr.o \
+LIBOBJECT =   \
+	wl_ListHeader.o RefListHeader.o \
+	wl_hash_table.o wl_hash_table_ptr.o \
 	wl_buckets.o wl_psi_term.o wl_psi_term_ptr.o \
 	wl_module.o wl_module_ptr.o \
 	wl_node.o wl_node_ptr.o wl_node_ptr_ptr.o \
@@ -131,7 +134,9 @@ LIBOBJECT = 	wl_hash_table.o wl_hash_table_ptr.o \
 
 # $(XOBJECT) $(DBMOBJECT)
 
-LIBINCLUDE = 	wl_buckets.h wl_psi_term.h wl_psi_term_ptr.h \
+LIBINCLUDE = \
+	wl_ListHeader.h RefListHeader.h \
+	wl_buckets.h wl_psi_term.h wl_psi_term_ptr.h \
 	wl_module.h wl_module_ptr.h \
 	wl_node.h wl_node_ptr.h wl_node_ptr_ptr.h \
 	def_const.h def_glob.h def_macro.h def_proto.h \
@@ -273,6 +278,12 @@ wl_hash_table.o : wl_hash_table.cpp  $(LIBINCLUDE)
 
 wl_hash_table_ptr.o : wl_hash_table_ptr.cpp  $(LIBINCLUDE)
 	$(CC) wl_hash_table_ptr.cpp -o wl_hash_table_ptr.o $(CFLAGS) $(CPPFLAGS) $(DEFS_EXT_MINT) -c
+
+wl_ListHeader.o : wl_ListHeader.cpp  $(LIBINCLUDE)
+	$(CC) wl_ListHeader.cpp -o wl_ListHeader.o $(CFLAGS) $(CPPFLAGS) $(DEFS_EXT_MINT) -c
+
+RefListHeader.o : RefListHeader.cpp  $(LIBINCLUDE)
+	$(CC) RefListHeader.cpp -o RefListHeader.o $(CFLAGS) $(CPPFLAGS) $(DEFS_EXT_MINT) -c
 
 
 

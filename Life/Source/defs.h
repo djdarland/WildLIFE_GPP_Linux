@@ -81,6 +81,8 @@ typedef struct wl_definition definition;
 typedef struct wl_hash_table * ptr_hash_table;
 typedef struct wl_keyword * ptr_keyword;
 typedef struct wl_resid_block *ptr_resid_block;
+typedef struct wl_ListLinks *	RefListLinks;
+typedef struct wl_ListHeader *	RefListHeader;
 
 
 #include "wl_module.h"
@@ -100,6 +102,8 @@ typedef struct wl_resid_block *ptr_resid_block;
 #include "wl_buckets.h"
 #include "wl_psi_term.h"
 #include "wl_psi_term_ptr.h"
+#include "wl_ListHeader.h"
+#include "RefListHeader.h"
 #include "def_glob.h"
 #include "def_proto.h"
 

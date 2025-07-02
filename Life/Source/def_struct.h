@@ -288,8 +288,10 @@ typedef struct wl_resid_block {
 // from list.h
 
 typedef void *			Ref;
+#if FALSE
 typedef struct wl_ListLinks *	RefListLinks;
 typedef struct wl_ListHeader *	RefListHeader;
+#endif
 typedef RefListLinks		(*RefListGetLinksProc)	(Ref ); 
 typedef long long			(*RefListEnumProc)	(Ref,Ref ); // REV401PLUS
 
@@ -306,6 +308,7 @@ typedef long long			(*RefListEnumProc)	(Ref,Ref ); // REV401PLUS
   debugging mode.
 */
 
+#if FALSE
 typedef struct wl_ListHeader
 {
   Ref First, Last;
@@ -314,6 +317,8 @@ typedef struct wl_ListHeader
 #endif
   RefListGetLinksProc		GetLinks;
 } ListHeader;
+
+#endif
 
 typedef struct wl_ListLinks
 {
