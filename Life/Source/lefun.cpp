@@ -7,8 +7,8 @@
 #ifdef REV401PLUS
 #include "defs.h"
 #endif
-static long long attr_missing;
-static long long check_func_flag;
+// static long long attr_missing;
+// static long long check_func_flag;
 /* Create a new psi_term on the stack with value '@' (top) and no attributes. */
 ptr_psi_term stack_psi_term(long long stat)
 // long long stat;
@@ -453,6 +453,7 @@ long long eval_aim()
   resid_aim=NULL;
   return success;
 }
+#if FALSE
 /* Match the corresponding arguments */
 /* RESID */ void match_attr1(ptr_node *u,ptr_node v,ptr_resid_block rb) //REV401PLUS add void 
 {
@@ -460,7 +461,7 @@ long long eval_aim()
   ptr_node temp;
   if (v) {
     if (*u==NULL)
-      attr_missing=TRUE;
+      wl_node_ptr_ptr::attr_missing=TRUE;
     else {
       cmp=featcmp((*u)->key_val(),v->key_val());
       if(cmp==0) {
@@ -550,7 +551,7 @@ long long eval_aim()
   
   if (v) {
     if (*u==NULL)
-      attr_missing=TRUE;
+      wl_node_ptr_ptr::attr_missing=TRUE;
     else {
       cmp=featcmp((*u)->key_val(),v->key_val());
       if(cmp==0) {
@@ -596,6 +597,7 @@ void match_attr(ptr_node *u,ptr_node v,ptr_resid_block rb)
   match_attr2(u,v,rb); /* Evaluate lone arguments (second) */
   match_attr3(u,v,rb); /* Evaluate corresponding arguments (first) */
 }
+#endif
 /******** MATCH_AIM()
 This is very similar to UNIFY_AIM, only matching cannot modify the calling
 psi_term.   The first argument is the calling term (which may not be changed)
@@ -667,9 +669,9 @@ long long match_aim()
         else {
           v->coref=u;
         } /* 21.9 */
-	attr_missing=FALSE;
-	match_attr(&(u->attr_list),v->attr_list,rb);
-	if (attr_missing) {
+	wl_node_ptr_ptr::attr_missing=FALSE;
+	((wl_node_ptr_ptr*)&(u->attr_list))->match_attr(v->attr_list,rb);
+	if (wl_node_ptr_ptr::attr_missing) {
 	  if (can_curry)
 	    curried=TRUE;
 	  else
@@ -700,7 +702,7 @@ long long eval_args();
 long long i_eval_args(ptr_node n)
 // ptr_node n;
 {
-  check_func_flag=FALSE;
+  wl_node_ptr_ptr::check_func_flag=FALSE;
   return eval_args(n);
 }
 long long eval_args(ptr_node n)
@@ -750,7 +752,7 @@ void check_func(ptr_psi_term t)
     push_goal(eval,copy,result,(GENERIC)t->type->rule); // REV401PLUS cast
     /* Avoid evaluation for built-in functions with unevaluated arguments */
     /* (cond and such_that) */
-    check_func_flag=TRUE;
+    wl_node_ptr_ptr::check_func_flag=TRUE;
     if (t->type==iff) {
       get_one_arg(t->attr_list,&t1);
       if (t1) {
@@ -827,13 +829,13 @@ of unification, matching, built-ins, and user-defined routines.
 long long i_check_out(ptr_psi_term t)
 // ptr_psi_term t;
 {
-  check_func_flag=FALSE;
+  wl_node_ptr_ptr::check_func_flag=FALSE;
   return check_out(t);
 }
 long long f_check_out(ptr_psi_term t)
 // ptr_psi_term t;
 {
-  check_func_flag=TRUE;
+  wl_node_ptr_ptr::check_func_flag=TRUE;
   return check_out(t);
 }
 long long check_out(ptr_psi_term t)
@@ -848,7 +850,7 @@ long long check_out(ptr_psi_term t)
     t->status |= RMASK;
     switch((long long)t->type->type_def) { /*  RM: Feb  8 1993  */
     case function_it:
-      if (check_func_flag) {
+      if (wl_node_ptr_ptr::check_func_flag) {
 	check_func(t);
 	flag=TRUE;
       }

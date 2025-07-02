@@ -80,6 +80,7 @@ typedef struct wl_psi_term psi_term;
 typedef struct wl_definition definition;
 typedef struct wl_hash_table * ptr_hash_table;
 typedef struct wl_keyword * ptr_keyword;
+typedef struct wl_resid_block *ptr_resid_block;
 
 
 #include "wl_module.h"

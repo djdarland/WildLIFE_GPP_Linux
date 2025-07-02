@@ -236,3 +236,4 @@ void wl_node_ptr::bk_mark_quote_tree()
   if (t->right) ((wl_node_ptr*)t->right)->bk_mark_quote_tree();
   //}
 }
+///////////////////////

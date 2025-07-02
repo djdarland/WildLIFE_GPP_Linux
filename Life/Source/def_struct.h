@@ -272,7 +272,9 @@ typedef struct wl_choice_point {
 
 /* Residuation block state handling */
 
+#if FALSE
 typedef struct wl_resid_block *ptr_resid_block;
+#endif
 
 typedef struct wl_resid_block {
   long long cc_cr; /* 11.9 */

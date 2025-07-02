@@ -1,5 +1,8 @@
 #define EXTERN extern
 #include "defs.h"
+long long wl_node_ptr_ptr::attr_missing;
+long long wl_node_ptr_ptr::check_func_flag;
+
 /******** GENERAL_INSERT(comp,keystr,tree,info,heapflag,copystr,bkflag)
 General tree insertion routine.
 comp     = comparison routine for insertion.
@@ -188,4 +191,165 @@ void wl_node_ptr_ptr::delete_attr(char *s)
     else
       *n = (*n)->right;
   }
+}
+///////////////////////////////
+
+
+/* Match the corresponding arguments */
+/* RESID */
+void wl_node_ptr_ptr::match_attr1(ptr_node v,ptr_resid_block rb) //REV401PLUS add void 
+{
+  ptr_node *u;
+  long long cmp;
+  ptr_node temp;
+
+  u = (ptr_node *) this;
+  if (v) {
+    if (*u==NULL)
+      attr_missing=TRUE;
+    else {
+      cmp=featcmp((*u)->key_val(),v->key_val());
+      if(cmp==0) {
+        ptr_psi_term t;
+	//  	/* RESID */ match_attr1(&((*u)->right),v->right,rb);
+  	/* RESID */ ((wl_node_ptr_ptr*)(*u)->right_addr())->match_attr1(v->right_val(),rb);
+
+        t = (ptr_psi_term) (*u)->data_val();
+  	/* RESID */ push_goal(match,(ptr_psi_term)(*u)->data_val(),(ptr_psi_term)v->data_val(),(GENERIC)rb); // REV401PLUS casts
+        /* deref2_eval(t); */
+  	/* RESID */ ((wl_node_ptr_ptr*)(*u)->left_addr())->match_attr1(v->left_val(),rb);
+      }
+      else if (cmp>0) {
+        temp=v->right_val();
+        v->set_right(NULL);
+  	/* RESID */ ((wl_node_ptr_ptr*)u)->match_attr1(temp,rb);
+  	/* RESID */ ((wl_node_ptr_ptr*)(*u)->left_addr())->match_attr1(v,rb);
+	v->set_right(temp);
+      }
+      else {
+	temp=v->left_val();
+	v->set_left(NULL);
+	/* RESID */ ((wl_node_ptr_ptr*)(*u)->right_addr())->match_attr1(v,rb);
+  	/* RESID */ ((wl_node_ptr_ptr*)u)->match_attr1(temp,rb);
+  	v->set_left(temp);
+      }
+    }
+  }
+}
+/* Evaluate the lone arguments (for lazy failure + eager success) */
+/* RESID */
+void wl_node_ptr_ptr::match_attr2(ptr_node v,ptr_resid_block rb) // REV401PLUS add void
+	    // ptr_node *u,v;
+	    /* RESID */ //ptr_resid_block rb;
+{
+  ptr_node *u;
+  long long cmp;
+  ptr_node temp;
+  u = (ptr_node *) this;
+  
+  if (v) {
+    if (*u==NULL) { /* PVR 12.03 */
+      ptr_psi_term t;
+      ((wl_node_ptr_ptr*)u)->match_attr1(v->right_val(),rb);
+      t = (ptr_psi_term) v->data_val();
+      //      deref2_rec_eval(t);
+      ((wl_psi_term_ptr*)t)->deref2_rec_eval();
+      ((wl_node_ptr_ptr*)u)->match_attr1(v->left_val(),rb);
+    }
+    else {
+      cmp=featcmp((*u)->key_val(),v->key_val());
+      if(cmp==0) {
+  	/* RESID */ ((wl_node_ptr_ptr*)(*u)->right_addr())->match_attr2(v->right_val(),rb);
+  	/* RESID */ ((wl_node_ptr_ptr*)(*u)->left_addr())->match_attr2(v->left_val(),rb);
+      }
+      else if (cmp>0) {
+        temp=v->right_val();
+        v->set_right(NULL);
+  	/* RESID */ ((wl_node_ptr_ptr*)u)->match_attr2(temp,rb);
+  	/* RESID */ ((wl_node_ptr_ptr*)(*u)->left_addr())-> match_attr2(v,rb);
+  	v->set_right(temp);
+      }
+      else {
+  	temp=v->left_val();
+  	v->set_left(NULL);
+  	/* RESID */ ((wl_node_ptr_ptr*)(*u)->right_addr())->match_attr2(v,rb);
+  	/* RESID */ ((wl_node_ptr_ptr*)u)->match_attr2(temp,rb);
+  	v->set_left(temp);
+      }
+    }
+  }
+  else if (*u!=NULL) {
+    ptr_psi_term t /* , empty */ ;
+    ((wl_node_ptr_ptr*)(*u)->right_addr())->match_attr1(v,rb);
+    t = (ptr_psi_term) (*u)->data_val();
+    /* Create a new psi-term to put the (useless) result: */
+    /* This is needed so that *all* arguments of a function call */
+    /* are evaluated, which avoids incorrect 'Yes' answers.      */
+    
+    //    deref2_rec_eval(t); /* Assumes goal_stack is already restored. */
+    ((wl_psi_term_ptr*)t)->deref2_rec_eval(); /* Assumes goal_stack is already restored. */
+    ((wl_node_ptr_ptr*)(*u)->left_addr())->match_attr1(v,rb);
+  }
+}
+/* Evaluate the corresponding arguments */
+/* RESID */
+void wl_node_ptr_ptr::match_attr3(ptr_node v,ptr_resid_block rb) // REV401PLUS add void
+{
+  ptr_node *u;
+  long long cmp;
+  ptr_node temp;
+
+  u = (ptr_node *) this;
+  
+  if (v) {
+    if (*u==NULL)
+      attr_missing=TRUE;
+    else {
+      cmp=featcmp((*u)->key_val(),v->key_val());
+      if(cmp==0) {
+        ptr_psi_term t1,t2;
+  	/* RESID */ ((wl_node_ptr_ptr*)(*u)->right_addr())->match_attr3(v->right_val(),rb);
+      t1 = (ptr_psi_term) (*u)->data_val();
+      t2 = (ptr_psi_term) v->data_val();
+	//        deref2_eval(t1); /* Assumes goal_stack is already restored. */
+        //        deref2_eval(t2); /* PVR 12.03 */
+        ((wl_psi_term_ptr*)t1)->deref2_eval(); /* Assumes goal_stack is already restored. */
+        ((wl_psi_term_ptr*)t2)->deref2_eval(); /* PVR 12.03 */
+  	/* RESID */ ((wl_node_ptr_ptr*)(*u)->left_addr())->match_attr3(v->left_val(),rb);
+      }
+      else if (cmp>0) {
+        temp=v->right_val();
+        v->set_right(NULL);
+  	/* RESID */ ((wl_node_ptr_ptr*)u)->match_attr3(temp,rb);
+  	/* RESID */ ((wl_node_ptr_ptr*)(*u)->left_addr())->match_attr3(v,rb);
+  	v->set_right(temp);
+      }
+      else {
+  	temp=v->left_val();
+  	v->set_left(NULL);
+  	/* RESID */ ((wl_node_ptr_ptr*)(*u)->right_addr())->match_attr3(v,rb);
+  	/* RESID */ ((wl_node_ptr_ptr*)u)->match_attr3(temp,rb);
+  	v->set_left(temp);
+      }
+    }
+  }
+}
+/******** MATCH_ATTR(u,v)
+	  Match the attribute trees of psi_terms U and V.
+	  If V has an attribute that U doesn't then curry.
+	  U is the calling term, V is the definition.
+	  This routine is careful to push nested eval and match goals in
+	  descending order of feature names.
+*/
+void wl_node_ptr_ptr::match_attr(ptr_node v,ptr_resid_block rb)
+//ptr_node *u,v;
+//ptr_resid_block rb;
+{
+  ptr_node *u;
+
+  u = (ptr_node *) this;
+  
+  ((wl_node_ptr_ptr*)u)->match_attr1(v,rb); /* Match corresponding arguments (third) */
+  ((wl_node_ptr_ptr*)u)->match_attr2(v,rb); /* Evaluate lone arguments (second) */
+  ((wl_node_ptr_ptr*)u)->match_attr3(v,rb); /* Evaluate corresponding arguments (first) */
 }
