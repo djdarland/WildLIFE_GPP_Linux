@@ -3801,7 +3801,7 @@ static long long c_freeze_inner(long long freeze_flag)
           if (TRUE /*arg1->type->evaluate_args 8.9 */)
 	    if (rule->aaaa_2) head=((wl_psi_term_ptr*)rule->aaaa_2)->eval_copy(STACK); else head = NULL;
           else
-	    head=quote_copy(rule->aaaa_2,STACK);
+	    head=((wl_psi_term_ptr*)rule->aaaa_2)->quote_copy(STACK);
 	  if (rule->bbbb_2) body=((wl_psi_term_ptr*)rule->bbbb_2)->eval_copy(STACK); else body = NULL;
 	  head->status=4;
 
