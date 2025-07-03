@@ -16,6 +16,7 @@
 /*=============================================================================*/
 /*			Set functions					       */
 /*=============================================================================*/
+#if FALSE
 void List_SetLinkProc (RefListHeader header, RefListGetLinksProc getLinks)
 // RefListHeader header;
 // RefListGetLinksProc getLinks;
@@ -318,7 +319,9 @@ long long List_EnumBack (RefListHeader header, RefListEnumProc proc, Ref closure
 
 /*==============================================================================*/
 /*ARGSUSED*/
-static long long List_CountAtom (Ref p, Ref nbR)
+
+
+long long List_CountAtom (Ref p, Ref nbR)
 // Ref p; 
 // Ref nbR;
 {
@@ -327,6 +330,9 @@ static long long List_CountAtom (Ref p, Ref nbR)
   ++*nb;
   return TRUE;
 }
+
+
+
 long long List_Card (RefListHeader header)
 // RefListHeader header;
 {
@@ -335,6 +341,7 @@ long long List_Card (RefListHeader header)
   List_Enum (header,(RefListEnumProc) List_CountAtom, &n); // REV401PLUS cast
   return n;
 }
+#endif
 /*==============================================================================*/
 long long List_IsUnlink (RefListLinks links)
 // RefListLinks links;
@@ -342,6 +349,7 @@ long long List_IsUnlink (RefListLinks links)
   return (links->Next == NULL && links->Prev == NULL);
 }
 /*==============================================================================*/
+#if FALSE
 void List_Cut (RefListHeader header, Ref atom, RefListHeader newHeader)
 // RefListHeader	header;
 // Ref			atom;
@@ -360,3 +368,4 @@ void List_Cut (RefListHeader header, Ref atom, RefListHeader newHeader)
     }
 }
 /*==============================================================================*/
+#endif

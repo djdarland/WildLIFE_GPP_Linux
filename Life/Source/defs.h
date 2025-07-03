@@ -82,7 +82,7 @@ typedef struct wl_hash_table * ptr_hash_table;
 typedef struct wl_keyword * ptr_keyword;
 typedef struct wl_resid_block *ptr_resid_block;
 typedef struct wl_ListLinks *	RefListLinks;
-typedef struct wl_ListHeader *	RefListHeader;
+//typedef struct wl_ListHeader *	RefListHeader;
 
 
 #include "wl_module.h"

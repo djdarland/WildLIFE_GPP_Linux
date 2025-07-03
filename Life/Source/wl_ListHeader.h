@@ -1,5 +1,6 @@
 #pragma once
 #include "defs.h"
+
 class wl_ListHeader
 {
 public:

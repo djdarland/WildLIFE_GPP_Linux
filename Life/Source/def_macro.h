@@ -164,12 +164,20 @@
 /*=============================================================================*/
 /*			Get functions	(macros)                               */
 /*=============================================================================*/
+#if FALSE
+#define List_First(header) ((header)->First)
+#define List_Last(header) ((header)->Last)
+#define List_Next(header,RefAtom) ((*(header)->GetLinks)(RefAtom)->Next)
+#define List_Prev(header,RefAtom) ((*(header)->GetLinks)(RefAtom)->Prev)
+#define List_IsEmpty(header) (List_First(header)==NULL)
+#endif
 
 #define List_First(header) ((header)->First)
 #define List_Last(header) ((header)->Last)
 #define List_Next(header,RefAtom) ((*(header)->GetLinks)(RefAtom)->Next)
 #define List_Prev(header,RefAtom) ((*(header)->GetLinks)(RefAtom)->Prev)
 #define List_IsEmpty(header) (List_First(header)==NULL)
+
 
 // from sys.h
 
