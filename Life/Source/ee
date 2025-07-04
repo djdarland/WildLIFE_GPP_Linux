@@ -42,7 +42,7 @@ $EDITOR djd1 djd2 ;;
 116) ./ts.sh 1;;
 117) ./ts2.sh;;
 118) ./tsnow.sh;;
-119)  wild_life++;;
+119)  wild_life;;
 120)  wild_life_X++;;
 121) $EDITOR Makefile;;
 122) ./cp_local.sh;;

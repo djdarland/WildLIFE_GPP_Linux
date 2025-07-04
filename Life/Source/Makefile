@@ -128,7 +128,7 @@ LIBOBJECT =   \
 	wl_module.o wl_module_ptr.o \
 	wl_node.o wl_node_ptr.o wl_node_ptr_ptr.o \
 	arity.o bi_math.o bi_sys.o bi_type.o built_ins.o copy.o error.o \
-	hash_table.o info2.o interrupt.o lefun.o lib2.o list.o login.o \
+	hash_table.o info2.o interrupt.o lefun.o lib.o list.o login.o \
 	lub.o memory.o modules.o parser.o print.o raw.o sys.o templates.o \
 	token.o trees.o types.o wl_memory.o
 
@@ -159,7 +159,7 @@ VERSION     = 4.20
 # $(LIBOBJECT) regexp/regexp.o regexp/regsub.o
 
 # all: wild_life++ wild_life_X++
-all: wild_life++
+all: wild_life
 	@echo
 	@echo "Life generation done"
 	@echo
@@ -167,8 +167,8 @@ all: wild_life++
 Demo:
 	cd ../Demo; $(MAKE) SETUPDIR="$(SETUPDIR)"
 
-life2.o : life2.cpp $(LIBINCLUDE)
-	$(CC) life2.cpp -o life2.o $(CFLAGS) $(CPPFLAGS) $(DEFS_MAIN_MINT) -c
+wild_life.o : wild_life.cpp $(LIBINCLUDE)
+	$(CC) wild_life.cpp -o wild_life.o $(CFLAGS) $(CPPFLAGS) $(DEFS_MAIN_MINT) -c
 
 arity.o : arity.cpp $(LIBINCLUDE)
 	$(CC) arity.cpp -o arity.o $(CFLAGS) $(CPPFLAGS) $(DEFS_EXT_MINT) -c
@@ -203,8 +203,8 @@ interrupt.o : interrupt.cpp  $(LIBINCLUDE)
 lefun.o : lefun.cpp  $(LIBINCLUDE)
 	$(CC) lefun.cpp -o lefun.o $(CFLAGS) $(CPPFLAGS) $(DEFS_EXT_MINT) -c
 
-lib2.o : lib2.cpp  $(LIBINCLUDE)
-	$(CC) lib2.cpp -o lib2.o $(CFLAGS) $(CPPFLAGS) $(DEFS_EXT_MINT) -c
+lib.o : lib.cpp  $(LIBINCLUDE)
+	$(CC) lib.cpp -o lib.o $(CFLAGS) $(CPPFLAGS) $(DEFS_EXT_MINT) -c
 
 list.o : list.cpp  $(LIBINCLUDE)
 	$(CC) list.cpp -o list.o $(CFLAGS) $(CPPFLAGS) $(DEFS_EXT_MINT) -c
@@ -384,8 +384,8 @@ regexp/regexp.o regexp/regsub.o: RegExp
 RegExp:
 	cd regexp; $(MAKE) r CC="$(CC)" CFLAGS="$(CFLAGS)"
 
-wild_life++: life2.o $(LIBOBJECT) regexp/regexp.o regexp/regsub.o
-	$(CC) -o wild_life++ life2.o $(LIBOBJECT) $(LIBS) regexp/regexp.o regexp/regsub.o
+wild_life: wild_life.o $(LIBOBJECT) regexp/regexp.o regexp/regsub.o
+	$(CC) -o wild_life wild_life.o $(LIBOBJECT) $(LIBS) regexp/regexp.o regexp/regsub.o
 
 wild_life_X++: life2_x.o $(LIBOBJECT_X) regexp/regexp.o regexp/regsub.o
 	$(CC) -o wild_life_X++ life2_x.o $(LIBOBJECT_X) $(LIBS)  $(XLIBRARIES) regexp/regexp.o regexp/regsub.o -lX11
@@ -404,11 +404,11 @@ veryclean: clean
 	-rm *.cache *.status Makefile
 	cd regexp; $(MAKE) veryclean
 
-life2.cpp: life.cpp Makefile
-	sed -e "s%+SETUP+%$(SETUP)%" < life.cpp > life2.cpp
+# life2.cpp: life.cpp Makefile
+#	sed -e "s%+SETUP+%$(SETUP)%" < life.cpp > life2.cpp
 
-lib2.cpp:	lib.cpp Makefile
-	sed -e "s%+SETUP+%$(SETUP)%" < lib.cpp > lib2.cpp
+# lib2.cpp:	lib.cpp Makefile
+#	sed -e "s%+SETUP+%$(SETUP)%" < lib.cpp > lib2.cpp
 
 info2.cpp: info.cpp  Makefile
 	@echo Don\'t be surprised, info is compiled "for ${DATE} because" something has changed
