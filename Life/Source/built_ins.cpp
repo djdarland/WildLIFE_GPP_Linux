@@ -22,42 +22,6 @@ ptr_psi_term stack_nil()
   empty->type=nil;
   return empty;
 }
-/******** STACK_CONS(head,tail)
-	  Create a CONS object.
-*/
-#if FALSE
-ptr_psi_term stack_cons(ptr_psi_term head, ptr_psi_term tail)
-//     ptr_psi_term head;
-//     ptr_psi_term tail;
-{
-  ptr_psi_term cons;
-
-  cons=stack_psi_term(4);
-  cons->type=alist;
-  if(head)
-    ((wl_node_ptr_ptr*)&(cons->attr_list))->stack_insert(FEATCMP,one,(GENERIC)head); //cast REV401PLUS
-  if(tail)
-    ((wl_node_ptr_ptr*)&(cons->attr_list))->stack_insert(FEATCMP,two,(GENERIC)tail); // cast REV401PLUS
-  return cons;
-}
-/********* STACK_PAIR(left,right)
-	   create a PAIR object.
-*/
-ptr_psi_term stack_pair(ptr_psi_term left, ptr_psi_term right)
-//     ptr_psi_term left;
-//     ptr_psi_term right;
-{
-  ptr_psi_term pair;
-
-  pair=stack_psi_term(4);
-  pair->type=wl_and;
-  if(left)
-    ((wl_node_ptr_ptr*)&(pair->attr_list))->stack_insert(FEATCMP,one,(GENERIC)left);  // cast REV401PLUS
-    if(right)
-    ((wl_node_ptr_ptr*)&(pair->attr_list))->stack_insert(FEATCMP,two,(GENERIC)right);  // cast REV401PLUS
-  return pair;
-}
-#endif
 
 /********* STACK_INT(n)
 	   create an INT object
@@ -119,54 +83,6 @@ long long psi_to_string(ptr_psi_term t, char **fn)
     return TRUE;
   }
 }
-#if FALSE
-/***  RM: Dec  9 1992  (START) ***/
-ptr_psi_term make_feature_list(ptr_node tree,ptr_psi_term tail,
-			       ptr_module module,int val)
-//     ptr_node tree;
-//     ptr_psi_term tail;
-//     ptr_module module;
-//     int val;
-     
-{
-  ptr_psi_term wl_new;
-  ptr_definition def;
-  double d; // , strtod();
-
-  if(tree) {
-    if(tree->right)
-      tail=make_feature_list(tree->right,tail,module,val);
-    /* Insert the feature name into the list */
-    d=str_to_int(tree->key);
-    if (d== -1) { /* Feature is not a number */
-      def=((wl_module_ptr*)module)->update_feature(tree->key); /* Extract module RM: Feb 3 1993 */
-      if(def) {
-	if(val) /* RM: Mar  3 1994 Distinguish between features & values */
-	  tail=stack_cons((ptr_psi_term)tree->data,tail); // REV401PLUS cast
-	else {
-	  wl_new=stack_psi_term(4);      
-	  wl_new->type=def;
-	  tail=stack_cons(wl_new,tail);
-	}
-      }
-    }
-    else { /* Feature is a number */
-      if(val) /* RM: Mar  3 1994 Distinguish between features & values */
-	tail=stack_cons((ptr_psi_term)tree->data,tail); // REV401PLUS cast
-      else {
-	wl_new=stack_psi_term(4);      
-	wl_new->type=(d==floor(d))?integer:real;
-	wl_new->value_3=wl_mem->heap_alloc(sizeof(REAL));
-	*(REAL *)wl_new->value_3=(REAL)d;
-	tail=stack_cons(wl_new,tail);
-      }
-    }
-    if(tree->left)
-      tail=make_feature_list(tree->left,tail,module,val);
-  }
-  return tail;
-}
-#endif
 /***  RM: Dec  9 1992  (END) ***/
 /******** CHECK_REAL(t,v,n)
 	  Like get_real_value, but does not force the type of T to be real.
@@ -4354,46 +4270,6 @@ static long long c_funct()
     curry();
   return success;
 }
-#if FALSE
-
-/******************************************************************************
-  
-  Here are the routines which allow a new built_in type, predicate or function
-  to be declared.
-  
-****************************************************************************/
-/******** NEW_BUILT_IN(m,s,t,r)
-	  Add a new built-in predicate or function.
-	  Used also in x_pred.c
-
-	  M=module.
-	  S=string.
-	  T=type (function or predicate).
-	  R=address of C routine to call.
-*/
-void new_built_in(ptr_module m,char *s,def_type t,long long (*r)())
-//     ptr_module m;
-//     char *s;
-//     def_type t;
-//     long long (*r)();
-{
-  ptr_definition d;
-
-  if (built_in_index >= MAX_BUILT_INS) {
-    fprintf(stderr,"Too many primitives, increase MAX_BUILT_INS in extern.h\n");
-    exit(-1);
-  }
-
-  if(m!=current_module)  /*  RM: Jan 13 1993  */
-    set_current_module(m);
-  d=((wl_module_ptr*)m)->update_symbol(s); /* RM: Jan  8 1993 */
-  d->type_def=t;
-  built_in_index++;
-  d->rule=(ptr_pair_list )built_in_index;
-  c_rule[built_in_index]=r;
-}
-
-#endif
 
 /******** OP_DECLARE(p,t,s)
 Declare that string S is an operator of precedence P and of type T where

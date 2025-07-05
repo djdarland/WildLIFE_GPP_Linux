@@ -591,20 +591,6 @@ long long strict_matches(ptr_psi_term t1,ptr_psi_term t2,long long *smaller);
 long long bit_length(ptr_int_list c);
 ptr_int_list decode(ptr_int_list c);
 
-#if FALSE
-// from xdisplaylist.c
-
-extern ListHeader * x_display_list ();
-extern void x_set_gc (Display *, GC,long long,unsigned long long,long long,Font);
-extern void x_record_line (ListHeader *,Action,long long,long long,long long,long long,unsigned long long,unsigned long long,unsigned long long);
-extern void x_record_arc (ListHeader *, Action, long long,long long,long long,long long,long long,long long,unsigned long long, unsigned long long, unsigned long long);
-extern void x_record_rectangle (ListHeader *, Action, long long,long long,long long,long long, unsigned long long, unsigned long long, unsigned long long);
-extern void x_record_string (ListHeader *, Action, long long,long long,char *,long long,unsigned long long,unsigned long long);
-extern void x_record_polygon (ListHeader *,Action,XPoint *,long long,unsigned long long,unsigned long long,unsigned long long);
-extern void x_refresh_window (Display *, Window, Pixmap, GC, ListHeader *);
-extern void x_free_display_list (ListHeader *);
-
-#endif
 
 // NEW
 #ifdef X11

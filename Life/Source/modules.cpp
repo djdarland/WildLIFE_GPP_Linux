@@ -125,36 +125,6 @@ char *string_val(ptr_psi_term term)
   else
     return term->type->keyword->symbol;
 }
-#if FALSE
-/******** MAKE_MODULE_TOKEN(module,string)
-Write 'module#string' in module_buffer.
-If string is a qualified reference to a given module, then modify the calling
-module variable to reflect this.
-
-The result must be immediately stored in a newly allocated string.
-*/
-char *make_module_token(ptr_module module,char *str)
-//     ptr_module module;
-//     char *str;
-{
-  ptr_module wl_explicit;
-
-  /* Check if the string already contains a module */
-  wl_explicit=extract_module_from_name(str);
-  if(wl_explicit)
-    strcpy(module_buffer,str);
-  else
-    if(module!=no_module) {
-      strcpy(module_buffer,module->module_name);
-      strcat(module_buffer,"#");
-      strcat(module_buffer,str);
-    }
-    else
-      strcpy(module_buffer,str);
-  return module_buffer;
-}
-
-#endif
 
 /******** NEW_DEFINITION(key)
 	  Create a definition for a key.
@@ -188,106 +158,6 @@ ptr_definition new_definition(ptr_keyword key)    /*  RM: Feb 22 1993  */
   return result;
 }
 
-#if FALSE
-/******** UPDATE_SYMBOL(m,s)
-S is a string of characters encountered during parsing, M is the module it
-belongs too.
-
-if M is NULL then extract the module name from S. If that fails then use the
-current module.
-  
-Then, retrieve the keyword for 'module#symbol'. Then find the correct
-definition by scanning the opened modules.
-*/
-ptr_definition update_symbol(ptr_module module,char *symbol)   /*  RM: Jan  8 1993  */
-//     ptr_module module;
-//     char *symbol;
-{
-  ptr_keyword key;
-  ptr_definition result=NULL;
-  ptr_int_list opens;
-  ptr_module opened;
-  ptr_keyword openkey;
-  ptr_keyword tempkey;
-  /* First clean up the arguments and find out which module to use */
-  if(!module) {
-    module=extract_module_from_name(symbol);
-    if(!module)
-      module=current_module;
-    symbol=strip_module_name(symbol);
-  }
-  /* Now look up 'module#symbol' in the symbol table */
-  key=hash_lookup(module->symbol_table,symbol);
-  if(key)
-    if(key->wl_public || module==current_module)
-      result=key->definition;
-    else {
-      Errorline("qualified call to private symbol '%s'\n",
-		key->combined_name);
-      result=error_psi_term->type;
-    }
-  else
-    if(module!=current_module) {
-      Errorline("qualified call to undefined symbol '%s#%s'\n",
-		module->module_name,symbol);
-      result=error_psi_term->type;
-    }
-    else
-      {
-	/* Add 'module#symbol' to the symbol table */
-	key=HEAP_ALLOC(struct wl_keyword);
-	key->module=module;
-	key->symbol=heap_copy_string(symbol);
-	key->combined_name=heap_copy_string(make_module_token(module,symbol));
-	key->wl_public=FALSE;
-	key->private_feature=FALSE; /*  RM: Mar 11 1993  */
-	key->definition=NULL;
-	hash_insert(module->symbol_table,key->symbol,key);
-	/* Search the open modules of 'module' for 'symbol' */
-	opens=module->open_modules;
-	openkey=NULL;
-	while(opens) {
-	  opened=(ptr_module)(opens->value_1);
-	  if(opened!=module) {
-	    tempkey=hash_lookup(opened->symbol_table,symbol);
-	    if(tempkey)
-	      if(openkey && openkey->wl_public && tempkey->wl_public) {
-		if(openkey->definition==tempkey->definition) {
-		  Warningline("benign module name clash: %s and %s\n",
-			      openkey->combined_name,
-			      tempkey->combined_name);
-		}
-		else {
-		  Errorline("serious module name clash: \"%s\" and \"%s\"\n",
-			    openkey->combined_name,
-			    tempkey->combined_name);
-		  
-		  result=error_psi_term->type;
-		}
-	      }
-	      else
-		if(!openkey || !openkey->wl_public)
-		  openkey=tempkey;
-	  }
-	  opens=opens->next;
-	}
-	if(!result) { /*  RM: Feb  1 1993  */
-	  if(openkey && openkey->wl_public) {
-	    /* Found the symbol in an open module */
-	    if(!openkey->wl_public)
-	      Warningline("implicit reference to non-public symbol: %s\n",
-			  openkey->combined_name);
-	    result=openkey->definition;
-	    key->definition=result;
-	  }
-	  else { /* Didn't find it */
-	    result=new_definition(key);
-	  }
-	}
-      }
-  return result;
-}
-#endif
 /******** GET_FUNCTION_VALUE(module,symbol)
 Return the value of a function without arguments. This returns a psi-term on
 the heap which may not be bound etc...
@@ -966,35 +836,6 @@ long long c_private_feature()    /*  RM: Mar 11 1993  */
   }
   return success;
 }
-#if FALSE
- 
-/********* UPDATE_FEATURE(module,feature)
-	   Look up a FEATURE.
-	   May return NULL if the FEATURE is not visible from MODULE.
-*/
-ptr_definition update_feature(ptr_module module,char *feature)
-//     ptr_module module;
-//     char *feature;
-{
-  ptr_keyword key;
-  ptr_module wl_explicit;
-  /* Check if the feature already contains a module name */
-  if(!module)
-    module=current_module;
-  wl_explicit=extract_module_from_name(feature);
-  if(wl_explicit)
-    if(wl_explicit!=module)
-      return NULL; /* Feature isn't visible */
-    else
-      return update_symbol(NULL,feature);
-  /* Now we have a simple feature to look up */
-  key=hash_lookup(module->symbol_table,feature);
-  if(key && key->private_feature)
-    return key->definition;
-  else
-    return update_symbol(module,feature);
-}
-#endif
 
 /******** ALL_PUBLIC_SYMBOLS
 	  Returns all public symbols from all modules or a specific module.

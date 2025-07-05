@@ -550,20 +550,6 @@ static long long c_residList()
   push_goal(unify,result,other,NULL);
   return TRUE;
 }
-#if FALSE
-ptr_goal makeGoal(ptr_psi_term p)
-// ptr_psi_term p;
-{
-  ptr_goal old = goal_stack;
-  ptr_goal g;
-	
-  push_goal(prove, p, (ptr_psi_term)DEFRULES, NULL);
-  g = goal_stack;
-  g->next=NULL;
-  goal_stack = old;
-  return g;
-}
-#endif
 /******** C_residuate
 	  residuate(A,B) ->  residuate goal B on variable A, non_strict in both args
 */

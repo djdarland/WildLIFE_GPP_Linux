@@ -109,7 +109,7 @@ LIBSOURCE = \
 	wl_buckets.cpp wl_psi_term.cpp wl_psi_term_ptr.cpp \
 	wl_module.cpp wl_module_ptr.cpp \
 	wl_node.cpp wl_node_ptr.cpp wl_node_ptr_ptr.cpp \
-	arity.cpp bi_math.cpp bi_sys.cpp bi_type.cpp built_ins.cpp copy.cpp error.cpp \
+	arity.cpp bi_math.cpp bi_sys.cpp bi_type.cpp built_ins.cpp error.cpp \
 	hash_table.cpp info.cpp interrupt.cpp lefun.cpp lib.cpp list.cpp login.cpp \
 	lub.cpp memory.cpp modules.cpp parser.cpp print.cpp raw.cpp sys.cpp templates.cpp \
 	token.cpp trees.cpp types.cpp .wl_memory.cpp $(XSOURCE) $(DBMSOURCE)
@@ -127,7 +127,7 @@ LIBOBJECT =   \
 	wl_buckets.o wl_psi_term.o wl_psi_term_ptr.o \
 	wl_module.o wl_module_ptr.o \
 	wl_node.o wl_node_ptr.o wl_node_ptr_ptr.o \
-	arity.o bi_math.o bi_sys.o bi_type.o built_ins.o copy.o error.o \
+	arity.o bi_math.o bi_sys.o bi_type.o built_ins.o error.o \
 	hash_table.o info2.o interrupt.o lefun.o lib.o list.o login.o \
 	lub.o memory.o modules.o parser.o print.o raw.o sys.o templates.o \
 	token.o trees.o types.o wl_memory.o
@@ -184,9 +184,6 @@ bi_type.o : bi_type.cpp  $(LIBINCLUDE)
 
 built_ins.o : built_ins.cpp  $(LIBINCLUDE)
 	$(CC) built_ins.cpp -o built_ins.o $(CFLAGS) $(CPPFLAGS) $(DEFS_EXT_MINT) -c
-
-copy.o : copy.cpp  $(LIBINCLUDE)
-	$(CC) copy.cpp -o copy.o $(CFLAGS) $(CPPFLAGS) $(DEFS_EXT_MINT) -c
 
 error.o : error.cpp  $(LIBINCLUDE)
 	$(CC) error.cpp -o error.o $(CFLAGS) $(CPPFLAGS) $(DEFS_EXT_MINT) -c

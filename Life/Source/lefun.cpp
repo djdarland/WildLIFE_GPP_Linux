@@ -70,60 +70,7 @@ ptr_psi_term heap_psi_term(long long stat)
 
   return result;
 }
-#if FALSE
-/* Create an empty list on the stack,  wiped out by RM: Dec 14 1992  */
-/* ptr_psi_term stack_empty_list()  is now aliased to stack_nil()    */
-/******** RESIDUATE_DOUBLE(t,u)
-Residuate the current expression with T in the Residuation Variable set.
-Also store the other variable, so that its sort can be used in the
-'bestsort' calculation needed to implement disequality constraints.
-*/
-void residuate_double(ptr_psi_term t,ptr_psi_term u) /* 21.9 */
-// ptr_psi_term t,u;
-{
-  ptr_resid_list curr;
 
-  curr=STACK_ALLOC(resid_list);
-  curr->var=t;
-  curr->othervar=u;
-  curr->next=resid_vars;
-  resid_vars=curr;
-}
-/******** RESIDUATE(t)
-Residuate the current expression with T in the Residuation Variable set.
-*/
-void residuate(ptr_psi_term t)
-// ptr_psi_term t;
-{
-  ptr_resid_list curr;
-
-  curr=STACK_ALLOC(resid_list);
-  curr->var=t;
-  curr->othervar=NULL; /* 21.9 */
-  curr->next=resid_vars;
-  resid_vars=curr;
-}
-/******** RESIDUATE2(u,v)
-	  Residuate the current function on the two variables U and V.
-*/
-void residuate2(ptr_psi_term u,ptr_psi_term v)
-// /ptr_psi_term u,v;
-{
-  residuate(u);
-  if (v && u!=v) residuate(v);
-}
-/******** RESIDUATE3(u,v,w)
-	  Residuate the current function on the three variables U, V, and W.
-*/
-void residuate3(ptr_psi_term u,ptr_psi_term v,ptr_psi_term w)
-// ptr_psi_term u,v,w;
-{
-  residuate(u);
-  if (v && u!=v) residuate(v);
-  if (w && u!=w && v!=w) residuate(w);
-}
-
-#endif
 /******** CURRY()
 Decide that the current function will have to be curried.
 This has become so simple it could be a MACRO.
@@ -318,66 +265,6 @@ void do_currying()
   push_goal(unify_noeval,funct,result,NULL);
   resid_aim=NULL;
 }
-#if FALSE
-/******** RELEASE_RESID(t)
-Release the residuations pending on the Residuation Variable T.
-This is done by simply pushing the residuated goals onto the goal-stack.
-A goal is not added if already present on the stack.
-Two versions of this routine exist: one which trails t and one which never
-trails t.
-*/
-void release_resid_main(ptr_psi_term t,long long trailflag)
-// ptr_psi_term t;
-// long long trailflag;
-{
-  ptr_goal g;
-  ptr_residuation r;
-  
-  if (r=t->resid) {
-    if (trailflag) push_ptr_value(resid_ptr,(GENERIC *)&(t->resid)); // REV401PLUS cast
-    t->resid=NULL;
-      while (r) {
-      g=r->goal;
-      if (g->pending) {
-	push_ptr_value(int_ptr,(GENERIC *)&(g->pending)); // REV401PLUS cast
-	g->pending=FALSE;
-	push_ptr_value(goal_ptr,(GENERIC *)&(g->next)); // REV401PLUS cast
-	g->next=goal_stack;
-	goal_stack=g;
-        Traceline("releasing %P\n",g->aaaa_1);
-      }
-      r=r->next;
-    }
-  }
-}
-void release_resid(ptr_psi_term t)
-// ptr_psi_term t;
-{
-  release_resid_main(t,TRUE);
-}
-void release_resid_notrail(ptr_psi_term t)
-// ptr_psi_term t;
-{
-  release_resid_main(t,FALSE);
-}
-/******** APPEND_RESID(u,v)
-Append the residuations pending on V to U. This routine does not check that
-the same constraint is not present twice in the end on U. This doesn't matter
-since RELEASE_RESID ensures that the same constraint is not released more
-than once.
-*/
-void append_resid(ptr_psi_term u,ptr_psi_term v)
-// ptr_psi_term u,v;
-{
-  ptr_residuation *g;
-  
-  g= &(u->resid);
-  while (*g)
-    g = &((*g)->next);
-  push_ptr_value(resid_ptr,(GENERIC *)g); // REV401PLUS cast
-  *g=v->resid;
-}
-#endif
 /******** EVAL_AIM()
 Evaluate a function.
 This copies the current definition of the function and
@@ -453,151 +340,6 @@ long long eval_aim()
   resid_aim=NULL;
   return success;
 }
-#if FALSE
-/* Match the corresponding arguments */
-/* RESID */ void match_attr1(ptr_node *u,ptr_node v,ptr_resid_block rb) //REV401PLUS add void 
-{
-  long long cmp;
-  ptr_node temp;
-  if (v) {
-    if (*u==NULL)
-      wl_node_ptr_ptr::attr_missing=TRUE;
-    else {
-      cmp=featcmp((*u)->key_val(),v->key_val());
-      if(cmp==0) {
-        ptr_psi_term t;
-	//  	/* RESID */ match_attr1(&((*u)->right),v->right,rb);
-  	/* RESID */ match_attr1((*u)->right_addr(),v->right_val(),rb);
-
-        t = (ptr_psi_term) (*u)->data_val();
-  	/* RESID */ push_goal(match,(ptr_psi_term)(*u)->data_val(),(ptr_psi_term)v->data_val(),(GENERIC)rb); // REV401PLUS casts
-        /* deref2_eval(t); */
-  	/* RESID */ match_attr1((*u)->left_addr(),v->left_val(),rb);
-      }
-      else if (cmp>0) {
-        temp=v->right_val();
-        v->set_right(NULL);
-  	/* RESID */ match_attr1(u,temp,rb);
-  	/* RESID */ match_attr1((*u)->left_addr(),v,rb);
-	v->set_right(temp);
-      }
-      else {
-	temp=v->left_val();
-	v->set_left(NULL);
-	/* RESID */ match_attr1((*u)->right_addr(),v,rb);
-  	/* RESID */ match_attr1(u,temp,rb);
-  	v->set_left(temp);
-      }
-    }
-  }
-}
-/* Evaluate the lone arguments (for lazy failure + eager success) */
-/* RESID */ void match_attr2(ptr_node *u,ptr_node v,ptr_resid_block rb) // REV401PLUS add void
-	    // ptr_node *u,v;
-	    /* RESID */ //ptr_resid_block rb;
-{
-  long long cmp;
-  ptr_node temp;
-  
-  if (v) {
-    if (*u==NULL) { /* PVR 12.03 */
-      ptr_psi_term t;
-      match_attr1(u,v->right_val(),rb);
-      t = (ptr_psi_term) v->data_val();
-      //      deref2_rec_eval(t);
-      ((wl_psi_term_ptr*)t)->deref2_rec_eval();
-      match_attr1(u,v->left_val(),rb);
-    }
-    else {
-      cmp=featcmp((*u)->key_val(),v->key_val());
-      if(cmp==0) {
-  	/* RESID */ match_attr2((*u)->right_addr(),v->right_val(),rb);
-  	/* RESID */ match_attr2((*u)->left_addr(),v->left_val(),rb);
-      }
-      else if (cmp>0) {
-        temp=v->right_val();
-        v->set_right(NULL);
-  	/* RESID */ match_attr2(u,temp,rb);
-  	/* RESID */ match_attr2((*u)->left_addr(),v,rb);
-  	v->set_right(temp);
-      }
-      else {
-  	temp=v->left_val();
-  	v->set_left(NULL);
-  	/* RESID */ match_attr2((*u)->right_addr(),v,rb);
-  	/* RESID */ match_attr2(u,temp,rb);
-  	v->set_left(temp);
-      }
-    }
-  }
-  else if (*u!=NULL) {
-    ptr_psi_term t /* , empty */ ;
-    match_attr1((*u)->right_addr(),v,rb);
-    t = (ptr_psi_term) (*u)->data_val();
-    /* Create a new psi-term to put the (useless) result: */
-    /* This is needed so that *all* arguments of a function call */
-    /* are evaluated, which avoids incorrect 'Yes' answers.      */
-    
-    //    deref2_rec_eval(t); /* Assumes goal_stack is already restored. */
-    ((wl_psi_term_ptr*)t)->deref2_rec_eval(); /* Assumes goal_stack is already restored. */
-    match_attr1((*u)->left_addr(),v,rb);
-  }
-}
-/* Evaluate the corresponding arguments */
-/* RESID */ void match_attr3(ptr_node *u,ptr_node v,ptr_resid_block rb) // REV401PLUS add void
-{
-  long long cmp;
-  ptr_node temp;
-  
-  if (v) {
-    if (*u==NULL)
-      wl_node_ptr_ptr::attr_missing=TRUE;
-    else {
-      cmp=featcmp((*u)->key_val(),v->key_val());
-      if(cmp==0) {
-        ptr_psi_term t1,t2;
-  	/* RESID */ match_attr3((*u)->right_addr(),v->right_val(),rb);
-      t1 = (ptr_psi_term) (*u)->data_val();
-      t2 = (ptr_psi_term) v->data_val();
-	//        deref2_eval(t1); /* Assumes goal_stack is already restored. */
-        //        deref2_eval(t2); /* PVR 12.03 */
-        ((wl_psi_term_ptr*)t1)->deref2_eval(); /* Assumes goal_stack is already restored. */
-        ((wl_psi_term_ptr*)t2)->deref2_eval(); /* PVR 12.03 */
-  	/* RESID */ match_attr3((*u)->left_addr(),v->left_val(),rb);
-      }
-      else if (cmp>0) {
-        temp=v->right_val();
-        v->set_right(NULL);
-  	/* RESID */ match_attr3(u,temp,rb);
-  	/* RESID */ match_attr3((*u)->left_addr(),v,rb);
-  	v->set_right(temp);
-      }
-      else {
-  	temp=v->left_val();
-  	v->set_left(NULL);
-  	/* RESID */ match_attr3((*u)->right_addr(),v,rb);
-  	/* RESID */ match_attr3(u,temp,rb);
-  	v->set_left(temp);
-      }
-    }
-  }
-}
-/******** MATCH_ATTR(u,v)
-	  Match the attribute trees of psi_terms U and V.
-	  If V has an attribute that U doesn't then curry.
-	  U is the calling term, V is the definition.
-	  This routine is careful to push nested eval and match goals in
-	  descending order of feature names.
-*/
-void match_attr(ptr_node *u,ptr_node v,ptr_resid_block rb)
-//ptr_node *u,v;
-//ptr_resid_block rb;
-{
-  match_attr1(u,v,rb); /* Match corresponding arguments (third) */
-  match_attr2(u,v,rb); /* Evaluate lone arguments (second) */
-  match_attr3(u,v,rb); /* Evaluate corresponding arguments (first) */
-}
-#endif
 /******** MATCH_AIM()
 This is very similar to UNIFY_AIM, only matching cannot modify the calling
 psi_term.   The first argument is the calling term (which may not be changed)
@@ -874,114 +616,6 @@ long long check_out(ptr_psi_term t)
   }
   return flag;	
 }
-#if FALSE
-/********************************************************************/
-/*                                                                  */
-/* New dereference routines for Wild_Life                           */
-/* These routines handle evaluation-by-need.  Check_out is changed  */
-/* to no long longer call check_func, which is done in the new routines. */
-/* Functions inside of psi-terms are only evaluated if needed.  It  */
-/* is assumed that 'needed' is true when they are derefed.          */
-/*                                                                  */
-/* There are three new dereference routines:                        */
-/*    deref_eval(P)                                                 */
-/*       If the psi-term P is a function, call check_func to        */
-/*       push eval goals so that the function will be evaluated.    */
-/*       Then return TRUE so that the caller can itself return.     */
-/*       This only looks at the top level.                          */
-/*    deref_rec(P)                                                  */
-/*       If the psi-term P recursively contains any functions, then */
-/*       push eval goals to evaluate all of them.  Set a global     */
-/*       variable deref_flag if this is the case.                   */
-/*    deref_args(P,S)                                               */
-/*       Same as above, except does not look at the top level or at */
-/*       the arguments named in the set S.                          */
-/*       This is needed to guarantee evaluation of all arguments of */
-/*       a built-in, even those not used by the built-in.           */
-/*                                                                  */
-/* The original dereference macro is renamed to:                    */
-/*    deref_ptr(P) = while (P->coref) P=P->coref                    */
-/* There are three new macros:                                      */
-/*    deref(P)        = deref_ptr(P);                               */
-/*                      if (deref_eval(P)) then return TRUE         */
-/*    deref_rec(P)    = deref_ptr(P);                               */
-/*                      if (deref_rec_eval(P)) then return TRUE     */
-/*    deref_args(P,S) = deref_ptr(P);                               */
-/*                      if (deref_args_eval(P,S)) then return TRUE  */
-/*                                                                  */
-/********************************************************************/
-static long long deref_flag;
-void deref_rec_body();
-void deref_rec_args();
-void deref_rec_args_exc();
-/* Ensure evaluation of top of psi-term */
-long long deref_eval(ptr_psi_term t)
-// ptr_psi_term t;
-{
-  ptr_goal save=goal_stack;
-
-  deref_flag=FALSE;
-  goal_stack=aim;
-  if (t->status==0) {
-    if(t->type->type_def==(def_type)function_it) {
-      check_func(t);    /* Push eval goals to evaluate the function. */
-      deref_flag=TRUE;  /* TRUE so that caller will return to main_prove. */
-    }
-    else
-      if(t->type->type_def==(def_type)global_it) { /*  RM: Feb 10 1993  */
-	eval_global_var(t);
-	deref_ptr(t);/*  RM: Jun 25 1993  */
-	deref_flag=deref_eval(t);
-      }
-      else {
-	if (t->status!=2) {
-	  if((GENERIC)t<wl_mem->heap_pointer_val())
-	    push_ptr_value(int_ptr,(GENERIC *)&(t->status)); /*  RM: Jul 15 1993  */ // REV401PLUS cast
-	  t->status=4;
-	  deref_flag=FALSE;
-	}
-      }
-  }
-  else
-    deref_flag=FALSE;
-  if (!deref_flag) goal_stack=save;
-  return (deref_flag);
-}
-/* Ensure evaluation of *all* of psi-term */
-long long deref_rec_eval(ptr_psi_term t)
-// ptr_psi_term t;
-{
-  ptr_goal save=goal_stack;
-
-  deref_flag=FALSE;
-  goal_stack=aim;
-  deref_rec_body(t);
-  if (!deref_flag) goal_stack=save;
-  return (deref_flag);
-}
-void deref_rec_body(ptr_psi_term t)
-// ptr_psi_term t;
-{
-  if (t->status==0) {
-    if (t->type->type_def==(def_type)function_it) {
-      check_func(t);
-      deref_flag=TRUE;
-    }
-    else
-      if(t->type->type_def==(def_type)global_it) { /*  RM: Feb 10 1993  */
-	eval_global_var(t);
-	deref_ptr(t);/*  RM: Jun 25 1993  */
-	deref_rec_body(t);
-      }
-      else {
-	if((GENERIC)t<wl_mem->heap_pointer_val())
-	  push_ptr_value(int_ptr,(GENERIC *)&(t->status));/*  RM: Jul 15 1993  */ // REV401PLUS cast
-	t->status=4;
-	deref_rec_args(t->attr_list);
-      }
-  }
-}
-#endif
 void deref_rec_args(ptr_node n)
 // ptr_node n;
 {
@@ -996,23 +630,6 @@ void deref_rec_args(ptr_node n)
     deref_rec_args(n->left_val());
   }
 }
-#if FALSE
-/* Same as deref_rec_eval, but doesn't look at either the top level or */
-/* the arguments in the set. */
-long long deref_args_eval(ptr_psi_term t,long long set)
-// ptr_psi_term t;
-// long long set;
-{
-  ptr_goal save = goal_stack;
-  ptr_goal top = aim;
-
-  deref_flag = FALSE;
-  goal_stack = top;
-  deref_rec_args_exc(t->attr_list,set);
-  if (!deref_flag) goal_stack = save;
-  return (deref_flag);
-}
-#endif
 /* Return TRUE iff string (considered as number) is in the set */
 /* This routine only recognizes the strings "1", "2", "3",     */
 /* represented as numbers 1, 2, 4.                             */
@@ -1043,36 +660,6 @@ void deref_rec_args_exc(ptr_node n,long long set)
     deref_rec_args_exc(n->left_val(),set);
   }
 }
-#if FALSE
-/* These two needed only for match_aim and match_attr: */
-/* Same as deref_eval, but assumes goal_stack already restored. */
-void deref2_eval(ptr_psi_term t)
-//ptr_psi_term t;
-{
-  deref_ptr(t);
-  if (t->status==0) {
-    if (t->type->type_def==(def_type)function_it) {
-      check_func(t);
-    }
-    else 
-      if(t->type->type_def==(def_type)global_it) { /*  RM: Feb 10 1993  */
-      	eval_global_var(t);
-	deref_ptr(t);/*  RM: Jun 25 1993  */
-	deref2_eval(t);
-      }
-      else {
-	t->status=4;
-      }
-  }
-}
-/* Same as deref_rec_eval, but assumes goal_stack already restored. */
-void deref2_rec_eval(ptr_psi_term t)
-// ptr_psi_term t;
-{
-  deref_ptr(t);
-  deref_rec_body(t);
-}
-#endif
 /********************************************************************/
 /* Saving & restoring residuation information */
 void save_resid(ptr_resid_block rb,ptr_psi_term match_date)
@@ -1102,37 +689,6 @@ void restore_resid(ptr_resid_block rb,ptr_psi_term *match_date)
     *match_date = rb->md;
   }
 }
-#if FALSE
-/******** EVAL_GLOBAL_VAR(t)
-	  Dereference a global variable.
-*/
-void eval_global_var(ptr_psi_term t)     /*  RM: Feb 10 1993  */
-//     ptr_psi_term t;
-{
-  deref_ptr(t);
-  /* Global variable (not persistent) */
-  Traceline("dereferencing variable %P\n",t);
-  /* Trails the heap RM: Nov 10 1993  */
-  if(!t->type->global_value) {
-    /* Trail the heap !! */
-    {
-      ptr_stack n;
-      n=STACK_ALLOC(stack);
-      n->type=psi_term_ptr;
-      n->aaaa_3= (GENERIC *) &(t->type->global_value);
-      n->bbbb_3= NULL;
-      n->next=undo_stack;
-      undo_stack=n;
-    }
-    wl_bucks->clear_copy();
-    if (t->type->init_value)  t->type->global_value=((wl_psi_term_ptr*)t->type->init_value)->eval_copy(STACK); else t->type->global_value = NULL;
-  }
-  if(t->type->type_def==(def_type) global_it && t!=t->type->global_value) {
-    push_psi_ptr_value(t,(GENERIC *)&(t->coref)); // REV401PLUS cast
-    t->coref=t->type->global_value;
-  }
-}
-#endif
 /******** INIT_GLOBAL_VARS()
 	  Initialize all non-persistent global variables.
 */

@@ -15,7 +15,6 @@ public:
   ptr_node bk_stack_insert(long long comp,char *keystr,GENERIC info);
   ptr_node bk2_stack_insert(long long comp,char *keystr,GENERIC info);
   void delete_attr(char *s);
-  ////////////////
   void match_attr1(ptr_node v,ptr_resid_block rb);
   void match_attr2(ptr_node v,ptr_resid_block rb);
   void match_attr3(ptr_node v,ptr_resid_block rb);

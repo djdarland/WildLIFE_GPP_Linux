@@ -192,7 +192,6 @@ void wl_node_ptr_ptr::delete_attr(char *s)
       *n = (*n)->right;
   }
 }
-///////////////////////////////
 
 
 /* Match the corresponding arguments */

@@ -126,7 +126,6 @@ void wl_node_ptr::mark_quote_tree_c(long long heap_flag)
   }
 }
 
-/////////////////////////////
 
 ptr_node wl_node_ptr::copy_tree(long long copy_flag, long long heap_flag)
 //ptr_node t;
@@ -193,7 +192,6 @@ void wl_node_ptr::mark_eval_tree_new()
     ((wl_node_ptr*)n->right)->mark_eval_tree_new();
   //  }
 }
-///////////////
 
 void wl_node_ptr::mark_quote_tree_new()
 // ptr_node n;
@@ -236,4 +234,4 @@ void wl_node_ptr::bk_mark_quote_tree()
   if (t->right) ((wl_node_ptr*)t->right)->bk_mark_quote_tree();
   //}
 }
-///////////////////////
+

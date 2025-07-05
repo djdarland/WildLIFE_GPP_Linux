@@ -60,14 +60,7 @@ typedef struct wl_operator_data *   ptr_operator_data;
 typedef struct wl_int_list *        ptr_int_list;
 typedef struct wl_resid_list *      ptr_resid_list; /* 21.9 */
 typedef struct wl_definition *      ptr_definition;
-#if FALSE
-typedef struct wl_definition *      def_type;
-#endif
 typedef struct wl_residuation *     ptr_residuation;
-#if FALSE
-typedef struct wl_psi_term *        ptr_psi_term;
-#endif
-// typedef struct wl_node *            ptr_node;
 
 typedef struct wl_pair_list *       ptr_pair_list;
 typedef struct wl_triple_list *     ptr_triple_list;
@@ -105,24 +98,8 @@ typedef struct wl_resid_list {
   ptr_resid_list next;
 } resid_list;
 
-#if FALSE
-typedef struct wl_hash_table * ptr_hash_table;
-#endif 
 /************ MODULES **************/
 /*        RM: Jan  7 1993          */
-#if FALSE
-struct wl_module {
-  char *module_name;
-  char *source_file;
-  ptr_int_list open_modules;
-  ptr_int_list inherited_modules;
-  ptr_hash_table symbol_table;
-};
-
-
-typedef struct wl_module * ptr_module;
-
-#endif
 
 struct wl_keyword {
   ptr_module module;
@@ -133,9 +110,6 @@ struct wl_keyword {
   ptr_definition definition;
 };
 
-#if FALSE
-typedef struct wl_keyword * ptr_keyword;
-#endif
 /********* END MODULES *************/
 
 
@@ -144,13 +118,6 @@ typedef struct wl_keyword * ptr_keyword;
 /*                RM: Feb  3 1993                  */
 
 /* Hash tables for keywords */
-#if FALSE
-struct wl_hash_table {
-  int size;
-  int used;
-  ptr_keyword *data;
-};
-#endif
 /****************************/
 /* Definition of a keyword. */
 /* This includes the rules associated to the symbol and how old they are.  */
@@ -185,37 +152,12 @@ typedef struct wl_residuation {
   ptr_residuation next;
 } residuation;
 
-#if FALSE
-/* PSI_TERM */
-typedef struct wl_psi_term {
-#ifdef TS
-  unsigned long long time_stamp; /* Avoid multiple trailing on a choice point. 9.6 */
-#endif
-  ptr_definition type;
-  long long status; /* Indicates whether the properties of the type have been */
-  /* checked or the function evaluated */
-  /* long long curried; Distinguish between quoted and curried object 20.5 */
-  long long flags; /* 14.9 */
-  GENERIC value_3;
-  ptr_node attr_list;  // For classes DJD
-  ptr_psi_term coref;
-  ptr_residuation resid; /* List of goals to prove if type is narrowed. */
-} psi_term;
-#endif
 
 /* Binary tree node. */
 /* KEY can be either an integer (a pointer) or a pointer to a string. */
 /* DATA is the information accessed under the KEY, in most cases a pointer */
 /* to a PSI-TERM.  */
 
-#if FALSE
-typedef struct wl_node {
-  char *key;
-  ptr_node left;
-  ptr_node right;
-  GENERIC data;
-} node;
-#endif
 
 typedef struct wl_pair_list {
   ptr_psi_term aaaa_2;
@@ -272,9 +214,6 @@ typedef struct wl_choice_point {
 
 /* Residuation block state handling */
 
-#if FALSE
-typedef struct wl_resid_block *ptr_resid_block;
-#endif
 
 typedef struct wl_resid_block {
   long long cc_cr; /* 11.9 */
@@ -288,10 +227,6 @@ typedef struct wl_resid_block {
 // from list.h
 
 typedef void *			Ref;
-#if FALSE
-typedef struct wl_ListLinks *	RefListLinks;
-typedef struct wl_ListHeader *	RefListHeader;
-#endif
 typedef RefListLinks		(*RefListGetLinksProc)	(Ref ); 
 typedef long long			(*RefListEnumProc)	(Ref,Ref ); // REV401PLUS
 
@@ -308,17 +243,6 @@ typedef long long			(*RefListEnumProc)	(Ref,Ref ); // REV401PLUS
   debugging mode.
 */
 
-#if FALSE
-typedef struct wl_ListHeader
-{
-  Ref First, Last;
-#ifdef prlDEBUG
-  Int32			Lock;
-#endif
-  RefListGetLinksProc		GetLinks;
-} ListHeader;
-
-#endif
 
 typedef struct wl_ListLinks
 {

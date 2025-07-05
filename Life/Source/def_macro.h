@@ -114,9 +114,6 @@
 /* The basic dereference operation. */
 /* P must be a pointer to a psi_term.  */
 /* (For the other dereference routines, see lefun.c) */
-#if FALSE
-#define deref_ptr(P) while(P->coref) P=P->coref
-#endif
 /* Predicates defined in Life whose args should not be evaluated. */
 #define noneval(T) (T->type==quote || T->type==listingsym || T->type==loadsym)
 
@@ -152,25 +149,11 @@
 /* extern ptr_psi_term stack_empty_list(); */
 
 // from lefun.h
-#if FALSE
-#define deref(P)         {deref_ptr(P);if (deref_eval(P)) return TRUE;}
-#define deref_void(P)    {deref_ptr(P);deref_eval(P);}
-#define deref_rec(P)     {deref_ptr(P);if (deref_rec_eval(P)) return TRUE;}
-#define deref_args(P,S)  {deref_ptr(P);if (deref_args_eval(P,S)) return TRUE;}
-#define deref_args_void(P)  {deref_ptr(P);deref_args_eval(P);}
-#endif
 // from list.h
 
 /*=============================================================================*/
 /*			Get functions	(macros)                               */
 /*=============================================================================*/
-#if FALSE
-#define List_First(header) ((header)->First)
-#define List_Last(header) ((header)->Last)
-#define List_Next(header,RefAtom) ((*(header)->GetLinks)(RefAtom)->Next)
-#define List_Prev(header,RefAtom) ((*(header)->GetLinks)(RefAtom)->Prev)
-#define List_IsEmpty(header) (List_First(header)==NULL)
-#endif
 
 #define List_First(header) ((header)->First)
 #define List_Last(header) ((header)->Last)

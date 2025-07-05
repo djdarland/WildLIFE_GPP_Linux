@@ -171,78 +171,6 @@ long long isSubTypeValue(ptr_psi_term arg1, ptr_psi_term arg2)  // REV401PLUS ch
   return ans;
 }
 
-#if FALSE
-/* Boolean utility function that implements isa */
-static long long isa(ptr_psi_term arg1, ptr_psi_term arg2)
-// ptr_psi_term arg1, arg2;
-{
-  long long ans;
-
-  if (  arg1->type==arg2->type
-	|| (  (arg1->type==real || arg1->type==integer)
-	      && (arg2->type==real || arg2->type==integer)
-	      && (arg1->value_3 || arg2->value_3)
-	      )
-	) {
-    if(arg1->type==cut) /*  RM: Jan 21 1993  */
-      ans=TRUE;
-    else
-      ans=isSubTypeValue(arg1, arg2);
-  }
-  else {
-    matches(arg1->type, arg2->type, &ans);
-  }
-  return ans;
-}
-
-#define isa_le_sel 0
-#define isa_lt_sel 1
-#define isa_ge_sel 2
-#define isa_gt_sel 3
-#define isa_eq_sel 4
-#define isa_nle_sel 5
-#define isa_nlt_sel 6
-#define isa_nge_sel 7
-#define isa_ngt_sel 8
-#define isa_neq_sel 9
-#define isa_cmp_sel 10
-#define isa_ncmp_sel 11
-/* Utility that selects one of several isa functions */
-static long long isa_select(ptr_psi_term arg1, ptr_psi_term arg2, long long sel)
-// ptr_psi_term arg1,arg2;
-// long long sel;
-{
-  long long ans;
-
-  switch (sel) {
-  case isa_le_sel: ans=isa(arg1,arg2);
-    break;
-  case isa_lt_sel: ans=isa(arg1,arg2) && !isa(arg2,arg1);
-    break;
-  case isa_ge_sel: ans=isa(arg2,arg1);
-    break;
-  case isa_gt_sel: ans=isa(arg2,arg1) && !isa(arg1,arg2);
-    break;
-  case isa_eq_sel: ans=isa(arg1,arg2) && isa(arg2,arg1);
-    break;
-  case isa_nle_sel: ans= !isa(arg1,arg2);
-    break;
-  case isa_nlt_sel: ans= !(isa(arg1,arg2) && !isa(arg2,arg1));
-    break;
-  case isa_nge_sel: ans= !isa(arg2,arg1);
-    break;
-  case isa_ngt_sel: ans= !(isa(arg2,arg1) && !isa(arg1,arg2));
-    break;
-  case isa_neq_sel: ans= !(isa(arg1,arg2) && isa(arg2,arg1));
-    break;
-  case isa_cmp_sel: ans=isa(arg1,arg2) || isa(arg2,arg1);
-    break;
-  case isa_ncmp_sel: ans= !(isa(arg1,arg2) || isa(arg2,arg1));
-    break;
-  }
-  return ans;
-}
-#endif
 
 /******** C_ISA_MAIN
 	  Main routine to handle all the isa built-in functions.
@@ -479,13 +407,6 @@ long long c_isa_subsort() // changed to long long REV401PLUS
     }
   return FALSE;
 }
-#if FALSE 
-long long isValue(ptr_psi_term p)  // REV401PLUS to long long
-// ptr_psi_term p;
-{
-  return (p->value_3 != NULL);
-}
-#endif
 /******** C_GLB(A,B)
 	  Return glb(A,B).  Continued calls will return each following type in
 	  the disjunction of the glb of A,B.

@@ -18,7 +18,7 @@ echo "9 info.cpp"
 echo "10 interrupt.cpp"
 echo "11 lefun.cpp"
 echo "12 lib.cpp"
-echo "13 life.cpp"
+echo "13 wild_life.cpp"
 echo "14 list.cpp"
 echo "15 login.cpp"
 echo "16 lub.cpp"
@@ -39,7 +39,7 @@ case $select in
 10) $EDITOR interrupt.cpp   ;;
 11) $EDITOR lefun.cpp   ;;
 12) $EDITOR lib.cpp   ;;
-13) $EDITOR life.cpp   ;;
+13) $EDITOR wild_life.cpp   ;;
 14) $EDITOR list.cpp   ;;
 15) $EDITOR login.cpp   ;;
 16) $EDITOR lub.cpp   ;;
