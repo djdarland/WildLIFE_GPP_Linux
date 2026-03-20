@@ -5,19 +5,14 @@ else
     echo "creating ~/bin"
     mkdir ~/bin
 fi
-echo "enter 0 clean all .o and generated .c files"
-echo "enter 999 to skip"
-read select
-if [ $select -ne 999 ]
+if test -f info2.cpp
 then
-    if [ $select -eq 0 ]
-       then
-	   rm info2.cpp
-	   rm regexp/*.o
-	   rm *.o
-	   rm wild_life
-    fi
+   rm info2.cpp
 fi
+rm regexp/*.o
+rm *.o
+rm wild_life
+
 
 cd regexp
 make >djd3 2>djd4
@@ -37,3 +32,4 @@ if test -f wild_life_X++
 then
     cp wild_life_X++ ~/bin
 fi
+
