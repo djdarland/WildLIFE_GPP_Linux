@@ -2,29 +2,20 @@
 ** All Rights Reserved.
 *****************************************************************/
 /* 	$Id: print.c,v 1.4 1995/01/14 00:27:20 duchier Exp $	 */
-
-#ifndef lint
-static char vcid[] = "$Id: print.c,v 1.4 1995/01/14 00:27:20 duchier Exp $";
-#endif /* lint */
-
 #define DOTDOT ": "   /*  RM: Dec 14 1992, should be " : "  */
-
+#define EXTERN extern
+#define REV401PLUS
 #ifdef REV401PLUS
 #include "defs.h"
 #endif
-
-// REV401PLUS moved initializations down
 /* Used to distinguish listings from other writes */
-static long listing_flag;
+static long long listing_flag;
 /* Precedence of the comma and colon operators (or 0 if none exists) */
 #define COMMA_PREC ((commasym->op_data)?(commasym->op_data->precedence):0)
 #define COLON_PREC ((colonsym->op_data)?(colonsym->op_data->precedence):0)
-
 /* Used to list function bodies in a nice way */
 /* Only valid if listing_flag==TRUE */
-static long func_flag;
-
-
+static long long func_flag;
 /* Initialize size of single segment of split printing.  Wild_Life         */
 /* integers are represented as REALS, and therefore can have higher        */
 /* precision than the machine integers.  They will be printed in segments. */
@@ -32,13 +23,11 @@ void init_print()
 {
   sprintf(seg_format,"%%0%ldd",PRINT_POWER);
 }
-
-
 /* Generate a nice-looking new variable name. */
 char *heap_nice_name()
 {
   string tmp1,tmp2;
-  long g,len,leading_a;
+  long long g,len,leading_a;
 
   g= ++gen_sym_counter;
   len=2;
@@ -53,15 +42,11 @@ char *heap_nice_name()
     len++;
   } while (g>0 && len<STRLEN);
   if (len>=STRLEN)
-    perr("Variable name too long -- the universe has ceased to exist.");
-
+    perr("Variable name too long long -- the universe has ceased to exist.");
   strcpy(tmp1,"_");
   strcat(tmp1,tmp2);
-  
   return heap_copy_string(tmp1);
 }
-
-
 /* Make sure that the new variable name does not exist in the var_tree. */
 /* (This situation should be rare.) */
 /* Time to print a term is proportional to product of var_tree size and */
@@ -71,21 +56,18 @@ GENERIC unique_name()
 {
   char *name;
 
-  do name=heap_nice_name(); while (find(STRCMP,name,var_tree));
-
+  do name=heap_nice_name(); while (var_tree
+				   && ((wl_node_ptr*)var_tree)->find(STRCMP,name));
   return (GENERIC) name;
 }
-
-
-
 /******** STR_TO_INT(s) 
-  Converts the string S into a positive integer.
-  Returns -1 if s is not an integer.
+	  Converts the string S into a positive integer.
+	  Returns -1 if s is not an integer.
 */
-long str_to_int(char *s)
+long long str_to_int(char *s)
 // char *s;
 {
-  long v=0;
+  long long v=0;
   char c;
 
   c=(*s);
@@ -99,32 +81,25 @@ long str_to_int(char *s)
     }
     if (c!=0) v= -1;
   }
-
   return v;
 }
-
-
-
 /******** PRINT_BIN(b)
-  Print the integer B under binary format (currently 26 is printed **-*-).
-  This is used to print the binary codes used in type encryption.
+Print the integer B under binary format (currently 26 is printed **-*-).
+This is used to print the binary codes used in type encryption.
 */
-void print_bin(long b)
-// long b;
+void print_bin(long long b)
+// long long b;
 {
-  long p;
+  long long p;
 
   for (p=INT_SIZE;p--;p>0) 
-  {
-    fprintf(outfile,(b&1?"X":" "));
-    b = b>>1;
-  }
+    {
+      fprintf(outfile,(b&1?"X":" "));
+      b = b>>1;
+    }
 }
-
-
-
 /******** PRINT_CODE(s,c)
-  Print a binary code C to a stream s (as used in type encoding).
+	  Print a binary code C to a stream s (as used in type encoding).
 */
 void print_code(FILE *s,ptr_int_list c)
 // FILE *s;
@@ -137,20 +112,15 @@ void print_code(FILE *s,ptr_int_list c)
   else {
     fprintf(outfile,"  [");
     while (c) {
-      print_bin((long)c->value_1);  // REV401PLUS cast
+      print_bin((long long)c->value_1);  // REV401PLUS cast
       c=c->next;
     }
     fprintf(outfile,"]");
   }
 }
-
-
 void go_through();
-
-
-
 /******** PRINT_OPERATOR_KIND(s,kind)
-  Print the kind of an operator.
+	  Print the kind of an operator.
 */
 void print_operator_kind(FILE *s,wl_operator kind)
 // FILE *s;
@@ -183,14 +153,11 @@ void print_operator_kind(FILE *s,wl_operator kind)
     break;
   }
 }
-
-
-
 /******** CHECK_POINTER(p)
-  Count the number of times address P has been encountered in the current
-  psi-term being printed. If it is more than once then a tag will have to
-  be used.
-  If P has not already been seen, then explore the psi_term it points to.
+Count the number of times address P has been encountered in the current
+psi-term being printed. If it is more than once then a tag will have to
+be used.
+If P has not already been seen, then explore the psi_term it points to.
 */
 void check_pointer(ptr_psi_term p)
 // ptr_psi_term p;
@@ -199,90 +166,75 @@ void check_pointer(ptr_psi_term p)
   
   if (p) {
     deref_ptr(p);
-    n=find(INTCMP,(char *)p,pointer_names); // REV401PLUS cast
+    if (pointer_names)
+      n=((wl_node_ptr*)pointer_names)->find(INTCMP,(char *)p); // REV401PLUS cast
+    else
+      n = NULL;
     if (n==NULL) {
-      heap_insert(INTCMP,(char *)p,&pointer_names,NULL); // REV401PLUS cast
+      ((wl_node_ptr_ptr*)&pointer_names)->heap_insert(INTCMP,(char *)p,NULL); // REV401PLUS cast
       go_through(p);
     }
     else
-      n->data=(GENERIC)no_name;
+      n->set_data((GENERIC)no_name);
   }
 }
-
-
-
 /******** GO_THROUGH_TREE(t)
-  Explore all the pointers in the attribute tree T.
-  Pointers that occur more than once will need a tag.
+	  Explore all the pointers in the attribute tree T.
+	  Pointers that occur more than once will need a tag.
 */
 void go_through_tree(ptr_node t)
 // ptr_node t;
 {
   if (t) {
-    go_through_tree(t->left);
-    check_pointer((ptr_psi_term)t->data);
-    go_through_tree(t->right);
+    go_through_tree(t->left_val());
+    check_pointer((ptr_psi_term)t->data_val());
+    go_through_tree(t->right_val());
   }
 }
-
-
-
 /******** GO_THROUGH(t)
-  This routine goes through all the sub_terms of psi_term T to determine which
-  pointers need to have names given to them for printing because they are
-  referred to elsewhere. T is a dereferenced psi_term.
+This routine goes through all the sub_terms of psi_term T to determine which
+pointers need to have names given to them for printing because they are
+referred to elsewhere. T is a dereferenced psi_term.
 */
 void go_through(ptr_psi_term t)
 // ptr_psi_term t;
 {
   ptr_list l;
 
-
   go_through_tree(t->attr_list);
-
-  /*
-  if(r=t->resid)
-    while(r) {
-      if(r->goal->pending)
-	go_through(r->goal->a);
-      r=r->next;
-    } */
 }
-
-
-
 /******** INSERT_VARIABLES(vars,force)
-  This routine gives the name of the query variable to the corresponding
-  pointer in the POINTER_NAMES.
-  If FORCE is TRUE then variables will be printed as TAGS, even if not
-  referred to elsewhere.
+This routine gives the name of the query variable to the corresponding
+pointer in the POINTER_NAMES.
+If FORCE is TRUE then variables will be printed as TAGS, even if not
+referred to elsewhere.
 */
-void insert_variables(ptr_node vars,long force)
+void insert_variables(ptr_node vars,long long force)
 // ptr_node vars;
-// long force;
+// long long force;
 {
   ptr_psi_term p;
   ptr_node n;
   
   if(vars) {
-    insert_variables(vars->right,force);
-    p=(ptr_psi_term )vars->data;
+    insert_variables(vars->right_val(),force);
+    p=(ptr_psi_term )vars->data_val();
     deref_ptr(p);
-    n=find(INTCMP,(char *)p,pointer_names); // REV401PLUS cast
+    if (pointer_names)
+      n=((wl_node_ptr*)pointer_names)->find(INTCMP,(char *)p); // REV401PLUS cast
+    else
+      n = NULL;
     if (n)
-      if (n->data || force)
-	n->data=(GENERIC)vars->key;
-    insert_variables(vars->left,force);
+      if (n->data_val() || force)
+	n->set_data((GENERIC)vars->key_val());
+    insert_variables(vars->left_val(),force);
   }
 }
-
-
-
 /******** FORBID_VARIABLES
-  This inserts the value of the dereferenced variables into the
-  PRINTED_POINTERS tree, so that they will never be printed as
-  NAME:value inside a psi-term.
-  Each variable is printed as NAME = VALUE by the PRINT_VARIABLES routine.
+This inserts the value of the dereferenced variables into the
+PRINTED_POINTERS tree, so that they will never be printed as
+NAME:value inside a psi-term.
+Each variable is printed as NAME = VALUE by the PRINT_VARIABLES routine.
 */
 void forbid_variables(ptr_node n)
 // ptr_node n;
@@ -290,17 +242,13 @@ void forbid_variables(ptr_node n)
   ptr_psi_term v;
   
   if(n) {
-    forbid_variables(n->right);
-    v=(ptr_psi_term )n->data;
+    forbid_variables(n->right_val());
+    v=(ptr_psi_term )n->data_val();
     deref_ptr(v);
-    heap_insert(INTCMP,(char *)v,&printed_pointers,(GENERIC)n->key); // REV401PLUS casts
-    forbid_variables(n->left);
+    ((wl_node_ptr_ptr*)&printed_pointers)->heap_insert(INTCMP,(char *)v,(GENERIC)n->key_val()); // REV401PLUS casts
+    forbid_variables(n->left_val());
   }
 }
-
-
-
-
 /******************************************************************************
   PRINTING ROUTINES.
 
@@ -312,21 +260,16 @@ void forbid_variables(ptr_node n)
   within PAGE_WIDTH of the output page. Then it is effectively printed to the
   output stream.
 
- *****************************************************************************/
-
-
-
+*****************************************************************************/
 /* Printing into memory involves the use of an array containing a TAB
-position on which to align things then a string to print. The routine
-WORK_OUT_LENGTH tries (by trial and error) to print the psi_term into
-PAGE_WIDTH columns by inserting line feeds whereever possible */
-
-
+   position on which to align things then a string to print. The routine
+   WORK_OUT_LENGTH tries (by trial and error) to print the psi_term into
+   PAGE_WIDTH columns by inserting line feeds whereever possible */
 /* Does the work of prettyf and prettyf_quote */
 /* The q argument is a flag telling whether to quote or not. */
-void prettyf_inner(char *s,long q,char c)
+void prettyf_inner(char *s,long long q,char c)
 // char *s;
-// long q;
+// long long q;
 // char c; /* the quote character */
 {
   char *sb=buffer;
@@ -351,17 +294,14 @@ void prettyf_inner(char *s,long q,char c)
     if (q) putc(c,outfile);
   }
 }
-
-
 /* Return TRUE iff s starts with a non-lowercase character. */
-long starts_nonlower(char *s)
+long long starts_nonlower(char *s)
 // char *s;
 {
   return (*s && !LOWER(s[0]));
 }
-
 /* Return TRUE iff s contains a character that is not alphanumeric. */
-long has_non_alpha(char *s)
+long long has_non_alpha(char *s)
 // char *s;
 {
   while (*s) {
@@ -370,9 +310,8 @@ long has_non_alpha(char *s)
   }
   return FALSE;
 }
-
 /* Return TRUE iff s contains only SYMBOL characters. */
-long all_symbol(char *s)
+long long all_symbol(char *s)
 // char *s;
 {
   while (*s) {
@@ -381,9 +320,8 @@ long all_symbol(char *s)
   }
   return TRUE;
 }
-
 /* Return TRUE if s represents an integer. */
-long is_integer(char *s)
+long long is_integer(char *s)
 // char *s;
 {
   if (!*s) return FALSE;
@@ -394,15 +332,13 @@ long is_integer(char *s)
   }
   return TRUE;
 }
-
 /* Return TRUE if s does not have to be quoted, i.e., */
 /* s starts with '_' or a lowercase symbol and contains */
 /* all digits, letters, and '_'. */
-long no_quote(char *s)
+long long no_quote(char *s)
 // char *s;
 {
   if (!s[0]) return FALSE;
-
   if (s[0]=='%') return FALSE;
   if (SINGLE(s[0]) && s[1]==0) return TRUE;
   if (s[0]=='_'    && s[1]==0) return FALSE;
@@ -416,77 +352,52 @@ long no_quote(char *s)
   }
   return TRUE;
 }
-  
-
-
 /******** PRETTYF(s)
-  This prints the string S into the BUFFER.
+	  This prints the string S into the BUFFER.
 */
 void prettyf(char *s)
 // char *s;
 {
   prettyf_inner(s,FALSE,'\'');
 }
-
-
 void prettyf_quoted_string(char *s)
 // char *s;
 {
   prettyf_inner(s,const_quote,'"');
 }
-
-
-
 /****** PRETTYF_QUOTE(s)
-  This prints the string S into the buffer.
-  S is surrounded by quotes if:
-    (1) const_quote==TRUE, and
-    (2) S does not represent an integer, and
-    (2) S contains a non-alphanumeric character
-        or starts with a non-lowercase character, and
-    (3) if S is longer than one character, it is not true that S has only
-        non-SINGLE SYMBOL characters (in that case, S does not need quotes),and
-    (4) if S has only one character, it is a single space or underscore.
-  When S is surrounded by quotes, a quote inside S is printed as two quotes.
+This prints the string S into the buffer.
+S is surrounded by quotes if:
+(1) const_quote==TRUE, and
+(2) S does not represent an integer, and
+(2) S contains a non-alphanumeric character
+ or starts with a non-lowercase character, and
+(3) if S is long longer than one character, it is not true that S has only
+non-SINGLE SYMBOL characters (in that case, S does not need quotes),and
+(4) if S has only one character, it is a single space or underscore.
+When S is surrounded by quotes, a quote inside S is printed as two quotes.
 */
 void prettyf_quote(char *s)
 //char *s;
 {
   prettyf_inner(s, const_quote && !no_quote(s), '\'');
 }
-/*
-                  !is_integer(s) &&
-                  (starts_nonlower(s) || has_non_alpha(s)) &&
-                  ((int)strlen(s)>1
-                  ? !all_symbol(s):
-                    ((int)strlen(s)==1
-                    ? (s[0]==' ' || s[0]=='_' || UPPER(s[0]) || DIGIT(s[0]))
-                    : TRUE
-                    )
-                  ),
-                '\'');
-*/
-
-
 /******** END_TAB()
-  Mark the end of an item.
-  Copy the item's string into global space and point to the next item.
+	  Mark the end of an item.
+	  Copy the item's string into global space and point to the next item.
 */
 void end_tab()
 {
   if (indent) {
-    indx->str=(char *)heap_alloc(strlen(buffer)+1);
+    indx->str=(char *)wl_mem->heap_alloc(strlen(buffer)+1);
     strcpy(indx->str,buffer);
     indx++;
     *buffer=0;
   }
 }
-
-
-
 /******** MARK_TAB(t)
-  Mark a tabbing position T.
-  Make the current item point to tabbing position T.
+	  Mark a tabbing position T.
+	  Make the current item point to tabbing position T.
 */
 void mark_tab(ptr_tab_brk t)
 //ptr_tab_brk t;
@@ -494,11 +405,8 @@ void mark_tab(ptr_tab_brk t)
   end_tab();
   indx->tab=t;
 }
-
-
-
 /******** NEW_TAB(t)
-  Create a new tabulation mark T.
+	  Create a new tabulation mark T.
 */
 void new_tab(ptr_tab_brk *t)
 // ptr_tab_brk *t;
@@ -508,15 +416,13 @@ void new_tab(ptr_tab_brk *t)
   (*t)->printed=FALSE;
   (*t)->column=0;
 }
-
-
 /* Utility to correctly handle '\n' inside strings being printed: */
 /* What is the column after printing str, when the starting position */
 /* is pos? */
 /* Same as strlen, except that the length count starts with pos and */
 /* \n resets it. */
-long strpos(long pos, char *str)
-// long pos;
+long long strpos(long long pos, char *str)
+// long long pos;
 // char *str;
 {
   while (*str) {
@@ -525,59 +431,45 @@ long strpos(long pos, char *str)
   }
   return pos;
 }
-
-
 /******** WORK_OUT_LENGTH()
-  Calculate the number of blanks before each tabulation.
-  Insert line feeds until it all fits into PAGE_WIDTH columns.
-  This is done by a trial and error mechanism.
+	  Calculate the number of blanks before each tabulation.
+	  Insert line feeds until it all fits into PAGE_WIDTH columns.
+	  This is done by a trial and error mechanism.
 */
 void work_out_length()
 {
   ptr_item i;
-  long done=FALSE;
-  long pos;
+  long long done=FALSE;
+  long long pos;
   ptr_tab_brk worst,root;
-  long w;
+  long long w;
   
   while(!done) {
-    
     pos=0;
     done=TRUE;
-    
     w= -1;
     worst=NULL;
     root=NULL;
-    
-    for(i=pretty_things+1;(unsigned long)i<(unsigned long)indx;i++) {
-      
+    for(i=pretty_things+1;(unsigned long long)i<(unsigned long long)indx;i++) {
       if(i->tab->broken && i->tab->printed) {
 	pos=i->tab->column;
 	root=NULL;
       }
-      
       if(!i->tab->printed) i->tab->column=pos;
-      
       if(!(i->tab->broken))
 	if(!root || (root && (root->column)>=(i->tab->column)))
 	  root=i->tab;
-      
-      /* pos=pos+strlen(i->str); */
       pos=strpos(pos,i->str);
       i->tab->printed=TRUE;
-      
       if(pos>page_width)
 	done=FALSE;
-      
       if(pos>w) {
 	w=pos;
 	worst=root;
       }
     }
-
-    for(i=pretty_things+1;(unsigned long)i<(unsigned long)indx;i++)
+    for(i=pretty_things+1;(unsigned long long)i<(unsigned long long)indx;i++)
       i->tab->printed=FALSE;
-    
     if(!done)      
       if(worst)
 	worst->broken=TRUE;
@@ -585,61 +477,46 @@ void work_out_length()
 	done=TRUE;
   }
 }
-
-
-
 /*** RM: Dec 11 1992  (START) ***/
-
 /******** COUNT_FEATURES(t)
-  Return the number of features of a tree.
-  */
-
-long count_features(ptr_node t)
-
+	  Return the number of features of a tree.
+*/
+long long count_features(ptr_node t)
 //     ptr_node t;
 {
-  long c=0;
+  long long c=0;
   if(t) {
-    if(t->left)
-      c+=count_features(t->left);
+    if(t->left_val())
+      c+=count_features(t->left_val());
     c++;
-    if(t->right)
-      c+=count_features(t->right);
+    if(t->right_val())
+      c+=count_features(t->right_val());
   }
   return c;
 }
-
-
-
 /******** CHECK_LEGAL_CONS(t,t_type)
-
-  Check that T is of type T_TYPE, that it has exactly the attributes '1' and
-  '2' and that the 2nd is either nil or also long check_legal_cons(t,t_type)
+Check that T is of type T_TYPE, that it has exactly the attributes '1' and
+'2' and that the 2nd is either nil or also long long check_legal_cons(t,t_type)
 */
-
-long check_legal_cons(ptr_psi_term t,ptr_definition t_type)
+long long check_legal_cons(ptr_psi_term t,ptr_definition t_type)
 //      ptr_psi_term t;
 //     ptr_definition t_type;
-     
 {
   return (t->type==t_type &&
+	  t->attr_list &&
 	  count_features(t->attr_list)==2 &&
-	  find(FEATCMP,one,t->attr_list) &&
-	  find(FEATCMP,two,t->attr_list));
+	  ((wl_node_ptr*)t->attr_list)->find(FEATCMP,one) &&
+	  ((wl_node_ptr*)t->attr_list)->find(FEATCMP,two));
 }
-
 /*** RM: Dec 11 1992  (END) ***/
-
-    
-
 /******** PRETTY_LIST(t,depth)
-  Pretty print a list.
-  On entry we know that T is a legal CONS pair, so we can immediately print
-  the opening bracket etc...
+Pretty print a list.
+On entry we know that T is a legal CONS pair, so we can immediately print
+the opening bracket etc...
 */
-void pretty_list(ptr_psi_term t,long depth)
+void pretty_list(ptr_psi_term t,long long depth)
 // ptr_psi_term t;
-// long depth;
+// long long depth;
 {
   ptr_tab_brk wl_new;
   ptr_list l;
@@ -648,14 +525,12 @@ void pretty_list(ptr_psi_term t,long depth)
   ptr_node n,n2;
   char *tag=NULL;
   char colon[2],sep[4],end[3];
-  long list_depth; /* 20.8 */
-  long done=FALSE; /* RM: Dec 11 1992 */
-  
+  long long list_depth; /* 20.8 */
+  long long done=FALSE; /* RM: Dec 11 1992 */
   
   strcpy(sep,"ab");
   strcpy(end,"cd");
   t_type=t->type;
-  
   if (overlap_type(t_type,alist)) {
     if (!equal_types(t_type,alist)) {
       pretty_symbol(t_type->keyword);  /*  RM: Jan 13 1993  */
@@ -665,43 +540,29 @@ void pretty_list(ptr_psi_term t,long depth)
     strcpy(sep,",");
     strcpy(end,"]");
   }
-
-  /*
-    else if (equal_types(t_type,conjunction)) {
-      prettyf("(");
-      strcpy(sep,DOTDOT);
-      strcpy(end,")");
-      }
-      */
-  
   else if (equal_types(t_type,disjunction)) {
     prettyf("{");
     strcpy(sep,";");
     strcpy(end,"}");
   }
-
-  
   /* RM: Dec 11 1992  New code for printing lists */
-  
   new_tab(&wl_new);
   list_depth=0; /* 20.8 */
   while(!done) {
     mark_tab(wl_new);
     if(list_depth==print_depth)
       prettyf("...");
-
     get_two_args(t->attr_list,&car,&cdr);
     deref_ptr(car);
     deref_ptr(cdr);
-
-    
     if(list_depth<print_depth)
       pretty_tag_or_psi_term(car,COMMA_PREC,depth);
-    
     /* Determine how to print the CDR */
-    n=find(INTCMP,(char *)cdr,pointer_names); // REV401PLUS
-    
-    if(n && n->data) {
+    if (pointer_names)
+      n=((wl_node_ptr*)pointer_names)->find(INTCMP,(char *)cdr); // REV401PLUS
+    else
+      n = NULL;
+    if(n && n->data_val()) {
       prettyf("|");
       pretty_tag_or_psi_term(cdr,MAX_PRECEDENCE+1,depth);
       done=TRUE;
@@ -710,8 +571,8 @@ void pretty_list(ptr_psi_term t,long depth)
       if(( /*  RM: Feb  1 1993  */
 	  (cdr->type==nil && overlap_type(t_type,alist)) ||
 	  (cdr->type==disj_nil && t_type==disjunction)
-	  )
-	  && !cdr->attr_list)
+	   )
+	 && !cdr->attr_list)
 	done=TRUE;
       else
 	if(!check_legal_cons(cdr,t_type)) {
@@ -724,23 +585,18 @@ void pretty_list(ptr_psi_term t,long depth)
 	    prettyf(sep);
 	  t=cdr;
 	}
-    
     list_depth++;
   }
-  
   prettyf(end);
 }
-
-
-
 /******** PRETTY_TAG_OR_PSI_TERM(p,depth)
-  Print a psi-term, but first precede it with the appropriate TAG. Don't
-  reprint the same psi-term twice.
+Print a psi-term, but first precede it with the appropriate TAG. Don't
+reprint the same psi-term twice.
 */
-void pretty_tag_or_psi_term(ptr_psi_term p, long sprec, long depth)
+void pretty_tag_or_psi_term(ptr_psi_term p, long long sprec, long long depth)
 // ptr_psi_term p;
-// long sprec;
-// long depth;
+// long long sprec;
+// long long depth;
 {
   ptr_node n,n2;
 
@@ -753,77 +609,71 @@ void pretty_tag_or_psi_term(ptr_psi_term p, long sprec, long depth)
     return;
   }
   deref_ptr(p);
-  
-  n=find(INTCMP,(char *)p,pointer_names); // REV401PLUS cast
-  
-  if (n && n->data) {
-    if (n->data==(GENERIC)no_name) {
-      n->data=unique_name();
-      /* sprintf(name,"_%ld%c",++gen_sym_counter,0); */
-      /* n->data=(GENERIC)heap_copy_string(name); */
+  if (pointer_names)
+    n=((wl_node_ptr*)pointer_names)->find(INTCMP,(char *)p); // REV401PLUS cast
+  else
+    n = NULL;
+  if (n && n->data_val()) {
+    if (n->data_val()==(GENERIC)no_name) {
+      n->set_data(unique_name());
     }
-    n2=find(INTCMP,(char *)p,printed_pointers);  // REV401PLUS cast
-
+    if (printed_pointers)
+      n2=((wl_node_ptr*)printed_pointers)->find(INTCMP,(char *)p);  // REV401PLUS cast
+    else
+      n2 = NULL;
     if(n2==NULL) {
-      prettyf((char *)n->data);   // REV401PLUS cast
-      heap_insert(INTCMP,(char *)p,&printed_pointers,n->data);  // REV401PLUS cast
+      prettyf((char *)n->data_val());   // REV401PLUS cast
+      ((wl_node_ptr_ptr*)&printed_pointers)->heap_insert(INTCMP,(char *)p,n->data_val());  // REV401PLUS cast
       if (!is_top(p)) {
         prettyf(DOTDOT);
         pretty_psi_term(p,COLON_PREC,depth);
       }
     }
     else
-      prettyf((char *)n2->data);  // REV401PLUS cast
+      prettyf((char *)n2->data_val());  // REV401PLUS cast
   }
   else
     pretty_psi_term(p,sprec,depth);
 }
-
-
-
 /****************************************************************************/
 /* Routines to handle printing of operators. */
 /* The main routine is pretty_psi_with_ops, which is called in */
 /* pretty_psi_term. */
-
 
 /* Check arguments of a potential operator. */
 /* Returns existence of arguments 1 and 2 in low two bits of result. */
 /* If only argument "1" exists, returns 1. */
 /* If only arguments "1" and "2"  exist, returns 3. */
 /* Existence of any other arguments causes third bit to be set as well. */
-long check_opargs(ptr_node n)
+long long check_opargs(ptr_node n)
 // ptr_node n;
 {
   if (n) {
-    long f=check_opargs(n->left) | check_opargs(n->right);
-    if (!featcmp(n->key,"1")) return 1 | f;
-    if (!featcmp(n->key,"2")) return 2 | f;
+    long long f=check_opargs(n->left_val()) | check_opargs(n->right_val());
+    if (!featcmp(n->key_val(),"1")) return 1 | f;
+    if (!featcmp(n->key_val(),"2")) return 2 | f;
     return 4 | f;
   }
   else
     return 0;
 }
-
 #define NOTOP 0
 #define INFIX 1
 #define PREFIX 2
 #define POSTFIX 3
-
-
 /* Get information about an operator. */
 /* If t is an operator with the correct arguments, return one of     */
 /* {INFIX, PREFIX, POSTFIX} and also its precedence and type.        */
 /* If t is not an operator, or it has wrong arguments, return NOTOP  */
 /* and prec=0.                                                       */
-long opcheck(ptr_psi_term t, long *prec, wl_operator *type)
+long long opcheck(ptr_psi_term t, long long *prec, wl_operator *type)
 // ptr_psi_term t;
-// long *prec;
+// long long *prec;
 // operator *type;
 {
   wl_operator op;
-  long result=NOTOP;
-  long numarg=check_opargs(t->attr_list);
+  long long result=NOTOP;
+  long long numarg=check_opargs(t->attr_list);
   ptr_operator_data opdat=t->type->op_data;
 
   *prec=0;
@@ -843,26 +693,23 @@ long opcheck(ptr_psi_term t, long *prec, wl_operator *type)
   *type=op;
   return result;
 }
-
-
 /* Write an expression with its operators. */
 /* Return TRUE iff the arguments of t are written here (i.e. t was indeed */
 /* a valid operator, and is therefore taken care of here).                */
-long pretty_psi_with_ops(ptr_psi_term t,long sprec,long depth)
+long long pretty_psi_with_ops(ptr_psi_term t,long long sprec,long long depth)
 // ptr_psi_term t;
-// long sprec;
-// long depth;
+// long long sprec;
+// long long depth;
 {
   ptr_tab_brk wl_new;
   ptr_psi_term arg1, arg2;
   wl_operator ttype, a1type, a2type;
-  long tprec, a1prec, a2prec;
-  long tkind, a1kind, a2kind;
-  long p1, p2, argswritten;
-  long sp; /* surrounding parentheses */
+  long long tprec, a1prec, a2prec;
+  long long tkind, a1kind, a2kind;
+  long long p1, p2, argswritten;
+  long long sp; /* surrounding parentheses */
 
   if (write_canon) return FALSE; /* PVR 24.2.94 */
-
   argswritten=TRUE;
   tkind=opcheck(t, &tprec, &ttype);
   sp=(tkind==INFIX||tkind==PREFIX||tkind==POSTFIX) && tprec>=sprec;
@@ -873,7 +720,6 @@ long pretty_psi_with_ops(ptr_psi_term t,long sprec,long depth)
     deref_ptr(arg2); /* 16.9 */
     a1kind = opcheck(arg1, &a1prec, &a1type);
     a2kind = opcheck(arg2, &a2prec, &a2type);
-
     /* The p1 and p2 flags tell whether to put parens around t's args */
     /* Calculate p1 flag: */
     if      (a1prec>tprec) p1=TRUE;
@@ -883,7 +729,6 @@ long pretty_psi_with_ops(ptr_psi_term t,long sprec,long depth)
       else /* yfx */
         if (a1type==yfx || a1type==fx || a1type==fy) p1=FALSE;
         else p1=TRUE;
-
     /* Calculate p2 flag: */
     if      (a2prec>tprec) p2=TRUE;
     else if (a2prec<tprec) p2=FALSE;
@@ -892,7 +737,6 @@ long pretty_psi_with_ops(ptr_psi_term t,long sprec,long depth)
       else /* xfy */
         if (a2type==xfy || a2type==xf || a2type==yf) p2=FALSE;
         else p2=TRUE;
-
     /* Write the expression */
     if (p1) prettyf("(");
     pretty_tag_or_psi_term(arg1,MAX_PRECEDENCE+1,depth);
@@ -916,11 +760,9 @@ long pretty_psi_with_ops(ptr_psi_term t,long sprec,long depth)
   else if (tkind==PREFIX) {
     get_two_args(t->attr_list, &arg1, &arg2); /* arg2 does not exist */
     a1kind = opcheck(arg1, &a1prec, &a1type);
-
     /* Calculate p1 flag: */
     if (a1type==fx || a1type==fy) p1=FALSE;
     else p1=(tprec<=a1prec);
-
     pretty_quote_symbol(t->type->keyword);  /*  RM: Jan 13 1993  */
     if (!p1) prettyf(" ");
     if (p1) prettyf("(");
@@ -930,11 +772,9 @@ long pretty_psi_with_ops(ptr_psi_term t,long sprec,long depth)
   else if (tkind==POSTFIX) {
     get_two_args(t->attr_list, &arg1, &arg2); /* arg2 does not exist */
     a1kind = opcheck(arg1, &a1prec, &a1type);
-
     /* Calculate p1 flag: */
     if (a1type==xf || a1type==yf) p1=FALSE;
     else p1=(tprec<=a1prec);
-
     if (p1) prettyf("(");
     pretty_tag_or_psi_term(arg1,MAX_PRECEDENCE+1,depth);
     if (p1) prettyf(")");
@@ -947,33 +787,24 @@ long pretty_psi_with_ops(ptr_psi_term t,long sprec,long depth)
   if (sp) prettyf(")");
   return argswritten;
 }
-
 /****************************************************************************/
-
-
 /******** PRETTY_PSI_TERM(t,sprec,depth)  
-  Pretty print a psi_term T with sugar for lists.
+	  Pretty print a psi_term T with sugar for lists.
 */
-void pretty_psi_term(ptr_psi_term t,long sprec,long depth)
+void pretty_psi_term(ptr_psi_term t,long long sprec,long long depth)
 //      ptr_psi_term t;
-//     long sprec;
-//     long depth;
+//     long long sprec;
+//     long long depth;
 {
-  char buf[STRLEN]; /* Big enough for a long number */
+  char buf[STRLEN]; /* Big enough for a long long number */
   ptr_residuation r;
-  long argswritten;
-  //  double fmod();
-  
+  long long argswritten;
   if (t) {
     deref_ptr(t); /* PVR */
-
-    /* if (trace) printf("<%d>",t->status); For brunobug.lf PVR 14.2.94 */
-
     /*  RM: Feb 12 1993  */
     if(display_persistent &&
-       (GENERIC)t>heap_pointer)
+       (GENERIC)t>wl_mem->heap_pointer_val())
       prettyf(" $");
-    
     if((t->type==alist || t->type==disjunction) && check_legal_cons(t,t->type))
       pretty_list(t,depth+1); /*  RM: Dec 11 1992  */
     else
@@ -983,89 +814,87 @@ void pretty_psi_term(ptr_psi_term t,long sprec,long depth)
 	if(t->type==disj_nil && !t->attr_list) /*  RM: Feb  1 1993  */
 	  prettyf("{}");
 	else {
-	argswritten=FALSE;
-	if (t->value_3) {
+	  argswritten=FALSE;
+	  if (t->value_3) {
 #ifdef CLIFE
-	  if(t->type->type==block) {  /* RM 20 Jan 1993 */
-            pretty_block(t);          /* AA 21 Jan 1993 */
-	  }
-	  else
+	    if(t->type->type==block) {  /* RM 20 Jan 1993 */
+	      pretty_block(t);          /* AA 21 Jan 1993 */
+	    }
+	    else
 #endif /* CLIFE */
-	  if (sub_type(t->type,integer)) {
-	    /* Print integers in chunks up to the full precision of the REAL */
-	    long seg,neg,i;
-	    REAL val;
-	    char segbuf[100][PRINT_POWER+3];
-	    
-	    val = *(REAL *)t->value_3;
-	    neg = (val<0.0);
-	    if (neg) val = -val;
-	    if (val>WL_MAXINT) goto PrintReal;
-	    seg=0;
-	    while (val>=(double)PRINT_SPLIT) {
-	      double tmp;
-	      tmp=(REAL)fmod((double)val,(double)PRINT_SPLIT);
-	      sprintf(segbuf[seg],seg_format,(unsigned long)tmp);
-	      val=floor(val/(double)PRINT_SPLIT);
-	      seg++;
-	    }
-	    sprintf(segbuf[seg],"%s%ld",(neg?"-":""),(unsigned long)val);
-	    for (i=seg; i>=0; i--) prettyf(segbuf[i]);
-	    if (!equal_types(t->type,integer)) {
-	      prettyf(DOTDOT);
-	      pretty_symbol(t->type->keyword); /*  RM: Jan 13 1993  */
-	    }
+	      if (sub_type(t->type,integer)) {
+		/* Print integers in chunks up to the full precision of the REAL */
+		long long seg,neg,i;
+		REAL val;
+		char segbuf[100][PRINT_POWER+3];
+		val = *(REAL *)t->value_3;
+		neg = (val<0.0);
+		if (neg) val = -val;
+		if (val>WL_MAXINT) goto PrintReal;
+		seg=0;
+		while (val>=(double)PRINT_SPLIT) {
+		  double tmp;
+		  tmp=(REAL)fmod((double)val,(double)PRINT_SPLIT);
+		  sprintf(segbuf[seg],seg_format,(unsigned long long)tmp);
+		  val=floor(val/(double)PRINT_SPLIT);
+		  seg++;
+		}
+		sprintf(segbuf[seg],"%s%lld",(neg?"-":""),(unsigned long long)val);
+		for (i=seg; i>=0; i--) prettyf(segbuf[i]);
+		if (!equal_types(t->type,integer)) {
+		  prettyf(DOTDOT);
+		  pretty_symbol(t->type->keyword); /*  RM: Jan 13 1993  */
+		}
+	      }
+	      else if (sub_type(t->type,real)) {
+	      PrintReal:
+		sprintf(buf,"%lg",*(REAL *)t->value_3);
+		prettyf(buf);
+		if (!equal_types(t->type,real) &&
+		    !equal_types(t->type,integer)) {
+		  prettyf(DOTDOT);
+		  pretty_symbol(t->type->keyword); /*  RM: Jan 13 1993  */
+		}
+	      }
+	      else if (sub_type(t->type,quoted_string)) {
+		prettyf_quoted_string((char *)t->value_3);  // REV401PLUS cast
+		if(!equal_types(t->type,quoted_string)) {
+		  prettyf(DOTDOT);
+		  pretty_quote_symbol(t->type->keyword); /*  RM: Jan 13 1993  */
+		}
+	      }
+	    /* DENYS: BYTEDATA */
+	      else if (sub_type(t->type,sys_bytedata)) {
+		pretty_quote_symbol(t->type->keyword);
+	      }
+	      else if (equal_types(t->type,stream)) {
+		sprintf(buf,"stream(%lld)",(long long)t->value_3);  // REV401PLUS cast
+		prettyf(buf);
+	      }
+	      else if (equal_types(t->type,eof))
+		pretty_quote_symbol(eof->keyword); /*  RM: Jan 13 1993  */
+	      else if (equal_types(t->type,cut))
+		pretty_quote_symbol(cut->keyword); /*  RM: Jan 13 1993  */
+	      else {
+		prettyf("*** bad object '");
+		pretty_symbol(t->type->keyword); /*  RM: Jan 13 1993  */
+		prettyf("'***");
+	      }
 	  }
-	  else if (sub_type(t->type,real)) {
-	  PrintReal:
-	    sprintf(buf,"%lg",*(REAL *)t->value_3);
-	    prettyf(buf);
-	    if (!equal_types(t->type,real) &&
-		!equal_types(t->type,integer)) {
-	      prettyf(DOTDOT);
-	      pretty_symbol(t->type->keyword); /*  RM: Jan 13 1993  */
-	    }
-	  }
-	  else if (sub_type(t->type,quoted_string)) {
-	    prettyf_quoted_string((char *)t->value_3);  // REV401PLUS cast
-	    if(!equal_types(t->type,quoted_string)) {
-	      prettyf(DOTDOT);
-	      pretty_quote_symbol(t->type->keyword); /*  RM: Jan 13 1993  */
-	    }
-	  }
-	  /* DENYS: BYTEDATA */
-	  else if (sub_type(t->type,sys_bytedata)) {
-	    pretty_quote_symbol(t->type->keyword);
-	  }
-	  else if (equal_types(t->type,stream)) {
-	    sprintf(buf,"stream(%ld)",(long)t->value_3);  // REV401PLUS cast
-	    prettyf(buf);
-	  }
-	  else if (equal_types(t->type,eof))
-	    pretty_quote_symbol(eof->keyword); /*  RM: Jan 13 1993  */
-	  else if (equal_types(t->type,cut))
-	    pretty_quote_symbol(cut->keyword); /*  RM: Jan 13 1993  */
 	  else {
-	    prettyf("*** bad object '");
-	    pretty_symbol(t->type->keyword); /*  RM: Jan 13 1993  */
-	    prettyf("'***");
+	    if (depth<print_depth) /* 20.8 */
+	      argswritten=pretty_psi_with_ops(t,sprec,depth+1);
+	    /*  RM: Jan 13 1993  */
+	    if (!argswritten) pretty_quote_symbol(t->type->keyword);
 	  }
-	}
-	else {
-	  if (depth<print_depth) /* 20.8 */
-	    argswritten=pretty_psi_with_ops(t,sprec,depth+1);
-	  /*  RM: Jan 13 1993  */
-	  if (!argswritten) pretty_quote_symbol(t->type->keyword);
-	}
+	  /* write_canon -- PVR 24.2.94 */
+	  if (!argswritten && t->attr_list &&
+	      (depth<print_depth || write_canon)) /* 20.8 */
+	    pretty_attr(t->attr_list,depth+1);
 	
-	/* write_canon -- PVR 24.2.94 */
-	if (!argswritten && t->attr_list &&
- 	    (depth<print_depth || write_canon)) /* 20.8 */
-	  pretty_attr(t->attr_list,depth+1);
-	
-	if (depth>=print_depth && !write_canon && t->attr_list) /* 20.8 */
-	  prettyf("(...)");
-      }
+	  if (depth>=print_depth && !write_canon && t->attr_list) /* 20.8 */
+	    prettyf("(...)");
+	}
     if (r=t->resid)
       while (r) {
 	if (r->goal->pending) {
@@ -1080,112 +909,96 @@ void pretty_psi_term(ptr_psi_term t,long sprec,long depth)
       }
   }
 }
-
 /******** DO_PRETTY_ATTR(t,tab,cnt,depth)
-  Pretty print the attribute tree T at position TAB.
+	  Pretty print the attribute tree T at position TAB.
 
-  CNT is what the value of the first integer label should be, so that
-  "p(1=>a,2=>b)" is printed "p(a,b)"
-  but
-  "p(2=>a,3=>b)" is printed as "p(2 => a,3 => b)".
+	  CNT is what the value of the first integer label should be, so that
+	  "p(1=>a,2=>b)" is printed "p(a,b)"
+	  but
+	  "p(2=>a,3=>b)" is printed as "p(2 => a,3 => b)".
 */
-void do_pretty_attr(ptr_node t,ptr_tab_brk tab,long *cnt,long two,long depth)
+void do_pretty_attr(ptr_node t,ptr_tab_brk tab,long long *cnt,long long two,long long depth)
 //ptr_node t;
 // ptr_tab_brk tab;
-// long *cnt;
-// long two;
-// long depth;
+// long long *cnt;
+// long long two;
+// long long depth;
 {
-  long v;
+  long long v;
   /* char *s="nnn"; 18.5 */
   char s[22];  // modified 3/8/2021 to prevent overflow - compiler warning
   ptr_module module;
 
-  
   if (t) {
-    if (t->left) {
-      do_pretty_attr(t->left,tab,cnt,two,depth);
+    if (t->left_val()) {
+      do_pretty_attr(t->left_val(),tab,cnt,two,depth);
       prettyf(",");
     }
-    
     /* Don't start each argument on a new line, */
     /* unless printing a function body: */
     mark_tab(tab);
-    
-    v=str_to_int(t->key);
+    v=str_to_int(t->key_val());
     if (v<0) {
       if(display_modules) { /*  RM: Jan 21 1993  */
-	module=extract_module_from_name(t->key);
+	module=extract_module_from_name(t->key_val());
 	if(module) {
 	  prettyf(module->module_name);
 	  prettyf("#");
 	}
       }
-      prettyf_quote(strip_module_name(t->key));
-
+      prettyf_quote(strip_module_name(t->key_val()));
       prettyf(" => ");
     }
     else if (v== *cnt)
       (*cnt)++ ;
     else {
-      sprintf(s,"%ld",v);
+      sprintf(s,"%lld",v);
       prettyf(s); /* 6.10 */
       prettyf(" => ");
     }
-    
-    /* pretty_tag_or_psi_term(t->data,(two?COMMA_PREC:MAX_PRECEDENCE+1)); */
-    pretty_tag_or_psi_term((ptr_psi_term)t->data,COMMA_PREC,depth); // REV401PLUS cast
-    
-    if (t->right) {
+    pretty_tag_or_psi_term((ptr_psi_term)t->data_val(),COMMA_PREC,depth); // REV401PLUS cast
+    if (t->right_val()) {
       prettyf(",");
-      do_pretty_attr(t->right,tab,cnt,two,depth);
+      do_pretty_attr(t->right_val(),tab,cnt,two,depth);
     }
   }
 }
-
-
 /* Return true if number of attributes is greater than 1 */
-long two_or_more(ptr_node t)
+long long two_or_more(ptr_node t)
 // ptr_node t;
 {
   if (t) {
-    if (t->left || t->right) return TRUE; else return FALSE;
+    if (t->left_val() || t->right_val()) return TRUE; else return FALSE;
   }
   else
     return FALSE;
 }
-
-
 /******** PRETTY_ATTR(t,depth)
-  Pretty print the attributes. This calls DO_PRETTY_ATTR which does the real
-  work.
+Pretty print the attributes. This calls DO_PRETTY_ATTR which does the real
+work.
 */
-void pretty_attr(ptr_node t,long depth)
+void pretty_attr(ptr_node t,long long depth)
 // ptr_node t;
-// long depth;
+// long long depth;
 {
   ptr_tab_brk wl_new;
-  long cnt=1;
+  long long cnt=1;
 
   prettyf("(");
   new_tab(&wl_new);
 
   do_pretty_attr(t,wl_new,&cnt,two_or_more(t),depth);
-
   prettyf(")");
 }
-
-
-
 /******** PRETTY_OUTPUT()
-  Final output of all these pretty things which have been built up.
+	  Final output of all these pretty things which have been built up.
 */
 void pretty_output()
 {
   ptr_item i;
-  long j;
+  long long j;
   
-  for(i=pretty_things+1;(unsigned long)i<(unsigned long)indx;i++) {
+  for(i=pretty_things+1;(unsigned long long)i<(unsigned long long)indx;i++) {
     if(i->tab->broken && i->tab->printed) {
       fprintf(outfile,"\n");
       for(j=0;j<i->tab->column;j++)
@@ -1197,7 +1010,7 @@ void pretty_output()
 }
 
 /******** PRETTY_VARIABLES(n,tab)
-  Pretty print the variables at position TAB.
+	  Pretty print the variables at position TAB.
 */
 void pretty_variables(ptr_node n,ptr_tab_brk tab)
 // ptr_node n;
@@ -1206,24 +1019,25 @@ void pretty_variables(ptr_node n,ptr_tab_brk tab)
   ptr_psi_term tok;
   ptr_node n2;
   
-  if(n->left) {
-    pretty_variables(n->left,tab);
+  if(n->left_val()) {
+    pretty_variables(n->left_val(),tab);
     prettyf(", ");
   }
-
   mark_tab(tab);
-  prettyf(n->key);
+  prettyf(n->key_val());
   prettyf(" = ");
-
-  tok=(ptr_psi_term )n->data;
+  tok=(ptr_psi_term )n->data_val();
   deref_ptr(tok);
-  n2=find(INTCMP,(char *)tok,printed_pointers); // REV401PLUS cast
-  if(strcmp((char *)n2->data,n->key)<0)
+  if (printed_pointers)
+    n2=((wl_node_ptr*)printed_pointers)->find(INTCMP,(char *)tok); // REV401PLUS cast
+  else
+    n2 = NULL;
+  if(strcmp((char *)n2->data_val(),n->key_val())<0)
     /* Reference to previously printed variable */
-    prettyf((char *)n2->data); // EV401PLUS cast
+    prettyf((char *)n2->data_val()); // EV401PLUS cast
   else {
     if (eqsym->op_data) {
-      long tkind, tprec, ttype, eqprec;
+      long long tkind, tprec, ttype, eqprec;
       eqprec=eqsym->op_data->precedence;
       tkind=opcheck(tok, &tprec, &ttype);
       if (tprec>=eqprec) prettyf("(");
@@ -1233,50 +1047,40 @@ void pretty_variables(ptr_node n,ptr_tab_brk tab)
     else
       pretty_psi_term(tok,MAX_PRECEDENCE+1,0);
   }
-  
-  if(n->right) {
+  if(n->right_val()) {
     prettyf(", ");
-    pretty_variables(n->right,tab);
+    pretty_variables(n->right_val(),tab);
   }
 }
-
-
-
-
 /******** PRINT_VARIABLES
-  This prints all the query variables.
-  Symbols generated to print one variable are coherent with those used in
-  other variables.
-  Returns TRUE iff the set of query variables is nonempty.
+This prints all the query variables.
+Symbols generated to print one variable are coherent with those used in
+other variables.
+Returns TRUE iff the set of query variables is nonempty.
 */
 
-long print_variables(long printflag)
-     
-//     long printflag;
+long long print_variables(long long printflag)
+//     long long printflag;
 {
   ptr_tab_brk wl_new;
   GENERIC old_heap_pointer;
   
   if (!printflag) return FALSE; /* 21.1 */
-  
   outfile=output_stream;
   listing_flag=FALSE;
-  old_heap_pointer=heap_pointer;
-  
+  old_heap_pointer=wl_mem->heap_pointer_val();
   pointer_names=NULL;
   printed_pointers=NULL;
   gen_sym_counter=0;
   go_through_tree(var_tree);
   insert_variables(var_tree,TRUE);
   forbid_variables(var_tree);
-  
   indent=TRUE;
   const_quote=TRUE;
   write_resids=TRUE;
   write_canon=FALSE;
   *buffer=0;
   indx=pretty_things;
-
   if (var_tree) {
     new_tab(&wl_new);
     pretty_variables(var_tree,wl_new);
@@ -1284,47 +1088,39 @@ long print_variables(long printflag)
     mark_tab(wl_new);
     prettyf("\n");
     end_tab();
-
     if (indent) {
       work_out_length();
       pretty_output();
     }
   }
-  heap_pointer=old_heap_pointer;
+  wl_mem->set_heap_pointer(old_heap_pointer);
   return (var_tree!=NULL);
 }
-
-
-
 /******** WRITE_ATTRIBUTES(n)
-  Used by all versions of the built-in predicate write,
-  and by the built-in predicate listing.
+	  Used by all versions of the built-in predicate write,
+	  and by the built-in predicate listing.
 */
 void write_attributes(ptr_node n,ptr_tab_brk tab)
 //ptr_node n;
 // ptr_tab_brk tab;
 {
   if(n) {
-    write_attributes(n->left,tab);
+    write_attributes(n->left_val(),tab);
     mark_tab(tab);
-    pretty_tag_or_psi_term((ptr_psi_term)n->data,MAX_PRECEDENCE+1,0); // REV401PLUS cast
-    write_attributes(n->right,tab);
+    pretty_tag_or_psi_term((ptr_psi_term)n->data_val(),MAX_PRECEDENCE+1,0); // REV401PLUS cast
+    write_attributes(n->right_val(),tab);
   }
 }
-
-
 /******** PRED_WRITE(n)
-  N is an attribute tree to be printed in one lump. This is called by WRITE.
+N is an attribute tree to be printed in one lump. This is called by WRITE.
 */
-
 void main_pred_write();
-
 /* For the listing built-in */
-void listing_pred_write(ptr_node n,long fflag)
+void listing_pred_write(ptr_node n,long long fflag)
 // ptr_node n;
-// long fflag;
+// long long fflag;
 {
-  long old_print_depth;
+  long long old_print_depth;
 
   listing_flag=TRUE;
   func_flag=fflag;
@@ -1348,7 +1144,6 @@ void pred_write(ptr_node n)
 //ptr_node n;
 {
   listing_flag=FALSE;
-  /* write_stderr=FALSE; */
   outfile=(write_stderr?stderr:output_stream);
   main_pred_write(n);
   fflush(outfile);
@@ -1361,50 +1156,38 @@ void main_pred_write(ptr_node n)
     GENERIC old_heap_pointer;
     ptr_tab_brk wl_new;
  
-    if (!write_corefs) main_pred_write(n->left);
-
-    old_heap_pointer=heap_pointer;
+    if (!write_corefs) main_pred_write(n->left_val());
+    old_heap_pointer=wl_mem->heap_pointer_val();
     pointer_names=NULL;
     printed_pointers=NULL;
     gen_sym_counter=0;
     if (write_corefs)
       go_through_tree(n);
     else
-      check_pointer((ptr_psi_term)n->data);
+      check_pointer((ptr_psi_term)n->data_val());
     insert_variables(var_tree,FALSE);
-
     *buffer=0;
-    
     indx=pretty_things;
     new_tab(&wl_new);
-
     if (write_corefs) {
       write_attributes(n,wl_new);
     }
     else {
       mark_tab(wl_new);
-      pretty_tag_or_psi_term((ptr_psi_term)n->data,MAX_PRECEDENCE+1,0); // REV401PLUS cast
+      pretty_tag_or_psi_term((ptr_psi_term)n->data_val(),MAX_PRECEDENCE+1,0); // REV401PLUS cast
     }
-
     end_tab();
-
     if (indent) {
       work_out_length();
       pretty_output();
     }
-    
-    heap_pointer=old_heap_pointer;
-
-    if (!write_corefs) main_pred_write(n->right);
+    wl_mem->set_heap_pointer(old_heap_pointer);
+    if (!write_corefs) main_pred_write(n->right_val());
   }
 }
-
-
 void main_display_psi_term(); /* Forward declaration */
-
-
 /******** DISPLAY_PSI_STDOUT(t)
-  Print the psi_term T to stdout as simply as possible (no indenting).
+	  Print the psi_term T to stdout as simply as possible (no indenting).
 */
 void display_psi_stdout(ptr_psi_term t)
 //ptr_psi_term t;
@@ -1412,10 +1195,8 @@ void display_psi_stdout(ptr_psi_term t)
   outfile=stdout;
   main_display_psi_term(t);
 }
-
-
 /******** DISPLAY_PSI_STDERR(t)
-  Print the psi_term T to stderr as simply as possible (no indenting).
+	  Print the psi_term T to stderr as simply as possible (no indenting).
 */
 void display_psi_stderr(ptr_psi_term t)
 // ptr_psi_term t;
@@ -1423,10 +1204,8 @@ void display_psi_stderr(ptr_psi_term t)
   outfile=stderr;
   main_display_psi_term(t);
 }
-
-
 /******** DISPLAY_PSI_STREAM(t)
-  Print the psi_term T to output_stream as simply as possible (no indenting).
+Print the psi_term T to output_stream as simply as possible (no indenting).
 */
 void display_psi_stream(ptr_psi_term t)
 // ptr_psi_term t;
@@ -1434,10 +1213,8 @@ void display_psi_stream(ptr_psi_term t)
   outfile=output_stream;
   main_display_psi_term(t);
 }
-
-
 /******** DISPLAY_PSI(stream,t)
-  Print the psi_term T to the given stream.
+	  Print the psi_term T to the given stream.
 */
 void display_psi(FILE *s,ptr_psi_term t)
 // FILE *s;
@@ -1446,8 +1223,6 @@ void display_psi(FILE *s,ptr_psi_term t)
   outfile=s;
   main_display_psi_term(t);
 }
-
-
 /* Main loop for previous two entry points */
 void main_display_psi_term(ptr_psi_term t)
 // ptr_psi_term t;
@@ -1457,23 +1232,19 @@ void main_display_psi_term(ptr_psi_term t)
 
   listing_flag=FALSE;
   if(t) {
-
     deref_ptr(t);
-    
-    old_heap_pointer=heap_pointer;
+    old_heap_pointer=wl_mem->heap_pointer_val();
     pointer_names=NULL;
     printed_pointers=NULL;
     gen_sym_counter=0;
     go_through(t);
     insert_variables(var_tree,FALSE);
-    
     indent=FALSE;
     const_quote=TRUE;
     write_resids=FALSE;
     write_canon=FALSE;
     *buffer=0;
     indx=pretty_things;
-
     new_tab(&wl_new);
     mark_tab(wl_new);
     pretty_tag_or_psi_term(t,MAX_PRECEDENCE+1,0);
@@ -1482,18 +1253,14 @@ void main_display_psi_term(ptr_psi_term t)
       work_out_length();
       pretty_output();
     }
-    
-    heap_pointer=old_heap_pointer;
+    wl_mem->set_heap_pointer(old_heap_pointer);
   }
   else
     printf("*null psi_term*");
 }
-
-
-
 /******** DISPLAY_COUPLE(u,s,v)
-  Print a couple of psi-terms (u,v) with the correct co-referencing. Print
-  string S in between.
+Print a couple of psi-terms (u,v) with the correct co-referencing. Print
+string S in between.
 */
 void display_couple(ptr_psi_term u,char *s,ptr_psi_term v)
 // ptr_psi_term u;
@@ -1505,15 +1272,13 @@ void display_couple(ptr_psi_term u,char *s,ptr_psi_term v)
 
   output_stream=stdout;
   listing_flag=FALSE;
-  old_heap_pointer=heap_pointer;
-  
+  old_heap_pointer=wl_mem->heap_pointer_val();
   pointer_names=NULL;
   printed_pointers=NULL;
   gen_sym_counter=0;
   check_pointer(u);
   check_pointer(v);
   insert_variables(var_tree,TRUE);
-  
   indent=FALSE;
   const_quote=TRUE;
   write_resids=FALSE;
@@ -1526,20 +1291,15 @@ void display_couple(ptr_psi_term u,char *s,ptr_psi_term v)
   prettyf(s);
   pretty_tag_or_psi_term(v,MAX_PRECEDENCE+1,0);
   end_tab();
-
   if (indent) {
     work_out_length();
     pretty_output();
   }
-  
-  heap_pointer=old_heap_pointer;
+  wl_mem->set_heap_pointer(old_heap_pointer);
 }
-
-
-
 /******** PRINT_RESID_MESSAGE
-  This is called in trace mode to print the residuated goal along with the
-  RV set.
+	  This is called in trace mode to print the residuated goal along long with the
+	  RV set.
 */
 void print_resid_message(ptr_psi_term t,ptr_resid_list r)
 // ptr_psi_term t;
@@ -1551,22 +1311,17 @@ void print_resid_message(ptr_psi_term t,ptr_resid_list r)
   
   outfile=stdout;
   listing_flag=FALSE;
-  old_heap_pointer=heap_pointer;
-  
+  old_heap_pointer=wl_mem->heap_pointer_val();
   pointer_names=NULL;
   printed_pointers=NULL;
   gen_sym_counter=0;
-
   check_pointer(t);
-
   r2=r;
   while(r2) {
     check_pointer(r2->var);
     r2=r2->next;
   }
-  
   insert_variables(var_tree,TRUE);
-  
   indent=FALSE;
   const_quote=TRUE;
   write_resids=FALSE;
@@ -1575,11 +1330,9 @@ void print_resid_message(ptr_psi_term t,ptr_resid_list r)
   indx=pretty_things;
   new_tab(&wl_new);
   mark_tab(wl_new);
-
   prettyf("residuating ");
   pretty_tag_or_psi_term(t,MAX_PRECEDENCE+1,0);
   prettyf(" on variable(s) {");
-
   r2=r;
   while(r2) {
     pretty_tag_or_psi_term(r2->var,MAX_PRECEDENCE+1,0);
@@ -1587,9 +1340,7 @@ void print_resid_message(ptr_psi_term t,ptr_resid_list r)
     if(r2)
       prettyf(",");
   }
-
   prettyf("}\n");
   end_tab();
-  
-  heap_pointer=old_heap_pointer;
+  wl_mem->set_heap_pointer(old_heap_pointer);
 }

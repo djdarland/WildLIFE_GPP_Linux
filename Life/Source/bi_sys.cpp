@@ -2,30 +2,25 @@
    All Rights Reserved
 */
 /* 	$Id: bi_sys.c,v 1.2 1994/12/08 23:08:17 duchier Exp $	 */
-
-#ifndef lint
-static char vcid[] = "$Id: bi_sys.c,v 1.2 1994/12/08 23:08:17 duchier Exp $";
-#endif /* lint */
-
+#define EXTERN extern
+#define REV401PLUS
 #ifdef REV401PLUS
 #include "defs.h"
 #endif
-
 #define copyPsiTerm(a,b)        (ptr_psi_term )memcpy(a,b,sizeof(psi_term))
-
 /******** C_TRACE
-  With no arguments: Toggle the trace flag & print a message saying whether
-  tracing is on or off.
-  With argument 1: If it is top, return the trace flag and disable tracing.
-  If it is true or false, set the trace flag to that value.  Otherwise, give
-  an error.
-  With argument 2: If it is top, return the stepflag and disable stepping.
-  If it is true or false, set the stepflag to that value.  Otherwise, give
-  an error.
+With no arguments: Toggle the trace flag & print a message saying whether
+tracing is on or off.
+With argument 1: If it is top, return the trace flag and disable tracing.
+If it is true or false, set the trace flag to that value.  Otherwise, give
+an error.
+With argument 2: If it is top, return the stepflag and disable stepping.
+If it is true or false, set the stepflag to that value.  Otherwise, give
+an error.
 */
-long c_trace()
+long long c_trace()
 {
-  long success=TRUE;
+  long long success=TRUE;
   ptr_psi_term t,arg1,arg2;
 
   t=aim->aaaa_1;
@@ -68,7 +63,7 @@ long c_trace()
   return success;
 }
 
-long c_tprove()
+long long c_tprove()
 {
   ptr_psi_term t;
 
@@ -79,10 +74,10 @@ long c_tprove()
 }
 
 /******** C_STEP
-  Toggle the single step flag & print a message saying whether
-  single stepping mode is on or off.
+	  Toggle the single step flag & print a message saying whether
+	  single stepping mode is on or off.
 */
-static long c_step()
+static long long c_step()
 {
   ptr_psi_term t;
 
@@ -93,10 +88,10 @@ static long c_step()
 }
 
 /******** C_VERBOSE
-  Toggle the verbose flag & print a message saying whether
-  verbose mode is on or off.
+	  Toggle the verbose flag & print a message saying whether
+	  verbose mode is on or off.
 */
-static long c_verbose()
+static long long c_verbose()
 {
   ptr_psi_term t;
 
@@ -109,34 +104,31 @@ static long c_verbose()
 }
 
 /******** C_WARNING
-  Toggle the warning flag & print a message saying whether
-  warnings are printed or not.
-  Default: print warnings.
-  (Errors cannot be turned off.)
+	  Toggle the warning flag & print a message saying whether
+	  warnings are printed or not.
+	  Default: print warnings.
+	  (Errors cannot be turned off.)
 */
-static long c_warning()
+static long long c_warning()
 {
   ptr_psi_term t;
 
   t=aim->aaaa_1;
   deref_args(t,set_empty);
   warningflag = !warningflag;
-
   /*  RM: Sep 24 1993  */
   Infoline("*** Warning messages are%s printed\n",warningflag?"":" not");
-  
   return TRUE;
 }
-
 /******** C_MAXINT
-  Return the integer of greatest magnitude that guarantees exact
-  integer arithmetic.
+	  Return the integer of greatest magnitude that guarantees exact
+	  integer arithmetic.
 */
-static long c_maxint()
+static long long c_maxint()
 {
   ptr_psi_term t,result;
   REAL val;
-  long num,success;
+  long long num,success;
   
   t=aim->aaaa_1;
   deref_args(t,set_empty);
@@ -151,14 +143,11 @@ static long c_maxint()
   }
   return success;
 }
-
-
-
 /* 21.1 */
 /******** C_QUIET
-  Return the value of not(NOTQUIET).
-  */
-long c_quiet()
+	  Return the value of not(NOTQUIET).
+*/
+long long c_quiet()
 {
   ptr_psi_term t,result,ans;
   int success=TRUE;
@@ -172,17 +161,38 @@ long c_quiet()
   push_goal(unify,result,ans,NULL);
   return success;
 }
-
-
-
 /******** C_CPUTIME
-  Return the cpu-time in seconds used by the Wild_Life interpreter.
+	  Return the cpu-time in seconds used by the Wild_Life interpreter.
 */
-static long c_cputime()
+#ifdef _WIN64
+static long long c_cputime()
 {
   ptr_psi_term result, t;
   REAL thetime,val;
-  long num,success;
+  long long num,success;
+  
+  t=aim->aaaa_1;
+  deref_args(t,set_empty);
+  result=aim->bbbb_1;
+  deref_ptr(result);
+  success=get_real_value(result,&val,&num);
+  if (success) {
+    life_end = clock();
+    thetime= ((REAL)life_end-life_start)/(REAL)CLOCKS_PER_SEC;
+    if (num)
+      success=(val==thetime);
+    else
+      success=unify_real_result(result,thetime);
+  }
+  return success;
+}
+#endif
+#ifdef __unix__
+static long long c_cputime()
+{
+  ptr_psi_term result, t;
+  REAL thetime,val;
+  long long num,success;
   
   t=aim->aaaa_1;
   deref_args(t,set_empty);
@@ -199,92 +209,69 @@ static long c_cputime()
   }
   return success;
 }
-
-
-
-/******** C_REALTIME
-  Return the time in seconds since 00:00:00 GMT, January 1, 1970.
-  This is useful for building real-time applications such as clocks.
-*/
-
-// REV401PLUS I had revised c_realtime as below in prior work on X
-
-static long c_realtime()
-{
-  ptr_psi_term result, t;
-  REAL thetime,val;
-  long num,success;
-  struct timeval tp;
-  struct timezone tzp;
- 
-  t=aim->aaaa_1;
-  deref_args(t,set_empty);
-  result=aim->bbbb_1;
-  deref_ptr(result);
-  success=get_real_value(result,&val,&num);
-  if (success) {
-    gettimeofday(&tp, &tzp);
-    thetime=(REAL)tp.tv_sec + ((REAL)tp.tv_usec/1000000.0);
-    /* thetime=times(&life_end)/60.0; */
-    //    if (num)
-    //  success=(val==thetime);
-    // else
-      success=unify_real_result(result,thetime);
-  }
-  return success;
-}
-#if FALSE
-
-// origin below
-
-static long c_realtime()
-{
-  ptr_psi_term result, t;
-  REAL thetime,val;
-  long num,success;
-  struct timeval tp;
-  struct timezone tzp;
-  
-  t=aim->aaaa_1;
-  deref_args(t,set_empty);
-  result=aim->bbbb_1;
-  deref_ptr(result);
-  success=get_real_value(result,&val,&num);
-  if (success) {
-    gettimeofday(&tp, &tzp);
-    thetime=(REAL)tp.tv_sec + ((REAL)tp.tv_usec/1000000.0);
-    /* thetime=times(&life_end)/60.0; */
-    if (num)
-      success=(val==thetime);
-    else
-      success=unify_real_result(result,thetime);
-  }
-  return success;
-}
-
 #endif
 
-/******** C_LOCALTIME
-  Return a psi-term containing the local time split up into year, month, day,
-  hour, minute, second, and weekday.
-  This is useful for building real-time applications such as clocks.
+/******** C_REALTIME
+	  Return the time in seconds since 00:00:00 GMT, January 1, 1970.
+	  This is useful for building real-time applications such as clocks.
 */
-static long c_localtime()
+// REV401PLUS I had revised c_realtime as below in prior work on X
+static long long c_realtime()
 {
-  ptr_psi_term result, t, psitime;
-  long success=TRUE;
+  ptr_psi_term result, t;
+  REAL thetime,val;
+  long long num,success;
+#ifdef _WIN64
+  time_t rawtime;
+#endif
+#ifdef __unix__
   struct timeval tp;
   struct timezone tzp;
-  struct tm *thetime;
-  
+#endif
   t=aim->aaaa_1;
   deref_args(t,set_empty);
   result=aim->bbbb_1;
   deref_ptr(result);
+  success=get_real_value(result,&val,&num);
+  if (success) {
 
-  gettimeofday(&tp, &tzp);
-  thetime=localtime((time_t *) &(tp.tv_sec));
+#ifdef _WIN64
+    time(&rawtime);
+    thetime = (REAL)rawtime;
+#endif
 
+#ifdef __unix__
+    gettimeofday(&tp, &tzp);
+    thetime=(REAL)tp.tv_sec + ((REAL)tp.tv_usec/1000000.0);
+#endif
+
+    success=unify_real_result(result,thetime);
+  }
+  return success;
+}
+/******** C_LOCALTIME
+	  Return a psi-term containing the local time split up into year, month, day,
+	  hour, minute, second, and weekday.
+	  This is useful for building real-time applications such as clocks.
+*/
+
+#ifdef _WIN64
+static long long c_localtime()
+{
+  ptr_psi_term result, t, psitime;
+  long long success=TRUE;
+  // struct timeval tp;
+  // struct timezone tzp;
+  // struct tm *thetime;
+  time_t rawtime;
+  struct tm *thetime;
+
+  t=aim->aaaa_1;
+  deref_args(t,set_empty);
+  result=aim->bbbb_1;
+  deref_ptr(result);
+  time(&rawtime);
+  thetime=localtime(&rawtime);
   psitime=stack_psi_term(4);
   psitime->type=timesym;
   stack_add_int_attr(psitime, year_attr,    thetime->tm_year+1900);
@@ -294,74 +281,93 @@ static long c_localtime()
   stack_add_int_attr(psitime, minute_attr,  thetime->tm_min);
   stack_add_int_attr(psitime, second_attr,  thetime->tm_sec);
   stack_add_int_attr(psitime, weekday_attr, thetime->tm_wday);
-
   push_goal(unify,result,psitime,NULL);
-
   return success;
 }
+#endif
+
+#ifdef __unix__
+static long long c_localtime()
+{
+  ptr_psi_term result, t, psitime;
+  long long success=TRUE;
+  struct timeval tp;
+  struct timezone tzp;
+  struct tm *thetime;
+  
+  t=aim->aaaa_1;
+  deref_args(t,set_empty);
+  result=aim->bbbb_1;
+  deref_ptr(result);
+  gettimeofday(&tp, &tzp);
+  thetime=localtime((time_t *) &(tp.tv_sec));
+  psitime=stack_psi_term(4);
+  psitime->type=timesym;
+  stack_add_int_attr(psitime, year_attr,    thetime->tm_year+1900);
+  stack_add_int_attr(psitime, month_attr,   thetime->tm_mon+1);
+  stack_add_int_attr(psitime, day_attr,     thetime->tm_mday);
+  stack_add_int_attr(psitime, hour_attr,    thetime->tm_hour);
+  stack_add_int_attr(psitime, minute_attr,  thetime->tm_min);
+  stack_add_int_attr(psitime, second_attr,  thetime->tm_sec);
+  stack_add_int_attr(psitime, weekday_attr, thetime->tm_wday);
+  push_goal(unify,result,psitime,NULL);
+  return success;
+}
+#endif
 
 /******** C_STATISTICS
-  Print some information about Wild_Life: stack size, heap size, total memory.
+	  Print some information about Wild_Life: stack size, heap size, total memory.
 */
-static long c_statistics()
+static long long c_statistics()
 {
   ptr_psi_term t;
-  long success=TRUE;
-  long t1,t2,t3;
+  long long success=TRUE;
+  long long t1,t2,t3;
 
   t=aim->aaaa_1;
   deref_args(t,set_empty);
-
-  t1 = sizeof(mem_base)*(stack_pointer-mem_base);
-  t2 = sizeof(mem_base)*(mem_limit-heap_pointer);
-  t3 = sizeof(mem_base)*(mem_limit-mem_base);
-
+  t1 = wl_mem->bi_sys_t1();
+  t2 = wl_mem->bi_sys_t2();
+  t3 = wl_mem->bi_sys_t3();
   printf("\n");
   /* printf("************** SYSTEM< INFORMATION **************\n"); */
-  printf("Stack size  : %8ld bytes (%5ldK) (%ld%%)\n",t1,t1/1024,100*t1/t3);
-  printf("Heap size   : %8ld bytes (%5ldK) (%ld%%)\n",t2,t2/1024,100*t2/t3);
-  printf("Total memory: %8ld bytes (%5ldK)\n",t3,t3/1024);
-
+  printf("Stack size  : %8lld bytes (%5lldK) (%lld%%)\n",t1,t1/1024,100*t1/t3);
+  printf("Heap size   : %8lld bytes (%5lldK) (%lld%%)\n",t2,t2/1024,100*t2/t3);
+  printf("Total memory: %8lld bytes (%5lldK)\n",t3,t3/1024);
 #ifdef X11
   printf("X predicates are installed.\n");
 #else
   printf("X predicates are not installed.\n");
 #endif
-  
   /* printf("\n"); */
   /* printf("************************************************\n"); */
   return success;
 }
-
-
 /******** C_GARBAGE
-  Force a call to the garbage collector.
+	  Force a call to the garbage collector.
 */
-static long c_garbage()
+static long long c_garbage()
 {
   ptr_psi_term t;
 
   t=aim->aaaa_1;
   deref_args(t,set_empty);
-  garbage();
+  wl_mem->garbage();
   return TRUE;
 }
-
-
 /******** C_GETENV
-  Get the value of an environment variable.
+	  Get the value of an environment variable.
 */
-static long c_getenv()
+static long long c_getenv()
 {
-  long success=FALSE;
+  long long success=FALSE;
   ptr_psi_term arg1,arg2,funct,result,t;
-  long smaller;  // REV401PLUS int -> long
-  
+  long long smaller;  // REV401PLUS int -> long long
+
   funct = aim->aaaa_1;
   result=aim->bbbb_1;
   deref_ptr(funct);
   deref_ptr(result);
-  
   get_two_args(funct->attr_list, &arg1, &arg2);
   if(arg1) {
     deref_ptr(arg1);
@@ -381,20 +387,17 @@ static long c_getenv()
   }
   else
     Errorline("argument missing in %P\n",funct);
-  
   return success;
 }
-
-
 /******** C_SYSTEM
-  Pass a string to shell for execution. Return the value as the result.
+	  Pass a string to shell for execution. Return the value as the result.
 */
-static long c_system()
+static long long c_system()
 {
-  long success=TRUE;
+  long long success=TRUE;
   ptr_psi_term arg1,arg2,funct,result;
   REAL value;
-  long smaller;
+  long long smaller;
   
   funct=aim->aaaa_1;
   deref_ptr(funct);
@@ -427,15 +430,13 @@ static long c_system()
   }
   else
     curry();
-  
   return success;
 }
-
 /******** C_ENCODE
-  Force type encoding.
-  This need normally never be called by the user.
+	  Force type encoding.
+	  This need normally never be called by the user.
 */
-static long c_encode()
+static long long c_encode()
 {
   ptr_psi_term t;
 
@@ -444,208 +445,160 @@ static long c_encode()
   encode_types();
   return TRUE;
 }
-
 static GENERIC unitListElement;
-
 void setUnitList(GENERIC x)
 // GENERIC x;
 {
-	unitListElement = x;
+  unitListElement = x;
 }
 
 ptr_psi_term unitListValue()
 {
-	return makePsiTerm((ptr_definition)unitListElement);
+  return makePsiTerm((ptr_definition)unitListElement);
 }
 
 GENERIC unitListNext()
 {
-	unitListElement = NULL;
-	return NULL;
+  unitListElement = NULL;
+  return NULL;
 }
 
 ptr_psi_term intListValue(ptr_int_list p)
 // ptr_int_list p;
 {
-	return makePsiTerm((ptr_definition)p->value_1); 
+  return makePsiTerm((ptr_definition)p->value_1); 
 }
 
 GENERIC intListNext(ptr_int_list p)
 // ptr_int_list p;
 {
-	return (GENERIC )(p->next);
+  return (GENERIC )(p->next);
 }
-
-#if FALSE
-ptr_psi_term quotedStackCopy(p)
-  ptr_psi_term p;  // REV401PLUS unveverting - def_proto.h
-{
-	ptr_psi_term q;
-
-	q = stack_copy_psi_term(p); // added * REV401PLUS
-	mark_quote(q);
-	return q;
-}
-#endif
 
 /* Return a ptr to a psi-term marked as  evaluated.  The psi-term is a copy at
  * the top level of the goal residuated on p, with the rest of the psi-term
  * shared.
  */
-
 ptr_psi_term residListGoalQuote(ptr_residuation p)
 // ptr_residuation p;
 {
-	ptr_psi_term psi;
+  ptr_psi_term psi;
 
-	psi = stack_psi_term(4);
-	copyPsiTerm(psi, p->goal->aaaa_1);
-	psi->status = 4;
-	return psi;
+  psi = stack_psi_term(4);
+  copyPsiTerm(psi, p->goal->aaaa_1);
+  psi->status = 4;
+  return psi;
 }
 
 GENERIC residListNext(ptr_residuation p)
 // ptr_residuation p;
 {
-	return (GENERIC )(p->next);
+  return (GENERIC )(p->next);
 }
 
 ptr_psi_term makePsiTerm(ptr_definition x)
 // ptr_definition x;
 {
-	ptr_psi_term p;
+  ptr_psi_term p;
 	
-	p = stack_psi_term(4);
-	p->type = x;
-	return p;
+  p = stack_psi_term(4);
+  p->type = x;
+  return p;
 }
-
-
-
 ptr_psi_term makePsiList(GENERIC head, ptr_psi_term (*valueFunc)(GENERIC), GENERIC (*nextFunc)(GENERIC))
 //     GENERIC head;
 //     ptr_psi_term (*valueFunc)();
 //     GENERIC (*nextFunc)();
 {
   ptr_psi_term result;
-
-  
   /*  RM: Dec 14 1992: Added the new list representation  */
   result=stack_nil();
   
   while (head) {
-    result=stack_cons((*valueFunc)(head),result);
+    result=((wl_psi_term_ptr*)(*valueFunc)(head))->stack_cons(result);
     head=(*nextFunc)(head);
   }
   return result;
 }
-
-
-
 /******** C_ResidList
-  rlist(A) ->  list all eval/prove goals residuated on variable 'A'.
+	  rlist(A) ->  list all eval/prove goals residuated on variable 'A'.
 */
-static long c_residList()
+static long long c_residList()
 {
-	ptr_psi_term func;
-	ptr_psi_term result,arg1, other;
+  ptr_psi_term func;
+  ptr_psi_term result,arg1, other;
 	
-	func = aim->aaaa_1;
-	deref_ptr(func);
+  func = aim->aaaa_1;
+  deref_ptr(func);
 
-	get_one_arg(func->attr_list, &arg1);
-	if (!arg1)
-	{
-		curry();
-		return TRUE;
-	}
-	
-	result = aim->bbbb_1;
-	deref(result);
-	deref_ptr(arg1);
-	deref_args(func, set_1);
+  get_one_arg(func->attr_list, &arg1);
+  if (!arg1)
+    {
+      curry();
+      return TRUE;
+    }
+  result = aim->bbbb_1;
+  deref(result);
+  deref_ptr(arg1);
+  deref_args(func, set_1);
 
-	//ptr_psi_term makePsiList(GENERIC head, ptr_psi_term (*valueFunc)(GENERIC), GENERIC (*nextFunc)(GENERIC))
-	other = makePsiList((GENERIC)arg1->resid,
-			    (ptr_psi_term (*)(GENERIC))residListGoalQuote,
-			    (GENERIC (*)(GENERIC))residListNext);
-	resid_aim = NULL;
-	push_goal(unify,result,other,NULL);
-	return TRUE;
+  //ptr_psi_term makePsiList(GENERIC head, ptr_psi_term (*valueFunc)(GENERIC), GENERIC (*nextFunc)(GENERIC))
+  other = makePsiList((GENERIC)arg1->resid,
+		      (ptr_psi_term (*)(GENERIC))residListGoalQuote,
+		      (GENERIC (*)(GENERIC))residListNext);
+  resid_aim = NULL;
+  push_goal(unify,result,other,NULL);
+  return TRUE;
 }
-
-
-ptr_goal makeGoal(ptr_psi_term p)
-// ptr_psi_term p;
-{
-	ptr_goal old = goal_stack;
-	ptr_goal g;
-	
-	push_goal(prove, p, (ptr_psi_term)DEFRULES, NULL);
-	g = goal_stack;
-	g->next=NULL;
-	goal_stack = old;
-	return g;
-}
-
-
 /******** C_residuate
-  residuate(A,B) ->  residuate goal B on variable A, non_strict in both args
+	  residuate(A,B) ->  residuate goal B on variable A, non_strict in both args
 */
-static long c_residuate()
+static long long c_residuate()
 {
-	ptr_psi_term pred;
-	ptr_psi_term arg1, arg2;
-	ptr_goal g;
+  ptr_psi_term pred;
+  ptr_psi_term arg1, arg2;
+  ptr_goal g;
 	
-	pred = aim->aaaa_1;
-	deref_ptr(pred);
-
-	get_two_args(pred->attr_list, &arg1, &arg2);
-	if ((!arg1)||(!arg2)) {
-	  Errorline("%P requires two arguments.\n",pred);
-	  return FALSE;
-        }
+  pred = aim->aaaa_1;
+  deref_ptr(pred);
+  get_two_args(pred->attr_list, &arg1, &arg2);
+  if ((!arg1)||(!arg2)) {
+    Errorline("%P requires two arguments.\n",pred);
+    return FALSE;
+  }
 	
-	deref_ptr(arg1);
-	deref_ptr(arg2);
-	deref_args(pred, set_1_2);
-
-	g = makeGoal(arg2);
-	residuateGoalOnVar(g, arg1, NULL);
-	
-	return TRUE;
+  deref_ptr(arg1);
+  deref_ptr(arg2);
+  deref_args(pred, set_1_2);
+  g = ((wl_psi_term_ptr*)arg2)->makeGoal();
+  residuateGoalOnVar(g, arg1, NULL);
+  return TRUE;
 }
 
 /******** C_mresiduate
-  Multiple-variable residuation of a predicate.
-  mresiduate(A,B) ->  residuate goal B on a list of variables A, non_strict in
-  both args.  If any of the variables is bound the predicate is executed.
-  The list must have finite length.
+	  Multiple-variable residuation of a predicate.
+	  mresiduate(A,B) ->  residuate goal B on a list of variables A, non_strict in
+	  both args.  If any of the variables is bound the predicate is executed.
+	  The list must have finite length.
 */
-static long c_mresiduate()
-     
+static long long c_mresiduate()
 {
-  long success=TRUE;
+  long long success=TRUE;
   ptr_psi_term pred;
   ptr_psi_term arg1, arg2, tmp, var;
   ptr_goal g;
   
   pred = aim->aaaa_1;
   deref_ptr(pred);
-  
   get_two_args(pred->attr_list, &arg1, &arg2);
   if ((!arg1)||(!arg2)) {
     Errorline("%P requires two arguments.\n",pred);
     return FALSE;
   }
-  
   deref_ptr(arg1);
   deref_ptr(arg2);
   deref_args(pred, set_1_2);
-  
-  g = makeGoal(arg2);
-  
+  g = ((wl_psi_term_ptr*)arg2)->makeGoal();
   /* Then residuate on all the list variables: */
   tmp=arg1;
   while(tmp && tmp->type==alist) { /*  RM: Dec 14 1992  */
@@ -657,35 +610,31 @@ static long c_mresiduate()
     if(tmp)
       deref_ptr(tmp);
   }
-  
   if(!tmp || tmp->type!=nil) {
     Errorline("%P should be a nil-terminated list in mresiduate.\n",arg1);
     success=FALSE;
   }
-
   return success;
 }
 
-
-
 void insert_system_builtins()
 {
-  new_built_in(bi_module,"trace",(def_type)predicate_it,c_trace);
-  new_built_in(bi_module,"step",(def_type)predicate_it,c_step);
-  new_built_in(bi_module,"verbose",(def_type)predicate_it,c_verbose);
-  new_built_in(bi_module,"warning",(def_type)predicate_it,c_warning);
-  new_built_in(bi_module,"maxint",(def_type)function_it,c_maxint);
-  new_built_in(bi_module,"cpu_time",(def_type)function_it,c_cputime);
-  new_built_in(bi_module,"quiet",(def_type)function_it,c_quiet); /* 21.1 */
-  new_built_in(bi_module,"real_time",(def_type)function_it,c_realtime);
-  new_built_in(bi_module,"local_time",(def_type)function_it,c_localtime);
-  new_built_in(bi_module,"statistics",(def_type)predicate_it,c_statistics);
-  new_built_in(bi_module,"gc",(def_type)predicate_it,c_garbage);
-  new_built_in(bi_module,"system",(def_type)function_it,c_system);
-  new_built_in(bi_module,"getenv",(def_type)function_it,c_getenv);
-  new_built_in(bi_module,"encode",(def_type)predicate_it,c_encode);
-  new_built_in(bi_module,"rlist",(def_type)function_it,c_residList);
-  new_built_in(bi_module,"residuate",(def_type)predicate_it,c_residuate);
-  new_built_in(bi_module,"mresiduate",(def_type)predicate_it,c_mresiduate);
-  new_built_in(bi_module,"tprove",(def_type)predicate_it,c_tprove);
+  ((wl_module_ptr*)bi_module)->new_built_in("trace",(def_type)predicate_it,c_trace);
+  ((wl_module_ptr*)bi_module)->new_built_in("step",(def_type)predicate_it,c_step);
+  ((wl_module_ptr*)bi_module)->new_built_in("verbose",(def_type)predicate_it,c_verbose);
+  ((wl_module_ptr*)bi_module)->new_built_in("warning",(def_type)predicate_it,c_warning);
+  ((wl_module_ptr*)bi_module)->new_built_in("maxint",(def_type)function_it,c_maxint);
+  ((wl_module_ptr*)bi_module)->new_built_in("cpu_time",(def_type)function_it,c_cputime);
+  ((wl_module_ptr*)bi_module)->new_built_in("quiet",(def_type)function_it,c_quiet); /* 21.1 */
+  ((wl_module_ptr*)bi_module)->new_built_in("real_time",(def_type)function_it,c_realtime);
+  ((wl_module_ptr*)bi_module)->new_built_in("local_time",(def_type)function_it,c_localtime);
+  ((wl_module_ptr*)bi_module)->new_built_in("statistics",(def_type)predicate_it,c_statistics);
+  ((wl_module_ptr*)bi_module)->new_built_in("gc",(def_type)predicate_it,c_garbage);
+  ((wl_module_ptr*)bi_module)->new_built_in("system",(def_type)function_it,c_system);
+  ((wl_module_ptr*)bi_module)->new_built_in("getenv",(def_type)function_it,c_getenv);
+  ((wl_module_ptr*)bi_module)->new_built_in("encode",(def_type)predicate_it,c_encode);
+  ((wl_module_ptr*)bi_module)->new_built_in("rlist",(def_type)function_it,c_residList);
+  ((wl_module_ptr*)bi_module)->new_built_in("residuate",(def_type)predicate_it,c_residuate);
+  ((wl_module_ptr*)bi_module)->new_built_in("mresiduate",(def_type)predicate_it,c_mresiduate);
+  ((wl_module_ptr*)bi_module)->new_built_in("tprove",(def_type)predicate_it,c_tprove);
 }

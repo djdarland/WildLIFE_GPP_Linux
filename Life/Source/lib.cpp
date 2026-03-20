@@ -1,60 +1,34 @@
 /* Copyright 1991 Digital Equipment Corporation.
- ** All Rights Reserved.
- *****************************************************************/
+** All Rights Reserved.
+*****************************************************************/
 /* 	$Id: lib.c,v 1.2 1994/12/08 23:26:47 duchier Exp $	 */
-
-#ifndef lint
-static char vcid[] = "$Id: lib.c,v 1.2 1994/12/08 23:26:47 duchier Exp $";
-#endif /* lint */
-
 /* VERSION of Wild-LIFE for calling from C */
 /*  RM: Mar 31 1993  */
-
+#define EXTERN extern
+#define REV401PLUS
 #ifdef REV401PLUS
 #include "defs.h"
 #endif
-
-
-
 #ifdef X11
 #include "xpred.h"
 #endif
-
-#ifdef SOLARIS
-#include <stdlib.h>
-static unsigned int libseed;
-#endif
-
-
-
-// REV401PLUS -- moved nex 4 down
-/* long noisy=TRUE;
-long file_date=3;
-long types_done=FALSE;
-float garbage_time=0;
-*/ // REMOVED above for MINT
-
-
 char **group_features(char **f,ptr_node n)
 //     char **f;
 //     ptr_node n;
 {
   *f=NULL;
   if(n) {
-    if(n->left)
-      f=group_features(f,n->left);
-    *f=n->key;
+    if(n->left_val())
+      f=group_features(f,n->left_val());
+    *f=n->key_val();
     f++;
-    if(n->right)
-      f=group_features(f,n->right);
+    if(n->right_val())
+      f=group_features(f,n->right_val());
   }
-  
   return f;
 }
-
-
-void exit_if_true(long exitflag)
-//     long exitflag;
+void exit_if_true(long long exitflag)
+//     long long exitflag;
 {
   if (exitflag) {
     printf("\n\n*** Execution is not allowed to continue.\n");
@@ -62,38 +36,36 @@ void exit_if_true(long exitflag)
     exit(1);
   }
 }
-
-
-
 /* I/O initialization */
 void init_io()
 {
   struct stat buffer;
-  
+#ifdef __unix__
   fstat(fileno(stdin), &buffer);
+#endif
+#ifdef _WIN64
+  fstat(_fileno(stdin), &buffer);
+#endif
   /* True iff stdin is from a terminal */
   stdin_terminal=(S_IFCHR & buffer.st_mode)!=0;
   input_state=NULL;
   stdin_state=NULL;
   output_stream=stdout;
 }
-
 #ifdef REV102
 extern char prompt_buffer[];
 #endif
-
 /* Initial state of system to begin a query */
 void init_system()
 {
 #ifdef X11
   x_window_creation=FALSE;
 #endif
-  stack_pointer=mem_base;
+  wl_mem->set_stack_pointer(wl_mem->mem_base_val());
   goal_stack=NULL;
   choice_stack=NULL;
   undo_stack=NULL; /* 7.8 */
   var_tree=NULL;
-
   /*  RM: Oct 13 1993  */
   if(current_module==user_module)
     prompt=PROMPT;
@@ -101,10 +73,8 @@ void init_system()
     prompt=prompt_buffer;
     sprintf(prompt_buffer,"%s%s",current_module->module_name,PROMPT);
   }
-    
   resid_aim=NULL;
-  exit_if_true(!memory_check());
-  
+  exit_if_true(!wl_mem->memory_check());
 #ifdef X11
   /*  RM: Dec 15 1992  */
   xevent_list=stack_nil();
@@ -112,20 +82,18 @@ void init_system()
   
   init_global_vars(); /*  RM: Feb 15 1993  */
 }
-
-void WFInit(long argc, char *argv[])
+void WFInit(long long argc, char *argv[])
 {
   ptr_stack save_undo_stack;
-  
   int i;
-#ifdef SOLARIS
-  for(i=0;i<256;i++)
-    rand_array[i]=rand_r(&libseed);
-#else
+#ifdef __unix__
   for(i=0;i<256;i++)
     rand_array[i]=random();
 #endif
-  
+#ifdef _Win64
+  for (i = 0;i < 256;i++)
+    rand_array[i] = rand();
+#endif
   if (argc < 10)
     {
       arg_c=argc;
@@ -137,87 +105,73 @@ void WFInit(long argc, char *argv[])
     {
       Errorline("Too many command line arguments\n");
     }
-  
   quietflag = TRUE; /*  RM: Mar 31 1993  */
-  
   init_io();
-  init_memory();
-  exit_if_true(!mem_base || !other_base);
-  assert(stack_pointer==mem_base); /* 8.10 */
-  init_copy();
-  assert(stack_pointer==mem_base); /* 8.10 */
+  wl_mem = new wl_memory();
+  wl_mem->exit_mem_err_1();
+  wl_mem->exit_mem_err_2();
+  wl_bucks = new wl_buckets(); // init_copy();
+  wl_mem->exit_mem_err_2();
   init_print();
-  assert(stack_pointer==mem_base); /* 8.10 */
-  
+  wl_mem->exit_mem_err_2();
   /* Timekeeping initialization */
+#ifdef __unix__
   tzset();
   times(&life_start);
-  assert(stack_pointer==mem_base); /* 8.10 */
-  
+#endif
+#ifdef _WIN64
+  _tzset();
+  life_start = clock();
+#endif
+  wl_mem->exit_mem_err_2();
   init_modules(); /*  RM: Jan  8 1993  */
-  
+  wl_mem->exit_mem_err_2();
   init_built_in_types();
-  assert(stack_pointer==mem_base); /* 8.10 */
+  wl_mem->exit_mem_err_2();
 #ifdef X11
   x_setup_builtins();
-  assert(stack_pointer==mem_base); /* 8.10 */
+  wl_mem->exit_mem_err_2();
 #endif
+#ifdef __unix__
   init_interrupt();
-  assert(stack_pointer==mem_base); /* 8.10 */
+#endif
+  wl_mem->exit_mem_err_2();
   title();
-  assert(stack_pointer==mem_base); /* 8.10 */
+  wl_mem->exit_mem_err_2();
   init_trace();
   noisy=FALSE;
-  
-  assert(stack_pointer==mem_base); /* 8.10 */
-  
-  
+  wl_mem->exit_mem_err_2();
   set_current_module(user_module); /*  RM: Jan 27 1993  */
-  
   /* Read in the .set_up file */
   init_system();
-  
 #ifdef ARITY  /*  RM: Mar 29 1993  */
   arity_init();
 #endif
-  
-  
-  open_input_file("+SETUP+");
-  push_goal(load,input_state,(ptr_psi_term)file_date,(GENERIC)heap_copy_string("+SETUP+")); // REV401PLUS casts
+  open_input_file("~/life_local/Source/.set_up");
+  push_goal(load,input_state,(ptr_psi_term)file_date,(GENERIC)heap_copy_string("~/life_local/Source/.set_up")); // REV401PLUS casts
   file_date+=2;
   main_prove();
-  
-  
   setjmp(env);
-  /* printf("%ld\n",(long)(stack_pointer-mem_base)); */ /* 8.10 */
+  /* printf("%ld\n",(long long)(stack_pointer-mem_base)); */ /* 8.10 */
   init_system(); 
   init_trace();
   begin_terminal_io();
   var_occurred=FALSE;
   save_undo_stack=undo_stack;
   stdin_cleareof();
-  
   c_query_level=0;
 }
-
-
-
 int WFInput(char *query)
-     
 //     char *query;
 {
   ptr_psi_term t;
-  long sort;
+  long long sort;
   parse_block pb;
   int result=WFno;
   ptr_stack save_undo_stack;
   ptr_choice_point old_choice;
-  
-  
   save_undo_stack=undo_stack;
   old_choice=choice_stack;
-
-  
   if(!strcmp(query,".")) {
     reset_stacks();
     result=WFyes;
@@ -238,12 +192,10 @@ int WFInput(char *query)
       /* old_var_occurred=var_occurred; */
       var_occurred=FALSE;
       t=stack_copy_psi_term(parse(&sort));
-      
       /* Main loop of interpreter */
       if(sort==QUERY) {
 	ignore_eff=TRUE;
 	goal_count=0;
-		
 	push_choice_point(c_what_next,(ptr_psi_term)c_query_level,NULL,NULL); // REV401PLUS cast
 	c_query_level++;
 	push_goal(c_what_next,(ptr_psi_term)c_query_level,(ptr_psi_term)var_occurred,NULL); // REV401PLUS casts
@@ -260,14 +212,11 @@ int WFInput(char *query)
 	encode_types();
       }
     }
-
     if(sort==QUERY) {
       start_chrono();
       main_prove();
-      
       if(goal_stack && goal_stack->type==c_what_next) {
-	  
-	if((unsigned long)(goal_stack->aaaa_1)==c_query_level) // REV401PLUS cast
+	if((unsigned long long)(goal_stack->aaaa_1)==c_query_level) // REV401PLUS cast
 	  if(choice_stack==old_choice) {
 	    result=WFyes;
 	    c_query_level--;
@@ -278,56 +227,43 @@ int WFInput(char *query)
 	  result=WFno;
 	  c_query_level--;
 	}
-	
 	goal_stack=goal_stack->next;
       }
     }
   }
-  
   return result;
 }
-
-
-
 PsiTerm WFGetVar(char *name)
-     
 //     char *name;
 {
   ptr_psi_term result=NULL;
   ptr_node n;
-  
-  n=find(STRCMP,name,var_tree);
+  if (var_tree)
+    n=((wl_node_ptr*)var_tree)->find(STRCMP,name);
+  else
+    n = NULL;
   if(n) {
-    result=(ptr_psi_term)n->data;
+    result=(ptr_psi_term)n->data_val();
     if(result)
       deref_ptr(result);
   }
-  
   return result;
 }
-
-
 int WFfeature_count_loop(ptr_node n)
-     
 //     ptr_node n;
 {
   int result=0;
 
   if(n) {
-    if(n->left)
-      result+=WFfeature_count_loop(n->left);
+    if(n->left_val())
+      result+=WFfeature_count_loop(n->left_val());
     result++;
-    if(n->right)
-      result+=WFfeature_count_loop(n->right);
+    if(n->right_val())
+      result+=WFfeature_count_loop(n->right_val());
   }
-
   return result;
 }
-
-
-
 int WFFeatureCount(ptr_psi_term psi)
-
 //   ptr_psi_term psi;
 {
   int result=0;
@@ -336,14 +272,9 @@ int WFFeatureCount(ptr_psi_term psi)
     deref_ptr(psi);
     result=WFfeature_count_loop(psi->attr_list);
   }
-  
   return result;
 }
-
-
-
 char *WFType(ptr_psi_term psi)
-
 //   ptr_psi_term psi;
 {
   char *result=NULL;
@@ -353,11 +284,7 @@ char *WFType(ptr_psi_term psi)
   }
   return result;
 }
-
-
-
 char **WFFeatures(ptr_psi_term psi)
-
 //     ptr_psi_term psi;
 {
   char **features=NULL;
@@ -365,20 +292,14 @@ char **WFFeatures(ptr_psi_term psi)
   
   if(psi) {
     deref_ptr(psi);
-    
     n=WFfeature_count_loop(psi->attr_list);
     if(n) {
       features=(char **)malloc((n+1)*sizeof(char *));
       group_features(features,psi->attr_list);
     }
   }
-
   return features;
 }
-
-
-
-
 double WFGetDouble(ptr_psi_term psi,int *ok)
 //     ptr_psi_term psi;
 //     int *ok;
@@ -387,10 +308,8 @@ double WFGetDouble(ptr_psi_term psi,int *ok)
   
   if(ok)
     *ok=FALSE;
-  
   if(psi) {
     deref_ptr(psi);
-    
     if(sub_type(psi->type,real) && psi->value_3) {
       value= *((double *)psi->value_3);
       if(ok)
@@ -399,9 +318,6 @@ double WFGetDouble(ptr_psi_term psi,int *ok)
   }
   return value;
 }
-
-
-
 char *WFGetString(ptr_psi_term psi,int *ok)
 //     ptr_psi_term psi;
 //     int *ok;
@@ -410,10 +326,8 @@ char *WFGetString(ptr_psi_term psi,int *ok)
   
   if(ok)
     *ok=FALSE;
-  
   if(psi) {
     deref_ptr(psi);
-    
     if(sub_type(psi->type,quoted_string) && psi->value_3) {
       value=(char *)psi->value_3;
       if(ok)
@@ -422,11 +336,7 @@ char *WFGetString(ptr_psi_term psi,int *ok)
   }
   return value;
 }
-
-
-
 ptr_psi_term WFGetFeature(ptr_psi_term psi,char *feature)  // changed g++
-
 //     ptr_psi_term psi;
 //     char *feature;
 {
@@ -435,10 +345,12 @@ ptr_psi_term WFGetFeature(ptr_psi_term psi,char *feature)  // changed g++
 
   if(psi && feature) {
     deref_ptr(psi);
-    n=find(FEATCMP,feature,psi->attr_list);
+    if (psi->attr_list)
+      n=((wl_node_ptr*)psi->attr_list)->find(FEATCMP,feature);
+    else
+      n = NULL;
     if(n)
-      result=(ptr_psi_term)n->data;  // changed g++
+      result=(ptr_psi_term)n->data_val();  // changed g++
   }
-  
   return result;
 }

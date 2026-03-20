@@ -1,7 +1,23 @@
+#pragma once
 /*! \file def_glob.h
   \brief globals
   
 */
+
+#ifdef __unix__
+EXTERN struct tms life_start;
+EXTERN struct tms life_end;
+EXTERN struct tms start_time;
+EXTERN struct tms end_time;
+#endif
+#ifdef _WIN64
+EXTERN clock_t life_end;
+EXTERN clock_t life_start;
+EXTERN clock_t start_time;
+EXTERN clock_t end_time;
+#endif
+EXTERN class wl_memory *wl_mem;
+EXTERN class wl_buckets *wl_bucks;
 
 // from extern.h
 
@@ -31,63 +47,14 @@ EXTERN char *arg_v[ARGNN]; // Modified DJD
 
 */
 
-EXTERN int alloc_words;
-
-/*! \var mem_size
-  \brief number of words from memory = alloc_words * sizeof word 
-
-*/
-
-EXTERN int mem_size;
-
-/*! \var mem_base
-  \brief mem_size memory allocated in init_memory by malloc 
-
-*/
-
-EXTERN GENERIC mem_base;
-
-/*! \var heap_pointer
-  \brief used to allocate from heap - size allocated subtracted - adj for alignment
-
-*/
-
-EXTERN GENERIC heap_pointer;
-
-/*! mem_limit
-  \brief starting point of heap - mem_base aligned
-
-*/
-
-EXTERN GENERIC mem_limit;
-
-/*! \var stack_pointer
-  \brief used to allocate from stack - size allocated added - adj for alignment
-
-*/
-
-EXTERN GENERIC stack_pointer;
-
-/*! \var garbage_time
-  \brief total time on garbage collections - seconds
-
-*/
-
-EXTERN float garbage_time;
-
-/*! \var life_start
-  \brief time life started - seconds
-
-*/
-
-EXTERN struct tms life_start;
+// EXTERN struct tms life_start;
 
 /*! \var life_start
   \brief time life ended - seconds
 
 */
 
-EXTERN struct tms life_end;
+// EXTERN struct tms life_end;
 
 /*! \var other_base
   \brief mem_size memory allocated in init_memory by malloc 
@@ -161,7 +128,7 @@ EXTERN ptr_definition add_module3;
 
 */
 
-EXTERN long parser_stack_index; /* 26.1 */
+EXTERN long long parser_stack_index; /* 26.1 */
 
 /*! \var and
   \brief symbol in syntax module
@@ -669,12 +636,12 @@ EXTERN ptr_psi_term old_state; /*  RM: Feb 17 1993  */
 
 */
 
-EXTERN long interrupted;
+EXTERN long long interrupted;
 // from login.h
 
-EXTERN long stepflag;
-EXTERN long ignore_eff;
-EXTERN long goal_count;
+EXTERN long long stepflag;
+EXTERN long long ignore_eff;
+EXTERN long long goal_count;
 
 // from modules.h
 
@@ -732,19 +699,20 @@ EXTERN ptr_module current_module;
 
 */
 EXTERN ptr_module sys_module;
+EXTERN ptr_module nill_module;
 
 /*! \var display_modules
   \brief whether to display modules with symbols
 */
 
-EXTERN long display_modules;
+EXTERN long long display_modules;
 
 /*! \var display_persistent
   \brief if true print persistent values preceded by "$"
 
 */
 
-EXTERN long display_persistent;
+EXTERN long long display_persistent;
 
 /*! \var trace_input
   \brief whether to echo characters read
@@ -752,7 +720,7 @@ EXTERN long display_persistent;
   I can use this to get equivalent of swi prolog's "protocol" !!!
 */
 
-EXTERN long trace_input;
+EXTERN long long trace_input;
 
 // from parser.h
 
@@ -761,7 +729,7 @@ EXTERN long trace_input;
 
 */
 
-EXTERN long parse_ok;
+EXTERN long long parse_ok;
 
 // from print.h
 
@@ -783,43 +751,43 @@ EXTERN char *buffer;
   \brief Global flag that modifies how writing is done. 
 */
 
-EXTERN long print_depth;
+EXTERN long long print_depth;
 
 /*! \var indent
   \brief Global flag that modifies how writing is done. 
 */
 
-EXTERN long indent;
+EXTERN long long indent;
 
 /*! \var const_quote
   \brief Global flag that modifies how writing is done. 
 */
 
-EXTERN long const_quote;
+EXTERN long long const_quote;
 
 /*! \var write_stderr
   \brief Global flag that modifies how writing is done. 
 */
 
-EXTERN long write_stderr;
+EXTERN long long write_stderr;
 
 /*! \var write_corefs
   \brief Global flag that modifies how writing is done. 
 */
 
-EXTERN long write_corefs;
+EXTERN long long write_corefs;
 
 /*! \var write_resids
   \brief Global flag that modifies how writing is done. 
 */
 
-EXTERN long write_resids;
+EXTERN long long write_resids;
 
 /*! \var write_canon
   \brief Global flag that modifies how writing is done. 
 */
 
-EXTERN long write_canon;
+EXTERN long long write_canon;
 
 // from token.h
 
@@ -828,34 +796,34 @@ EXTERN long write_canon;
 
 */
 
-EXTERN long stdin_terminal;
+EXTERN long long stdin_terminal;
 
 /*! \var var_occurred
   \brief ???
 
 */
 
-EXTERN long var_occurred;
+EXTERN long long var_occurred;
 /* Part of global input file state */
 
 /*! \var start_of_line
-\brief ???
+  \brief ???
 
 */
-EXTERN long start_of_line;
+EXTERN long long start_of_line;
 
 
-EXTERN long saved_char;
-EXTERN long old_saved_char;
+EXTERN long long saved_char;
+EXTERN long long old_saved_char;
 EXTERN ptr_psi_term saved_psi_term;
 EXTERN ptr_psi_term old_saved_psi_term;
-EXTERN long eof_flag;
+EXTERN long long eof_flag;
 
 /* File state ADT */
 EXTERN ptr_psi_term input_state;
 EXTERN ptr_psi_term stdin_state;
 /* For parsing from a string */
-EXTERN long stringparse;
+EXTERN long long stringparse;
 EXTERN char *stringinput;
 
 // from types.h
@@ -864,13 +832,13 @@ EXTERN char *stringinput;
 EXTERN ptr_goal resid_aim;
 EXTERN ptr_resid_list resid_vars; /* 21.9 */
 EXTERN ptr_goal resid_limit;
-EXTERN long curried;
-EXTERN long can_curry;
+EXTERN long long curried;
+EXTERN long long can_curry;
 
 // from templates.h
 
 EXTERN char *numbers[21];
-EXTERN long set_extra_args[6];
+EXTERN long long set_extra_args[6];
 
 // from lib.c
 EXTERN jmp_buf env;
@@ -884,7 +852,7 @@ EXTERN FILE *features;
 // from built_ins.c
 EXTERN FILE *bi_list;
 
-EXTERN long (* c_rule[MAX_BUILT_INS])();
+EXTERN long long (* c_rule[MAX_BUILT_INS])();
 
 
 EXTERN char *one;
@@ -901,23 +869,30 @@ EXTERN char *weekday_attr;
 // from copy.c
 /* TRUE means: heap_flag==TRUE & only copy to heap those objects not */
 /* already on heap, i.e. incremental copy to heap.                   */
-EXTERN long to_heap;
+EXTERN long long to_heap;
 
 
 // from error.c
-EXTERN long psi_term_line_number;
+EXTERN long long psi_term_line_number;
 
-EXTERN long warningflag;
-EXTERN long quietflag;  // 21.1 
-EXTERN long trace;
-EXTERN long verbose; // 21.1 
+EXTERN long long warningflag;
+EXTERN long long quietflag;  // 21.1 
+EXTERN long long cygwin_flag;  // 21.1 
+EXTERN long long djd;  // 21.1
 
-EXTERN long steptrace;
-EXTERN long stepcount;
+EXTERN FILE *dbg;
+EXTERN FILE *dbg2;
+EXTERN long long built_in_index;
+
+EXTERN long long trace;
+EXTERN long long verbose; // 21.1 
+
+EXTERN long long steptrace;
+EXTERN long long stepcount;
 
 // from hash_table.c
 
-EXTERN long rand_array[256];
+EXTERN long long rand_array[256];
 
 // from lefun.c
 /* ptr_goal resid_limit; 12.6 */
@@ -927,39 +902,39 @@ EXTERN long rand_array[256];
 
 // from lib.c
 
-EXTERN long c_query_level;
+EXTERN long long c_query_level;
 
 // from login.c
 /* Statistics on trail cleaning */
-EXTERN long clean_iter;
-EXTERN long clean_succ;
+EXTERN long long clean_iter;
+EXTERN long long clean_succ;
 
 /* ptr_choice_point prompt_choice_stack; 12.7 */
 
-EXTERN struct tms start_time,end_time;
+// EXTERN struct tms start_time,end_time;
 
-EXTERN long xeventdelay;
-EXTERN long xcount;
+EXTERN long long xeventdelay;
+EXTERN long long xcount;
 
-EXTERN long more_u_attr; /* TRUE if U has attributes V doesn't */
-EXTERN long more_v_attr; /* Vice-versa */
+EXTERN long long more_u_attr; /* TRUE if U has attributes V doesn't */
+EXTERN long long more_v_attr; /* Vice-versa */
 
-EXTERN long u_func,v_func;  /* TRUE if U or V is a curried function */
-EXTERN long new_stat;
+EXTERN long long u_func,v_func;  /* TRUE if U or V is a curried function */
+EXTERN long long new_stat;
 
 EXTERN ptr_definition *gamma_table;
 
 // from modules.c
 EXTERN string module_buffer;              /* Temporary storage place for strings */
 
-EXTERN long cmp_debug_flag;
+EXTERN long long cmp_debug_flag;
 
 // from parser.c
 EXTERN psi_term psi_term_stack[PARSER_STACK_SIZE];
-EXTERN long int_stack[PARSER_STACK_SIZE];
+EXTERN long long int_stack[PARSER_STACK_SIZE];
 EXTERN wl_operator op_stack[PARSER_STACK_SIZE];
 
-EXTERN long no_var_tree;
+EXTERN long long no_var_tree;
 
 // from print.c
 
@@ -993,45 +968,45 @@ EXTERN ptr_node symbol_table;
 /* FILE *last_eof_read; */
 
 /* Global input file state information */
-/* Note: all characters should be stored in longs.  This ensures
+/* Note: all characters should be stored in long longs.  This ensures
    that noncharacters (i.e., EOF) can also be stored. */
 /* For parsing from a string */
 
 // from types.h
 EXTERN ptr_int_list adults,children;
 
-// EXTERN long parser_stack_index;
+// EXTERN long long parser_stack_index;
 
 EXTERN ptr_node var_tree;
 EXTERN ptr_node printed_vars;
 EXTERN ptr_node printed_pointers;
 EXTERN ptr_node pointer_names;
-EXTERN long gen_sym_counter;
+EXTERN long long gen_sym_counter;
 
-EXTERN long noisy;
-EXTERN long types_done;
+EXTERN long long noisy;
+EXTERN long long types_done;
 
 EXTERN FILE *input_stream;
-EXTERN long line_count;
+EXTERN long long line_count;
 EXTERN string input_file_name;
 EXTERN FILE *output_stream;
 EXTERN char *prompt;
-EXTERN long page_width;
+EXTERN long long page_width;
 
-EXTERN long type_count;
-EXTERN long types_modified;
-EXTERN long main_loop_ok;
+EXTERN long long type_count;
+EXTERN long long types_modified;
+EXTERN long long main_loop_ok;
 EXTERN ptr_goal aim;
 EXTERN ptr_goal goal_stack;
 EXTERN ptr_choice_point choice_stack;
 EXTERN ptr_stack undo_stack;
 #ifdef TS
-EXTERN unsigned long global_time_stamp; /* 9.6 */
+EXTERN unsigned long long global_time_stamp; /* 9.6 */
 #endif
 
-EXTERN long assert_first;
-EXTERN long assert_ok;
-EXTERN long file_date;
+EXTERN long long assert_first;
+EXTERN long long assert_ok;
+EXTERN long long file_date;
 
 // from xpred.h
 EXTERN ptr_psi_term xevent_list, xevent_existing;
@@ -1043,9 +1018,9 @@ xevent, xkeyboard_event, xbutton_event, /* RM: 7.12.92 */
   xenter_event,xleave_event, xmisc_event,  /* RM: 3rd May 93 */
   xgc, xdisplaylist;
 
-EXTERN long x_window_creation;
+EXTERN long long x_window_creation;
 
 // EXTERN char  *numbers[21];
 
-// EXTERN long  set_extra_args[6];
+// EXTERN long long  set_extra_args[6];
 

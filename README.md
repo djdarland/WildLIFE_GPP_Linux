@@ -1,3 +1,21 @@
+g++ and csh needed.
+
+Now simple make and install procedure:
+./make_and_install.sh
+
+To test
+./run_tests
+
+To run WildLIFE
+wild_life
+the make_and_install places it in ~/bin
+
+One test fails. I haven't figured it out.
+I have not kept the X-Windows version working
+I have used C++ classes to a large extent.
+
+
+OLD notes follow
 I had the basic setup done on the one of my computers.
 Now using Mint - I had done previous work in Ununtu.
 I had probably unrelated problems in Ubuntu.

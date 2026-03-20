@@ -8,10 +8,10 @@ CFLAGS		= -g -O
 LIBS		=  -lm
 # DEFS		=  -DNEEDXLIBINT=1 -DGARBCOL=1 -DALLOC_WORDS=20971520 -DUNIF_DEBUG=1 -DNORAW=1 -DREV401PLUS=1  
 # DEFS		=  -DX11=1 -DNEEDXLIBINT=1 -DGARBCOL=1 -DALLOC_WORDS=20971520 -DUNIF_DEBUG=1 -DNORAW=1 -DREV401PLUS=1
-DEFS_EXT_MINT 		= -DREV401PLUS=1 -DMINT -DEXTERN=extern -DGARBCOL=1 -DALLOC_WORDS=20971520 -DUNIF_DEBUG=1 -DNORAW=1 -Wno-write-strings -fpermissive
-DEFS_EXT_MINT_X 		= -DREV401PLUS=1 -DMINT -DEXTERN=extern -DGARBCOL=1 -DALLOC_WORDS=20971520 -DUNIF_DEBUG=1 -DNORAW=1 -DX11=1 -DNEEDXLIBINT=1  -Wno-write-strings  -fpermissive
-DEFS_MAIN_MINT 		= -DREV401PLUS=1  -DMINT -DGARBCOL=1 -DALLOC_WORDS=20971520 -DUNIF_DEBUG=1 -DNORAW=1  -Wno-write-strings  -fpermissive
-DEFS_MAIN_MINT_X 		= -DREV401PLUS=1  -DMINT -DGARBCOL=1 -DALLOC_WORDS=20971520 -DUNIF_DEBUG=1 -DNORAW=1 -DX11=1 -DNEEDXLIBINT=1  -Wno-write-strings  -fpermissive
+DEFS_EXT_MINT 		=  -DMINT  -DGARBCOL=1 -DALLOC_WORDS=20971520 -DUNIF_DEBUG=1 -DNORAW=1 -Wno-write-strings -fpermissive
+DEFS_EXT_MINT_X 		=  -DMINT  -DGARBCOL=1 -DALLOC_WORDS=20971520 -DUNIF_DEBUG=1 -DNORAW=1 -DX11=1 -DNEEDXLIBINT=1  -Wno-write-strings  -fpermissive
+DEFS_MAIN_MINT 		=   -DMINT -DGARBCOL=1 -DALLOC_WORDS=20971520 -DUNIF_DEBUG=1 -DNORAW=1  -Wno-write-strings  -fpermissive
+DEFS_MAIN_MINT_X 		=   -DMINT -DGARBCOL=1 -DALLOC_WORDS=20971520 -DUNIF_DEBUG=1 -DNORAW=1 -DX11=1 -DNEEDXLIBINT=1  -Wno-write-strings  -fpermissive
 # RANLIB		= ranlib
 # INSTALL		= /usr/bin/install -c
 # MKDIRHIER	= mkdirhier
@@ -104,10 +104,15 @@ XOBJ = xpred.o xdisplaylist.o
 XINC = xpred.h xdisplaylist.h
 
 LIBSOURCE = \
-	arity.cpp bi_math.cpp bi_sys.cpp bi_type.cpp built_ins.cpp copy.cpp error.cpp \
+	wl_ListHeader.cpp RefListHeader.cpp \
+	wl_hash_table.cpp wl_hash_table_ptr.cpp \
+	wl_buckets.cpp wl_psi_term.cpp wl_psi_term_ptr.cpp \
+	wl_module.cpp wl_module_ptr.cpp \
+	wl_node.cpp wl_node_ptr.cpp wl_node_ptr_ptr.cpp \
+	arity.cpp bi_math.cpp bi_sys.cpp bi_type.cpp built_ins.cpp error.cpp \
 	hash_table.cpp info.cpp interrupt.cpp lefun.cpp lib.cpp list.cpp login.cpp \
 	lub.cpp memory.cpp modules.cpp parser.cpp print.cpp raw.cpp sys.cpp templates.cpp \
-	token.cpp trees.cpp types.cpp $(XSOURCE) $(DBMSOURCE)
+	token.cpp trees.cpp types.cpp .wl_memory.cpp $(XSOURCE) $(DBMSOURCE)
 
 LIBOBJECT_X = \
 	arity_x.o bi_math_x.o bi_sys_x.o bi_type_x.o built_ins_x.o copy_x.o \
@@ -116,16 +121,26 @@ LIBOBJECT_X = \
 	print_x.o raw_x.o sys_x.o templates_x.o \
 	token_x.o trees_x.o types_x.o xpred.o xdisplaylist.o
 
-LIBOBJECT = \
-	arity.o bi_math.o bi_sys.o bi_type.o built_ins.o copy.o error.o \
-	hash_table.o info2.o interrupt.o lefun.o lib2.o list.o login.o \
+LIBOBJECT =   \
+	wl_ListHeader.o RefListHeader.o \
+	wl_hash_table.o wl_hash_table_ptr.o \
+	wl_buckets.o wl_psi_term.o wl_psi_term_ptr.o \
+	wl_module.o wl_module_ptr.o \
+	wl_node.o wl_node_ptr.o wl_node_ptr_ptr.o \
+	arity.o bi_math.o bi_sys.o bi_type.o built_ins.o error.o \
+	hash_table.o info2.o interrupt.o lefun.o lib.o list.o login.o \
 	lub.o memory.o modules.o parser.o print.o raw.o sys.o templates.o \
-	token.o trees.o types.o
+	token.o trees.o types.o wl_memory.o
 
 # $(XOBJECT) $(DBMOBJECT)
 
-LIBINCLUDE = def_const.h def_glob.h def_macro.h def_proto.h \
-	defs.h def_struct.h
+LIBINCLUDE = \
+	wl_ListHeader.h RefListHeader.h \
+	wl_buckets.h wl_psi_term.h wl_psi_term_ptr.h \
+	wl_module.h wl_module_ptr.h \
+	wl_node.h wl_node_ptr.h wl_node_ptr_ptr.h \
+	def_const.h def_glob.h def_macro.h def_proto.h \
+	defs.h def_struct.h wl_memory.h
 
 
 REINCLUDE = regexp.h
@@ -143,7 +158,8 @@ VERSION     = 4.20
 
 # $(LIBOBJECT) regexp/regexp.o regexp/regsub.o
 
-all: wild_life++ wild_life_X++
+# all: wild_life++ wild_life_X++
+all: wild_life
 	@echo
 	@echo "Life generation done"
 	@echo
@@ -151,8 +167,8 @@ all: wild_life++ wild_life_X++
 Demo:
 	cd ../Demo; $(MAKE) SETUPDIR="$(SETUPDIR)"
 
-life2.o : life2.cpp $(LIBINCLUDE)
-	$(CC) life2.cpp -o life2.o $(CFLAGS) $(CPPFLAGS) $(DEFS_MAIN_MINT) -c
+wild_life.o : wild_life.cpp $(LIBINCLUDE)
+	$(CC) wild_life.cpp -o wild_life.o $(CFLAGS) $(CPPFLAGS) $(DEFS_MAIN_MINT) -c
 
 arity.o : arity.cpp $(LIBINCLUDE)
 	$(CC) arity.cpp -o arity.o $(CFLAGS) $(CPPFLAGS) $(DEFS_EXT_MINT) -c
@@ -169,9 +185,6 @@ bi_type.o : bi_type.cpp  $(LIBINCLUDE)
 built_ins.o : built_ins.cpp  $(LIBINCLUDE)
 	$(CC) built_ins.cpp -o built_ins.o $(CFLAGS) $(CPPFLAGS) $(DEFS_EXT_MINT) -c
 
-copy.o : copy.cpp  $(LIBINCLUDE)
-	$(CC) copy.cpp -o copy.o $(CFLAGS) $(CPPFLAGS) $(DEFS_EXT_MINT) -c
-
 error.o : error.cpp  $(LIBINCLUDE)
 	$(CC) error.cpp -o error.o $(CFLAGS) $(CPPFLAGS) $(DEFS_EXT_MINT) -c
 
@@ -187,8 +200,8 @@ interrupt.o : interrupt.cpp  $(LIBINCLUDE)
 lefun.o : lefun.cpp  $(LIBINCLUDE)
 	$(CC) lefun.cpp -o lefun.o $(CFLAGS) $(CPPFLAGS) $(DEFS_EXT_MINT) -c
 
-lib2.o : lib2.cpp  $(LIBINCLUDE)
-	$(CC) lib2.cpp -o lib2.o $(CFLAGS) $(CPPFLAGS) $(DEFS_EXT_MINT) -c
+lib.o : lib.cpp  $(LIBINCLUDE)
+	$(CC) lib.cpp -o lib.o $(CFLAGS) $(CPPFLAGS) $(DEFS_EXT_MINT) -c
 
 list.o : list.cpp  $(LIBINCLUDE)
 	$(CC) list.cpp -o list.o $(CFLAGS) $(CPPFLAGS) $(DEFS_EXT_MINT) -c
@@ -228,6 +241,48 @@ trees.o : trees.cpp  $(LIBINCLUDE)
 
 types.o : types.cpp  $(LIBINCLUDE)
 	$(CC) types.cpp -o types.o $(CFLAGS) $(CPPFLAGS) $(DEFS_EXT_MINT) -c
+
+wl_memory.o : memory.cpp  $(LIBINCLUDE)
+	$(CC) wl_memory.cpp -o wl_memory.o $(CFLAGS) $(CPPFLAGS) $(DEFS_EXT_MINT) -c
+
+wl_node.o : wl_node.cpp  $(LIBINCLUDE)
+	$(CC) wl_node.cpp -o wl_node.o $(CFLAGS) $(CPPFLAGS) $(DEFS_EXT_MINT) -c
+
+wl_node_ptr.o : wl_node_ptr.cpp  $(LIBINCLUDE)
+	$(CC) wl_node_ptr.cpp -o wl_node_ptr.o $(CFLAGS) $(CPPFLAGS) $(DEFS_EXT_MINT) -c
+
+wl_node_ptr_ptr.o : wl_node_ptr_ptr.cpp  $(LIBINCLUDE)
+	$(CC) wl_node_ptr_ptr.cpp -o wl_node_ptr_ptr.o $(CFLAGS) $(CPPFLAGS) $(DEFS_EXT_MINT) -c
+
+wl_module.o : wl_module.cpp  $(LIBINCLUDE)
+	$(CC) wl_module.cpp -o wl_module.o $(CFLAGS) $(CPPFLAGS) $(DEFS_EXT_MINT) -c
+
+wl_module_ptr.o : wl_module_ptr.cpp  $(LIBINCLUDE)
+	$(CC) wl_module_ptr.cpp -o wl_module_ptr.o $(CFLAGS) $(CPPFLAGS) $(DEFS_EXT_MINT) -c
+
+wl_psi_term.o : wl_psi_term.cpp  $(LIBINCLUDE)
+	$(CC) wl_psi_term.cpp -o wl_psi_term.o $(CFLAGS) $(CPPFLAGS) $(DEFS_EXT_MINT) -c
+
+wl_psi_term_ptr.o : wl_psi_term_ptr.cpp  $(LIBINCLUDE)
+	$(CC) wl_psi_term_ptr.cpp -o wl_psi_term_ptr.o $(CFLAGS) $(CPPFLAGS) $(DEFS_EXT_MINT) -c
+
+
+wl_buckets.o : wl_buckets.cpp  $(LIBINCLUDE)
+	$(CC) wl_buckets.cpp -o wl_buckets.o $(CFLAGS) $(CPPFLAGS) $(DEFS_EXT_MINT) -c
+
+wl_hash_table.o : wl_hash_table.cpp  $(LIBINCLUDE)
+	$(CC) wl_hash_table.cpp -o wl_hash_table.o $(CFLAGS) $(CPPFLAGS) $(DEFS_EXT_MINT) -c
+
+wl_hash_table_ptr.o : wl_hash_table_ptr.cpp  $(LIBINCLUDE)
+	$(CC) wl_hash_table_ptr.cpp -o wl_hash_table_ptr.o $(CFLAGS) $(CPPFLAGS) $(DEFS_EXT_MINT) -c
+
+wl_ListHeader.o : wl_ListHeader.cpp  $(LIBINCLUDE)
+	$(CC) wl_ListHeader.cpp -o wl_ListHeader.o $(CFLAGS) $(CPPFLAGS) $(DEFS_EXT_MINT) -c
+
+RefListHeader.o : RefListHeader.cpp  $(LIBINCLUDE)
+	$(CC) RefListHeader.cpp -o RefListHeader.o $(CFLAGS) $(CPPFLAGS) $(DEFS_EXT_MINT) -c
+
+
 
 # End regular Life
 
@@ -326,11 +381,11 @@ regexp/regexp.o regexp/regsub.o: RegExp
 RegExp:
 	cd regexp; $(MAKE) r CC="$(CC)" CFLAGS="$(CFLAGS)"
 
-wild_life++: life2.o $(LIBOBJECT) regexp/regexp.o regexp/regsub.o
-	$(CC) -o wild_life life2.o $(LIBOBJECT) $(LIBS) regexp/regexp.o regexp/regsub.o
+wild_life: wild_life.o $(LIBOBJECT) regexp/regexp.o regexp/regsub.o
+	$(CC) -o wild_life wild_life.o $(LIBOBJECT) $(LIBS) regexp/regexp.o regexp/regsub.o
 
 wild_life_X++: life2_x.o $(LIBOBJECT_X) regexp/regexp.o regexp/regsub.o
-	$(CC) -o wild_life_X life2_x.o $(LIBOBJECT_X) $(LIBS)  $(XLIBRARIES) regexp/regexp.o regexp/regsub.o -lX11
+	$(CC) -o wild_life_X++ life2_x.o $(LIBOBJECT_X) $(LIBS)  $(XLIBRARIES) regexp/regexp.o regexp/regsub.o -lX11
 
 # $(PROGRAM): life2.o $(LIBOBJECT) regexp/regexp.o regexp/regsub.o
 #	$(CC) -o $(PROGRAM) life2.o $(LDFLAGS) $(LIBS) $(XLIBRARIES) $(LIBOBJECT) regexp/regexp.o regexp/regsub.o
@@ -346,11 +401,11 @@ veryclean: clean
 	-rm *.cache *.status Makefile
 	cd regexp; $(MAKE) veryclean
 
-life2.cpp: life.cpp Makefile
-	sed -e "s%+SETUP+%$(SETUP)%" < life.cpp > life2.cpp
+# life2.cpp: life.cpp Makefile
+#	sed -e "s%+SETUP+%$(SETUP)%" < life.cpp > life2.cpp
 
-lib2.cpp:	lib.cpp Makefile
-	sed -e "s%+SETUP+%$(SETUP)%" < lib.cpp > lib2.cpp
+# lib2.cpp:	lib.cpp Makefile
+#	sed -e "s%+SETUP+%$(SETUP)%" < lib.cpp > lib2.cpp
 
 info2.cpp: info.cpp  Makefile
 	@echo Don\'t be surprised, info is compiled "for ${DATE} because" something has changed

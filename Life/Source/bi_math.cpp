@@ -17,52 +17,37 @@
  */
 /* 	$Id: bi_math.c,v 1.2 1994/12/08 23:07:37 duchier Exp $	 */
 
-#ifndef lint
-static char vcid[] = "$Id: bi_math.c,v 1.2 1994/12/08 23:07:37 duchier Exp $";
-#endif /* lint */
-
-/*
-#ifndef NULL
-#define NULL 0
-#endif
-#ifndef TRUE
-#define TRUE 1
-#endif
-#ifndef FALSE
-#define FALSE 0
-#endif
-*/
+#define EXTERN extern
+#define REV401PLUS
 
 #ifdef REV401PLUS
 #include "defs.h"
 #endif
 
-/* Incorrect when long conversion causes overflow: */
-/* #define trunc(x) ((double)((long)(x))) */
+/* Incorrect when long long conversion causes overflow: */
+/* #define trunc(x) ((double)((long long)(x))) */
 
 /* For machines that do not have a 'trunc(x)' function: */
 #ifdef NEED_TRUNC
 double trunc(x)
-double x;
+  double x;
 {
   return ((x>=0)?floor(x):ceil(x));
 }
 #endif
 
-
-
 /******** C_MULT
-  Multiplication is considered as a 3-variable relation as in Prolog:
+	  Multiplication is considered as a 3-variable relation as in Prolog:
   
-  arg1 * arg2 = arg3
+	  arg1 * arg2 = arg3
   
-  Only it may residuate or curry.
+	  Only it may residuate or curry.
 */
-static long c_mult()
+static long long c_mult()
 {
-  long success=TRUE;
+  long long success=TRUE;
   ptr_psi_term arg1,arg2,arg3,t;
-  long num1,num2,num3;
+  long long num1,num2,num3;
   REAL val1,val2,val3;
   
   t=aim->aaaa_1;
@@ -87,16 +72,7 @@ static long c_mult()
       if(success)
 	switch(num1+num2*2+num3*4) {
 	case 0:
-          residuate3(arg1,arg2,arg3);
-
-	  /* if(arg1==arg3)
-	    success=unify_real_result(arg2,(REAL)1);
-	  else
-	    if(arg2==arg3)
-	      success=unify_real_result(arg1,(REAL)1);
-	    else
-	      residuate2(arg1,arg3);
-	  */
+          ((wl_psi_term_ptr*)arg1)->residuate3(arg2,arg3);
 	  break;
 	case 1:
 	  if (val1==1.0)
@@ -106,7 +82,7 @@ static long c_mult()
           else if (val1!=1.0 && arg2==arg3) /* 9.9 */
 	    success=unify_real_result(arg3,(REAL)0);
 	  else
-	    residuate2(arg2,arg3);
+	    ((wl_psi_term_ptr*)arg2)->residuate2(arg3);
 	  break;
 	case 2:
 	  if (val2==1.0)
@@ -116,7 +92,7 @@ static long c_mult()
           else if (val2!=1.0 && arg1==arg3) /* 9.9 */
 	    success=unify_real_result(arg3,(REAL)0);
 	  else
-	    residuate2(arg1,arg3);
+	    ((wl_psi_term_ptr*)arg1)->residuate2(arg3);
 	  break;
 	case 3:
 	  success=unify_real_result(arg3,val1*val2);
@@ -126,13 +102,13 @@ static long c_mult()
             if (val3==0.0) /* 8.9 */
 	      success=unify_real_result(arg1,(REAL)0);
             else if (val3>0.0)
-	      residuate(arg1);
+	      ((wl_psi_term_ptr*)arg1)->residuate();
 	    else
 	      success=FALSE;
           }
 	  else {
             /* Case A*B=0 is not dealt with because it is nondeterministic */
-	    residuate2(arg1,arg2);
+	    ((wl_psi_term_ptr*)arg1)->residuate2(arg2);
           }
 	  break;
 	case 5:
@@ -159,17 +135,14 @@ static long c_mult()
   nonnum_warning(t,arg1,arg2);
   return success;
 }
-
-
-
 /******** C_DIV
-  Similar to multiply.
+	  Similar to multiply.
 */
-static long c_div()
+static long long c_div()
 {
-  long success=TRUE;
+  long long success=TRUE;
   ptr_psi_term arg1,arg2,arg3,t;
-  long num1,num2,num3;
+  long long num1,num2,num3;
   REAL val1,val2,val3;
   
   t=aim->aaaa_1;
@@ -186,7 +159,6 @@ static long c_div()
       success=get_real_value(arg2,&val2,&num2);
     }
   }
-  
   if (success)
     if (arg1 && arg2) {
       deref(arg3);
@@ -194,23 +166,23 @@ static long c_div()
       if (success)
 	switch(num1+num2*2+num3*4) {
 	case 0:
-	  residuate3(arg1,arg2,arg3);
+	  ((wl_psi_term_ptr*)arg1)->residuate3(arg2,arg3);
 	  break;
 	case 1:
 	  if (val1) {
 	    if (arg2==arg3) {
 	      if (val1>0.0)
-	        residuate(arg2);
+	        ((wl_psi_term_ptr*)arg2)->residuate();
 	      else
 		success=FALSE; /* A/B=B where A<0 */
             }
 	    else
-	      residuate2(arg2,arg3);
+	      ((wl_psi_term_ptr*)arg2)->residuate2(arg3);
           }
           else if (arg2==arg3) /* 9.9 */
             success=unify_real_result(arg2,(REAL)0);
           else
-            residuate2(arg2,arg3);
+            ((wl_psi_term_ptr*)arg2)->residuate2(arg3);
 	  break;
 	case 2:
 	  if (val2) {
@@ -219,7 +191,7 @@ static long c_div()
             else if (arg1==arg3) /* 9.9 */
               success=unify_real_result(arg1,(REAL)0);
             else
-	      residuate2(arg1,arg3);
+	      ((wl_psi_term_ptr*)arg1)->residuate2(arg3);
           }
 	  else {
 	    success=FALSE;
@@ -242,7 +214,7 @@ static long c_div()
             else if (val3!=1.0 && arg1==arg2) /* 9.9 */
               success=unify_real_result(arg1,(REAL)0);
             else
-	      residuate2(arg1,arg2);
+	      ((wl_psi_term_ptr*)arg1)->residuate2(arg2);
           }
           else
             success=unify_real_result(arg1,(REAL)0);
@@ -274,7 +246,6 @@ static long c_div()
           }
 	  break;
 	}
-      
     }
     else
       curry();
@@ -282,20 +253,16 @@ static long c_div()
   nonnum_warning(t,arg1,arg2);
   return success;
 }
-
-
-
-
 /******** C_INTDIV
-  Similar to division, but arguments and result must be integers.
-  Does all deterministic local inversions that can be determined in
-  constant-time independent of argument values.
+	  Similar to division, but arguments and result must be integers.
+	  Does all deterministic local inversions that can be determined in
+	  constant-time independent of argument values.
 */
-static long c_intdiv()
+static long long c_intdiv()
 {
-  long success=TRUE;
+  long long success=TRUE;
   ptr_psi_term arg1,arg2,arg3,t;
-  long num1,num2,num3;
+  long long num1,num2,num3;
   REAL val1,val2,val3;
   
   t=aim->aaaa_1;
@@ -312,7 +279,6 @@ static long c_intdiv()
       success=get_real_value(arg2,&val2,&num2);
     }
   }
-  
   if (success)
     if (arg1 && arg2) {
       deref(arg3);
@@ -320,24 +286,24 @@ static long c_intdiv()
       if (success)
 	switch(num1+num2*2+num3*4) {
 	case 0:
-	  residuate3(arg1,arg2,arg3);
+	  ((wl_psi_term_ptr*)arg1)->residuate3(arg2,arg3);
 	  break;
 	case 1:
 	  if (val1) {
 	    if (int_div_warning(arg1,val1)) return FALSE;
 	    if (arg2==arg3) {
 	      if (val1>0.0)
-	        residuate(arg2);
+	        ((wl_psi_term_ptr*)arg2)->residuate();
 	      else
 		success=FALSE; /* A/B=B where A<0 */
             }
 	    else
-	      residuate2(arg2,arg3);
+	      ((wl_psi_term_ptr*)arg2)->residuate2(arg3);
           }
           else if (arg2==arg3) /* 9.9 */
             success=unify_real_result(arg2,(REAL)0);
           else
-            residuate2(arg2,arg3);
+            ((wl_psi_term_ptr*)arg2)->residuate2(arg3);
 	  break;
 	case 2:
 	  if (val2) {
@@ -347,7 +313,7 @@ static long c_intdiv()
             else if (arg1==arg3) /* 9.9 */
               success=unify_real_result(arg1,(REAL)0);
             else
-	      residuate2(arg1,arg3);
+	      ((wl_psi_term_ptr*)arg1)->residuate2(arg3);
           }
 	  else {
 	    success=FALSE;
@@ -374,7 +340,7 @@ static long c_intdiv()
             else if (val3!=1.0 && arg1==arg2) /* 9.9 */
               success=unify_real_result(arg1,(REAL)0);
             else
-	      residuate2(arg1,arg2);
+	      ((wl_psi_term_ptr*)arg1)->residuate2(arg2);
           }
           else
             success=unify_real_result(arg1,(REAL)0);
@@ -400,7 +366,7 @@ static long c_intdiv()
 		if ((tmp>  1 && val3==trunc(val1/(tmp-1))) ||
 		    (tmp< -1 && val3==trunc(val1/(tmp+1))))
 		  /* Solution is not unique */
-		  residuate(arg2);
+		  ((wl_psi_term_ptr*)arg2)->residuate();
 		else /* Solution is unique */
 		  success=unify_real_result(arg2,tmp);
 	      }
@@ -417,7 +383,7 @@ static long c_intdiv()
 	  if (val3!=floor(val3)) return FALSE;
           if (val2) {
 	    if (val3) 
-	      residuate(arg1);
+	      ((wl_psi_term_ptr*)arg1)->residuate();
 	    else
 	      success=unify_real_result(arg1,(REAL)0);
 	  }
@@ -446,27 +412,22 @@ static long c_intdiv()
     }
     else
       curry();
-  
   nonnum_warning(t,arg1,arg2);
   return success;
 }
-
-
-
 /* Main routine for floor & ceiling functions */
-static long c_floor_ceiling(long floorflag)
-// long floorflag;
+static long long c_floor_ceiling(long long floorflag)
+// long long floorflag;
 {
-  long success=TRUE;
+  long long success=TRUE;
   ptr_psi_term arg1,arg2,arg3,t;
-  long num1,num3;
+  long long num1,num3;
   REAL val1,val3;
   
   t=aim->aaaa_1;
   deref_ptr(t);
   get_two_args(t->attr_list,&arg1,&arg2);
   arg3=aim->bbbb_1;
-  
   if(arg1) {
     deref(arg1);
     deref_args(t,set_1);
@@ -477,13 +438,13 @@ static long c_floor_ceiling(long floorflag)
       if(success)
 	switch(num1+num3*4) {
 	case 0:
-	  residuate(arg1);
+	  ((wl_psi_term_ptr*)arg1)->residuate();
 	  break;
 	case 1:
 	  success=unify_real_result(arg3,(floorflag?floor(val1):ceil(val1)));
 	  break;
 	case 4:
-	  residuate(arg1); 
+	  ((wl_psi_term_ptr*)arg1)->residuate(); 
 	  break;
 	case 5:
 	  success=(val3==(floorflag?floor(val1):ceil(val1)));
@@ -492,49 +453,37 @@ static long c_floor_ceiling(long floorflag)
   }
   else
     curry();
-
   nonnum_warning(t,arg1,NULL);
   return success;
 }
-
-
-
 /******** C_FLOOR
-  Return the largest integer inferior or equal to the argument
+	  Return the largest integer inferior or equal to the argument
 */
-static long c_floor()
+static long long c_floor()
 {
   return c_floor_ceiling(TRUE);
 }
-
-
-
-
 /******** C_CEILING
-  Return the smallest integer larger or equal to the argument
+	  Return the smallest integer larger or equal to the argument
 */
-static long c_ceiling()
+static long long c_ceiling()
 {
   return c_floor_ceiling(FALSE);
 }
-
-
-
 /******** C_SQRT
-  Return the square root of the argument
+	  Return the square root of the argument
 */
-static long c_sqrt()
+static long long c_sqrt()
 {
-  long success=TRUE;
+  long long success=TRUE;
   ptr_psi_term arg1,arg3,t;
-  long num1,num3;
+  long long num1,num3;
   REAL val1,val3;
   
   t=aim->aaaa_1;
   deref_ptr(t);
   get_one_arg(t->attr_list,&arg1);
   arg3=aim->bbbb_1;
-  
   if (arg1) {
     deref(arg1);
     deref_args(t,set_1);
@@ -545,7 +494,7 @@ static long c_sqrt()
       if (success)
 	switch(num1+num3*4) {
 	case 0:
-	  residuate2(arg1,arg3);
+	  ((wl_psi_term_ptr*)arg1)->residuate2(arg3);
 	  break;
 	case 1:
 	  if (val1>=0)
@@ -566,31 +515,25 @@ static long c_sqrt()
   }
   else
     curry();
-
   nonnum_warning(t,arg1,NULL);
   return success;
 }
-
-
 #define SINFLAG 1
 #define COSFLAG 2
 #define TANFLAG 3
-
-
 /* Main routine for sine and cosine */
-static long c_trig(long trigflag)
-// long trigflag;
+static long long c_trig(long long trigflag)
+// long long trigflag;
 {
-  long success=TRUE;
+  long long success=TRUE;
   ptr_psi_term arg1,arg3,t; /* arg3 is result */
-  long num1,num3;
+  long long num1,num3;
   REAL val1,val3,ans;
 
   t=aim->aaaa_1;
   deref_ptr(t);
   get_one_arg(t->attr_list,&arg1);
   arg3=aim->bbbb_1;
-
   if (arg1) {
     deref(arg1);
     deref_args(t,set_1);
@@ -601,19 +544,19 @@ static long c_trig(long trigflag)
       if (success)
         switch(num1+num3*4) {
         case 0:
-          residuate2(arg1,arg3);
+          ((wl_psi_term_ptr*)arg1)->residuate2(arg3);
           break;
         case 1:
           ans=(trigflag==SINFLAG?sin(val1):
-              (trigflag==COSFLAG?cos(val1):
-              (trigflag==TANFLAG?tan(val1):0.0)));
+	       (trigflag==COSFLAG?cos(val1):
+		(trigflag==TANFLAG?tan(val1):0.0)));
           success=unify_real_result(arg3,ans);
           break;
         case 4:
           if (trigflag==TANFLAG || (val3>= -1 && val3<=1)) {
             ans=(trigflag==SINFLAG?asin(val3):
-                (trigflag==COSFLAG?acos(val3):
-                (trigflag==TANFLAG?atan(val3):0.0)));
+		 (trigflag==COSFLAG?acos(val3):
+		  (trigflag==TANFLAG?atan(val3):0.0)));
             success=unify_real_result(arg1,ans);
           }
           else
@@ -621,63 +564,49 @@ static long c_trig(long trigflag)
           break;
         case 5:
           ans=(trigflag==SINFLAG?asin(val1):
-              (trigflag==COSFLAG?acos(val1):
-              (trigflag==TANFLAG?atan(val1):0.0)));
+	       (trigflag==COSFLAG?acos(val1):
+		(trigflag==TANFLAG?atan(val1):0.0)));
           success=(val3==ans);
         }
     }
   }
   else
     curry();
-
   nonnum_warning(t,arg1,NULL);
   return success;
 }
-
-
 /******** C_COSINE
-  Return the cosine of the argument (in radians).
+	  Return the cosine of the argument (in radians).
 */
-static long c_cos()
+static long long c_cos()
 {
   return (c_trig(COSFLAG));
 }
-
-
-
-
 /******** C_SINE
-  Return the sine of the argument
+	  Return the sine of the argument
 */
-static long c_sin()
+static long long c_sin()
 {
   return (c_trig(SINFLAG));
 }
-
-
-
 /******** C_TAN
-  Return the tangent of the argument
+	  Return the tangent of the argument
 */
-static long c_tan()
+static long long c_tan()
 {
   return (c_trig(TANFLAG));
 }
-
-
-
-static long c_bit_not()
+static long long c_bit_not()
 {
-  long success=TRUE;
+  long long success=TRUE;
   ptr_psi_term arg1,arg3,t; /* arg3 is result */
-  long num1,num3;
+  long long num1,num3;
   REAL val1,val3;
 
   t=aim->aaaa_1;
   deref_ptr(t);
   get_one_arg(t->attr_list,&arg1);
   arg3=aim->bbbb_1;
-
   if (arg1) {
     deref(arg1);
     deref_args(t,set_1);
@@ -689,15 +618,15 @@ static long c_bit_not()
         switch(num1+num3*4) {
         case 0:
 	  if (arg1==arg3) return FALSE;
-          residuate2(arg1,arg3);
+          ((wl_psi_term_ptr*)arg1)->residuate2(arg3);
           break;
         case 1:
 	  if (bit_not_warning(arg1,val1)) return FALSE;
-          success=unify_real_result(arg3,(REAL)~(long)val1);
+          success=unify_real_result(arg3,(REAL)~(long long)val1);
           break;
         case 4:
 	  if (bit_not_warning(arg3,val3)) return FALSE;
-          success=unify_real_result(arg1,(REAL)~(long)val3);
+          success=unify_real_result(arg1,(REAL)~(long long)val3);
           break;
         case 5:
 	  if (bit_not_warning(arg1,val1)) return FALSE;
@@ -709,29 +638,23 @@ static long c_bit_not()
   }
   else
     curry();
-
   nonnum_warning(t,arg1,NULL);
   return success;
 }
-
-
-
-
 /******** C_BIT_AND
-  Return the bitwise operation: ARG1 and ARG2.
+	  Return the bitwise operation: ARG1 and ARG2.
 */
-static long c_bit_and()
+static long long c_bit_and()
 {
-  long success=TRUE;
+  long long success=TRUE;
   ptr_psi_term arg1,arg2,arg3,t;
-  long num1,num2,num3;
+  long long num1,num2,num3;
   REAL val1,val2,val3;
   
   t=aim->aaaa_1;
   deref_ptr(t);
   get_two_args(t->attr_list,&arg1,&arg2);
   arg3=aim->bbbb_1;
-  
   if(arg1) {
     deref(arg1);
     success=get_real_value(arg1,&val1,&num1);
@@ -741,7 +664,6 @@ static long c_bit_and()
       success=get_real_value(arg2,&val2,&num2);
     }
   }
-  
   if(success)
     if(arg1 && arg2) {
       deref(arg3);
@@ -749,70 +671,64 @@ static long c_bit_and()
       if(success)
 	switch(num1+num2*2+num3*4) {
 	case 0:
-	  residuate2(arg1,arg2);
+	  ((wl_psi_term_ptr*)arg1)->residuate2(arg2);
 	  break;
 	case 1:
           if (bit_and_warning(arg1,val1)) return FALSE;
 	  if(val1)
-	    residuate(arg2);
+	    ((wl_psi_term_ptr*)arg2)->residuate();
 	  else
 	    success=unify_real_result(arg3,(REAL)0);
 	  break;
 	case 2:
           if (bit_and_warning(arg2,val2)) return FALSE;
 	  if(val2)
-	    residuate(arg1);
+	    ((wl_psi_term_ptr*)arg1)->residuate();
 	  else
 	    success=unify_real_result(arg3,(REAL)0);
 	  break;
 	case 3:
           if (bit_and_warning(arg1,val1)||bit_and_warning(arg2,val2))
             return FALSE;
-	  success=unify_real_result(arg3,(REAL)(((unsigned long)val1) & ((unsigned long)val2)));
+	  success=unify_real_result(arg3,(REAL)(((unsigned long long)val1) & ((unsigned long long)val2)));
 	  break;
 	case 4:
-	  residuate2(arg1,arg2);
+	  ((wl_psi_term_ptr*)arg1)->residuate2(arg2);
 	  break;
 	case 5:
           if (bit_and_warning(arg1,val1)) return FALSE;
-	  residuate(arg2);
+	  ((wl_psi_term_ptr*)arg2)->residuate();
 	  break;
 	case 6:
           if (bit_and_warning(arg2,val2)) return FALSE;
-	  residuate(arg1);
+	  ((wl_psi_term_ptr*)arg1)->residuate();
 	  break;
 	case 7:
           if (bit_and_warning(arg1,val1)||bit_and_warning(arg2,val2))
             return FALSE;
-	  success=(val3==(REAL)(((unsigned long)val1) & ((unsigned long)val2)));
+	  success=(val3==(REAL)(((unsigned long long)val1) & ((unsigned long long)val2)));
 	  break;
 	}
-      
     }
     else
       curry();
-  
   nonnum_warning(t,arg1,arg2);
   return success;
 }
-
-
-
 /******** C_BIT_OR
-  Return the bitwise operation: ARG1 or ARG2.
+	  Return the bitwise operation: ARG1 or ARG2.
 */
-static long c_bit_or()
+static long long c_bit_or()
 {
-  long success=TRUE;
+  long long success=TRUE;
   ptr_psi_term arg1,arg2,arg3,t;
-  long num1,num2,num3;
+  long long num1,num2,num3;
   REAL val1,val2,val3;
   
   t=aim->aaaa_1;
   deref_ptr(t);
   get_two_args(t->attr_list,&arg1,&arg2);
   arg3=aim->bbbb_1;
-  
   if(arg1) {
     deref(arg1);
     success=get_real_value(arg1,&val1,&num1);
@@ -822,7 +738,6 @@ static long c_bit_or()
       success=get_real_value(arg2,&val2,&num2);
     }
   }
-  
   if(success)
     if(arg1 && arg2) {
       deref(arg3);
@@ -831,68 +746,59 @@ static long c_bit_or()
 	switch(num1+num2*2+num3*4) {
 	case 0:
         case 4:
-	  residuate2(arg1,arg2);
+	  ((wl_psi_term_ptr*)arg1)->residuate2(arg2);
 	  break;
 	case 1:
         case 5:
           if (bit_or_warning(arg1,val1)) return FALSE;
-	  residuate(arg2);
+	  ((wl_psi_term_ptr*)arg2)->residuate();
 	  break;
 	case 2:
         case 6:
           if (bit_or_warning(arg2,val2)) return FALSE;
-	  residuate(arg1);
+	  ((wl_psi_term_ptr*)arg1)->residuate();
 	  break;
 	case 3:
           if (bit_or_warning(arg1,val1)||bit_or_warning(arg2,val2))
             return FALSE;
-	  success=unify_real_result(arg3,(REAL)(((unsigned long)val1) | ((unsigned long)val2)));
+	  success=unify_real_result(arg3,(REAL)(((unsigned long long)val1) | ((unsigned long long)val2)));
 	  break;
 	case 7:
           if (bit_or_warning(arg1,val1)||bit_or_warning(arg2,val2))
             return FALSE;
-	  success=(val3==(REAL)(((unsigned long)val1) | ((unsigned long)val2)));
+	  success=(val3==(REAL)(((unsigned long long)val1) | ((unsigned long long)val2)));
 	  break;
 	}      
     }
     else
       curry();
-  
   nonnum_warning(t,arg1,arg2);
   return success;
 }
-
-
 /******** C_SHIFT
-  Return the bitwise shift left or shift right.
+	  Return the bitwise shift left or shift right.
 */
-
-static long c_shift(long);
-
-
-static long c_shift_left()
+static long long c_shift(long long);
+static long long c_shift_left()
 {
   return (c_shift(FALSE));
 }
-
-static long c_shift_right()
+static long long c_shift_right()
 {
   return (c_shift(TRUE));
 }
-
-static long c_shift(long dir)
-// long dir;
+static long long c_shift(long long dir)
+// long long dir;
 {
-  long success=TRUE;
+  long long success=TRUE;
   ptr_psi_term arg1,arg2,arg3,t;
-  long num1,num2,num3;
+  long long num1,num2,num3;
   REAL val1,val2,val3,ans;
   
   t=aim->aaaa_1;
   deref_ptr(t);
   get_two_args(t->attr_list,&arg1,&arg2);
   arg3=aim->bbbb_1;
-  
   if(arg1) {
     deref(arg1);
     success=get_real_value(arg1,&val1,&num1);
@@ -902,7 +808,6 @@ static long c_shift(long dir)
       success=get_real_value(arg2,&val2,&num2);
     }
   }
-  
   if(success)
     if(arg1 && arg2) {
       deref(arg3);
@@ -911,55 +816,51 @@ static long c_shift(long dir)
 	switch(num1+num2*2+num3*4) {
 	case 0:
         case 4:
-	  residuate2(arg1,arg2);
+	  ((wl_psi_term_ptr*)arg1)->residuate2(arg2);
 	  break;
 	case 1:
         case 5:
           if (shift_warning(dir,arg1,val1)) return FALSE;
-	  residuate(arg2);
+	  ((wl_psi_term_ptr*)arg2)->residuate();
 	  break;
 	case 2:
         case 6:
           if (shift_warning(dir,arg2,val2)) return FALSE;
-	  residuate(arg1);
+	  ((wl_psi_term_ptr*)arg1)->residuate();
 	  break;
 	case 3:
           if (shift_warning(dir,arg1,val1)||shift_warning(dir,arg2,val2))
             return FALSE;
-          ans=(REAL)(dir?(long)val1>>(long)val2:(long)val1<<(long)val2);
+          ans=(REAL)(dir?(long long)val1>>(long long)val2:(long long)val1<<(long long)val2);
 	  success=unify_real_result(arg3,ans);
 	  break;
         case 7:
           if (shift_warning(dir,arg1,val1)||shift_warning(dir,arg2,val2))
             return FALSE;
-          ans=(REAL)(dir?(long)val1>>(long)val2:(long)val1<<(long)val2);
+          ans=(REAL)(dir?(long long)val1>>(long long)val2:(long long)val1<<(long long)val2);
 	  success=(val3==ans);
 	  break;
 	}      
     }
     else
       curry();
-  
   nonnum_warning(t,arg1,arg2);
   return success;
 }
-
-
 /******** C_MOD
-  The modulo operation.
+	  The modulo operation.
 */
-static long c_mod()
+static long long c_mod()
 {
-  long success=TRUE;
+  long long success=TRUE;
   ptr_psi_term arg1,arg2,arg3,t;
-  long num1,num2,num3;
+  long long num1,num2,num3;
   REAL val1,val2,val3;
   
   t=aim->aaaa_1;
   deref_ptr(t);
   get_two_args(t->attr_list,&arg1,&arg2);
   arg3=aim->bbbb_1;
-  
   if(arg1) {
     deref(arg1);
     success=get_real_value(arg1,&val1,&num1);
@@ -969,7 +870,6 @@ static long c_mod()
       success=get_real_value(arg2,&val2,&num2);
     }
   }
-  
   if(success)
     if(arg1 && arg2) {
       deref(arg3);
@@ -978,59 +878,56 @@ static long c_mod()
 	switch(num1+num2*2+num3*4) {
 	case 0:
 	case 4:
-	  residuate2(arg1,arg2);
+	  ((wl_psi_term_ptr*)arg1)->residuate2(arg2);
 	  break;
 	case 1:
 	case 5:
           if (mod_warning(arg1,val1,0)) return FALSE;
-	  residuate(arg2);
+	  ((wl_psi_term_ptr*)arg2)->residuate();
 	  break;
 	case 2:
 	case 6:
           if (mod_warning(arg2,val2,1)) return FALSE;
-	  residuate(arg1);
+	  ((wl_psi_term_ptr*)arg1)->residuate();
 	  break;
 	case 3:
           if (mod_warning(arg1,val1,0)||mod_warning(arg2,val2,1))
             return FALSE;
-	  success=unify_real_result(arg3,(REAL)((unsigned long)val1 % (unsigned long)val2));
+	  success=unify_real_result(arg3,(REAL)((unsigned long long)val1 % (unsigned long long)val2));
 	  break;
 	case 7:
           if (mod_warning(arg1,val1,0)||mod_warning(arg2,val2,1))
             return FALSE;
-	  success=(val3==(REAL)((unsigned long)val1 % (unsigned long)val2));
+	  success=(val3==(REAL)((unsigned long long)val1 % (unsigned long long)val2));
 	  break;
 	}      
     }
     else
       curry();
-  
   nonnum_warning(t,arg1,arg2);
   return success;
 }
-
 /******** C_ADD
-  Addition is considered as a 3-variable relation as in Prolog:
+	  Addition is considered as a 3-variable relation as in Prolog:
   
-  arg1 + arg2 = arg3
+	  arg1 + arg2 = arg3
   
-  Only it may residuate or curry.
+	  Only it may residuate or curry.
 
-  Addition is further complicated by the fact that it is both a unary and
-  binary function.
+	  Addition is further complicated by the fact that it is both a unary and
+	  binary function.
 */
-static long c_add()
+static long long c_add()
 {
-  long success=TRUE;
+  long long success=TRUE;
   ptr_psi_term arg1,arg2,arg3,t;
-  long num1,num2,num3;
+  long long num1,num2,num3;
   REAL val1,val2,val3;
   
   t=aim->aaaa_1;
   deref_ptr(t);
   get_two_args(t->attr_list,&arg1,&arg2);
   arg3=aim->bbbb_1;
-  
   if(arg1) {
     deref(arg1);
     success=get_real_value(arg1,&val1,&num1);
@@ -1040,7 +937,6 @@ static long c_add()
       success=get_real_value(arg2,&val2,&num2);
     }
   }
-  
   if(success)
     if(arg1 && arg2) {
       deref(arg3);
@@ -1053,14 +949,14 @@ static long c_add()
           else if (arg2==arg3)
 	    success=unify_real_result(arg1,(REAL)0);
           else
-	    residuate3(arg1,arg2,arg3);
+	    ((wl_psi_term_ptr*)arg1)->residuate3(arg2,arg3);
 	  break;
 	case 1:
 	  if (val1) {
             if (arg2==arg3) /* 8.9 */
               success=FALSE;
             else
-	      residuate2(arg2,arg3);
+	      ((wl_psi_term_ptr*)arg2)->residuate2(arg3);
           }
           else
 	    push_goal(unify,arg2,arg3,NULL);
@@ -1070,7 +966,7 @@ static long c_add()
             if (arg1==arg3) /* 8.9 */
               success=FALSE;
             else
-	      residuate2(arg1,arg3);
+	      ((wl_psi_term_ptr*)arg1)->residuate2(arg3);
           }
           else
 	    push_goal(unify,arg1,arg3,NULL);
@@ -1082,7 +978,7 @@ static long c_add()
 	  if (arg1==arg2)
 	    success=unify_real_result(arg1,val3/2);
 	  else
-	    residuate2(arg1,arg2);
+	    ((wl_psi_term_ptr*)arg1)->residuate2(arg2);
 	  break;
 	case 5:
 	  success=unify_real_result(arg2,val3-val1);
@@ -1097,45 +993,17 @@ static long c_add()
     }
     else
       curry(); 
-/*
-'+' is no longer a function of a single argument:
-      if(arg1) {
-	deref(arg3);
-	success=get_real_value(arg3,&val3,&num3);
-	if(success)
-	  switch(num1+4*num3) {
-	  case 0:
-	    residuate2(arg1,arg3);
-	    break;
-	  case 1:
-	    success=unify_real_result(arg3,val1);
-	    break;
-	  case 4:
-	    success=unify_real_result(arg1,val3);
-	    break;
-	  case 5:
-	    success=(val1==val3);
-	  }
-      }
-      else
-	curry();
-*/
-  
   nonnum_warning(t,arg1,arg2);
   return success;
 }
-
-
-
-
 /******** C_SUB
-  Identical (nearly) to C_ADD
+	  Identical (nearly) to C_ADD
 */
-static long c_sub()
+static long long c_sub()
 {
-  long success=TRUE;
+  long long success=TRUE;
   ptr_psi_term arg1,arg2,arg3,t;
-  long num1,num2,num3;
+  long long num1,num2,num3;
   REAL val1,val2,val3;
   
   t=aim->aaaa_1;
@@ -1152,7 +1020,6 @@ static long c_sub()
       success=get_real_value(arg2,&val2,&num2);
     }
   }
-  
   if(success)
     if(arg1 && arg2) {
       deref(arg3);
@@ -1165,20 +1032,20 @@ static long c_sub()
 	  else if (arg1==arg2)
 	    success=unify_real_result(arg3,(REAL)0);
 	  else
-	    residuate3(arg1,arg2,arg3);
+	    ((wl_psi_term_ptr*)arg1)->residuate3(arg2,arg3);
 	  break;
 	case 1:
 	  if (arg2==arg3)
 	    success=unify_real_result(arg3,val1/2);
           else
-	    residuate2(arg2,arg3);
+	    ((wl_psi_term_ptr*)arg2)->residuate2(arg3);
 	  break;
 	case 2:
 	  if (val2) {
             if (arg1==arg3) /* 9.9 */
               success=FALSE;
             else
-	      residuate2(arg1,arg3);
+	      ((wl_psi_term_ptr*)arg1)->residuate2(arg3);
           }
           else
 	    push_goal(unify,arg1,arg3,NULL);
@@ -1190,7 +1057,7 @@ static long c_sub()
 	  if (arg1==arg2)
 	    success=(val3==0);
           else if (val3)
-	    residuate2(arg1,arg2);
+	    ((wl_psi_term_ptr*)arg1)->residuate2(arg2);
 	  else
 	    push_goal(unify,arg1,arg2,NULL);
 	  break;
@@ -1212,7 +1079,7 @@ static long c_sub()
 	if(success)
 	  switch(num1+4*num3) {
 	  case 0:
-	    residuate2(arg1,arg3);
+	    ((wl_psi_term_ptr*)arg1)->residuate2(arg3);
 	    break;
 	  case 1:
 	    success=unify_real_result(arg3,-val1);
@@ -1226,26 +1093,23 @@ static long c_sub()
       }
       else
 	curry();
-  
   nonnum_warning(t,arg1,arg2);
   return success;
 }
-
 /******** C_LOG
-  Natural logarithm.
+	  Natural logarithm.
 */
-static long c_log()
+static long long c_log()
 {
-  long success=TRUE;
+  long long success=TRUE;
   ptr_psi_term arg1,arg3,t;
-  long num1,num3;
+  long long num1,num3;
   REAL val1,val3;
   
   t=aim->aaaa_1;
   deref_ptr(t);
   get_one_arg(t->attr_list,&arg1);
   arg3=aim->bbbb_1;
-  
   if(arg1) {
     deref(arg1);
     deref_args(t,set_1);
@@ -1256,7 +1120,7 @@ static long c_log()
       if(success)
 	switch(num1+num3*4) {
 	case 0:
-	  residuate2(arg1,arg3);
+	  ((wl_psi_term_ptr*)arg1)->residuate2(arg3);
 	  break;
 	case 1:
 	  if (val1>0)
@@ -1280,22 +1144,17 @@ static long c_log()
   }
   else
     curry();
-
   nonnum_warning(t,arg1,NULL);
   return success;
 }
-
-
-
-
 /******** C_EXP
-  Exponential.
+	  Exponential.
 */
-static long c_exp()
+static long long c_exp()
 {
-  long success=TRUE;
+  long long success=TRUE;
   ptr_psi_term arg1,arg2,arg3,t;
-  long num1,num3;
+  long long num1,num3;
   REAL val1,val3;
   
   t=aim->aaaa_1;
@@ -1313,7 +1172,7 @@ static long c_exp()
       if(success)
 	switch(num1+num3*4) {
 	case 0:
-	  residuate2(arg1,arg3);
+	  ((wl_psi_term_ptr*)arg1)->residuate2(arg3);
 	  break;
 	case 1:
 	  success=unify_real_result(arg3,exp(val1));
@@ -1335,27 +1194,26 @@ static long c_exp()
   nonnum_warning(t,arg1,NULL);
   return success;
 }
-
 void insert_math_builtins()
 {
-  new_built_in(syntax_module,"*",(def_type)function_it,c_mult);
-  new_built_in(syntax_module,"+",(def_type)function_it,c_add);
-  new_built_in(syntax_module,"-",(def_type)function_it,c_sub);
-  new_built_in(syntax_module,"/",(def_type)function_it,c_div);  
-  new_built_in(syntax_module,"//",(def_type)function_it,c_intdiv);  
-  new_built_in(syntax_module,"mod",(def_type)function_it,c_mod); /* PVR 24.2.94 */
-  new_built_in(syntax_module,"/\\",(def_type)function_it,c_bit_and);
-  new_built_in(syntax_module,"\\/",(def_type)function_it,c_bit_or);
-  new_built_in(syntax_module,"\\",(def_type)function_it,c_bit_not);
-  new_built_in(syntax_module,">>",(def_type)function_it,c_shift_right);
-  new_built_in(syntax_module,"<<",(def_type)function_it,c_shift_left);
-  new_built_in(bi_module,"floor",(def_type)function_it,c_floor);
-  new_built_in(bi_module,"ceiling",(def_type)function_it,c_ceiling);
-  new_built_in(bi_module,"exp",(def_type)function_it,c_exp);
-  new_built_in(bi_module,"log",(def_type)function_it,c_log);
-  new_built_in(bi_module,"cos",(def_type)function_it,c_cos);
-  new_built_in(bi_module,"sin",(def_type)function_it,c_sin);
-  new_built_in(bi_module,"tan",(def_type)function_it,c_tan);
-  new_built_in(bi_module,"sqrt",(def_type)function_it,c_sqrt);
+  ((wl_module_ptr*)syntax_module)->new_built_in("*",(def_type)function_it,c_mult);
+  ((wl_module_ptr*)syntax_module)->new_built_in("+",(def_type)function_it,c_add);
+  ((wl_module_ptr*)syntax_module)->new_built_in("-",(def_type)function_it,c_sub);
+  ((wl_module_ptr*)syntax_module)->new_built_in("/",(def_type)function_it,c_div);  
+  ((wl_module_ptr*)syntax_module)->new_built_in("//",(def_type)function_it,c_intdiv);  
+  ((wl_module_ptr*)syntax_module)->new_built_in("mod",(def_type)function_it,c_mod); /* PVR 24.2.94 */
+  ((wl_module_ptr*)syntax_module)->new_built_in("/\\",(def_type)function_it,c_bit_and);
+  ((wl_module_ptr*)syntax_module)->new_built_in("\\/",(def_type)function_it,c_bit_or);
+  ((wl_module_ptr*)syntax_module)->new_built_in("\\",(def_type)function_it,c_bit_not);
+  ((wl_module_ptr*)syntax_module)->new_built_in(">>",(def_type)function_it,c_shift_right);
+  ((wl_module_ptr*)syntax_module)->new_built_in("<<",(def_type)function_it,c_shift_left);
+  ((wl_module_ptr*)bi_module)->new_built_in("floor",(def_type)function_it,c_floor);
+  ((wl_module_ptr*)bi_module)->new_built_in("ceiling",(def_type)function_it,c_ceiling);
+  ((wl_module_ptr*)bi_module)->new_built_in("exp",(def_type)function_it,c_exp);
+  ((wl_module_ptr*)bi_module)->new_built_in("log",(def_type)function_it,c_log);
+  ((wl_module_ptr*)bi_module)->new_built_in("cos",(def_type)function_it,c_cos);
+  ((wl_module_ptr*)bi_module)->new_built_in("sin",(def_type)function_it,c_sin);
+  ((wl_module_ptr*)bi_module)->new_built_in("tan",(def_type)function_it,c_tan);
+  ((wl_module_ptr*)bi_module)->new_built_in("sqrt",(def_type)function_it,c_sqrt);
 }
 

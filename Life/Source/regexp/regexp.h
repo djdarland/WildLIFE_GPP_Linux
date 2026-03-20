@@ -4,6 +4,14 @@
  * Caveat:  this is V8 regexp(3) [actually, a reimplementation thereof],
  * not the System V one.
  */
+#ifdef __unix__
+#include <stdlib.h>
+#endif
+#ifdef _WIN64
+#include <cstdlib>
+#endif
+
+
 #define NSUBEXP  10
 typedef struct regexp {
 	char *startp[NSUBEXP];

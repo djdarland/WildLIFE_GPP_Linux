@@ -1,3 +1,4 @@
+#pragma once
 /*! \file def_config.h
   \brief defines formerly set in Makefile
 
@@ -5,14 +6,14 @@
 */
 
 /*! \def X11
-    \brief whether X11 enabled
+  \brief whether X11 enabled
 
 */
 
 // #define X11 1 
 
 /*! \def NEEDXLIBINT
-   \brief whether X11/Xlibint.h needed 
+  \brief whether X11/Xlibint.h needed 
 
 */
 
@@ -23,7 +24,7 @@
 
 */
 
-#define ALLOC_WORDS 20971520
+#define ALLOC_WORDS (20971520 * 16)
 
 /*! \def NORAW
   \brief this should be defined unless using the life-shell of Kathleen.

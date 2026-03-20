@@ -2,20 +2,14 @@
 ** All Rights Reserved.
 *****************************************************************/
 /* 	$Id: interrupt.c,v 1.2 1994/12/08 23:25:19 duchier Exp $	 */
-
-#ifndef lint
-static char vcid[] = "$Id: interrupt.c,v 1.2 1994/12/08 23:25:19 duchier Exp $";
-#endif /* lint */
-
+#define EXTERN extern
+#define REV401PLUS
 #ifdef REV401PLUS
 #include "defs.h"
 #endif
-
-// long interrupted=FALSE;  // REV401PLUS moved down removed for MINT
-
 /******** INTERRUPT()
-  This routine is called whenever the user types CONTROL C which generates an
-  interrupt. The interrupt is dealt with later, when convenient, or ignored.
+This routine is called whenever the user types CONTROL C which generates an
+interrupt. The interrupt is dealt with later, when convenient, or ignored.
 */
 void interrupt(int)
 {
@@ -25,12 +19,9 @@ void interrupt(int)
   f=interrupt;
   signal(SIGINT,f);/*  RM: Feb 15 1993  */
 }
-
-
-
 /******** INIT_INTERRUPT
-  This initialises interrupts by trapping the interrupt signal and sending it
-  to INTERRUPT.
+This initialises interrupts by trapping the interrupt signal and sending it
+to INTERRUPT.
 */
 void init_interrupt()
 {
@@ -39,58 +30,46 @@ void init_interrupt()
   if (signal(SIGINT,SIG_IGN)!=SIG_IGN)
     signal(SIGINT,f);
 }
-
-
-
 /******** HANDLE_INTERRUPT()
-  This deals with an eventual interrupt.
-  Return TRUE if execution continues normally, otherwise abort query, toggle
-  trace on or off, or quit Wild_Life (suicide).
+This deals with an eventual interrupt.
+Return TRUE if execution continues normally, otherwise abort query, toggle
+trace on or off, or quit Wild_Life (suicide).
 */
 void handle_interrupt()
 {
   ptr_psi_term old_state;
   char *old_prompt;
   int old_quiet; /* 21.1 */
-  long c,d; /* 21.12 (prev. char) */
-  long count;
+  long long c,d; /* 21.12 (prev. char) */
+  long long count;
 
   if (interrupted) printf("\n");
   interrupted=FALSE;
   old_prompt=prompt;
   old_quiet=quietflag; /* 21.1 */
   steptrace=FALSE;
-
   /* new_state(&old_state); */
   old_state=input_state;
   open_input_file("stdin");
   stdin_cleareof();
-
-  StartAgain:
+ StartAgain:
   do {
     printf("*** Command ");
     prompt="(q,c,a,s,t,h)?";
     quietflag=FALSE; /* 21.1 */
-    
     do {
       c=read_char();
     } while (c!=EOLN && c>0 && c<=32);
-  
     d=c;
     count=0;
     while (DIGIT(d)) { count=count*10+(d-'0'); d=read_char(); }
-
     while (d!=EOLN && d!=EOF) d=read_char();
-
     if (c=='h' || c=='?') {
       printf("*** [Quit (q), Continue (c), Abort (a), Step (s,RETURN), Trace (t), Help (h,?)]\n");
     }
-
   } while (c=='h' || c=='?');
-  
   prompt=old_prompt;
   quietflag=old_quiet; /* 21.1 */
-  
   switch (c) {
   case 'v':
   case 'V':

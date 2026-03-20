@@ -1,3 +1,4 @@
+#pragma once
 /*! \file def_struct.h
   \brief typedefs and structures
 
@@ -9,12 +10,12 @@
   Use define instead of enums because quick masking is important 
 */
 
-typedef long type_ptr;
+typedef long long type_ptr;
 
-typedef long wl_operator; // Added REV401PLUS
+typedef long long wl_operator; // Added REV401PLUS
 
 /*! \typedef PsiTerm
-\brief Type for psi-terms, hidden from users 
+  \brief Type for psi-terms, hidden from users 
 
 */
 
@@ -27,14 +28,14 @@ typedef void *PsiTerm;
 /******************************* TYPES ************************************/
 
 /*! \typedef GENERIC 
-  \brief unsigned long *GENERIC 
+  \brief unsigned long long *GENERIC 
   
   GENERIC is the type of a pointer to any type.  This might not work on 
   some machines, but it should be possible as MALLOC() uses something of/
   that kind.  ANSI uses "void *" instead.  
 */
 
-typedef  unsigned long *GENERIC;
+typedef  unsigned long long *GENERIC;
 // typedef void * GENERIC; 
 
 /*! \typedef operator
@@ -48,10 +49,10 @@ typedef  unsigned long *GENERIC;
   \brief int - formerly enum
 
 */ 
-typedef long goals;
+typedef long long goals;
 
 #ifdef X11
-typedef long Action;
+typedef long long Action;
 #endif
 
 typedef char                      string[STRLEN];
@@ -59,10 +60,8 @@ typedef struct wl_operator_data *   ptr_operator_data;
 typedef struct wl_int_list *        ptr_int_list;
 typedef struct wl_resid_list *      ptr_resid_list; /* 21.9 */
 typedef struct wl_definition *      ptr_definition;
-typedef struct wl_definition *      def_type;
 typedef struct wl_residuation *     ptr_residuation;
-typedef struct wl_psi_term *        ptr_psi_term;
-typedef struct wl_node *            ptr_node;
+
 typedef struct wl_pair_list *       ptr_pair_list;
 typedef struct wl_triple_list *     ptr_triple_list;
 typedef struct wl_list *            ptr_list;
@@ -74,7 +73,7 @@ typedef struct wl_choice_point *    ptr_choice_point;
 
 typedef struct wl_operator_data {
   wl_operator type;
-  long precedence;
+  long long precedence;
   ptr_operator_data next;
 } operator_data;
 
@@ -99,21 +98,8 @@ typedef struct wl_resid_list {
   ptr_resid_list next;
 } resid_list;
 
-typedef struct wl_hash_table * ptr_hash_table;
-
 /************ MODULES **************/
 /*        RM: Jan  7 1993          */
-
-struct wl_module {
-  char *module_name;
-  char *source_file;
-  ptr_int_list open_modules;
-  ptr_int_list inherited_modules;
-  ptr_hash_table symbol_table;
-};
-
-
-typedef struct wl_module * ptr_module;
 
 struct wl_keyword {
   ptr_module module;
@@ -124,8 +110,6 @@ struct wl_keyword {
   ptr_definition definition;
 };
 
-typedef struct wl_keyword * ptr_keyword;
-
 /********* END MODULES *************/
 
 
@@ -134,18 +118,11 @@ typedef struct wl_keyword * ptr_keyword;
 /*                RM: Feb  3 1993                  */
 
 /* Hash tables for keywords */
-
-struct wl_hash_table {
-  int size;
-  int used;
-  ptr_keyword *data;
-};
-
 /****************************/
 /* Definition of a keyword. */
 /* This includes the rules associated to the symbol and how old they are.  */
 typedef struct wl_definition {
-  long date;
+  long long date;
   ptr_keyword keyword; /*  RM: Jan 11 1993  */
   ptr_pair_list rule;
   ptr_triple_list properties;
@@ -168,40 +145,19 @@ typedef struct wl_definition {
 
 /* 22.9 */
 typedef struct wl_residuation {
-  long sortflag; /* bestsort == if TRUE ptr_definition else ptr_int_list */
+  long long sortflag; /* bestsort == if TRUE ptr_definition else ptr_int_list */
   GENERIC bestsort; /* 21.9 */
   GENERIC value_2; /* to handle psi-terms with a value field 6.10 */
   ptr_goal goal;
   ptr_residuation next;
 } residuation;
 
-/* PSI_TERM */
-typedef struct wl_psi_term {
-#ifdef TS
-  unsigned long time_stamp; /* Avoid multiple trailing on a choice point. 9.6 */
-#endif
-  ptr_definition type;
-  long status; /* Indicates whether the properties of the type have been */
-              /* checked or the function evaluated */
-  /* long curried; Distinguish between quoted and curried object 20.5 */
-  long flags; /* 14.9 */
-  GENERIC value_3;
-  ptr_node attr_list;
-  ptr_psi_term coref;
-  ptr_residuation resid; /* List of goals to prove if type is narrowed. */
-} psi_term;
 
 /* Binary tree node. */
 /* KEY can be either an integer (a pointer) or a pointer to a string. */
 /* DATA is the information accessed under the KEY, in most cases a pointer */
 /* to a PSI-TERM.  */
 
-typedef struct wl_node {
-  char *key;
-  ptr_node left;
-  ptr_node right;
-  GENERIC data;
-} node;
 
 typedef struct wl_pair_list {
   ptr_psi_term aaaa_2;
@@ -212,8 +168,8 @@ typedef struct wl_pair_list {
 /* Used for type properties */
 typedef struct wl_triple_list {
   ptr_psi_term aaaa_4;   /* Attributes */
-  ptr_psi_term bbbb_4;   /* Constralong */
-  ptr_definition cccc_4; /* Original type of attribute & constralong */
+  ptr_psi_term bbbb_4;   /* Constralong long */
+  ptr_definition cccc_4; /* Original type of attribute & constralong long */
   ptr_triple_list next;
 } triple_list;
 
@@ -222,7 +178,7 @@ typedef struct wl_triple_list {
     ptr_psi_term car;
     ptr_psi_term cdr;
     } list;
-    */
+*/
 
 #ifdef CLIFE
 #include "blockstruct.h"
@@ -246,7 +202,7 @@ typedef struct wl_goal {
 } goal;
 
 typedef struct wl_choice_point {
-  unsigned long time_stamp;
+  unsigned long long time_stamp;
   ptr_stack undo_point;
   ptr_goal goal_stack;
   ptr_choice_point next;
@@ -258,24 +214,21 @@ typedef struct wl_choice_point {
 
 /* Residuation block state handling */
 
-typedef struct wl_resid_block *ptr_resid_block;
 
 typedef struct wl_resid_block {
-   long cc_cr; /* 11.9 */
-   ptr_goal ra;
-   /* long cc; 11.9 */
-   /* long cr; 11.9 */
-   ptr_resid_list rv; /* 21.9 */
-   ptr_psi_term md;
+  long long cc_cr; /* 11.9 */
+  ptr_goal ra;
+  /* long long cc; 11.9 */
+  /* long long cr; 11.9 */
+  ptr_resid_list rv; /* 21.9 */
+  ptr_psi_term md;
 } resid_block;
 
 // from list.h
 
 typedef void *			Ref;
-typedef struct wl_ListLinks *	RefListLinks;
-typedef struct wl_ListHeader *	RefListHeader;
 typedef RefListLinks		(*RefListGetLinksProc)	(Ref ); 
-typedef long			(*RefListEnumProc)	(Ref,Ref ); // REV401PLUS
+typedef long long			(*RefListEnumProc)	(Ref,Ref ); // REV401PLUS
 
 /*
   "First", "Last" are pointers to the first and last element of the list
@@ -288,20 +241,12 @@ typedef long			(*RefListEnumProc)	(Ref,Ref ); // REV401PLUS
   
   "Lock" is the number of recursive enum calls on the list. Used only in
   debugging mode.
-  */
+*/
 
-typedef struct wl_ListHeader
-{
-  Ref First, Last;
-#ifdef prlDEBUG
-    Int32			Lock;
-#endif
-    RefListGetLinksProc		GetLinks;
-} ListHeader;
 
 typedef struct wl_ListLinks
 {
-    Ref Next, Prev;
+  Ref Next, Prev;
 } ListLinks;
 
 // from print.h
@@ -309,9 +254,9 @@ typedef struct wl_ListLinks
 typedef struct wl_tab_brk *       ptr_tab_brk;
 typedef struct wl_item *          ptr_item;
 typedef struct wl_tab_brk {
-  long column;
-  long broken;
-  long printed;
+  long long column;
+  long long broken;
+  long long printed;
 } tab_brk;
 typedef struct wl_item {
   char *str;
@@ -359,7 +304,7 @@ typedef struct wl_item {
   primitive, result is the result in case we are implementing a
   function, and info (optional) is extra information, typically a
   pointer to a structure.
-  *******************************************************************/
+*******************************************************************/
 
 
 typedef struct {
@@ -371,28 +316,28 @@ typedef struct {
 // from token.h
 
 typedef struct wl_parse_block {
-  long lc;
-  long sol;
-  long sc;
-  long osc;
+  long long lc;
+  long long sol;
+  long long sc;
+  long long osc;
   ptr_psi_term spt;
   ptr_psi_term ospt;
-  long ef;
+  long long ef;
 } parse_block;
 
 typedef struct wl_parse_block *ptr_parse_block;
 
 // from copy.c
 struct hashbucket {
-   ptr_psi_term old_value;
-   ptr_psi_term new_value;
-   long info;
-   long next;
+  ptr_psi_term old_value;
+  ptr_psi_term new_value;
+  long long info;
+  long long next;
 };
 
 struct hashentry {
-   long timestamp;
-   long bucketindex;
+  long long timestamp;
+  long long bucketindex;
 };
 
 #define TEXTBUFSIZE 5000

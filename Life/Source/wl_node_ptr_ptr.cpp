@@ -1,0 +1,354 @@
+#define EXTERN extern
+#include "defs.h"
+long long wl_node_ptr_ptr::attr_missing;
+long long wl_node_ptr_ptr::check_func_flag;
+
+/******** GENERAL_INSERT(comp,keystr,tree,info,heapflag,copystr,bkflag)
+General tree insertion routine.
+comp     = comparison routine for insertion.
+keystr   = the insertion key.
+tree     = the tree to insert in.
+info     = the information to insert.
+heapflag = HEAP or STACK for heap or stack allocation of insertion node.
+copystr  = TRUE iff copy the keystr to the heap on insertion.
+bkflag   = 1 iff the insertion is backtrackable (trailed with trail check).
+2 iff the insertion must always be trailed.
+Returns a pointer to the node containing the pair (keystr,info).
+
+Here KEYSTR can be either a pointer to a string, an integer, or a feature.
+COMP is the function to call to compare 2 keys so it has three
+possible values: COMP==strcmp(), COMP==intcmp(), or COMP==featcmp().
+COMP(a,b) should return n where: n=0 if a=b; n>0 if a>b; n<0 if a<b.
+*/
+ptr_node wl_node_ptr_ptr::general_insert(long long comp,char *keystr,
+			GENERIC info,
+			long long heapflag, long long copystr,
+			long long bkflag)
+// long long comp;
+// char *keystr;
+// ptr_node *tree;
+// GENERIC info;
+// long long heapflag, copystr, bkflag;
+{
+  long long cmp;
+  ptr_node result;
+  long long to_do=TRUE;
+  ptr_node * tree;
+  
+  tree = (ptr_node *) this;
+  do {
+    if (*tree==NULL) {
+      if (bkflag==1) push_ptr_value(int_ptr,(GENERIC *)tree); // REV401PLUS cast
+      else if (bkflag==2) push_ptr_value_global(int_ptr,(GENERIC *)tree); // REV401PLUS cast
+      *tree = (heapflag==HEAP) ? HEAP_ALLOC(node): STACK_ALLOC(node);
+      result= *tree;
+      (*tree)->key = copystr ? heap_copy_string(keystr) : keystr;
+      (*tree)->left=NULL;
+      (*tree)->right=NULL;
+      (*tree)->data=info;
+      to_do=FALSE;
+    }
+    else {
+      // revised logic not using function pointer
+      if (comp == INTCMP) cmp=intcmp((long long)keystr,(long long)(*tree)->key); // REV401PLUS cast
+      else if (comp == STRCMP) cmp=strcmp(keystr,(*tree)->key);
+      else if (comp == FEATCMP) cmp=featcmp(keystr,(*tree)->key);
+      if (cmp<0)
+	tree=(&((*tree)->left));
+      else
+	if (cmp==0) {
+          if (bkflag)
+            Errorline("attempt to overwrite an existing feature; ignored.\n");
+          else
+	    (*tree)->data=info;
+	  result= *tree;
+	  to_do=FALSE;
+	}
+	else
+	  tree=(&((*tree)->right));
+    }
+  } while (to_do);
+  return result;
+}
+/******** HEAP_INSERT_COPYSTR(keystr,tree,info)
+Insert the pointer INFO under the reference string KEYSTR (which is
+a feature name) in the binary tree TREE.  KEYSTR is copied to the heap.
+A potential additional node allocated to TREE is put on the heap.
+*/
+void wl_node_ptr_ptr::heap_insert_copystr(char *keystr, GENERIC info)
+// char *keystr;
+// ptr_node *tree;
+// GENERIC info;
+{
+  ptr_node * tree;
+  tree = (ptr_node *) this;
+
+  ((wl_node_ptr_ptr*)tree)->general_insert(FEATCMP,keystr,info,HEAP,TRUE,0);
+}
+/******** STACK_INSERT_COPYSTR(keystr,tree,info)
+Insert the pointer INFO under the reference string KEYSTR (which is
+a feature name) in the binary tree TREE.  KEYSTR is copied to the heap.
+A potential additional node allocated to TREE is put on the stack.
+*/
+void wl_node_ptr_ptr::stack_insert_copystr(char *keystr,GENERIC info)
+// char *keystr;
+// ptr_node *tree;
+// GENERIC info;
+{
+  ptr_node * tree;
+  tree = (ptr_node *) this;
+  ((wl_node_ptr_ptr*)tree)->general_insert(FEATCMP,keystr,info,STACK,TRUE,0);
+}
+/******** HEAP_INSERT(comp,keystr,tree,info)
+Insert the pointer INFO under the reference KEYSTR in the
+binary tree TREE stored in the heap.
+Return the pointer to the node of KEYSTR.
+*/
+ptr_node wl_node_ptr_ptr::heap_insert(long long comp,char *keystr,GENERIC info)
+// long long comp;
+// char *keystr;
+// ptr_node *tree;
+// GENERIC info;
+{
+  ptr_node * tree;
+  tree = (ptr_node *) this;
+  return ((wl_node_ptr_ptr*)tree)->general_insert(comp,keystr,info,HEAP,FALSE,0);
+}
+/******** STACK_INSERT(comp,keystr,tree,info)
+Exactly the same as heap_insert, only the new node is in the stack.
+*/
+ptr_node wl_node_ptr_ptr::stack_insert(long long comp,char *keystr,GENERIC info)
+// long long comp;
+// char *keystr;
+// ptr_node *tree;
+// GENERIC info;
+{
+  ptr_node * tree;
+  tree = (ptr_node *) this;
+  return ((wl_node_ptr_ptr*)tree)->general_insert(comp,keystr,info,STACK,FALSE,0);
+}
+/******** BK_STACK_INSERT(comp,keystr,tree,info)
+	  Insert the pointer INFO under the reference string KEYSTR of
+	  length len in the binary tree TREE. Return the pointer to the permanent
+	  storage place of KEY. This is used by C_APPLY_LABEL
+	  Trail the change with a trail check.
+*/
+ptr_node wl_node_ptr_ptr::bk_stack_insert(long long comp,char *keystr,GENERIC info)
+// long long comp;
+// char *keystr;
+// ptr_node *tree;
+// GENERIC info;
+{
+  ptr_node * tree;
+  tree = (ptr_node *) this;
+  return ((wl_node_ptr_ptr*)tree)->general_insert(comp,keystr,info,STACK,FALSE,1);
+}
+/******** BK2_STACK_INSERT(comp,keystr,tree,info)
+Insert the pointer INFO under the reference string KEYSTR of
+length len in the binary tree TREE. Return the pointer to the permanent
+storage place of KEY. This is used by C_APPLY_LABEL
+Always trail the change.
+*/
+ptr_node wl_node_ptr_ptr::bk2_stack_insert(long long comp,char *keystr,GENERIC info)
+// long long comp;
+// char *keystr;
+// ptr_node *tree;
+// GENERIC info;
+{
+  ptr_node * tree;
+  tree = (ptr_node *) this;
+  return ((wl_node_ptr_ptr*)tree)->general_insert(comp,keystr,info,STACK,FALSE,2);
+}
+/******** DELETE_ATTR(key,tree)
+	  Remove the node addressed by KEY from TREE.
+*/
+void wl_node_ptr_ptr::delete_attr(char *s)
+// char *s;
+// ptr_node *n;
+{
+  ptr_node *n;
+  long long cmp;
+  ptr_node wl_new,r;
+  n = (ptr_node *) this;
+
+  if (*n) {
+    cmp=featcmp(s,(*n)->key);
+    if (cmp<0)
+      ((wl_node_ptr_ptr*)&((*n)->left))->delete_attr(s);
+    else if (cmp>0)
+      ((wl_node_ptr_ptr*)&((*n)->right))->delete_attr(s);
+    else if ((*n)->left) {
+      if ((*n)->right) {
+        r=(*n)->right;
+        wl_new=((wl_node_ptr_ptr*)&(*n)->left)->heap_insert(FEATCMP,r->key,r->data);
+        wl_new->left=r->left;
+        wl_new->right=r->right;
+        *n = (*n) -> left;
+      }
+      else
+        *n = (*n)->left;
+    }
+    else
+      *n = (*n)->right;
+  }
+}
+
+
+/* Match the corresponding arguments */
+/* RESID */
+void wl_node_ptr_ptr::match_attr1(ptr_node v,ptr_resid_block rb) //REV401PLUS add void 
+{
+  ptr_node *u;
+  long long cmp;
+  ptr_node temp;
+
+  u = (ptr_node *) this;
+  if (v) {
+    if (*u==NULL)
+      attr_missing=TRUE;
+    else {
+      cmp=featcmp((*u)->key_val(),v->key_val());
+      if(cmp==0) {
+        ptr_psi_term t;
+	//  	/* RESID */ match_attr1(&((*u)->right),v->right,rb);
+  	/* RESID */ ((wl_node_ptr_ptr*)(*u)->right_addr())->match_attr1(v->right_val(),rb);
+
+        t = (ptr_psi_term) (*u)->data_val();
+  	/* RESID */ push_goal(match,(ptr_psi_term)(*u)->data_val(),(ptr_psi_term)v->data_val(),(GENERIC)rb); // REV401PLUS casts
+        /* deref2_eval(t); */
+  	/* RESID */ ((wl_node_ptr_ptr*)(*u)->left_addr())->match_attr1(v->left_val(),rb);
+      }
+      else if (cmp>0) {
+        temp=v->right_val();
+        v->set_right(NULL);
+  	/* RESID */ ((wl_node_ptr_ptr*)u)->match_attr1(temp,rb);
+  	/* RESID */ ((wl_node_ptr_ptr*)(*u)->left_addr())->match_attr1(v,rb);
+	v->set_right(temp);
+      }
+      else {
+	temp=v->left_val();
+	v->set_left(NULL);
+	/* RESID */ ((wl_node_ptr_ptr*)(*u)->right_addr())->match_attr1(v,rb);
+  	/* RESID */ ((wl_node_ptr_ptr*)u)->match_attr1(temp,rb);
+  	v->set_left(temp);
+      }
+    }
+  }
+}
+/* Evaluate the lone arguments (for lazy failure + eager success) */
+/* RESID */
+void wl_node_ptr_ptr::match_attr2(ptr_node v,ptr_resid_block rb) // REV401PLUS add void
+	    // ptr_node *u,v;
+	    /* RESID */ //ptr_resid_block rb;
+{
+  ptr_node *u;
+  long long cmp;
+  ptr_node temp;
+  u = (ptr_node *) this;
+  
+  if (v) {
+    if (*u==NULL) { /* PVR 12.03 */
+      ptr_psi_term t;
+      ((wl_node_ptr_ptr*)u)->match_attr1(v->right_val(),rb);
+      t = (ptr_psi_term) v->data_val();
+      //      deref2_rec_eval(t);
+      ((wl_psi_term_ptr*)t)->deref2_rec_eval();
+      ((wl_node_ptr_ptr*)u)->match_attr1(v->left_val(),rb);
+    }
+    else {
+      cmp=featcmp((*u)->key_val(),v->key_val());
+      if(cmp==0) {
+  	/* RESID */ ((wl_node_ptr_ptr*)(*u)->right_addr())->match_attr2(v->right_val(),rb);
+  	/* RESID */ ((wl_node_ptr_ptr*)(*u)->left_addr())->match_attr2(v->left_val(),rb);
+      }
+      else if (cmp>0) {
+        temp=v->right_val();
+        v->set_right(NULL);
+  	/* RESID */ ((wl_node_ptr_ptr*)u)->match_attr2(temp,rb);
+  	/* RESID */ ((wl_node_ptr_ptr*)(*u)->left_addr())-> match_attr2(v,rb);
+  	v->set_right(temp);
+      }
+      else {
+  	temp=v->left_val();
+  	v->set_left(NULL);
+  	/* RESID */ ((wl_node_ptr_ptr*)(*u)->right_addr())->match_attr2(v,rb);
+  	/* RESID */ ((wl_node_ptr_ptr*)u)->match_attr2(temp,rb);
+  	v->set_left(temp);
+      }
+    }
+  }
+  else if (*u!=NULL) {
+    ptr_psi_term t /* , empty */ ;
+    ((wl_node_ptr_ptr*)(*u)->right_addr())->match_attr1(v,rb);
+    t = (ptr_psi_term) (*u)->data_val();
+    /* Create a new psi-term to put the (useless) result: */
+    /* This is needed so that *all* arguments of a function call */
+    /* are evaluated, which avoids incorrect 'Yes' answers.      */
+    
+    //    deref2_rec_eval(t); /* Assumes goal_stack is already restored. */
+    ((wl_psi_term_ptr*)t)->deref2_rec_eval(); /* Assumes goal_stack is already restored. */
+    ((wl_node_ptr_ptr*)(*u)->left_addr())->match_attr1(v,rb);
+  }
+}
+/* Evaluate the corresponding arguments */
+/* RESID */
+void wl_node_ptr_ptr::match_attr3(ptr_node v,ptr_resid_block rb) // REV401PLUS add void
+{
+  ptr_node *u;
+  long long cmp;
+  ptr_node temp;
+
+  u = (ptr_node *) this;
+  
+  if (v) {
+    if (*u==NULL)
+      attr_missing=TRUE;
+    else {
+      cmp=featcmp((*u)->key_val(),v->key_val());
+      if(cmp==0) {
+        ptr_psi_term t1,t2;
+  	/* RESID */ ((wl_node_ptr_ptr*)(*u)->right_addr())->match_attr3(v->right_val(),rb);
+      t1 = (ptr_psi_term) (*u)->data_val();
+      t2 = (ptr_psi_term) v->data_val();
+	//        deref2_eval(t1); /* Assumes goal_stack is already restored. */
+        //        deref2_eval(t2); /* PVR 12.03 */
+        ((wl_psi_term_ptr*)t1)->deref2_eval(); /* Assumes goal_stack is already restored. */
+        ((wl_psi_term_ptr*)t2)->deref2_eval(); /* PVR 12.03 */
+  	/* RESID */ ((wl_node_ptr_ptr*)(*u)->left_addr())->match_attr3(v->left_val(),rb);
+      }
+      else if (cmp>0) {
+        temp=v->right_val();
+        v->set_right(NULL);
+  	/* RESID */ ((wl_node_ptr_ptr*)u)->match_attr3(temp,rb);
+  	/* RESID */ ((wl_node_ptr_ptr*)(*u)->left_addr())->match_attr3(v,rb);
+  	v->set_right(temp);
+      }
+      else {
+  	temp=v->left_val();
+  	v->set_left(NULL);
+  	/* RESID */ ((wl_node_ptr_ptr*)(*u)->right_addr())->match_attr3(v,rb);
+  	/* RESID */ ((wl_node_ptr_ptr*)u)->match_attr3(temp,rb);
+  	v->set_left(temp);
+      }
+    }
+  }
+}
+/******** MATCH_ATTR(u,v)
+	  Match the attribute trees of psi_terms U and V.
+	  If V has an attribute that U doesn't then curry.
+	  U is the calling term, V is the definition.
+	  This routine is careful to push nested eval and match goals in
+	  descending order of feature names.
+*/
+void wl_node_ptr_ptr::match_attr(ptr_node v,ptr_resid_block rb)
+//ptr_node *u,v;
+//ptr_resid_block rb;
+{
+  ptr_node *u;
+
+  u = (ptr_node *) this;
+  
+  ((wl_node_ptr_ptr*)u)->match_attr1(v,rb); /* Match corresponding arguments (third) */
+  ((wl_node_ptr_ptr*)u)->match_attr2(v,rb); /* Evaluate lone arguments (second) */
+  ((wl_node_ptr_ptr*)u)->match_attr3(v,rb); /* Evaluate corresponding arguments (first) */
+}

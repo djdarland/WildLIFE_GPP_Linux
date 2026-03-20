@@ -1,11 +1,11 @@
 /* Copyright 1991 Digital Equipment Corporation.
- ** Distributed only by permission.
- **
- ** Last modified on Wed Mar  2 11:32:59 MET 1994 by rmeyer
- **      modified on Fri Jan 28 14:24:13 MET 1994 by dumant
- **      modified on Thu Jun 24 06:55:40 1993 by Rmeyer
- **      modified on Thu Nov 26 20:13:50 1992 by herve
- *****************************************************************/
+** Distributed only by permission.
+**
+** Last modified on Wed Mar  2 11:32:59 MET 1994 by rmeyer
+**      modified on Fri Jan 28 14:24:13 MET 1994 by dumant
+**      modified on Thu Jun 24 06:55:40 1993 by Rmeyer
+**      modified on Thu Nov 26 20:13:50 1992 by herve
+*****************************************************************/
 /* 	$Id: xpred.c,v 1.4 1997/07/18 14:50:52 duchier Exp $	 */
 
 #ifndef lint
@@ -97,45 +97,45 @@ typedef struct wl_EventClosure
 /*****************************************/
 
 static long xevent_mask[] = {
-0,				/* ???			 0 */
-0,				/* ???			 1 */
-KeyPressMask,			/* KeyPress		 2 */
-KeyReleaseMask,			/* KeyRelease		 3 */
-ButtonPressMask,		/* ButtonPress 		 4 */ 
-ButtonReleaseMask,		/* ButtonRelease	 5 */
+  0,				/* ???			 0 */
+  0,				/* ???			 1 */
+  KeyPressMask,			/* KeyPress		 2 */
+  KeyReleaseMask,			/* KeyRelease		 3 */
+  ButtonPressMask,		/* ButtonPress 		 4 */ 
+  ButtonReleaseMask,		/* ButtonRelease	 5 */
 
-PointerMotionMask |	PointerMotionHintMask |	ButtonMotionMask |
-Button1MotionMask |	Button2MotionMask |	Button3MotionMask |
-Button4MotionMask |    	Button5MotionMask,
-				/* MotionNotify		 6 */
-EnterWindowMask,		/* EnterNotify		 7 */
-LeaveWindowMask,		/* LeaveNotify		 8 */
-FocusChangeMask,		/* FocusIn		 9 */
-FocusChangeMask,		/* FocusOut		10 */
-KeymapStateMask,		/* KeymapNotify		11 */
-ExposureMask,			/* Expose		12 */
-0,				/* GraphicsExpose	13 */
-0,				/* NoExpose		14 */
-VisibilityChangeMask,		/* VisibilityNotify	15 */
-SubstructureNotifyMask,		/* CreateNotify		16 */
-SubstructureNotifyMask,		/* DestroyNotify	17 */
-StructureNotifyMask,		/* UnmapNotify		18 */
-StructureNotifyMask,		/* MapNotify		19 */
-SubstructureRedirectMask,	/* MapRequest		20 */
-SubstructureNotifyMask,		/* ReparentNotify	21 */
-StructureNotifyMask,		/* ConfigureNotify	22 */
-SubstructureRedirectMask,	/* ConfigureRequest	23 */
-StructureNotifyMask,		/* GravityNotify	24 */
-ResizeRedirectMask,		/* ResizeRequest	25 */
-StructureNotifyMask,		/* CirculateNotify	26 */
-SubstructureRedirectMask,	/* CirculateRequest	27 */
-PropertyChangeMask,		/* PropertyNotify	28 */
-0,				/* SelectionClear	29 */
-0,				/* SelectionRequest	30 */
-0,				/* SelectionNotify	31 */
-ColormapChangeMask,		/* ColormapNotify	32 */
-0,				/* ClientMessage	33 */
-0				/* MappingNotify	34 */
+  PointerMotionMask |	PointerMotionHintMask |	ButtonMotionMask |
+  Button1MotionMask |	Button2MotionMask |	Button3MotionMask |
+  Button4MotionMask |    	Button5MotionMask,
+  /* MotionNotify		 6 */
+  EnterWindowMask,		/* EnterNotify		 7 */
+  LeaveWindowMask,		/* LeaveNotify		 8 */
+  FocusChangeMask,		/* FocusIn		 9 */
+  FocusChangeMask,		/* FocusOut		10 */
+  KeymapStateMask,		/* KeymapNotify		11 */
+  ExposureMask,			/* Expose		12 */
+  0,				/* GraphicsExpose	13 */
+  0,				/* NoExpose		14 */
+  VisibilityChangeMask,		/* VisibilityNotify	15 */
+  SubstructureNotifyMask,		/* CreateNotify		16 */
+  SubstructureNotifyMask,		/* DestroyNotify	17 */
+  StructureNotifyMask,		/* UnmapNotify		18 */
+  StructureNotifyMask,		/* MapNotify		19 */
+  SubstructureRedirectMask,	/* MapRequest		20 */
+  SubstructureNotifyMask,		/* ReparentNotify	21 */
+  StructureNotifyMask,		/* ConfigureNotify	22 */
+  SubstructureRedirectMask,	/* ConfigureRequest	23 */
+  StructureNotifyMask,		/* GravityNotify	24 */
+  ResizeRedirectMask,		/* ResizeRequest	25 */
+  StructureNotifyMask,		/* CirculateNotify	26 */
+  SubstructureRedirectMask,	/* CirculateRequest	27 */
+  PropertyChangeMask,		/* PropertyNotify	28 */
+  0,				/* SelectionClear	29 */
+  0,				/* SelectionRequest	30 */
+  0,				/* SelectionNotify	31 */
+  ColormapChangeMask,		/* ColormapNotify	32 */
+  0,				/* ClientMessage	33 */
+  0				/* MappingNotify	34 */
 };
 
 
@@ -204,8 +204,8 @@ static char* xevent_name[] = {
 
 
 static int x_handle_error(display,x_error)
-     Display *display;
-     XErrorEvent *x_error;
+  Display *display;
+XErrorEvent *x_error;
 {
   char msg[128];
   XGetErrorText(display,x_error->error_code,msg,128);
@@ -213,13 +213,13 @@ static int x_handle_error(display,x_error)
   /* don't use abort_life(TRUE) because it tries to destroy windows ...
      and loops because the window is yet in the stack !!
      jch - Fri Aug  7 17:58:27 MET DST 1992
-     */
+  */
   exit_life(TRUE);
 }
 
 
 static int x_handle_fatal_error(display)
-     Display *display;
+  Display *display;
 {
   Errorline("fatal X Error.\n");
   exit_life(TRUE);
@@ -230,9 +230,9 @@ static int x_handle_fatal_error(display)
 /* JCH didn't understand ANYTHING about trailing! */
 
 void bk_stack_add_int_attr(t,attrname,value)
-     ptr_psi_term t;
-     char *attrname;
-     long value;
+  ptr_psi_term t;
+char *attrname;
+long value;
 {
   ptr_psi_term t1;
   ptr_node n;
@@ -261,9 +261,9 @@ void bk_stack_add_int_attr(t,attrname,value)
 
 
 void bk_change_psi_attr(t,attrname,value)
-     ptr_psi_term t;
-     char *attrname;
-     ptr_psi_term value;
+  ptr_psi_term t;
+char *attrname;
+ptr_psi_term value;
 {
   ptr_psi_term t1;
   ptr_node n;
@@ -294,8 +294,8 @@ void bk_change_psi_attr(t,attrname,value)
 /* could be in builtins.c */
 
 long unify_int_result(t,v)
-     ptr_psi_term t;
-     long v;
+  ptr_psi_term t;
+long v;
 {
   long smaller;
   long success=TRUE;
@@ -333,9 +333,9 @@ long unify_int_result(t,v)
 /* build a psi-term of type t with a feature f of value v */
 
 static ptr_psi_term NewPsi(t,f,v)
-     ptr_definition t;
-     char * f;
-     long v;
+  ptr_definition t;
+char * f;
+long v;
 {
   ptr_psi_term p;
   
@@ -352,8 +352,8 @@ static ptr_psi_term NewPsi(t,f,v)
 
 long GetIntAttr(psiTerm,attributeName)
      
-     ptr_psi_term psiTerm;
-     char *attributeName;
+  ptr_psi_term psiTerm;
+char *attributeName;
 {
   ptr_node nodeAttr;
   ptr_psi_term psiValue;
@@ -363,8 +363,8 @@ long GetIntAttr(psiTerm,attributeName)
   nodeAttr=find(FEATCMP,attributeName,psiTerm->attr_list);
   if(!nodeAttr) {
     Errorline("in GetIntAttr: didn't find %s on %P\n",
-	       attributeName,
-	       psiTerm);
+	      attributeName,
+	      psiTerm);
     exit_life(TRUE);
   }
   
@@ -386,8 +386,8 @@ long GetIntAttr(psiTerm,attributeName)
 
 ptr_psi_term GetPsiAttr(psiTerm,attributeName)
      
-     ptr_psi_term psiTerm;
-     char *attributeName;
+  ptr_psi_term psiTerm;
+char *attributeName;
 {
   ptr_node nodeAttr;
   ptr_psi_term psiValue;
@@ -414,10 +414,10 @@ ptr_psi_term GetPsiAttr(psiTerm,attributeName)
 
 static void ResizePixmap(psi_window,display,window,width,height)
      
-     ptr_psi_term psi_window;
-     Display *display;
-     Window window;
-     unsigned long width,height;
+  ptr_psi_term psi_window;
+Display *display;
+Window window;
+unsigned long width,height;
 {
   Pixmap pixmap;
   GC pixmapGC;
@@ -451,14 +451,14 @@ static void ResizePixmap(psi_window,display,window,width,height)
   /* init a new pixmap on the window */
   XGetWindowAttributes(display,window,&attr);
   if((pixmap = XCreatePixmap(display,window,
-			       attr.width+1,attr.height+1,
-			       attr.depth)) != 0)
+			     attr.width+1,attr.height+1,
+			     attr.depth)) != 0)
     {
       bk_stack_add_int_attr(psiPixmap,"id",pixmap);
       gcvalues.cap_style = CapRound;
       gcvalues.join_style = JoinRound;
       pixmapGC = XCreateGC(display,pixmap,
-			    GCJoinStyle|GCCapStyle,&gcvalues);
+			   GCJoinStyle|GCCapStyle,&gcvalues);
 
       /*  RM: Jun 24 1993  */
       if(psiPixmapGC)
@@ -477,8 +477,8 @@ static void ResizePixmap(psi_window,display,window,width,height)
 
 static void FreeWindow(display,psi_window)
      
-     Display *display;
-     ptr_psi_term psi_window;
+  Display *display;
+ptr_psi_term psi_window;
      
 {
   ptr_psi_term psiPixmap;
@@ -496,11 +496,11 @@ static void FreeWindow(display,psi_window)
 /*****************************************************************/
 /******** xcOpenConnection
   
-  xcOpenConnection(+Name,-Connection)
+	  xcOpenConnection(+Name,-Connection)
   
-  open a connection to the X server.
+	  open a connection to the X server.
   
-  */
+*/
 
 long xcOpenConnection()
      
@@ -543,11 +543,11 @@ long xcOpenConnection()
 /*****************************************************************/
 /******** xcDefaultRootWindow
   
-  xcDefaultRootWindow(+Display,-Root)
+	  xcDefaultRootWindow(+Display,-Root)
   
-  return the root window of the given display
+	  return the root window of the given display
   
-  */
+*/
 
 long xcDefaultRootWindow()
      
@@ -580,8 +580,8 @@ long xcDefaultRootWindow()
 
 static long GetConnectionAttribute(display,attributeId,attribute)
      
-     Display *display;
-     long attributeId,*attribute;
+  Display *display;
+long attributeId,*attribute;
      
 {
   switch(attributeId) 
@@ -661,11 +661,11 @@ long xcQueryTextExtents(); /*  RM: Apr 20 1993  */
 /*****************************************************************/
 /******** xcGetConnectionAttribute
   
-  xcGetConnectionAttribute(+Display,+AttributeId,-Value)
+	  xcGetConnectionAttribute(+Display,+AttributeId,-Value)
   
-  returns the value corresponding to the attribute id.
+	  returns the value corresponding to the attribute id.
   
-  */
+*/
 
 long xcGetConnectionAttribute()
      
@@ -701,8 +701,8 @@ long xcGetConnectionAttribute()
 
 static long GetScreenAttribute(display,screen,attributeId,attribute)
      
-     Display *display;
-     long screen,attributeId,*attribute;
+  Display *display;
+long screen,attributeId,*attribute;
      
 {
   Screen *s;
@@ -774,11 +774,11 @@ static long GetScreenAttribute(display,screen,attributeId,attribute)
 /*****************************************************************/
 /******** xcGetScreenAttribute
   
-  xcGetScreenAttribute(+Display,+Screen,+AttributeId,-Value)
+	  xcGetScreenAttribute(+Display,+Screen,+AttributeId,-Value)
   
-  returns the value corresponding to the attribute id.
+	  returns the value corresponding to the attribute id.
   
-  */
+*/
 
 long xcGetScreenAttribute()
      
@@ -813,11 +813,11 @@ long xcGetScreenAttribute()
 /*****************************************************************/
 /******** xcCloseConnection
   
-  xcCloseConnection(+Connection)
+	  xcCloseConnection(+Connection)
   
-  Close the connection.
+	  Close the connection.
   
-  */
+*/
 
 long xcCloseConnection()
      
@@ -841,14 +841,14 @@ long xcCloseConnection()
 /*****************************************************************/
 /******** xcCreateSimpleWindow
   
-  xcCreateSimpleWindow(+Display,+Parent,+X,+Y,+Width,+Height,
-  +BackGroundColor,+WindowTitle,+IconTitle,
-  +BorderWidth,+BorderColor,
-  +Permanent,+Show,-Window)
+	  xcCreateSimpleWindow(+Display,+Parent,+X,+Y,+Width,+Height,
+	  +BackGroundColor,+WindowTitle,+IconTitle,
+	  +BorderWidth,+BorderColor,
+	  +Permanent,+Show,-Window)
   
-  create a simple window.
+	  create a simple window.
   
-  */
+*/
 
 long xcCreateSimpleWindow()
      
@@ -883,10 +883,10 @@ long xcCreateSimpleWindow()
   show = val[12];
   
   if(window = XCreateSimpleWindow(DISP(0),WIND(1),/* display,parent */
-				    val[2],val[3],/* X,Y */
-				    val[4],val[5],/* Width,Height */
-				    val[9],val[10],/* BorderWidth,BorderColor */
-				    val[6]))        /* BackGround */
+				  val[2],val[3],/* X,Y */
+				  val[4],val[5],/* Width,Height */
+				  val[9],val[10],/* BorderWidth,BorderColor */
+				  val[6]))        /* BackGround */
     {
       psiWindow = stack_psi_term(4);
       psiWindow->type = xwindow;
@@ -894,7 +894,7 @@ long xcCreateSimpleWindow()
       
       /* attach the icon of life */
       life_icon = XCreateBitmapFromData(DISP(0),window,life_icon_bits,
-					 life_icon_width,life_icon_height);
+					life_icon_width,life_icon_height);
       /* set properties */
 #if 0
       hints.x = val[2];
@@ -916,21 +916,21 @@ long xcCreateSimpleWindow()
       changesMask = CWX | CWY | CWWidth | CWHeight;
       display = DISP(0);
       XReconfigureWMWindow(DISP(0),window,DefaultScreen(display),
-			    changesMask,&changes);
+			   changesMask,&changes);
 #endif
       /* set the background color */
       XSetWindowBackground(DISP(0),window,val[6]);
 #if 0
       /* set the geometry before to show the window */
       XMoveResizeWindow(DISP(0),window,
-			 val[2],val[3],val[4],val[5]);
+			val[2],val[3],val[4],val[5]);
 #endif
       /* set the back pixel in order to have the color when deiconify */
       attributes.background_pixel = val[6];
       attributes.backing_pixel = val[6];
       attributesMask = CWBackingPixel|CWBackPixel;
       XChangeWindowAttributes(DISP(0),window,
-			       attributesMask,&attributes);
+			      attributesMask,&attributes);
       
       if(!permanent)
 	{
@@ -953,15 +953,15 @@ long xcCreateSimpleWindow()
       gcvalues.join_style = JoinRound;
       gc = XCreateGC(DISP(0),window,GCJoinStyle|GCCapStyle,&gcvalues);
       bk_change_psi_attr(psiWindow,"graphic_context",
-			  NewPsi(xgc,"id",gc));
+			 NewPsi(xgc,"id",gc));
       
       /* init a display list on the window for the refresh window */
       bk_change_psi_attr(psiWindow,"display_list",
-			  NewPsi(xdisplaylist,"id",x_display_list()));
+			 NewPsi(xdisplaylist,"id",x_display_list()));
       
       /* init a pixmap on the window for the refresh mechanism */
       bk_change_psi_attr(psiWindow,"pixmap",
-			  NewPsi(xpixmap,"id",NULL));
+			 NewPsi(xpixmap,"id",NULL));
       ResizePixmap(psiWindow,DISP(0),window,val[4],val[5]);
       
       push_goal(unify,psiWindow,args[13],NULL);
@@ -981,19 +981,19 @@ long xcCreateSimpleWindow()
 #if 0
 
 xcCreateWindow is not used anymore since we use xcCreateSimpleWindow.
-  I just keep this code in case - jch - Thu Aug  6 16:11:23 MET DST 1992
+I just keep this code in case - jch - Thu Aug  6 16:11:23 MET DST 1992
   
-  /******** xcCreateWindow
+/******** xcCreateWindow
     
-    xcCreateWindow(+Connection,+Parent,+X,+Y,+Width,+Height,
-    +BorderWidth,+Depth,+Class,+Visual,
-    +Permanent,+Show,-Window)
+	  xcCreateWindow(+Connection,+Parent,+X,+Y,+Width,+Height,
+	  +BorderWidth,+Depth,+Class,+Visual,
+	  +Permanent,+Show,-Window)
     
-    create a window on the display Connection.
+	  create a window on the display Connection.
     
-    */
+*/
   
-  long xcCreateWindow()
+long xcCreateWindow()
 
 {
   include_var_builtin(13);
@@ -1016,11 +1016,11 @@ xcCreateWindow is not used anymore since we use xcCreateSimpleWindow.
   show = val[11];
   
   if(window = XCreateWindow(DISP(0),WIND(1),/* display,parent */
-			      val[2],val[3],/* X,Y */
-			      val[4],val[5],/* Width,Height */
-			      val[6],val[7],/* BorderWidth,Depth */
-			      val[8],val[9],/* Class,Visual */
-			      0,(XSetWindowAttributes *) NULL))
+			    val[2],val[3],/* X,Y */
+			    val[4],val[5],/* Width,Height */
+			    val[6],val[7],/* BorderWidth,Depth */
+			    val[8],val[9],/* Class,Visual */
+			    0,(XSetWindowAttributes *) NULL))
     {
       unify_real_result(args[12],(REAL) window);
       
@@ -1076,10 +1076,10 @@ xcCreateWindow is not used anymore since we use xcCreateSimpleWindow.
 /*****************************************************************/
 /******** xcSetStandardProperties
   
-  xcSetStandardProperties(+Display,+Window,+WindowTitle,+IconTitle,
-  +X,+Y,+Width,+Height)
+	  xcSetStandardProperties(+Display,+Window,+WindowTitle,+IconTitle,
+	  +X,+Y,+Width,+Height)
   
-  */
+*/
 
 long xcSetStandardProperties()
 {
@@ -1104,9 +1104,9 @@ long xcSetStandardProperties()
   hints.flags = PPosition | PSize; 
   
   XSetStandardProperties(DISP(0),WIND(1),
-			(char*)val[2],(char*)val[3],/* window title,icon title */
+			 (char*)val[2],(char*)val[3],/* window title,icon title */
 			 None,              /* icon pixmap */
-			(char **) NULL,0, /* argv,argc */
+			 (char **) NULL,0, /* argv,argc */
 			 &hints); 
   
   ResizePixmap(args[1],val[0],val[1],val[6],val[7]);
@@ -1122,11 +1122,11 @@ long xcSetStandardProperties()
 /*****************************************************************/
 /******** xcGetWindowGeometry
   
-  xcGetWindowGeometry(+Display,+Window,-X,-Y,-Width,-Height)
+	  xcGetWindowGeometry(+Display,+Window,-X,-Y,-Width,-Height)
   
-  returns the geometry of the window.
+	  returns the geometry of the window.
   
-  */
+*/
 
 long xcGetWindowGeometry()
      
@@ -1145,7 +1145,7 @@ long xcGetWindowGeometry()
   begin_builtin(xcGetWindowGeometry,6,2,types);
   
   if(XGetGeometry(DISP(0),DRAW(1),
-		    &r,&x,&y,&w,&h,&bw,&d))
+		  &r,&x,&y,&w,&h,&bw,&d))
     {
       unify_real_result(args[2],(REAL) x);
       unify_real_result(args[3],(REAL) y);
@@ -1168,99 +1168,99 @@ long xcGetWindowGeometry()
 
 static long GetWindowAttribute(display,window,attributeId,attribute)
      
-     Display *display; long window,attributeId,*attribute;
-{
-  XWindowAttributes windowAttributes;
+  Display *display; long window,attributeId,*attribute;
+  {
+    XWindowAttributes windowAttributes;
   
   
-  XGetWindowAttributes(display,window,&windowAttributes);
-  switch(attributeId) 
-    {
-    case 0: 
-      *attribute = windowAttributes.x;	
-      break;
-    case 1: 
-      *attribute = windowAttributes.y;
-      break;
-    case 2: 
-      *attribute = windowAttributes.width;
-      break;
-    case 3: 
-      *attribute = windowAttributes.height;
-      break;
-    case 4: 
-      *attribute = windowAttributes.border_width;
-      break;
-    case 5: 
-      *attribute = windowAttributes.depth;
-      break;
-    case 6: 
-      *attribute = windowAttributes.root;
-      break;
-    case 7: 
-      *attribute =(unsigned long)windowAttributes.screen;
-      break;
-    case 8: 
-      *attribute =(unsigned long)windowAttributes.visual;
-      break;
-    case 9: 
-      *attribute = windowAttributes.class;
-      break;
-    case 10: 
-      *attribute = windowAttributes.all_event_masks;
-      break;
-    case 11: 
-      *attribute = windowAttributes.bit_gravity;
-      break;
-    case 12: 
-      *attribute = windowAttributes.win_gravity;
-      break;
-    case 13: 
-      *attribute = windowAttributes.backing_store;
-      break;
-    case 14: 
-      *attribute = windowAttributes.backing_planes;
-      break;
-    case 15: 
-      *attribute = windowAttributes.backing_pixel;
-      break;
-    case 16: 
-      *attribute = windowAttributes.override_redirect;
-      break;
-    case 17: 
-      *attribute = windowAttributes.save_under;
-      break;
-    case 18: 
-      *attribute = windowAttributes.your_event_mask;
-      break;
-    case 19: 
-      *attribute = windowAttributes.do_not_propagate_mask;
-      break;
-    case 20: 
-      *attribute = windowAttributes.colormap;
-      break;
-    case 21: 
-      *attribute = windowAttributes.map_installed;
-      break;
-    case 22: 
-      *attribute = windowAttributes.map_state;
-      break;
-    default: 
-      return FALSE;
-      break;
-    }
-  return TRUE;
-}
+    XGetWindowAttributes(display,window,&windowAttributes);
+    switch(attributeId) 
+      {
+      case 0: 
+	*attribute = windowAttributes.x;	
+	break;
+      case 1: 
+	*attribute = windowAttributes.y;
+	break;
+      case 2: 
+	*attribute = windowAttributes.width;
+	break;
+      case 3: 
+	*attribute = windowAttributes.height;
+	break;
+      case 4: 
+	*attribute = windowAttributes.border_width;
+	break;
+      case 5: 
+	*attribute = windowAttributes.depth;
+	break;
+      case 6: 
+	*attribute = windowAttributes.root;
+	break;
+      case 7: 
+	*attribute =(unsigned long)windowAttributes.screen;
+	break;
+      case 8: 
+	*attribute =(unsigned long)windowAttributes.visual;
+	break;
+      case 9: 
+	*attribute = windowAttributes.class;
+	break;
+      case 10: 
+	*attribute = windowAttributes.all_event_masks;
+	break;
+      case 11: 
+	*attribute = windowAttributes.bit_gravity;
+	break;
+      case 12: 
+	*attribute = windowAttributes.win_gravity;
+	break;
+      case 13: 
+	*attribute = windowAttributes.backing_store;
+	break;
+      case 14: 
+	*attribute = windowAttributes.backing_planes;
+	break;
+      case 15: 
+	*attribute = windowAttributes.backing_pixel;
+	break;
+      case 16: 
+	*attribute = windowAttributes.override_redirect;
+	break;
+      case 17: 
+	*attribute = windowAttributes.save_under;
+	break;
+      case 18: 
+	*attribute = windowAttributes.your_event_mask;
+	break;
+      case 19: 
+	*attribute = windowAttributes.do_not_propagate_mask;
+	break;
+      case 20: 
+	*attribute = windowAttributes.colormap;
+	break;
+      case 21: 
+	*attribute = windowAttributes.map_installed;
+	break;
+      case 22: 
+	*attribute = windowAttributes.map_state;
+	break;
+      default: 
+	return FALSE;
+	break;
+      }
+    return TRUE;
+  }
 
 
 /*****************************************************************/
 /******** xcGetWindowAttribute
   
-  xcGetWindowAttribute(+Display,+Window,+AttributeId,-Value)
+	  xcGetWindowAttribute(+Display,+Window,+AttributeId,-Value)
   
-  returns the value corresponding to the attribute id of the window.
+	  returns the value corresponding to the attribute id of the window.
   
-  */
+*/
 
 long xcGetWindowAttribute()
      
@@ -1295,11 +1295,11 @@ long xcGetWindowAttribute()
 /*****************************************************************/
 /******** xcSetWindowGeometry
   
-  xcSetWindowGeometry(+Display,+Window,+X,+Y,+Width,+Height)
+	  xcSetWindowGeometry(+Display,+Window,+X,+Y,+Width,+Height)
   
-  set the geometry of the window.
+	  set the geometry of the window.
   
-  */
+*/
 
 long xcSetWindowGeometry()
      
@@ -1316,7 +1316,7 @@ long xcSetWindowGeometry()
   begin_builtin(xcSetWindowGeometry,6,6,types);
   
   XMoveResizeWindow(DISP(0),DRAW(1),
-		     val[2],val[3],val[4],val[5]);
+		    val[2],val[3],val[4],val[5]);
   
   /* modify the pixmap */
   ResizePixmap(args[1],val[0],val[1],val[4],val[5]);
@@ -1331,11 +1331,11 @@ long xcSetWindowGeometry()
 /*****************************************************************/
 /******** xcMoveWindow
   
-  xcMoveWindow(+Display,+Window,+X,+Y)
+	  xcMoveWindow(+Display,+Window,+X,+Y)
   
-  Move a window to a different location.
+	  Move a window to a different location.
   
-  */
+*/
 
 long xcMoveWindow()   /*  RM: May  4 1993  */
      
@@ -1365,10 +1365,10 @@ long xcMoveWindow()   /*  RM: May  4 1993  */
 
 static long SetWindowAttribute(psi_window,display,window,attributeId,attribute)
      
-     ptr_psi_term psi_window;
-     Display *display;
-     Drawable window;
-     unsigned long attributeId,attribute;
+  ptr_psi_term psi_window;
+Display *display;
+Drawable window;
+unsigned long attributeId,attribute;
      
 {
   XSetWindowAttributes attributes;
@@ -1507,11 +1507,11 @@ static long SetWindowAttribute(psi_window,display,window,attributeId,attribute)
 /*****************************************************************/
 /******** xcSetWindowAttribute
   
-  xcSetWindowAttribute(+Display,+Window,+AttributeId,+Value)
+	  xcSetWindowAttribute(+Display,+Window,+AttributeId,+Value)
   
-  set the value corresponding to the attribute id.
+	  set the value corresponding to the attribute id.
   
-  */
+*/
 
 long xcSetWindowAttribute()
      
@@ -1546,11 +1546,11 @@ long xcSetWindowAttribute()
 /*****************************************************************/
 /******** xcMapWindow
   
-  xcMapWindow(+Connection,+Window)
+	  xcMapWindow(+Connection,+Window)
   
-  map the Window on the display Connection.
+	  map the Window on the display Connection.
   
-  */
+*/
 
 long xcMapWindow()
      
@@ -1578,11 +1578,11 @@ long xcMapWindow()
 /*****************************************************************/
 /******** xcRaiseWindow
   
-  xcRaiseWindow(+Connection,+Window)
+	  xcRaiseWindow(+Connection,+Window)
   
-  raise the Window on the display Connection.
+	  raise the Window on the display Connection.
   
-  */
+*/
 
 long xcRaiseWindow()
      
@@ -1610,11 +1610,11 @@ long xcRaiseWindow()
 /*****************************************************************/
 /******** xcUnmapWindow
   
-  xcUnmapWindow(+Connection,+Window)
+	  xcUnmapWindow(+Connection,+Window)
   
-  unmap the Window on the display Connection.
+	  unmap the Window on the display Connection.
   
-  */
+*/
 
 long xcUnmapWindow()
      
@@ -1648,11 +1648,11 @@ long xcUnmapWindow()
 /*****************************************************************/
 /******** xcMapSubwindows
   
-  xcMapSubwindows(+Connection,+Window)
+	  xcMapSubwindows(+Connection,+Window)
   
-  map the sub-windows on the display Connection.
+	  map the sub-windows on the display Connection.
   
-  */
+*/
 
 long xcMapSubwindows()
      
@@ -1680,11 +1680,11 @@ long xcMapSubwindows()
 /*****************************************************************/
 /******** xcUnmapSubwindows
   
-  xcUnmapSubwindows(+Connection,+Window)
+	  xcUnmapSubwindows(+Connection,+Window)
   
-  unmap the sub-windows on the display Connection.
+	  unmap the sub-windows on the display Connection.
   
-  */
+*/
 
 long xcUnmapSubwindows()
      
@@ -1717,11 +1717,11 @@ long xcUnmapSubwindows()
 /*****************************************************************/
 /******** xcClearWindow
   
-  xcClearWindow(+Connection,+Window)
+	  xcClearWindow(+Connection,+Window)
   
-  clear the Window on the display Connection.
+	  clear the Window on the display Connection.
   
-  */
+*/
 
 long xcClearWindow()
      
@@ -1736,9 +1736,9 @@ long xcClearWindow()
   begin_builtin(xcClearWindow,2,2,types);
   
   XClearWindow(DISP(0),WIND(1));
-XSync(DISP(0),0);
+  XSync(DISP(0),0);
   
- x_free_display_list((ListHeader *)WindowDisplayList(args[1]));
+  x_free_display_list((ListHeader *)WindowDisplayList(args[1]));
   success = TRUE;
   
   end_builtin();
@@ -1749,12 +1749,12 @@ XSync(DISP(0),0);
 /*****************************************************************/
 /******** xcResizeWindowPixmap
   
-  xcResizeWindowPixmap(+Display,+Window,+Width,+Height)
+	  xcResizeWindowPixmap(+Display,+Window,+Width,+Height)
   
-  resize the pixmap of the window,useful when we caught the resize event
-  eg: the window is resized manualy.
+	  resize the pixmap of the window,useful when we caught the resize event
+	  eg: the window is resized manualy.
   
-  */
+*/
 
 long xcResizeWindowPixmap()
      
@@ -1783,11 +1783,11 @@ long xcResizeWindowPixmap()
 /*****************************************************************/
 /******** xcSelectInput
   
-  xcSelectInput(+Connection,+Window,+Mask)
+	  xcSelectInput(+Connection,+Window,+Mask)
   
-  select the desired event types
+	  select the desired event types
   
-  */
+*/
 
 long xcSelectInput()
      
@@ -1814,11 +1814,11 @@ long xcSelectInput()
 /******** xcRefreshWindow
   
   
-  xcRefreshWindow(+Connection,+Window)
+	  xcRefreshWindow(+Connection,+Window)
   
-  refresh the window
+	  refresh the window
   
-  */
+*/
 
 long xcRefreshWindow()
      
@@ -1837,12 +1837,12 @@ long xcRefreshWindow()
   psiPixmap = GetPsiAttr(args[1],"pixmap");
   if((pixmap =(Pixmap) GetIntAttr(psiPixmap,"id")) != 0)
     x_refresh_window((Display *)val[0],val[1],pixmap,
-		      DrawableGC(psiPixmap),
-		      (ListHeader *) WindowDisplayList(args[1]));
+		     DrawableGC(psiPixmap),
+		     (ListHeader *) WindowDisplayList(args[1]));
   else
     x_refresh_window((Display *)val[0],val[1],val[1],
-		      DrawableGC(args[1]),
-		      (ListHeader *)WindowDisplayList(args[1]));
+		     DrawableGC(args[1]),
+		     (ListHeader *)WindowDisplayList(args[1]));
   
   success = TRUE;
   
@@ -1855,11 +1855,11 @@ long xcRefreshWindow()
 /******** xcPostScriptWindow
   
   
-  xcPostScriptWindow(+Display,+Window,Filename)
+	  xcPostScriptWindow(+Display,+Window,Filename)
   
-  output the contents of the window in Filename
+	  output the contents of the window in Filename
   
-  */
+*/
 
 long xcPostScriptWindow()
      
@@ -1875,8 +1875,8 @@ long xcPostScriptWindow()
   begin_builtin(xcPostScriptWindow,3,3,types);
   
   success = x_postscript_window((Display *)val[0],val[1],
-				 (ListHeader *)GetIntAttr(GetPsiAttr(args[1],"display_list"),
-					     "id"),
+				(ListHeader *)GetIntAttr(GetPsiAttr(args[1],"display_list"),
+							 "id"),
 				(char *)val[2]);
   
   end_builtin();
@@ -1888,11 +1888,11 @@ long xcPostScriptWindow()
 /******** xcDestroyWindow
   
   
-  xcDestroyWindow(+Connection,+Window)
+	  xcDestroyWindow(+Connection,+Window)
   
-  Close and destroy the window(unbacktrable).
+	  Close and destroy the window(unbacktrable).
   
-  */
+*/
 
 long xcDestroyWindow()
      
@@ -1917,7 +1917,7 @@ long xcDestroyWindow()
     {
       FreeWindow(val[0],args[1]);
       XDestroyWindow(DISP(0),WIND(1));
-XSync(DISP(0),0);
+      XSync(DISP(0),0);
       clean_undo_window((long)DISP(0),WIND(1));
       success = TRUE;
     }
@@ -1930,11 +1930,11 @@ XSync(DISP(0),0);
 /*****************************************************************/
 /******** CREATEGC
   
-  xcCreateGC(+Connection,+Drawable,-GC)
+	  xcCreateGC(+Connection,+Drawable,-GC)
   
-  create a graphic context.
+	  create a graphic context.
   
-  */
+*/
 
 long xcCreateGC()
      
@@ -1972,8 +1972,8 @@ long xcCreateGC()
 
 static long GetGCAttribute(gc,attributeId,attribute)
      
-     GC gc;
-     long attributeId,*attribute;
+  GC gc;
+long attributeId,*attribute;
      
 {
 #ifndef __alpha
@@ -2066,11 +2066,11 @@ static long GetGCAttribute(gc,attributeId,attribute)
 /*****************************************************************/
 /******** GETGCATTRIBUTE
   
-  xcGetGCAttribute(+GC,+AttributeId,-Val)
+	  xcGetGCAttribute(+GC,+AttributeId,-Val)
   
-  get the value of the attribute id of GC.
+	  get the value of the attribute id of GC.
   
-  */
+*/
 
 long xcGetGCAttribute()
      
@@ -2107,9 +2107,9 @@ long xcGetGCAttribute()
 
 static long SetGCAttribute(display,gc,attributeId,attribute)
      
-     Display *display;
-     GC gc;
-     long attributeId,attribute;
+  Display *display;
+GC gc;
+long attributeId,attribute;
      
 {
   XGCValues attributes;
@@ -2223,11 +2223,11 @@ static long SetGCAttribute(display,gc,attributeId,attribute)
 /*****************************************************************/
 /******** SETGCATTRIBUTE
   
-  xcSetGCAttribute(+Display,+GC,+AttributeId,+Val)
+	  xcSetGCAttribute(+Display,+GC,+AttributeId,+Val)
   
-  set the value of the attribute id of GC.
+	  set the value of the attribute id of GC.
   
-  */
+*/
 
 long xcSetGCAttribute()
      
@@ -2259,11 +2259,11 @@ long xcSetGCAttribute()
 /*****************************************************************/
 /******** DESTROYGC
   
-  xcDestroyGC(+Connection,+GC)
+	  xcDestroyGC(+Connection,+GC)
   
-  destroys a graphic context.
+	  destroys a graphic context.
   
-  */
+*/
 
 long xcDestroyGC()
      
@@ -2286,11 +2286,11 @@ long xcDestroyGC()
 /*****************************************************************/
 /******** REQUESTCOLOR
   
-  xcRequestColor(+Connection,+ColorMap,+Red,+Green,+Blue,-Pixel)
+	  xcRequestColor(+Connection,+ColorMap,+Red,+Green,+Blue,-Pixel)
   
-  get the closest color to(Red,Green,Blue) in the ColorMap
+	  get the closest color to(Red,Green,Blue) in the ColorMap
   
-  */
+*/
 
 long xcRequestColor()
      
@@ -2329,11 +2329,11 @@ long xcRequestColor()
 /*****************************************************************/
 /******** REQUESTNAMEDCOLOR
   
-  xcRequestNamedColor(+Connection,+ColorMap,+Name,-Pixel)
+	  xcRequestNamedColor(+Connection,+ColorMap,+Name,-Pixel)
   
-  get the color corresponding to Name in the ColorMap
+	  get the color corresponding to Name in the ColorMap
   
-  */
+*/
 
 long xcRequestNamedColor()
      
@@ -2368,11 +2368,11 @@ long xcRequestNamedColor()
 /*****************************************************************/
 /******** FREECOLOR
   
-  xcFreeColor(+Connection,+ColorMap,+Pixel)
+	  xcFreeColor(+Connection,+ColorMap,+Pixel)
   
-  free the color in the colormap
+	  free the color in the colormap
   
-  */
+*/
 
 long xcFreeColor()
      
@@ -2399,12 +2399,12 @@ long xcFreeColor()
 /*****************************************************************/
 /******** DrawLine
   
-  xcDrawLine(+Connection,+Drawable,+X0,+Y0,+X1,+Y1,
-  +Function,+Color,+LineWidth)
+	  xcDrawLine(+Connection,+Drawable,+X0,+Y0,+X1,+Y1,
+	  +Function,+Color,+LineWidth)
   
-  draw a line(X0,Y0) ->(X1,Y1)
+	  draw a line(X0,Y0) ->(X1,Y1)
   
-  */
+*/
 
 long xcDrawLine()
      
@@ -2425,13 +2425,13 @@ long xcDrawLine()
   x_set_gc((Display *)val[0],gc,val[6],val[7],val[8],xDefaultFont);
   
   XDrawLine(DISP(0),(Window) val[1],gc,/* Display,Window,GC */
-	     val[2],val[3],val[4],val[5]);         /* X0,Y0,X1,Y1 */
+	    val[2],val[3],val[4],val[5]);         /* X0,Y0,X1,Y1 */
   
   x_record_line((ListHeader *)WindowDisplayList(args[1]),DRAW_LINE,
-		 val[2],val[3],val[4],val[5],
-		 val[6],val[7],val[8]);
+		val[2],val[3],val[4],val[5],
+		val[6],val[7],val[8]);
   
-XSync(DISP(0),0);
+  XSync(DISP(0),0);
   success = TRUE;
   
   end_builtin();
@@ -2440,12 +2440,12 @@ XSync(DISP(0),0);
 /*****************************************************************/
 /******** DrawArc
   
-  xcDrawArc(+Connection,+Drawable,+X,+Y,+Width,+Height,+StartAngle,+ArcAngle,
-  +Function,+Color,+LineWidth)
+	  xcDrawArc(+Connection,+Drawable,+X,+Y,+Width,+Height,+StartAngle,+ArcAngle,
+	  +Function,+Color,+LineWidth)
   
-  draw arc(see X Vol.2 page 135 for the meanings of the arguments).
+	  draw arc(see X Vol.2 page 135 for the meanings of the arguments).
   
-  */
+*/
 
 long xcDrawArc()
      
@@ -2466,14 +2466,14 @@ long xcDrawArc()
   x_set_gc((Display *)val[0],gc,val[8],val[9],val[10],xDefaultFont);
   
   XDrawArc(DISP(0),(Window) val[1],gc,/* Display,Window,GC */
-	    val[2],val[3],val[4],val[5],         /* X,Y,Width,Height */
-	    val[6],val[7]);                         /* StartAngle,ArcAngle */
+	   val[2],val[3],val[4],val[5],         /* X,Y,Width,Height */
+	   val[6],val[7]);                         /* StartAngle,ArcAngle */
   
   x_record_arc((ListHeader *)WindowDisplayList(args[1]),DRAW_ARC,
-		val[2],val[3],val[4],val[5],
-		val[6],val[7],val[8],val[9],val[10]);
+	       val[2],val[3],val[4],val[5],
+	       val[6],val[7],val[8],val[9],val[10]);
   
-XSync(DISP(0),0);
+  XSync(DISP(0),0);
   success = TRUE;
   
   end_builtin();
@@ -2483,12 +2483,12 @@ XSync(DISP(0),0);
 /*****************************************************************/
 /******** DrawRectangle
   
-  xcDrawRectangle(+Connection,+Drawable,+X,+Y,+Width,+Height,
-  +Function,+Color,+LineWidth)
+	  xcDrawRectangle(+Connection,+Drawable,+X,+Y,+Width,+Height,
+	  +Function,+Color,+LineWidth)
   
-  draw a rectangle.
+	  draw a rectangle.
   
-  */
+*/
 
 long xcDrawRectangle()
      
@@ -2509,13 +2509,13 @@ long xcDrawRectangle()
   x_set_gc((Display *)val[0],gc,val[6],val[7],val[8],xDefaultFont);
   
   XDrawRectangle(DISP(0),(Window) val[1],gc,/* Display,Window,GC */
-		  val[2],val[3],val[4],val[5]);         /* X,Y,Width,Height */
+		 val[2],val[3],val[4],val[5]);         /* X,Y,Width,Height */
   
   x_record_rectangle((ListHeader *)WindowDisplayList(args[1]),DRAW_RECTANGLE,
-		      val[2],val[3],val[4],val[5],
-		      val[6],val[7],val[8]);
+		     val[2],val[3],val[4],val[5],
+		     val[6],val[7],val[8]);
   
-XSync(DISP(0),0);
+  XSync(DISP(0),0);
   success = TRUE;
   
   end_builtin();
@@ -2525,12 +2525,12 @@ XSync(DISP(0),0);
 /*****************************************************************/
 /******** FillRectangle
   
-  xcFillRectangle(+Connection,+Drawable,+X,+Y,+Width,+Height,
-  +Function,+Color)
+	  xcFillRectangle(+Connection,+Drawable,+X,+Y,+Width,+Height,
+	  +Function,+Color)
   
-  fill a rectangle.
+	  fill a rectangle.
   
-  */
+*/
 
 long xcFillRectangle()
      
@@ -2551,14 +2551,14 @@ long xcFillRectangle()
   x_set_gc((Display *)val[0],gc,val[6],val[7],xDefaultLineWidth,xDefaultFont); 
   
   XFillRectangle(DISP(0),(Window) val[1],gc,/* Display,Window,GC */
-		  val[2],val[3],val[4],val[5]);         /* X,Y,Width,Height */
+		 val[2],val[3],val[4],val[5]);         /* X,Y,Width,Height */
   
   x_record_rectangle((ListHeader *)WindowDisplayList(args[1]),FILL_RECTANGLE,
-		      val[2],val[3],val[4],val[5],
-		      val[6],val[7],
-		      xDefaultLineWidth);
+		     val[2],val[3],val[4],val[5],
+		     val[6],val[7],
+		     xDefaultLineWidth);
   
-XSync(DISP(0),0);
+  XSync(DISP(0),0);
   success = TRUE;
   
   end_builtin();
@@ -2568,11 +2568,11 @@ XSync(DISP(0),0);
 /*****************************************************************/
 /******** FillArc
   
-  xcFillArc(+Connection,+Drawable,+X,+Y,+Width,+Height,+StartAngle,+ArcAngle,
-  +Function,+Color)
-  fill an arc.
+	  xcFillArc(+Connection,+Drawable,+X,+Y,+Width,+Height,+StartAngle,+ArcAngle,
+	  +Function,+Color)
+	  fill an arc.
   
-  */
+*/
 
 long xcFillArc()
      
@@ -2593,15 +2593,15 @@ long xcFillArc()
   x_set_gc((Display *)val[0],gc,val[8],val[9],xDefaultLineWidth,xDefaultFont);
   
   XFillArc(DISP(0),(Window) val[1],gc,/* Display,Window,GC */
-	    val[2],val[3],val[4],val[5],         /* X,Y,Width,Height */
-	    val[6],val[7]);                         /* StartAngle,ArcAngle */
+	   val[2],val[3],val[4],val[5],         /* X,Y,Width,Height */
+	   val[6],val[7]);                         /* StartAngle,ArcAngle */
   
   x_record_arc((ListHeader *)WindowDisplayList(args[1]),FILL_ARC,
-		val[2],val[3],val[4],val[5],
-		val[6],val[7],val[8],val[9],
-		xDefaultLineWidth);
+	       val[2],val[3],val[4],val[5],
+	       val[6],val[7],val[8],val[9],
+	       xDefaultLineWidth);
   
-XSync(DISP(0),0);
+  XSync(DISP(0),0);
   success = TRUE;
   
   end_builtin();
@@ -2611,10 +2611,10 @@ XSync(DISP(0),0);
 /*****************************************************************/
 /******** PointsAlloc
   
-  xcPointsAlloc(+NbPoints,-Points)
+	  xcPointsAlloc(+NbPoints,-Points)
   
-  allocate n points
-  */
+	  allocate n points
+*/
 
 long xcPointsAlloc()
      
@@ -2640,10 +2640,10 @@ long xcPointsAlloc()
 /*****************************************************************/
 /******** CoordPut
   
-  xcCoordPut(+Points,+N,+Coord)
+	  xcCoordPut(+Points,+N,+Coord)
   
-  put nth coordinate in Points
-  */
+	  put nth coordinate in Points
+*/
 
 long xcCoordPut()
      
@@ -2671,10 +2671,10 @@ long xcCoordPut()
 /*****************************************************************/
 /******** PointsFree
   
-  xcPointsFree(+Points)
+	  xcPointsFree(+Points)
   
-  free points
-  */
+	  free points
+*/
 
 long xcPointsFree()
      
@@ -2696,12 +2696,12 @@ long xcPointsFree()
 /*****************************************************************/
 /******** DrawPolygon
   
-  xcDrawPolygon(+Connection,+Drawable,+Points,+NbPoints,
-  +Function,+Color,+LineWidth)
+	  xcDrawPolygon(+Connection,+Drawable,+Points,+NbPoints,
+	  +Function,+Color,+LineWidth)
   
-  draw a polygon.
+	  draw a polygon.
   
-  */
+*/
 
 long xcDrawPolygon()
      
@@ -2725,9 +2725,9 @@ long xcDrawPolygon()
 	     (XPoint *)val[2],val[3],CoordModeOrigin);        /* Points,NbPoints,mode */
   
   x_record_polygon((ListHeader *)WindowDisplayList(args[1]),DRAW_POLYGON,
-		    (XPoint *)val[2],val[3],val[4],val[5],val[6]);
+		   (XPoint *)val[2],val[3],val[4],val[5],val[6]);
   
-XSync(DISP(0),0);
+  XSync(DISP(0),0);
   success = TRUE;
   
   end_builtin();
@@ -2737,11 +2737,11 @@ XSync(DISP(0),0);
 /*****************************************************************/
 /******** FillPolygon
   
-  xcFillPolygon(+Connection,+Drawable,+Points,+NbPoints,+Function,+Color)
+	  xcFillPolygon(+Connection,+Drawable,+Points,+NbPoints,+Function,+Color)
   
-  fill a polygon.
+	  fill a polygon.
   
-  */
+*/
 
 long xcFillPolygon()
      
@@ -2766,8 +2766,8 @@ long xcFillPolygon()
 	       Complex,CoordModeOrigin);  /* shape,mode */
   
   x_record_polygon((ListHeader *)WindowDisplayList(args[1]),FILL_POLYGON,
-		    (XPoint *)val[2],val[3],val[4],val[5],
-		    xDefaultLineWidth);
+		   (XPoint *)val[2],val[3],val[4],val[5],
+		   xDefaultLineWidth);
   
   XSync(DISP(0),0);
   success = TRUE;
@@ -2779,11 +2779,11 @@ long xcFillPolygon()
 /*****************************************************************/
 /******** LoadFont
   
-  xcLoadFont(+Connection,+Name,-Font)
+	  xcLoadFont(+Connection,+Name,-Font)
   
-  load a font.
+	  load a font.
   
-  */
+*/
 
 long xcLoadFont()
      
@@ -2819,11 +2819,11 @@ long xcLoadFont()
 /*****************************************************************/
 /******** UnloadFont
   
-  xcUnloadFont(+Connection,+Font)
+	  xcUnloadFont(+Connection,+Font)
   
-  unload a font.
+	  unload a font.
   
-  */
+*/
 
 long xcUnloadFont()
      
@@ -2849,12 +2849,12 @@ long xcUnloadFont()
 /*****************************************************************/
 /******** DrawString
   
-  xcDrawString(+Connection,+Drawable,+X,+Y,String,
-  +Font,+Function,+Color)
+	  xcDrawString(+Connection,+Drawable,+X,+Y,String,
+	  +Font,+Function,+Color)
   
-  Print the string(only foreground).
+	  Print the string(only foreground).
   
-  */
+*/
 
 long xcDrawString()
 {
@@ -2875,14 +2875,14 @@ long xcDrawString()
   x_set_gc((Display *)val[0],gc,val[6],val[7],xDefaultLineWidth,val[5]);
   
   XDrawString(DISP(0),(Window) val[1],gc, /* Display,Window,GC */
-	       val[2],val[3],STRG(4),                  /* X,Y *//* String */
-	       strlen(STRG(4)));                /* Length */
+	      val[2],val[3],STRG(4),                  /* X,Y *//* String */
+	      strlen(STRG(4)));                /* Length */
   
   x_record_string((ListHeader *)WindowDisplayList(args[1]),DRAW_STRING,
-		   val[2],val[3],      /* X,Y */
+		  val[2],val[3],      /* X,Y */
 		  STRG(4),     /* String */
-		   val[5],              /* Font */
-		   val[6],val[7]);      /* Function,Color */
+		  val[5],              /* Font */
+		  val[6],val[7]);      /* Function,Color */
   
   XSync(DISP(0),0);
   success = TRUE;
@@ -2894,12 +2894,12 @@ long xcDrawString()
 /*****************************************************************/
 /******** DrawImageString
   
-  xcDrawImageString(+Connection,+Drawable,+X,+Y,String,
-  +Font,+Function,+Color)
+	  xcDrawImageString(+Connection,+Drawable,+X,+Y,String,
+	  +Font,+Function,+Color)
   
-  Print the string(foreground+background).
+	  Print the string(foreground+background).
   
-  */
+*/
 
 long xcDrawImageString()
 {
@@ -2920,15 +2920,15 @@ long xcDrawImageString()
   x_set_gc((Display *)val[0],gc,val[6],val[7],xDefaultLineWidth,val[5]);
   
   XDrawImageString(DISP(0),WIND(1),gc,          /* Display,Window,GC */
-		    val[2],val[3],              /* X,Y */
-		    STRG(4),                      /* String */
-		    strlen(STRG(4)));    /* Length */
+		   val[2],val[3],              /* X,Y */
+		   STRG(4),                      /* String */
+		   strlen(STRG(4)));    /* Length */
   
   x_record_string((ListHeader *)WindowDisplayList(args[1]),DRAW_IMAGE_STRING,
-		   val[2],val[3],               /* X,Y */
+		  val[2],val[3],               /* X,Y */
 		  STRG(4),              /* String */
-		   val[5],                       /* Font */
-		   val[6],val[7]);               /* Function,Color */
+		  val[5],                       /* Font */
+		  val[6],val[7]);               /* Function,Color */
   
   XSync(DISP(0),0);
   success = TRUE;
@@ -2940,12 +2940,12 @@ long xcDrawImageString()
 /*****************************************************************/
 /******** StringWidth
   
-  xcStringWidth(+Connection,+Font,+String)
+	  xcStringWidth(+Connection,+Font,+String)
   
   
-  returns the width in pixels of the string in the given font.
+	  returns the width in pixels of the string in the given font.
   
-  */
+*/
 
 long xcStringWidth()
 {
@@ -2981,11 +2981,11 @@ long xcStringWidth()
 /*****************************************************************/
 /******** SYNC
   
-  xcSync(+Connection,+Discard)
+	  xcSync(+Connection,+Discard)
   
-  flush the output of the connection.
+	  flush the output of the connection.
   
-  */
+*/
 
 long xcSync()
      
@@ -3012,7 +3012,7 @@ long xcSync()
 
 static ptr_psi_term xcEventToPsiTerm(event)
      
-     XEvent *event;
+  XEvent *event;
      
 {
   ptr_psi_term psiEvent,psi_str;
@@ -3090,7 +3090,7 @@ static ptr_psi_term xcEventToPsiTerm(event)
     bk_stack_add_int_attr(psiEvent,"width",event->xconfigure.width);
     bk_stack_add_int_attr(psiEvent,"height",event->xconfigure.height);
     bk_stack_add_int_attr(psiEvent,"border_width",
-		       event->xconfigure.border_width);
+			  event->xconfigure.border_width);
     break;
     /*** RM 7/12/92(END) ***/
     
@@ -3137,7 +3137,7 @@ static ptr_psi_term xcEventToPsiTerm(event)
 /*  RM: Dec 15 1992   Test if a list is empty  */
 long list_is_nil(lst)
      
-     ptr_psi_term(lst);
+  ptr_psi_term(lst);
      
 {
   deref_ptr(lst);
@@ -3149,7 +3149,7 @@ long list_is_nil(lst)
 /*  RM: Dec 15 1992   Return the CDR of a list */
 ptr_psi_term list_cdr(lst)
      
-     ptr_psi_term(lst);
+  ptr_psi_term(lst);
 {
   ptr_psi_term car;
   ptr_psi_term cdr;
@@ -3173,7 +3173,7 @@ ptr_psi_term list_cdr(lst)
 /*  RM: Dec 15 1992   Return the CAR of a list */
 ptr_psi_term list_car(lst)
      
-     ptr_psi_term(lst);
+  ptr_psi_term(lst);
 {
   ptr_psi_term car;
   ptr_psi_term cdr;
@@ -3197,8 +3197,8 @@ ptr_psi_term list_car(lst)
 /*  RM: Dec 15 1992  Set the CAR of a list */
 void list_set_car(lst,value)
      
-     ptr_psi_term lst;
-     ptr_psi_term value;
+  ptr_psi_term lst;
+ptr_psi_term value;
 {
   deref_ptr(lst);
   stack_insert(FEATCMP,one,&(lst->attr_list),(GENERIC)value);
@@ -3208,8 +3208,8 @@ void list_set_car(lst,value)
 /*  RM: Dec 15 1992  Set the CDR of a list */
 void list_set_cdr(lst,value)
      
-     ptr_psi_term lst;
-     ptr_psi_term value;
+  ptr_psi_term lst;
+ptr_psi_term value;
 {
   deref_ptr(lst);
   stack_insert(FEATCMP,two,&(lst->attr_list),(GENERIC)value);
@@ -3220,7 +3220,7 @@ void list_set_cdr(lst,value)
 /*  RM: Dec 15 1992  Return the last element of a list */
 ptr_psi_term list_last_cdr(lst)
      
-     ptr_psi_term lst;
+  ptr_psi_term lst;
 {
   while(!list_is_nil(lst))
     lst=list_cdr(lst);
@@ -3232,8 +3232,8 @@ ptr_psi_term list_last_cdr(lst)
 /*  RM: Dec 15 1992  Append an element to a list,return the new CONS cell */
 ptr_psi_term append_to_list(lst,value)
      
-     ptr_psi_term lst;
-     ptr_psi_term value;
+  ptr_psi_term lst;
+ptr_psi_term value;
 {
   ptr_psi_term end;
   
@@ -3247,9 +3247,9 @@ ptr_psi_term append_to_list(lst,value)
 /*  RM: Dec 15 1992
     Map a function,while TRUE,over the CONS cells of a list */
 long map_funct_over_list(lst,proc,closure)
-     ptr_psi_term lst;
-     long(*proc)();
-     long *closure;
+  ptr_psi_term lst;
+long(*proc)();
+long *closure;
 {
   long notInterrupted=TRUE;
   
@@ -3265,16 +3265,16 @@ long map_funct_over_list(lst,proc,closure)
 
 /*  RM: Dec 15 1992  Same thing,except map over the CARs of the list */
 long map_funct_over_cars(lst,proc,closure)
-     ptr_psi_term lst;
-     long(*proc)();
-     long *closure;
+  ptr_psi_term lst;
+long(*proc)();
+long *closure;
 {
   ptr_psi_term cdr;
   int	notInterrupted = TRUE;
   
   while(notInterrupted && !list_is_nil(lst)) {
     /* save the next because the current could be removed
-      (eg: xcFlushEvents) */
+       (eg: xcFlushEvents) */
     
     cdr=list_cdr(lst);
     notInterrupted=(*proc)(list_car(lst),closure);
@@ -3289,8 +3289,8 @@ long map_funct_over_cars(lst,proc,closure)
 /*  RM: Dec 15 1992  Re-written for new lists */
 void list_remove_value(lst,value)
      
-     ptr_psi_term lst;
-     ptr_psi_term value;
+  ptr_psi_term lst;
+ptr_psi_term value;
 {
   ptr_psi_term car,cdr;
   long still_there=TRUE;
@@ -3316,8 +3316,8 @@ void list_remove_value(lst,value)
 
 static long x_union_event(psiEvent,closure)
      
-     ptr_psi_term psiEvent;
-     EventClosure *closure;
+  ptr_psi_term psiEvent;
+EventClosure *closure;
      
 {
   return !((Display *)GetIntAttr(psiEvent,"display") == closure->display
@@ -3332,12 +3332,12 @@ static long x_union_event(psiEvent,closure)
 /*****************************************************************/
 /******** GetEvent
   
-  xcGetEvent(+Display,+Window,+Mask)
+	  xcGetEvent(+Display,+Window,+Mask)
   
-  return an event matching the mask in the window.
-  if no event residuate the call else return a null event.
+	  return an event matching the mask in the window.
+	  if no event residuate the call else return a null event.
   
-  */
+*/
 
 long xcGetEvent()
      
@@ -3408,16 +3408,16 @@ long xcGetEvent()
 /* remove the event from the queue if matching */
 
 static long x_flush_event(eventElt,closure)
-     ptr_psi_term eventElt;
-     EventClosure *closure;
+  ptr_psi_term eventElt;
+EventClosure *closure;
 {
   ptr_psi_term psiEvent;
   
   
   psiEvent = list_car(eventElt);
   if ((Display *)GetIntAttr(psiEvent,"display") == closure->display
-       && (Window)GetIntAttr(psiEvent,"window") ==closure->window
-       && (GetIntAttr(psiEvent,"mask") & closure->mask) != 0)
+      && (Window)GetIntAttr(psiEvent,"window") ==closure->window
+      && (GetIntAttr(psiEvent,"mask") & closure->mask) != 0)
     {
       /* 9.10 */
       /* if(xevent_list == eventElt) */
@@ -3433,11 +3433,11 @@ static long x_flush_event(eventElt,closure)
 /*****************************************************************/
 /******** FlushEvents
   
-  xcFlushEvents(+Display,+Window,+Mask)
+	  xcFlushEvents(+Display,+Window,+Mask)
   
-  flush all residuated events matching(display,window,mask).
+	  flush all residuated events matching(display,window,mask).
   
-  */
+*/
 
 long xcFlushEvents()
      
@@ -3468,11 +3468,11 @@ long xcFlushEvents()
 /*****************************************************************/
 /******** xcSendEvent
   
-  xcSendEvent(+Display,+Window,+Event)
+	  xcSendEvent(+Display,+Window,+Event)
   
-  send the event to the specified window
+	  send the event to the specified window
   
-  */
+*/
 
 long xcSendEvent()
      
@@ -3513,16 +3513,16 @@ long xcSendEvent()
 /*****************************************************************/
 /******** xcQueryPointer
   
-  xcQueryPointer(+Display,+Window,
-  -root_return,  -child_return,
-  -root_x_return,-root_y_return,
-  -win_x_return, -win_y_return,
-  -mask_return,  -same_screen)
+	  xcQueryPointer(+Display,+Window,
+	  -root_return,  -child_return,
+	  -root_x_return,-root_y_return,
+	  -win_x_return, -win_y_return,
+	  -mask_return,  -same_screen)
   
-  this predicate returns a psi-term containing loads of info about where the
-  pointer is at. See 'XQueryPointer' for a complete definition(the boolean
-  result of XQueryPointer is stored as 'same_screen'.
-  */
+	  this predicate returns a psi-term containing loads of info about where the
+	  pointer is at. See 'XQueryPointer' for a complete definition(the boolean
+	  result of XQueryPointer is stored as 'same_screen'.
+*/
 
 long xcQueryPointer()
      
@@ -3578,9 +3578,9 @@ long xcQueryPointer()
 /*****************************************************************/
 /******** SETUPBUILTINS
   
-  Set up the X built-in predicates.
+	  Set up the X built-in predicates.
   
-  */
+*/
 
 void x_setup_builtins()
      
@@ -3704,7 +3704,7 @@ void x_setup_builtins()
 /* called by what_next_aim in login.c */
 
 static long WaitNextEvent(ptreventflag)
-     long *ptreventflag;
+  long *ptreventflag;
 {
   long nfds;
   fd_set readfd,writefd,exceptfd;
@@ -3785,7 +3785,7 @@ static long WaitNextEvent(ptreventflag)
 
 
 long x_read_stdin_or_event(ptreventflag)
-     long *ptreventflag;
+  long *ptreventflag;
 {
   long c = 0;
   
@@ -3833,7 +3833,7 @@ long x_read_stdin_or_event(ptreventflag)
 /* returns TRUE if the mask matches the type */
 
 static long mask_match_type(mask,type)
-     long mask,type;
+  long mask,type;
 {
   long em;
 
@@ -3855,18 +3855,18 @@ static long mask_match_type(mask,type)
 /* returns the psi-event of the list corresponding to the existing event */
 
 static ptr_psi_term x_what_psi_event(beginSpan,endSpan,eventType)
-     ptr_psi_term beginSpan,endSpan;
-     long eventType;
+  ptr_psi_term beginSpan,endSpan;
+long eventType;
 {
   if(beginSpan == endSpan)
     return list_car(beginSpan);
   else
     if(mask_match_type(GetIntAttr(list_car(beginSpan),"mask"),
-			 eventType))
+		       eventType))
       return list_car(beginSpan);
     else
       return x_what_psi_event(list_cdr(beginSpan),
-			       endSpan,eventType);
+			      endSpan,eventType);
 }
 
 
@@ -3876,9 +3876,9 @@ static ptr_psi_term x_what_psi_event(beginSpan,endSpan,eventType)
 /* builds xevent_existing */
 
 static void x_build_existing_event(event,beginSpan,endSpan,eventType)
-     XEvent *event;
-     ptr_psi_term beginSpan,endSpan;
-     long eventType;
+  XEvent *event;
+ptr_psi_term beginSpan,endSpan;
+long eventType;
 {
   ptr_psi_term psiEvent;
   
@@ -3913,8 +3913,8 @@ static void x_build_existing_event(event,beginSpan,endSpan,eventType)
 /* get the next span of waiting events */
 
 static long x_next_event_span(eventElt,eventClosure)
-     ptr_psi_term eventElt;
-     EventClosure *eventClosure;
+  ptr_psi_term eventElt;
+EventClosure *eventClosure;
 {
   ptr_psi_term psiEvent;
   Display *display;
@@ -3946,15 +3946,15 @@ static long x_next_event_span(eventElt,eventClosure)
       /* a next span begins,check the current span */
     Repeat:
       if(XCheckWindowEvent(eventClosure->display,eventClosure->window,
-			     eventClosure->mask,&event)
-	  /* && event.xany.window == eventClosure->window */)
+			   eventClosure->mask,&event)
+	 /* && event.xany.window == eventClosure->window */)
 	{
 	  /* 9.10 */
 	  /* printf("Event type = %ld.\n",event.type); */
 
 	  
 	  if((event.type==Expose || event.type==GraphicsExpose)
-	      && event.xexpose.count!=0) {
+	     && event.xexpose.count!=0) {
 	    /* printf("Expose count = %ld.\n", event.xexpose.count); */
 	    goto Repeat;
 	  }
@@ -3964,8 +3964,8 @@ static long x_next_event_span(eventElt,eventClosure)
 	  /* printf("*** event %d ***\n",event.type); */
 	  
 	  x_build_existing_event(&event,
-				  eventClosure->beginSpan,
-				  eventElt,event.type);
+				 eventClosure->beginSpan,
+				 eventElt,event.type);
 
 	  return FALSE; /* stop ! we have an existing event !! */
 	}
@@ -4017,25 +4017,25 @@ long x_exist_event()
   
   /* check the last span */
   if(XCheckWindowEvent(eventClosure.display,
-			 eventClosure.window,
-			 eventClosure.mask,
-			 &event)) {
+		       eventClosure.window,
+		       eventClosure.mask,
+		       &event)) {
 
     /* printf("*** here event %d ***\n",event.xany.type); */
 
     if(event.xany.window==eventClosure.window) {
       if(event.type == Expose)
 	while(XCheckWindowEvent(eventClosure.display,
-				  eventClosure.window,
-				  ExposureMask,
-				  &exposeEvent))
+				eventClosure.window,
+				ExposureMask,
+				&exposeEvent))
 	  ; /* that is continue until no expose event */
       
       /* build a psi-term containing the event */
       x_build_existing_event(&event,
-			      eventClosure.beginSpan,
-			      list_last_cdr(xevent_list),/* RM: Dec 15 1992*/
-			      event.type);
+			     eventClosure.beginSpan,
+			     list_last_cdr(xevent_list),/* RM: Dec 15 1992*/
+			     event.type);
       return TRUE;
     }
   }
@@ -4050,15 +4050,15 @@ long x_exist_event()
 
 void x_destroy_window(display,window)
      
-     Display *display;
-     Window window;
+  Display *display;
+Window window;
      
 {
   /* we need the psi-term window(not the value) to get the display list,the pixmap ...
      jch - Fri Aug  7 15:29:14 MET DST 1992
      
      FreeWindow(display,window);
-     */
+  */
   XDestroyWindow(display,window);
   XSync(display,0);
 }
@@ -4069,12 +4069,12 @@ void x_destroy_window(display,window)
 
 void x_show_window(display,window)
      
-     Display *display;long window;
+  Display *display;long window;
      
-{
-  XMapWindow(display,window);
-  XSync(display,0);
-}
+  {
+    XMapWindow(display,window);
+    XSync(display,0);
+  }
 
 
 /*****************************************************************/
@@ -4082,12 +4082,12 @@ void x_show_window(display,window)
 
 void x_hide_window(display,window)
      
-     Display *display; long window;
+  Display *display; long window;
      
-{
-  XUnmapWindow(display,window);
-  XSync(display,0);
-}
+  {
+    XUnmapWindow(display,window);
+    XSync(display,0);
+  }
 
 
 /*** RM 8/12/92 ***/
@@ -4097,12 +4097,12 @@ void x_hide_window(display,window)
 
 void x_show_subwindow(display,window)
      
-     Display *display; long window;
+  Display *display; long window;
      
-{
-  XMapSubwindows(display,window);
-  XSync(display,0);
-}
+  {
+    XMapSubwindows(display,window);
+    XSync(display,0);
+  }
 
 
 /*****************************************************************/
@@ -4110,12 +4110,12 @@ void x_show_subwindow(display,window)
 
 void x_hide_subwindow(display,window)
      
-     Display *display; long window;
+  Display *display; long window;
      
-{
-  XUnmapSubwindows(display,window);
-  XSync(display,0);
-}
+  {
+    XUnmapSubwindows(display,window);
+    XSync(display,0);
+  }
 
 /*** RM 8/12/92 ***/
 
@@ -4128,7 +4128,7 @@ void x_hide_subwindow(display,window)
   xcQueryTextExtents(display,font,string,
   direction,font-ascent,font-descent,
   left-bearing,right-bearing,width,ascent,descent)
-  */
+*/
 
 long xcQueryTextExtents()
      
@@ -4189,7 +4189,7 @@ long xcQueryTextExtents()
 
 ptr_goal GoalFromPsiTerm(psiTerm)
      
-     ptr_psi_term psiTerm;
+  ptr_psi_term psiTerm;
      
 {
   ptr_residuation resid;

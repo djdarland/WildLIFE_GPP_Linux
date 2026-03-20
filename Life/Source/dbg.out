@@ -1,0 +1,6 @@
+NOTE fun = life - main -- start dbg
+NOTE fun = life - main -- after init_io
+NOTE fun = life - main -- after new wl_memory
+NOTE fun = life - main -- after new wl_buckets
+NOTE fun = life - main -- after init print
+NOTE fun = life - main -- before init modules

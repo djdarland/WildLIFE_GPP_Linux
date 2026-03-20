@@ -1,13 +1,15 @@
+#pragma once
 /*! \file def_const.h
   \brief constants
 
 */
 
-#ifndef  EXTERN
-#define EXTERN
+#ifndef TRUE
+#define TRUE 1L
 #endif
-
-
+#ifndef FALSE
+#define FALSE 0L
+#endif
 
 /*! \def least_sel
   \brief used by collect_symbols in built_ins.c 
@@ -66,7 +68,7 @@
 
 */
 
-#define WORD sizeof(long)
+#define WORD sizeof(long long)
 
 #ifdef WORDALIGN
 #define ALIGN WORD
@@ -110,7 +112,7 @@
    is in bytes and is the product of alloc_words by the size of a machine word.
    This system is thus consistent between 32 and 64-bit architectures: the same
    number of psi-terms can be allocated in either.
-   */
+*/
 
 // from extern.h
 
@@ -120,7 +122,7 @@
   number of words 
 */
 
-#define GC_THRESHOLD (alloc_words>>3) 
+#define GC_THRESHOLD (wl_mem->alloc_words_val()>>3) 
 
 /*! \def COPY_THRESHOLD
   \brief Copy threshold (1/8 of GC_THRESHOLD is reasonable) 
@@ -217,7 +219,7 @@
 #define PRINT_BUFFER 100000L
 
 /*! \def PROMPT
-\brief Head of prompt 
+  \brief Head of prompt 
 
 */
 
@@ -320,7 +322,7 @@
 
 */
 
-#define INT_SIZE 8*sizeof(unsigned long)
+#define INT_SIZE 8*sizeof(unsigned long long)
 
 /*! \def HEAP
   \brief Flag to indicate heap allocation 
@@ -565,26 +567,26 @@
   
   OPTIONAL	for an optional argument
   REQUIRED	for a required argument (i.e. residuate on it if not
-                present
+  present
   UNEVALED	if the argument should not be evaluated
   JUSTFAIL	to just fail is the argument does not meet its type
-		restriction
+  restriction
   POLYTYPE	sometimes you want to permit several particular sorts
-		in that case the 2nd psi_arg field is interpreted as
-		a pointer to a NULL terminated array of ptr_definitions
+  in that case the 2nd psi_arg field is interpreted as
+  a pointer to a NULL terminated array of ptr_definitions
   MANDATORY	like REQUIRED, but it is an error for it not to be
-  		present; don't residuate.  This is useful for
-		predicates since it doesn't make sense for them to
-		residuate.
+  present; don't residuate.  This is useful for
+  predicates since it doesn't make sense for them to
+  residuate.
   NOVALUE	no value required for this argument.
 
   The primitive must be defined to take the following arguments
-  		f(argl,result,funct[,info])
+  f(argl,result,funct[,info])
   where argl is an array containing the arguments obtained by call_
   primitive, result is the result in case we are implementing a
   function, and info (optional) is extra information, typically a
   pointer to a structure.
- */
+*/
 
 
 #define OPTIONAL  0
@@ -607,32 +609,32 @@
   
   { "1" , quoted_string , REQUIRED }
   
-  describes a required argument on feature 1, that must be a string.
-  The 3rd field is a mask of boolean flags and is constructed by
-  ORing some constants chosen from the set:
+describes a required argument on feature 1, that must be a string.
+The 3rd field is a mask of boolean flags and is constructed by
+ORing some constants chosen from the set:
   
-  OPTIONAL	for an optional argument
-  REQUIRED	for a required argument (i.e. residuate on it if not
-                present
-  UNEVALED	if the argument should not be evaluated
-  JUSTFAIL	to just fail is the argument does not meet its type
-		restriction
-  POLYTYPE	sometimes you want to permit several particular sorts
-		in that case the 2nd psi_arg field is interpreted as
-		a pointer to a NULL terminated array of ptr_definitions
-  MANDATORY	like REQUIRED, but it is an error for it not to be
-  		present; don't residuate.  This is useful for
-		predicates since it doesn't make sense for them to
-		residuate.
-  NOVALUE	no value required for this argument.
+OPTIONAL	for an optional argument
+REQUIRED	for a required argument (i.e. residuate on it if not
+		 present
+UNEVALED	if the argument should not be evaluated
+JUSTFAIL	to just fail is the argument does not meet its type
+		 restriction
+POLYTYPE	sometimes you want to permit several particular sorts
+		 in that case the 2nd psi_arg field is interpreted as
+		 a pointer to a NULL terminated array of ptr_definitions
+MANDATORY	like REQUIRED, but it is an error for it not to be
+		 present; don't residuate.  This is useful for
+		 predicates since it doesn't make sense for them to
+		 residuate.
+		 NOVALUE	no value required for this argument.
 
-  The primitive must be defined to take the following arguments
-  		f(argl,result,funct[,info])
-  where argl is an array containing the arguments obtained by call_
-  primitive, result is the result in case we are implementing a
-  function, and info (optional) is extra information, typically a
-  pointer to a structure.
- */
+		 The primitive must be defined to take the following arguments
+		 f(argl,result,funct[,info])
+		 where argl is an array containing the arguments obtained by call_
+		 primitive, result is the result in case we are implementing a
+		 function, and info (optional) is extra information, typically a
+		 pointer to a structure.
+		 */
 
 #define REQUIRED  1
 
@@ -660,26 +662,26 @@
   
   OPTIONAL	for an optional argument
   REQUIRED	for a required argument (i.e. residuate on it if not
-                present
+  present
   UNEVALED	if the argument should not be evaluated
   JUSTFAIL	to just fail is the argument does not meet its type
-		restriction
+  restriction
   POLYTYPE	sometimes you want to permit several particular sorts
-		in that case the 2nd psi_arg field is interpreted as
-		a pointer to a NULL terminated array of ptr_definitions
+  in that case the 2nd psi_arg field is interpreted as
+  a pointer to a NULL terminated array of ptr_definitions
   MANDATORY	like REQUIRED, but it is an error for it not to be
-  		present; don't residuate.  This is useful for
-		predicates since it doesn't make sense for them to
-		residuate.
+  present; don't residuate.  This is useful for
+  predicates since it doesn't make sense for them to
+  residuate.
   NOVALUE	no value required for this argument.
 
   The primitive must be defined to take the following arguments
-  		f(argl,result,funct[,info])
+  f(argl,result,funct[,info])
   where argl is an array containing the arguments obtained by call_
   primitive, result is the result in case we are implementing a
   function, and info (optional) is extra information, typically a
   pointer to a structure.
- */
+*/
 
 #define UNEVALED  (1<<1)
 
@@ -707,26 +709,26 @@
   
   OPTIONAL	for an optional argument
   REQUIRED	for a required argument (i.e. residuate on it if not
-                present
+  present
   UNEVALED	if the argument should not be evaluated
   JUSTFAIL	to just fail is the argument does not meet its type
-		restriction
+  restriction
   POLYTYPE	sometimes you want to permit several particular sorts
-		in that case the 2nd psi_arg field is interpreted as
-		a pointer to a NULL terminated array of ptr_definitions
+  in that case the 2nd psi_arg field is interpreted as
+  a pointer to a NULL terminated array of ptr_definitions
   MANDATORY	like REQUIRED, but it is an error for it not to be
-  		present; don't residuate.  This is useful for
-		predicates since it doesn't make sense for them to
-		residuate.
+  present; don't residuate.  This is useful for
+  predicates since it doesn't make sense for them to
+  residuate.
   NOVALUE	no value required for this argument.
 
   The primitive must be defined to take the following arguments
-  		f(argl,result,funct[,info])
+  f(argl,result,funct[,info])
   where argl is an array containing the arguments obtained by call_
   primitive, result is the result in case we are implementing a
   function, and info (optional) is extra information, typically a
   pointer to a structure.
- */
+*/
 
 #define JUSTFAIL  (1<<2)
 
@@ -754,26 +756,26 @@
   
   OPTIONAL	for an optional argument
   REQUIRED	for a required argument (i.e. residuate on it if not
-                present
+  present
   UNEVALED	if the argument should not be evaluated
   JUSTFAIL	to just fail is the argument does not meet its type
-		restriction
+  restriction
   POLYTYPE	sometimes you want to permit several particular sorts
-		in that case the 2nd psi_arg field is interpreted as
-		a pointer to a NULL terminated array of ptr_definitions
+  in that case the 2nd psi_arg field is interpreted as
+  a pointer to a NULL terminated array of ptr_definitions
   MANDATORY	like REQUIRED, but it is an error for it not to be
-  		present; don't residuate.  This is useful for
-		predicates since it doesn't make sense for them to
-		residuate.
+  present; don't residuate.  This is useful for
+  predicates since it doesn't make sense for them to
+  residuate.
   NOVALUE	no value required for this argument.
 
   The primitive must be defined to take the following arguments
-  		f(argl,result,funct[,info])
+  f(argl,result,funct[,info])
   where argl is an array containing the arguments obtained by call_
   primitive, result is the result in case we are implementing a
   function, and info (optional) is extra information, typically a
   pointer to a structure.
- */
+*/
 
 #define POLYTYPE  (1<<3)
 /*! \def MANDATORY
@@ -800,26 +802,26 @@
   
   OPTIONAL	for an optional argument
   REQUIRED	for a required argument (i.e. residuate on it if not
-                present
+  present
   UNEVALED	if the argument should not be evaluated
   JUSTFAIL	to just fail is the argument does not meet its type
-		restriction
+  restriction
   POLYTYPE	sometimes you want to permit several particular sorts
-		in that case the 2nd psi_arg field is interpreted as
-		a pointer to a NULL terminated array of ptr_definitions
+  in that case the 2nd psi_arg field is interpreted as
+  a pointer to a NULL terminated array of ptr_definitions
   MANDATORY	like REQUIRED, but it is an error for it not to be
-  		present; don't residuate.  This is useful for
-		predicates since it doesn't make sense for them to
-		residuate.
+  present; don't residuate.  This is useful for
+  predicates since it doesn't make sense for them to
+  residuate.
   NOVALUE	no value required for this argument.
 
   The primitive must be defined to take the following arguments
-  		f(argl,result,funct[,info])
+  f(argl,result,funct[,info])
   where argl is an array containing the arguments obtained by call_
   primitive, result is the result in case we are implementing a
   function, and info (optional) is extra information, typically a
   pointer to a structure.
- */
+*/
 
 #define MANDATORY (1<<4)
 
@@ -847,26 +849,26 @@
   
   OPTIONAL	for an optional argument
   REQUIRED	for a required argument (i.e. residuate on it if not
-                present
+  present
   UNEVALED	if the argument should not be evaluated
   JUSTFAIL	to just fail is the argument does not meet its type
-		restriction
+  restriction
   POLYTYPE	sometimes you want to permit several particular sorts
-		in that case the 2nd psi_arg field is interpreted as
-		a pointer to a NULL terminated array of ptr_definitions
+  in that case the 2nd psi_arg field is interpreted as
+  a pointer to a NULL terminated array of ptr_definitions
   MANDATORY	like REQUIRED, but it is an error for it not to be
-  		present; don't residuate.  This is useful for
-		predicates since it doesn't make sense for them to
-		residuate.
+  present; don't residuate.  This is useful for
+  predicates since it doesn't make sense for them to
+  residuate.
   NOVALUE	no value required for this argument.
 
   The primitive must be defined to take the following arguments
-  		f(argl,result,funct[,info])
+  f(argl,result,funct[,info])
   where argl is an array containing the arguments obtained by call_
   primitive, result is the result in case we are implementing a
   function, and info (optional) is extra information, typically a
   pointer to a structure.
- */
+*/
 
 #define NOVALUE   (1<<5)
 
@@ -1043,126 +1045,126 @@
 #define yfx 7
 
 /*! \def fail
-  \brief was enum (goal) -- but must be long for error.c - now typedef
+  \brief was enum (goal) -- but must be long long for error.c - now typedef
 
 */
 
 #define  fail 0L
 
 /*! \def prove
-  \brief was enum (goal) -- but must be long for error.c - now typedef
+  \brief was enum (goal) -- but must be long long for error.c - now typedef
 
 */
 
 #define  prove 1L
 
 /*! \def unify
-  \brief was enum (goal) -- but must be long for error.c - now typedef
+  \brief was enum (goal) -- but must be long long for error.c - now typedef
 
 */
 
 #define  unify 2L
 
 /*! \def unify_noeval
-  \brief was enum (goal) -- but must be long for error.c - now typedef
+  \brief was enum (goal) -- but must be long long for error.c - now typedef
 
 */
 
 #define  unify_noeval 3L
 
 /*! \def disj
-  \brief was enum (goal) -- but must be long for error.c - now typedef
+  \brief was enum (goal) -- but must be long long for error.c - now typedef
 
 */
 
 #define  disj 4L
 
 /*! \def what_next
-  \brief was enum (goal) -- but must be long for error.c - now typedef
+  \brief was enum (goal) -- but must be long long for error.c - now typedef
 
 */
 
 #define  what_next 5L
 
 /*! \def eval
-  \brief was enum (goal) -- but must be long for error.c - now typedef
+  \brief was enum (goal) -- but must be long long for error.c - now typedef
 
 */
 
 #define  eval 6L
 
 /*! \def eval_cut
-  \brief was enum (goal) -- but must be long for error.c - now typedef
+  \brief was enum (goal) -- but must be long long for error.c - now typedef
 
 */
 
 #define  eval_cut 7L
 
 /*! \def freeze_cut
-  \brief was enum (goal) -- but must be long for error.c - now typedef
+  \brief was enum (goal) -- but must be long long for error.c - now typedef
 
 */
 
 #define  freeze_cut 8L
 
 /*! \def implies_cut
-  \brief was enum (goal) -- but must be long for error.c - now typedef
+  \brief was enum (goal) -- but must be long long for error.c - now typedef
 
 */
 
 #define  implies_cut 9L
 
 /*! \def general_cut
-  \brief was enum (goal) -- but must be long for error.c - now typedef
+  \brief was enum (goal) -- but must be long long for error.c - now typedef
 
 */
 
 #define  general_cut 10L
 
 /*! \def match
-  \brief was enum (goal) -- but must be long for error.c - now typedef
+  \brief was enum (goal) -- but must be long long for error.c - now typedef
 
 */
 
 #define  match 11L
 
 /*! \def type_disj
-  \brief was enum (goal) -- but must be long for error.c - now typedef
+  \brief was enum (goal) -- but must be long long for error.c - now typedef
 
 */
 
 #define  type_disj 12L
 
 /*! \def clause
-  \brief was enum (goal) -- but must be long for error.c - now typedef
+  \brief was enum (goal) -- but must be long long for error.c - now typedef
 
 */
 
 #define  clause 13L
 
 /*! \def del_clause
-  \brief was enum (goal) -- but must be long for error.c - now typedef
+  \brief was enum (goal) -- but must be long long for error.c - now typedef
 
 */
 
 #define  del_clause 14L
 
 /*! \def retract
-  \brief was enum (goal) -- but must be long for error.c - now typedef
+  \brief was enum (goal) -- but must be long long for error.c - now typedef
 
 */
 
 #define  retract 15L
 
 /*! \def load
-  \brief was enum (goal) -- but must be long for error.c - now typedef
+  \brief was enum (goal) -- but must be long long for error.c - now typedef
 
 */
 
 #define  load 16L
 
 /*! \def c_what_next
-  \brief was enum (goal) -- but must be long for error.c - now typedef
+  \brief was enum (goal) -- but must be long long for error.c - now typedef
 
 */
 
@@ -1426,7 +1428,7 @@
 */
 
 #define   global_it 5
-   /*  RM: Feb  8 1993  */
+/*  RM: Feb  8 1993  */
 #ifdef CLIFE
 
 /*! \def block_it
@@ -1435,7 +1437,7 @@
 */
 
 #define   block_it 6
-       /*  AA: Mar  8 1993  */
+/*  AA: Mar  8 1993  */
 #endif 
 /* CLIFE */
 

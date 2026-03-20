@@ -1,0 +1,2 @@
+#define EXTERN extern
+#define REV401PLUS

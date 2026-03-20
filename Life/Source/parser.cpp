@@ -7,33 +7,26 @@
 **      modified on Thu Aug 22 18:14:49 1991 by herve
 *****************************************************************/
 /* 	$Id: parser.c,v 1.2 1994/12/08 23:32:03 duchier Exp $	 */
-
-#ifndef lint
-static char vcid[] = "$Id: parser.c,v 1.2 1994/12/08 23:32:03 duchier Exp $";
-#endif /* lint */
-
+#define EXTERN extern
+#define REV401PLUS
 #ifdef REV401PLUS
 #include "defs.h"
 #endif
-
-
 /******** BAD_PSI_TERM(t)
-  This returns true if T is a psi_term which is not allowed to be considered
-  as a constant by the parser.
+This returns true if T is a psi_term which is not allowed to be considered
+as a constant by the parser.
 
-  Example: "A=)+6."  would otherwise be parsed as: "=(A,+(')',6))", this was
-	             going a bit far.
+Example: "A=)+6."  would otherwise be parsed as: "=(A,+(')',6))", this was
+going a bit far.
 */
 int bad_psi_term(ptr_psi_term t)   // REV401PLUS add int
 // ptr_psi_term t;
 {
   char *s,c;
-  long r;
-
+  long long r;
   
   if(t->type==final_dot || t->type==final_question) /*  RM: Jul  9 1993  */
     return TRUE;
-  
   s=t->type->keyword->symbol;
   c=s[0];
   r=(s[1]==0 &&
@@ -43,30 +36,26 @@ int bad_psi_term(ptr_psi_term t)   // REV401PLUS add int
       c==']' ||
       c=='{' ||
       c=='}'
-      /* || c=='.' || c=='?'  RM: Jul  7 1993  */
       )
      );
   
   return r;
 }
-
-
-   
 /******** SHOW(limit)
-  This prints the parser's stack, for debugging purposes
-  only, LIMIT marks the bottom of the current stack.
+	  This prints the parser's stack, for debugging purposes
+	  only, LIMIT marks the bottom of the current stack.
 */
-void show(long limit)
-// long limit;
+void show(long long limit)
+// long long limit;
 {
-  long i;
+  long long i;
   
   for (i=1;i<=parser_stack_index;i++) {
     if (i==limit)
       printf("-> ");
     else
       printf("   ");
-    printf("%3ld: ",i);   // REV401PLUS add l
+    printf("%3lld: ",i);   // REV401PLUS add l
     switch (op_stack[i]) {
     case fx:
       printf("FX  ");
@@ -83,21 +72,18 @@ void show(long limit)
     default:
       printf("??? ");
     }
-    printf(" prec=%4ld  ",int_stack[i]);  // REV401PLUS add l
+    printf(" prec=%4lld  ",int_stack[i]);  // REV401PLUS add l
     display_psi_stdout(&(psi_term_stack[i]));
     printf("\n");
   }
   printf("\n");
 }
-
-
-
 /******** PUSH(tok,prec,op)
-  Push psi_term and precedence and operator onto parser stack.
+	  Push psi_term and precedence and operator onto parser stack.
 */
-void push(psi_term tok,long prec,wl_operator op)
+void push(psi_term tok,long long prec,wl_operator op)
 // psi_term tok;
-// long prec;
+// long long prec;
 // operator op;   
 {
   if (parser_stack_index==PARSER_STACK_SIZE) {
@@ -112,26 +98,17 @@ void push(psi_term tok,long prec,wl_operator op)
     op_stack[parser_stack_index]=op;
   }
 }
-
-
-
 /******** POP(psi_term,op);
-  This function pops PSI_TERM and OP off the parser stack and returns
-  its precedence.
+	  This function pops PSI_TERM and OP off the parser stack and returns
+	  its precedence.
 */
-long pop(ptr_psi_term tok,wl_operator *op)
+long long pop(ptr_psi_term tok,wl_operator *op)
 // ptr_psi_term tok;
 // operator *op;   
 {
-  long r=0;
+  long long r=0;
   
   if (parser_stack_index==0) {
-    /*
-      perr("*** Parser error ");
-      psi_term_error();
-      perr(": stack empty.\n");
-    */
-
     (*tok)= *error_psi_term;
     parse_ok=FALSE;
   }
@@ -144,30 +121,24 @@ long pop(ptr_psi_term tok,wl_operator *op)
   
   return r;
 }
-
-
-
 /******** LOOK()
-  This function returns the precedence of the stack top.
+	  This function returns the precedence of the stack top.
 */
-long look()
+long long look()
 {
   return int_stack[parser_stack_index];
 }
-
-
-
 /******** PRECEDENCE(tok,typ)
-  This function returns the precedence of
-  TOK if it is an operator of type TYP where TYP is FX XFX XF etc...
-  Note that this allows both a binary and unary minus.
-  The result is NOP if tok is not an operator.
+	  This function returns the precedence of
+	  TOK if it is an operator of type TYP where TYP is FX XFX XF etc...
+	  Note that this allows both a binary and unary minus.
+	  The result is NOP if tok is not an operator.
 */
-long precedence(psi_term tok,wl_operator typ)
+long long precedence(psi_term tok,wl_operator typ)
 // psi_term tok;
 // operator typ;  
 {
-  long r=NOP;
+  long long r=NOP;
   ptr_operator_data o;
 
   o=tok.type->op_data;
@@ -177,15 +148,11 @@ long precedence(psi_term tok,wl_operator typ)
     else
       o=o->next;
   }
-  
   return r;
 }
-
-
-
 /******** STACK_COPY_PSI_TERM(tok)
-  Return the address of a copy of TOK on the STACK.
-  All psi_terms read in by the parser are read into the stack.
+	  Return the address of a copy of TOK on the STACK.
+	  All psi_terms read in by the parser are read into the stack.
 */
 ptr_psi_term stack_copy_psi_term(psi_term t)
 // psi_term t;
@@ -197,14 +164,10 @@ ptr_psi_term stack_copy_psi_term(psi_term t)
 #ifdef TS
   p->time_stamp=global_time_stamp; /* 9.6 */
 #endif
-  
   return p;
 }
-
-
-
 /******** HEAP_COPY_PSI_TERM(tok)
-  Return the address of a copy of TOK on the HEAP.
+	  Return the address of a copy of TOK on the HEAP.
 */
 ptr_psi_term heap_copy_psi_term(psi_term t)
 //psi_term t;
@@ -216,17 +179,12 @@ ptr_psi_term heap_copy_psi_term(psi_term t)
 #ifdef TS
   p->time_stamp=global_time_stamp; /* 9.6 */
 #endif
-  
   return p;
 }
-
-
-
-
 /******** FEATURE_INSERT(keystr,tree,psi)
-  Insert the psi_term psi into the attribute tree.
-  If the feature already exists, create a call to the unification
-  function.
+	  Insert the psi_term psi into the attribute tree.
+	  If the feature already exists, create a call to the unification
+	  function.
 */
 void feature_insert(char *keystr,ptr_node *tree,ptr_psi_term psi)  // REV401PLUS add void
 // char *keystr;
@@ -235,30 +193,28 @@ void feature_insert(char *keystr,ptr_node *tree,ptr_psi_term psi)  // REV401PLUS
 {
   ptr_node loc;
   /* ptr_psi_term stk_psi=stack_copy_psi_term(*psi); 19.8 */
-
-  if (loc=find(FEATCMP,keystr,*tree)) {
-    /* Give an error message if there is a duplicate feature: */
-    Syntaxerrorline("duplicate feature %s (%E)\n",keystr);
-  }
+  if (*tree)
+    loc=((wl_node_ptr*)*tree)->find(FEATCMP,keystr);
+  else
+    loc = NULL;
+  if (loc)
+    {
+      /* Give an error message if there is a duplicate feature: */
+      Syntaxerrorline("duplicate feature %s (%E)\n",keystr);
+    }
   else {
     /* If the feature does not exist, insert it. */
     ptr_psi_term stk_psi=stack_copy_psi_term(*psi); /* 19.8 */
-    stack_insert_copystr(keystr,tree,(GENERIC)stk_psi); /* 10.8 */
+    if (tree)
+    ((wl_node_ptr_ptr*)tree)->stack_insert_copystr(keystr,(GENERIC)stk_psi); /* 10.8 */
+    else printf("parser DJD - tree NULL\n");
   }
 }
-
-
-
-
 /*** RM 9 Dec 1992 START ***/
-
-
 /******** LIST_NIL(type)
-  Returns the atom NIL to mark the end of a list.
-  */
-
+	  Returns the atom NIL to mark the end of a list.
+*/
 psi_term list_nil(ptr_definition type) /*  RM: Feb  1 1993  */
-
 //     ptr_definition type;
 {
   psi_term nihil;
@@ -267,49 +223,42 @@ psi_term list_nil(ptr_definition type) /*  RM: Feb  1 1993  */
     nihil.type=disj_nil;
   else
     nihil.type=nil;
-  
   nihil.status=0;
   nihil.flags=FALSE; /* 14.9 */
   nihil.attr_list=NULL;
   nihil.resid=NULL;
   nihil.value_3=NULL;
   nihil.coref=NULL;
-
   return nihil;
 }
-
-
-
 /******** PARSE_LIST(type,end,separator)
+This function provides a replacement for the function 'read_list'. It does
+not create the old (slightly more compact and a lot more complicated) list
+structure, but instead creates a generic psi-term with 2 features. The list
+is terminated by the atom 'nil'.
 
-  This function provides a replacement for the function 'read_list'. It does
-  not create the old (slightly more compact and a lot more complicated) list
-  structure, but instead creates a generic psi-term with 2 features. The list
-  is terminated by the atom 'nil'.
+Example:
 
-  Example:
-
-	[a,b,c|d] -> cons(a,cons(b,cons(c,d))).
-	[] -> nil
-	{a;b;c} -> disj(a,disj(b,disj(c,{}))).
-	{} -> {} = *bottom*
+[a,b,c|d] -> cons(a,cons(b,cons(c,d))).
+[] -> nil
+{a;b;c} -> disj(a,disj(b,disj(c,{}))).
+{} -> {} = *bottom*
 
 	
-  Example:
-  TYP=disjunction,
-  END="}",
-  SEPARATOR=";" will read in disjunctions.
+Example:
+TYP=disjunction,
+END="}",
+SEPARATOR=";" will read in disjunctions.
 
-  Example:
-  TYP=list,
-  END="]",
-  SEPARATOR="," will read lists such as [1,2,a,b,c|d]
-  */
+Example:
+TYP=list,
+END="]",
+SEPARATOR="," will read lists such as [1,2,a,b,c|d]
+*/
 
 psi_term parse_list(ptr_definition typ,char e,char s)
 //     ptr_definition typ;
 //     char e,s;
-
 {
   ptr_psi_term car=NULL;
   ptr_psi_term cdr=NULL;
@@ -317,24 +266,15 @@ psi_term parse_list(ptr_definition typ,char e,char s)
   psi_term t;
   char a;
 
-
-
   result=list_nil(typ); /*  RM: Feb  1 1993  */
-  
   if (parse_ok) {
-
     /* Character used for building cons pairs */
     a='|'; /*  RM: Jan 11 1993  */
-    
-
     read_token(&t);
-
     if(!equ_tokc(t,e)) {
-
       /* Read the CAR of the list */
       put_back_token(t);
       car=stack_copy_psi_term(read_life_form(s,a));
-
       /* Read the CDR of the list */
       read_token(&t);
       if(equ_tokch(t,s))
@@ -367,142 +307,143 @@ psi_term parse_list(ptr_definition typ,char e,char s)
 
       result.type=typ;
       if(car)
-	stack_insert(FEATCMP,one,&(result.attr_list),(GENERIC)car);
+	((wl_node_ptr_ptr*)&(result.attr_list))-> stack_insert(FEATCMP,one,(GENERIC)car);
       if(cdr)
-	stack_insert(FEATCMP,two,&(result.attr_list),(GENERIC)cdr);
+	((wl_node_ptr_ptr*)&(result.attr_list))->stack_insert(FEATCMP,two,(GENERIC)cdr);
     }
   }
-  
   return result;
 }
 /*** RM 9 Dec 1992 END ***/
-
-
-
-
 /******** READ_PSI_TERM()
-  This reads in a complex object from the input
-  stream, that is, a whole psi-term.
+This reads in a complex object from the input
+stream, that is, a whole psi-term.
 
-  Examples:
+Examples:
 
-  [A,B,C]
+[A,B,C]
 
-  {0;1;2+A}
+{0;1;2+A}
 
-  <a,b,c> death(victim => V,murderer => M)
+<a,b,c> death(victim => V,murderer => M)
 
-  which(x,y,z)
+which(x,y,z)
 
-  A:g(f)
+A:g(f)
 
-  I have allowed mixing labelled with unlabelled attributes.
+I have allowed mixing labelled with unlabelled attributes.
 
-  Example:
+Example:
   
-  f(x=>A,B,y=>K,"hklk",D) is parsed as f(1=>B,2=>"hklk",3=>D,x=>A,y=>K).
+f(x=>A,B,y=>K,"hklk",D) is parsed as f(1=>B,2=>"hklk",3=>D,x=>A,y=>K).
 */
 psi_term read_psi_term()
 {
   psi_term t,t2,t3;
   char s[22];  // Modified 3/8/2021  DJD to prevent overflow - compiler warning
-  long count=0,f=TRUE,f2,v;
+  long long count=0,f=TRUE,f2,v;
   ptr_psi_term module;
 
-  
+  dbg_top("read_psi_term");
   if(parse_ok) {
-    
+    dbg_note("read_psi_term", "00001");
     read_token(&t);
-    
-    if(equ_tokch(t,'['))
+    dbg_note("read_psi_term", "00002");
+    if(equ_tokch(t,'[')) {
+    dbg_note("read_psi_term", "00003");
       t=parse_list(alist,']',','); /*** RICHARD Nov_4 ***/
-    else
-      if(equ_tokch(t,'{')) 
+    dbg_note("read_psi_term", "00004");
+    }
+    else {
+    dbg_note("read_psi_term", "00005");
+      if(equ_tokch(t,'{')) {
+    dbg_note("read_psi_term", "00006");
 	t=parse_list(disjunction,'}',';'); /*** RICHARD Nov_4 ***/
-
-      /* The syntax <a,b,c> for conjunctions has been abandoned.
-	else
-	if(equ_tokch(t,'<'))
-	t=parse_list(conjunction,'>',',');
-	*/
-  
+    dbg_note("read_psi_term", "00007");
+      }
+    }
     if(parse_ok 
        && t.type!=eof
        && !bad_psi_term(&t)
-       /* && (precedence(t,fx)==NOP)
-	  && (precedence(t,fy)==NOP) */
        ) {
+    dbg_note("read_psi_term", "00008");
       read_token(&t2);
+    dbg_note("read_psi_term", "00009");
       if(equ_tokch(t2,'(')) {
-	
 	do {
-	  
+    dbg_note("read_psi_term", "00010");
 	  f2=TRUE;
 	  read_token(&t2);
-	  
 	  if(wl_const_3(t2) && !bad_psi_term(&t2)) {  // REV401PLUS for value_3
 	    read_token(&t3);
 	    if(equ_tok(t3,"=>")) {
-	      t3=read_life_form(',',')');
+    dbg_note("read_psi_term", "00011");
 	      
+	      t3=read_life_form(',',')');
 	      if(t2.type->keyword->private_feature) /*  RM: Mar 11 1993  */
-		feature_insert(t2.type->keyword->combined_name,
+		{
+		      dbg_note("read_psi_term", "00012");
+
+		  feature_insert(t2.type->keyword->combined_name,
 			       /*  RM: Jan 13 1993  */
 			       &(t.attr_list),
 			       &t3);
+    dbg_note("read_psi_term", "00013");
+		}
 	      else
+		{
+    dbg_note("read_psi_term", "00014");
 		feature_insert(t2.type->keyword->symbol,
 			       /*  RM: Jan 13 1993  */
 			       &(t.attr_list),
 			       &t3);
-	      
+		}
+    dbg_note("read_psi_term", "00015");
 	      f2=FALSE;
 	    }
-	    else 
+	    else
+	      {
 	      put_back_token(t3);
+	      }
 	  }
-	  
 	  if(parse_ok && equal_types(t2.type,integer)) {
+    dbg_note("read_psi_term", "00016");
 	    read_token(&t3);
+    dbg_note("read_psi_term", "00017");
 	    if(equ_tok(t3,"=>")) {
+    dbg_note("read_psi_term", "00018");
 	      t3=read_life_form(',',')');
 	      v= *(REAL *)t2.value_3;   // REV401PLUS
-	      sprintf(s,"%ld",v);  // REV401PLUS remove extra 0
+	      sprintf(s,"%lld",v);  // REV401PLUS remove extra 0
               feature_insert(s,&(t.attr_list),&t3);
 	      f2=FALSE;
+    dbg_note("read_psi_term", "00019");
 	    }
 	    else 
 	      put_back_token(t3);
 	  }
-	  
 	  if(f2) {
+    dbg_note("read_psi_term", "00020");
 	    put_back_token(t2);
 	    t2=read_life_form(',',')');
 	    ++count;
-	    sprintf(s,"%ld",count); // REV401PLUS remove extra 0
+	    sprintf(s,"%lld",count); // REV401PLUS remove extra 0
             feature_insert(s,&(t.attr_list),&t2);
+    dbg_note("read_psi_term", "00021");
 	  }
-	  
 	  read_token(&t2);
-	  
 	  if(equ_tokch(t2,')'))
 	    f=FALSE;
 	  else
 	    if(!equ_tokch(t2,',')) {
               if (stringparse) parse_ok=FALSE;
               else {
-		/*
-		  perr("*** Syntax error ");psi_term_error();
-		  perr(": ',' expected in argument list.\n");
-		  */
-
 		/*  RM: Feb  1 1993  */
 		Syntaxerrorline("',' expected in argument list (%E)\n");
-
 	        f=FALSE;
               }
 	    }
-	  
+    dbg_note("read_psi_term", "00022");
 	} while(f && parse_ok);
       }
       else
@@ -511,42 +452,32 @@ psi_term read_psi_term()
   }
   else
     t= *error_psi_term;
-
   if(t.type==variable && t.attr_list) {
     t2=t;
     t.type=apply;
     t.value_3=NULL;
     t.coref=NULL;
     t.resid=NULL;
-    stack_insert(FEATCMP,functor->keyword->symbol,
-		 &(t.attr_list),
-		 (GENERIC)stack_copy_psi_term(t2)); // REV401PLUS add cast
+    ((wl_node_ptr_ptr*)&(t.attr_list))->stack_insert(FEATCMP,functor->keyword->symbol,(GENERIC)stack_copy_psi_term(t2)); // REV401PLUS add cast
   }
-
-
   /*  RM: Mar 12 1993  Nasty hack for Bruno's features in modules */
   if((t.type==add_module1 || t.type==add_module2 || t.type==add_module3) &&
-     !find(FEATCMP,two,t.attr_list)) {
-
+     (!t.attr_list || ! ((wl_node_ptr*)t.attr_list)->find(FEATCMP,two))) {
     module=stack_psi_term(4);
     module->type=quoted_string;
     module->value_3=(GENERIC)heap_copy_string(current_module->module_name);
-    
-    stack_insert(FEATCMP,two,&(t.attr_list),(GENERIC)module); // REV401PLUS cast
+    ((wl_node_ptr_ptr*)&(t.attr_list))-> stack_insert(FEATCMP,two,(GENERIC)module); // REV401PLUS cast
   }
-  
+  dbg_bot("read_psi_term");
   return t;
 }
-
-
-
 /******** MAKE_LIFE_FORM(tok,arg1,arg2)
-  This routine inserts ARG1 and ARG2 as the first and second attributes of
-  psi_term TOK, thus creating the term TOK(1=>arg1,2=>arg2).
+This routine inserts ARG1 and ARG2 as the first and second attributes of
+psi_term TOK, thus creating the term TOK(1=>arg1,2=>arg2).
 
-  If TOK is ':' then a conjunction is created if necessary.
-  Example:
-  a:V:b:5:long => V: <a,b,5,int> (= conjunction list).
+If TOK is ':' then a conjunction is created if necessary.
+Example:
+a:V:b:5:long long => V: <a,b,5,int> (= conjunction list).
 */
 psi_term make_life_form(ptr_psi_term tok,ptr_psi_term arg1,ptr_psi_term arg2)
 // ptr_psi_term tok,arg1,arg2;
@@ -557,31 +488,23 @@ psi_term make_life_form(ptr_psi_term tok,ptr_psi_term arg1,ptr_psi_term arg2)
   deref_ptr(tok);
   tok->attr_list=NULL;
   tok->resid=NULL;
-
-    
   /* Here beginneth a terrible FIX,
      I will have to rewrite the tokeniser and the parser to handle
      POINTERS to psi-terms instead of PSI_TERMS !!!
-     */
-  
+  */
   a1=arg1;
   a2=arg2;
-
   if(a1)
     deref_ptr(a1);
   if(a2)
     deref_ptr(a2);
-  
   /* End of extremely ugly fix. */
-  
   if (/* UNI FALSE */ equ_tokch((*tok),':') && arg1 && arg2) {
-    
     if(a1!=a2) {
       if(a1->type==top && 
 	 !a1->attr_list &&
 	 !a1->resid) {
 	if(a1!=arg1)
-	  /* push_ptr_value(psi_term_ptr,&(a1->coref)); 9.6 */
 	  push_psi_ptr_value(a1,(GENERIC *)&(a1->coref));  // REV401PLUS cast
 	a1->coref=stack_copy_psi_term(*arg2);
 	tok=arg1;
@@ -591,7 +514,6 @@ psi_term make_life_form(ptr_psi_term tok,ptr_psi_term arg1,ptr_psi_term arg2)
 	   !a2->attr_list &&
 	   !a2->resid) {
 	  if(a2!=arg2)
-	    /* push_ptr_value(psi_term_ptr,&(a2->coref)); 9.6 */
 	    push_psi_ptr_value(a2,(GENERIC *)&(a2->coref)); // REV401PLUS
 	  a2->coref=stack_copy_psi_term(*arg1);
 	  tok=arg2;
@@ -599,14 +521,12 @@ psi_term make_life_form(ptr_psi_term tok,ptr_psi_term arg1,ptr_psi_term arg2)
 	else { /*  RM: Feb 22 1993  Now reports an error */
 	  Syntaxerrorline("':' occurs where '&' required (%E)\n");
 	  *tok= *error_psi_term;
-	  /* make_unify_pair(tok,arg1,arg2); Old code */
 	}
     }
     else
       tok=arg1;
   }
   else {
-
     /*  RM: Jun 21 1993  */
     /* And now for another nasty hack: reading negative numbers */
     if(tok->type==minus_symbol &&
@@ -616,41 +536,32 @@ psi_term make_life_form(ptr_psi_term tok,ptr_psi_term arg1,ptr_psi_term arg2)
        (a1->type==integer || a1->type==real))  {
       
       tok->type=a1->type;
-      tok->value_3=(GENERIC)heap_alloc(sizeof(REAL));
+      tok->value_3=(GENERIC)wl_mem->heap_alloc(sizeof(REAL));
       *(REAL *)tok->value_3 = - *(REAL *)a1->value_3;
-      
       return *tok;
     }
     /* End of other nasty hack */
-    
-    stack_insert(FEATCMP,one,&(tok->attr_list),(GENERIC)stack_copy_psi_term(*arg1));  // REV401PLUS cast
+    ((wl_node_ptr_ptr*)&(tok->attr_list))->stack_insert(FEATCMP,one,(GENERIC)stack_copy_psi_term(*arg1));  // REV401PLUS cast
     if (arg2)
-      stack_insert(FEATCMP,two,&(tok->attr_list),(GENERIC)stack_copy_psi_term(*arg2));    // REV401PLUS cast
+      ((wl_node_ptr_ptr*)&(tok->attr_list))->stack_insert(FEATCMP,two,(GENERIC)stack_copy_psi_term(*arg2));    // REV401PLUS cast
   }
-  
   return *tok;
 }
-
-
-
 /******** CRUNCH(prec,limit)
-  Crunch up = work out the arguments of anything on the stack whose precedence
-  is <= PREC, and replace it with the corresponding psi-term. Do not go any
-  further than LIMIT which is the end of the current expression.
+Crunch up = work out the arguments of anything on the stack whose precedence
+is <= PREC, and replace it with the corresponding psi-term. Do not go any
+further than LIMIT which is the end of the current expression.
 */
-void crunch(long prec,long limit)
-// long prec;
-// long limit;
+void crunch(long long prec,long long limit)
+// long long prec;
+// long long limit;
 {
   psi_term t,t1,t2,t3;
   wl_operator op1,op2,op3;
   
   if(parse_ok && prec>=look() && parser_stack_index>limit) {
-    
     pop(&t1,&op1);
-    
     switch(op1) {
-      
     case nop:
       pop(&t2,&op2);
       if(op2==fx)
@@ -667,7 +578,6 @@ void crunch(long prec,long limit)
 	  }
 	}
       break;
-      
     case xf:
       pop(&t2,&op2);
       if(op2==nop)
@@ -678,100 +588,93 @@ void crunch(long prec,long limit)
 	parse_ok=FALSE;
       }
       break;
-      
     default:
       printf("*** Parser: yuck, weirdo operator.\n");
     }
-    
     push(t,look(),nop);
-    
     crunch(prec,limit);
   }
 }
-
-
-
 /******** READ_LIFE_FORM(str1,str2)
-  This reads in one life-form from the input stream which finishes with
-  the psi_term whose name is STR1 or STR2, typically if we're reading a list
-  [A,4*5,b-4!] then STR1="," and STR2="|" . It would be incorrect if "," were
-  taken as an operator.
+This reads in one life-form from the input stream which finishes with
+the psi_term whose name is STR1 or STR2, typically if we're reading a list
+[A,4*5,b-4!] then STR1="," and STR2="|" . It would be incorrect if "," were
+taken as an operator.
 
-  This routine implements the two state expression parser as described in the
-  implementation guide. It deals with all the various types of operators,
-  precedence is dealt with by the CRUNCH function. Each time an opening
-  parenthesis is encountered a new expression is started.
+This routine implements the two state expression parser as described in the
+implementation guide. It deals with all the various types of operators,
+precedence is dealt with by the CRUNCH function. Each time an opening
+parenthesis is encountered a new expression is started.
 */
 psi_term read_life_form(char ch1,char ch2)
 // char ch1,ch2;
 {
   psi_term t,t2;
-  long limit,pr_op,pr_1,pr_2,start=0;
-  long fin=FALSE;
-  long state=0;
-  long prec=0;
+  long long limit,pr_op,pr_1,pr_2,start=0;
+  long long fin=FALSE;
+  long long state=0;
+  long long prec=0;
   
   wl_operator op;
-  
+  dbg_top("read_life_form");
   limit=parser_stack_index+1;
-  
   if(parse_ok)
     do {
-      if(state)
+      dbg_note("read_life_form","00002");
+      if(state) {
+      dbg_note("read_life_form","00003");
 	read_token(&t);
-      else
+      }
+      else {
+      dbg_note("read_life_form","00004");
 	t=read_psi_term();
-      
-      if(!start)
+      }
+      if(!start) {
+      dbg_note("read_life_form","00005");
 	start=line_count;
-      
+      }
       if(!fin)
 	if(state) {
+      dbg_note("read_life_form","00006");
 	  if(equ_tokc(t,ch1) || equ_tokc(t,ch2)) {
+      dbg_note("read_life_form","00007");
 	    fin=TRUE;
 	    put_back_token(t);
 	  }
 	  else {
-	    
+      dbg_note("read_life_form","00008");
 	    pr_op=precedence(t,xf);
 	    pr_1=pr_op-1;
-	    
 	    if(pr_op==NOP) {
+      dbg_note("read_life_form","00009");
 	      pr_op=precedence(t,yf);
 	      pr_1=pr_op;
 	    }
-	    
 	    if(pr_op==NOP) {
-	      
+      dbg_note("read_life_form","00010");
 	      pr_op=precedence(t,xfx);
 	      pr_1=pr_op-1;
 	      pr_2=pr_op-1;
-	      
 	      if(pr_op==NOP) {
+      dbg_note("read_life_form","00011");
 		pr_op=precedence(t,xfy);
 		pr_1=pr_op-1;
 		pr_2=pr_op;
 	      }
-	      
 	      if(pr_op==NOP) {
+      dbg_note("read_life_form","00012");
 		pr_op=precedence(t,yfx);
 		pr_1=pr_op;
 		pr_2=pr_op-1;
 	      }
-	      
-	      /* if(pr_op==NOP) {
-		pr_op=precedence(t,yfy);
-		pr_1=pr_op;
-		pr_2=pr_op-1;
-	      }
-              */
-	      
 	      if(pr_op==NOP) {
+      dbg_note("read_life_form","00013");
 		fin=TRUE;
 		put_back_token(t);
 	      }
 	      else
 		{
+      dbg_note("read_life_form","00014");
 		  crunch(pr_1,limit);
 		  push(t,pr_2,xfx);
 		  prec=pr_2;
@@ -779,6 +682,7 @@ psi_term read_life_form(char ch1,char ch2)
 		}
 	    }
 	    else {
+      dbg_note("read_life_form","00015");
 	      crunch(pr_1,limit);
 	      push(t,pr_1,xf);
 	      prec=pr_1;
@@ -786,36 +690,33 @@ psi_term read_life_form(char ch1,char ch2)
 	  }
 	}
 	else {
-
+      dbg_note("read_life_form","00016");
 	  if(t.attr_list)
 	    pr_op=NOP;
 	  else {
+      dbg_note("read_life_form","00017");
 	    pr_op=precedence(t,fx);
 	    pr_2=pr_op-1;
-	  	  
 	    if(pr_op==NOP) {
 	      pr_op=precedence(t,fy);
 	      pr_2=pr_op;
 	    }
 	  }
-
 	  if(pr_op==NOP) {
+      dbg_note("read_life_form","00018");
 	    if(equ_tokch(t,'(')) {
+      dbg_note("read_life_form","00019");
 	      t2=read_life_form(')',0);
 	      if(parse_ok) {
+      dbg_note("read_life_form","00020");
 		push(t2,prec,nop);
 		read_token(&t2);
 		if(!equ_tokch(t2,')')) {
+      dbg_note("read_life_form","00021");
                   if (stringparse) parse_ok=FALSE;
                   else {
-		    /*
-		      perr("*** Syntax error ");psi_term_error();
-		      perr(": ')' missing.\n");
-		      */
-
 		    /*  RM: Feb  1 1993  */
 		    Syntaxerrorline("')' missing (%E)\n");
-
 		    put_back_token(t2);
 		  }
 		}
@@ -825,7 +726,6 @@ psi_term read_life_form(char ch1,char ch2)
 	    else 
 	      if(bad_psi_term(&t)) {
 		put_back_token(t);
-		/* psi_term_error(); */
 		fin=TRUE;
 	      }
 	      else {
@@ -837,107 +737,91 @@ psi_term read_life_form(char ch1,char ch2)
 	    push(t,pr_2,fx);
 	    prec=pr_2;
 	  }
-	  
 	}
       
     } while (!fin && parse_ok);
-  
   if (state)
     crunch(MAX_PRECEDENCE,limit);
-  
   if (parse_ok && parser_stack_index!=limit) {
     if (stringparse) parse_ok=FALSE;
     else {
-      /*
-	perr("*** Syntax error ");psi_term_error();
-	perr(": bad expression.\n");
-	*/
-      
       /*  RM: Feb  1 1993  */
       Syntaxerrorline("bad expression (%E)\n");
     }
   }
   else
     pop(&t,&op);
-  
   if (!parse_ok)
     t= *error_psi_term;
-
   parser_stack_index=limit-1;
-  
+  dbg_bot("read_life_form");
   return t;
 }
-
-
-
 /******** PARSE(is_it_a_clause)
-  This returns one clause or query from the input stream.
-  It also indicates the type psi-term read, that is whether it was a clause
-  or a query in the IS_IT_A_CLAUSE variable. This is the top level of the
-  parser.
+This returns one clause or query from the input stream.
+It also indicates the type psi-term read, that is whether it was a clause
+or a query in the IS_IT_A_CLAUSE variable. This is the top level of the
+parser.
 
-  The whole parser is, rather like the psi_termiser, not too well written.
-  It handles psi_terms rather than pointers which causes a lot of messy code
-  and is somewhat slower.
+The whole parser is, rather like the psi_termiser, not too well written.
+It handles psi_terms rather than pointers which causes a lot of messy code
+and is somewhat slower.
 */
-psi_term parse(long *q)
-// long *q;
+psi_term parse(long long *q)
+// long long *q;
 {
   psi_term s,t,u;
-  long c;
+  long long c;
 
+  dbg_top("parse");
   parser_stack_index=0;
   parse_ok=TRUE;
-
-  /*s=read_life_form('.','?');*/
+  dbg_note("parse", "00001");
   s=read_life_form(0,0);
+  dbg_note("parse", "00002");
 
   if (parse_ok) {
+  dbg_note("parse", "00003");
     if (s.type!=eof) {
+  dbg_note("parse", "00004");
       read_token(&t);
-      
-      /*
-      if (equ_tokch(t,'?'))
-	*q=QUERY;
-      else if (equ_tokch(t,'.'))
-	*q=FACT;
-	*/
-
+  dbg_note("parse", "00005");
       /*  RM: Jul  7 1993  */
-      if (t.type==final_question)
+  if (t.type==final_question) {
+  dbg_note("parse", "00006");
 	*q=QUERY;
-      else if (t.type==final_dot)
+  }
+  else if (t.type==final_dot) {
+  dbg_note("parse", "00007");
 	*q=FACT;
+  }
       else {
-        if (stringparse) parse_ok=FALSE;
+  dbg_note("parse", "00008");
+  if (stringparse) {
+  dbg_note("parse", "00009");
+    parse_ok=FALSE;
+  }
         else {
-	  /*
-          perr("*** Syntax error ");psi_term_error();perr(": ");
-	  display_psi_stderr(&t);
-	  perr(".\n");
-	  */
-
+  dbg_note("parse", "00010");
 	  /*  RM: Feb  1 1993  */
 	  Syntaxerrorline("'%P' (%E)\n",&t);
-
         }
+  dbg_note("parse", "00011");
 	*q=ERROR;
       }
     }
   }
-
-      
   if (!parse_ok) {
+  dbg_note("parse", "00012");
 
     while (saved_psi_term!=NULL) read_token(&u);
-
     prompt="error>";
     while((c=read_char()) && c!=EOF && c!='.' && c!='?' && c!=EOLN) {}
-
     *q=ERROR;
   }
   else if (saved_char)
     do {
+  dbg_note("parse", "00013");
       c=read_char();
       if (c==EOLN)
         c=0;
@@ -945,11 +829,10 @@ psi_term parse(long *q)
         put_back_char(c);
         c=0;
       }
+  dbg_note("parse", "00014");
     } while(c && c!=EOF);
-
   /* Make sure arguments of nonstrict terms are marked quoted. */
-  if (parse_ok) mark_nonstrict(&s); /* 25.8 */
-
+  if (parse_ok) ((wl_psi_term_ptr*)&s)->mark_nonstrict(); /* 25.8 */
   /* mark_eval(&s); 24.8 XXX */
 
   /* Mark all the psi-terms corresponding to variables in the var_tree as    */
@@ -957,6 +840,7 @@ psi_term parse(long *q)
   /* that occur in an increment of a query are marked to be evaluated again! */
   /* mark_quote_tree(var_tree); 24.8 XXX */
 
+  dbg_bot("parse");
   
   return s;
 }
