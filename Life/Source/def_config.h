@@ -24,7 +24,7 @@
 
 */
 
-#define ALLOC_WORDS (20971520 * 16)
+#define ALLOC_WORDS 20971520
 
 /*! \def NORAW
   \brief this should be defined unless using the life-shell of Kathleen.
