@@ -32,11 +32,11 @@ void title()
 {
   if(quietflag)
     return; /*  RM: Feb 17 1993  */
-  printf("Wild_Life Interpreter Version 4.20 Sun Jun 28 06:42:51 AM CDT 2026\n");
+  printf("Wild_Life Interpreter Version 4.20 Sun Jun 28 08:35:19 PM CDT 2026\n");
   printf("Copyright (C) 1991-93 DEC Paris Research Laboratory\n");
   printf("Extensions, Copyright (C) 1994-1995 Intelligent Software Group, SFU\n"); 
-  printf("Ported to Linux and Cygwin December 2022 after many efforts since 1995\n");
-  printf("By Dennis J. Darland dennis.darland@hotmail.com\n");
+  //  printf("Ported to Linux and Cygwin December 2022 after many efforts since 1995\n");
+  //  printf("By Dennis J. Darland dennis.darland@hotmail.com\n");
 #ifndef X11
   printf("X interface not installed.\n");
 #endif
